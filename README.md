@@ -17,11 +17,13 @@ SwiftAdminPHP 极速后台开发框架
 <b>请注意，系统安装后默认密码为admin888</b><br/>
 
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-Apache%202-blue.svg" alt="swiftadmin"></a>
-<a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/ThinkPHP-6+-brightgreen.svg" alt="swiftadmin"></a>
+<a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/ThinkPHP-6.0.8-brightgreen.svg" alt="thinkphp"></a>
+<a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/Layui-2.6.4-red.svg" alt="layui"></a>
 <a href="https://gitee.com/meystack/swiftadmin/stargazers"><img src="https://gitee.com/meystack/swiftadmin/badge/star.svg?theme=dark" alt="star"></a>
-<a href="https://gitee.com/meystack/swiftadmin/members"><img src="https://gitee.com/meystack/swiftadmin/badge/fork.svg?theme=dark" alt="fork"></a><a href="https://qm.qq.com/cgi-bin/qm/qr?k=Idivrh-log25t0ryx19nWeqUk8oFrI-X&jump_from=webapi"><img src="https://img.shields.io/badge/一群-68221484-blue.svg" alt="一群"></a>
-<a href="https://qm.qq.com/cgi-bin/qm/qr?k=L_SKDh46TnWDVrudKEON2XAlgm02RNic&jump_from=webapi"><img src="https://img.shields.io/badge/二群-68221585-blue.svg" alt="二群"></a>
-<a href="https://qm.qq.com/cgi-bin/qm/qr?k=p6N-b7AkWiESpcrZmOKWpm3t05qt4MQ-&jump_from=webapi"><img src="https://img.shields.io/badge/三群-68221618-blue.svg" alt="三群"></a>
+<a href="https://gitee.com/meystack/swiftadmin/members"><img src="https://gitee.com/meystack/swiftadmin/badge/fork.svg?theme=dark" alt="fork"></a><br/>
+<a href="https://qm.qq.com/cgi-bin/qm/qr?k=Idivrh-log25t0ryx19nWeqUk8oFrI-X&jump_from=webapi"><img src="https://img.shields.io/badge/qq一群-68221484-blue.svg" alt="一群"></a>
+<a href="https://qm.qq.com/cgi-bin/qm/qr?k=L_SKDh46TnWDVrudKEON2XAlgm02RNic&jump_from=webapi"><img src="https://img.shields.io/badge/qq二群-68221585-blue.svg" alt="二群"></a>
+<a href="https://qm.qq.com/cgi-bin/qm/qr?k=p6N-b7AkWiESpcrZmOKWpm3t05qt4MQ-&jump_from=webapi"><img src="https://img.shields.io/badge/qq三群-68221618-blue.svg" alt="三群"></a>
 
 # 开发初衷
 1. `SwiftAdmin` 框架的开发，主要也是为了减少在自己开发过程中的频繁造轮子，并且swiftAdmin框架主张简单就是高效的原则，相信没有比判断0或者1更有效率的算法了吧，所以最简单的东西才是效率最高的，可能你的应用场景很复杂，但是你可以把复杂的事情简单化，复杂的维度无外乎  `n+0 or 1` 
