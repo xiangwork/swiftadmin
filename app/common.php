@@ -1768,7 +1768,7 @@ if (!function_exists('check_auth')) {
 		$urls = (string)url($urls);
 		$urls = str_replace('.html','',$urls);
 		if (preg_match('/\/\w+.php(\/.*?\/.*?\w+[^\/\?]+)/',$urls, $macth)) {
-			// $judge = app\common\library\auth::instance()->checkAuth($macth[1]);
+			$judge = app\common\library\auth::instance()->checkAuth($macth[1]);
 		}
 		
 		echo !$judge ? 'lay-noauth' : $attr .'="'.$urls.'"' . $action;
