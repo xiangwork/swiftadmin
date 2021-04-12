@@ -44,7 +44,7 @@ class AdminFile extends AdminController
 
             // 排序
             foreach ($list as $key => $value) {
-                $file = $path.'\\'.$value;
+                $file = $path.'/'.$value;
                 if (is_dir($file)) {
                     unset($list[$key]);
                     $files[$key] = $value;
@@ -59,7 +59,7 @@ class AdminFile extends AdminController
 
             $result = [];
             foreach ($files as $key => $value) {
-                $file = $path.'\\'.$value;
+                $file = $path.'/'.$value;
                 $result[$key]['name'] = $value;
                 $result[$key]['size'] = format_bytes(filesize($file));
                 $result[$key]['time'] = date("Y-m-d H:i:s",filemtime($file));
