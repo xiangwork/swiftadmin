@@ -1,0 +1,133 @@
+<?php
+declare (strict_types = 1);
+// +----------------------------------------------------------------------
+// | swiftAdmin 极速开发框架 [基于ThinkPHP6开发]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2019-2020 http://www.swiftadmin.net
+// +----------------------------------------------------------------------
+// | swiftAdmin.net High Speed Development Framework
+// +----------------------------------------------------------------------
+// | Author: 权栈 <coolsec@foxmail.com>，河北赢图网络科技版权所有
+// +----------------------------------------------------------------------
+namespace app\admin\controller\system;
+
+
+use app\AdminController;
+use app\common\model\system\Adwords as AdwordsModel;
+
+class Adwords extends AdminController
+{
+
+	// 初始化操作
+    public function initialize() 
+    {
+		parent::initialize();
+        $this->model = new AdwordsModel();
+        $this->path = public_path().'static\\adwords\\';
+    }
+
+    /**
+     * 获取资源列表
+     */
+    public function index()
+    {
+        if (request()->isAjax()) {
+
+            // 生成查询条件
+            $post = input();
+            $where = array();
+            if (!empty($post['title'])) {
+                $where[] = ['title','like','%'.$post['title'].'%'];
+            }
+            
+            if (!empty($post['status'])) {
+                if($post['status'] == 1){
+                    $where[]=['status','=','1'];
+                }else if($post['status'] == 2){
+                    $where[]=['status','=','0'];
+                }		
+            }
+
+            // 生成查询数据
+            $list = $this->model->where($where)->order("id asc")->select()->toArray();
+            return $this->success('查询成功', "", $list, count($list), 0);
+        }
+
+		return view();
+    }
+
+    /**
+     * 添加广告
+     */
+    public function add () 
+    {
+		if (request()->isPost()) {
+
+			$post = input('post.');
+			if (empty($post) || !is_array($post)) {
+				return $this->error($post);
+            }
+
+            // 单独验证场景
+            $post = safe_validate_model($post,$this->model::class);
+            if (empty($post) || !is_array($post)) {
+                $this->error($post);
+            }
+
+            $post['expirestime'] = strtotime($post['expirestime']);
+            if ($this->model->create($post)){
+                return $this->success();
+            }
+
+            return $this->error();
+        }
+ 
+        return view('',[
+            'data'=> $this->getField()
+        ]);
+    }
+
+    /**
+     * 编辑广告
+     */
+    public function edit() 
+    {
+        $id = input('id/d');
+        
+        if (request()->isPost()) {
+            $post = input('post.');
+			if (empty($post) || !is_array($post)) {
+				return $this->error($post);
+            }
+
+            // 单独验证场景
+            $post = safe_validate_model($post,$this->model::class);
+            if (empty($post) || !is_array($post)) {
+                $this->error($post);
+            }
+
+            $post['expirestime'] = strtotime($post['expirestime']);
+            if ($this->model->update($post)){
+                $this->_after_data($post);
+                return $this->success();
+            }
+            return $this->error();
+        }
+
+        $data = $this->model->find($id);
+        $data['expirestime'] = date("Y-m-d H:i:s",$data['expirestime']);
+        return view('add',[
+            'data'=> $data
+        ]);
+    }
+
+    /**
+     * 写入广告文件
+     */
+	private function _after_data($array,$mark = false) 
+    {
+		write_file($this->path.$array['alias'].'.js',strtoJs(stripslashes(trim($array['content']))));
+	}
+
+
+}

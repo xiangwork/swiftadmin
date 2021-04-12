@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SwiftAdmin 官方演示站</title>
+<meta http-equiv="Cache-Control" content="no-transform " />
+<include file="public:header">
+</head>
+<body>
+<div id="header">
+	<include file="public:nav"/>
+</div>
+
+<div id="content" >
+	<div class="layui-container">
+	  <div class="layui-row">
+	    <div class="layui-col-md6">
+	    	<div class="layui-swift-box">
+
+	    		<h1>SwiftAdmin 极速开发框架</h1>
+				<h1 style="font-size: 26px; font-weight: 300">基于ThinkPHP Layui 完美契合</h1>
+				<p>SwiftAdmin框架主张简单就是高效的原则，在设计和运维上采用最精简最高效的做法去完成业务系统的需求，并且基于ant Design的设计原则，是一款优秀的前后台极速开发解决方案。相信你第一眼就有立刻想体验SwiftAdmin框架的冲动和热情！</p>
+				<div class="layui-swift-desc">
+					<a target="_blank"><img src="https://img.shields.io/:License-MIT协议-red.svg"></a>
+					<a target="_blank"><img src="https://img.shields.io/badge/ThinkPHP-6.0 +-green.svg"></a>
+					<a target="_blank" href="https://gitee.com/meystack/swiftadmin/" rel="nofollow" style="margin-right: 50px">
+						<img src="https://gitee.com/meystack/swiftadmin/badge/star.svg?theme=dark" alt="gitee star">
+					</a>
+					<button type="button" class="layui-btn layui-btn-normal layui-btn-radius layui-btn-sm">开始使用</button>
+					<button type="button" class="layui-btn layui-btn-normal layui-btn-radius layui-btn-sm">后台体验</button>
+				</div>
+
+				<div class="layui-swift-images">
+					<img src="/static/images/demo/1.png" >
+					<img src="/static/images/demo/2.png" >
+					<img src="/static/images/demo/3.png" >
+					<img class="hidden" src="/static/images/demo/4.png" >
+					<img class="hidden" src="/static/images/demo/5.png" >
+					<img class="hidden" src="/static/images/demo/6.png" >
+					<img class="hidden" src="/static/images/demo/7.png" >
+					<img class="hidden" src="/static/images/demo/8.png" >
+					<img class="hidden" src="/static/images/demo/9.png" >
+					<img class="hidden" src="/static/images/demo/10.png" >
+					<img class="hidden" src="/static/images/demo/11.png" >
+					<img class="hidden" src="/static/images/demo/12.png" >
+					<img class="hidden" src="/static/images/demo/13.png" >
+					<img class="hidden" src="/static/images/demo/14.png" >
+					<img class="hidden" src="/static/images/demo/15.png" >
+					<img class="hidden" src="/static/images/demo/16.png" >
+					<img class="hidden" src="/static/images/demo/17.png" >
+					<img class="hidden" src="/static/images/demo/18.png" >
+					<img class="hidden" src="/static/images/demo/19.png" >
+					<img class="hidden" src="/static/images/demo/20.png" >
+				</div>
+	    	</div>
+	    </div>
+
+	    <div class="layui-col-md6">
+	      <img src="/static/images/hero-img.png" width="90%" height="500" alt="">
+	    </div>
+	  </div>
+	  <!-- // 友情链接 -->
+	  <salibs:friendlink id="vo">
+	  	<li><a href="{$vo.url}">{$vo.title}</a></li>
+	  </salibs:friendlink>
+	</div>
+</div>
+
+<include file="public:footer"/>
+</body>
+<script>
+	layui.use(['jquery','layer'],function(){
+		var $ = layui.jquery;
+		var layer = layui.layer;
+		$('.layui-swift-images img').click(function(){
+            layer.photos({
+                photos: '.layui-swift-images',
+                shadeClose: true,
+                closeBtn: 2,
+                anim: 10
+            })
+		})
+	})
+</script>	
+</html>

@@ -1,0 +1,560 @@
+
+<include file="/public/header" />
+<script src="__STATICADMIN__module/echarts/echarts.js?console"></script>
+<style>
+
+      .layui-row {
+        overflow: hidden;
+        margin-bottom: 10px;
+      }
+
+
+     .layui-table {
+        height: 250px;
+     }
+
+     .layui-table tr {
+        cursor: pointer;
+     }
+
+     .task .layui-table td {
+        white-space: nowrap;
+     }
+
+    ul.layui-timeline {
+        height: 260px;
+        overflow: hidden;
+     }
+
+    ul.layui-timeline:hover {
+        overflow-y: auto;
+    }
+
+    .layui-carousel {
+        height: 260px;
+    }
+
+    .layui-carousel>[carousel-item]>* {
+        background: 0 0;
+    }
+
+
+    .layui-carousel>[carousel-item]:before {
+        content: '';
+    }
+
+    /** 小组成员 */
+    .console-user-group {
+        position: relative;
+        padding: 10px 0 10px 60px;
+    }
+
+    .console-user-group .console-user-group-head {
+        width: 32px;
+        height: 32px;
+        position: absolute;
+        top: 50%;
+        left: 12px;
+        margin-top: -16px;
+        border-radius: 50%;
+    }
+
+    .console-user-group .layui-badge {
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        margin-top: -10px;
+    }
+
+    .console-user-group .console-user-group-name {
+        line-height: 1.2;
+    }
+
+    .console-user-group .console-user-group-desc {
+        color: #8c8c8c;
+        line-height: 1;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+</style>
+
+<div class="layui-fluid ">
+   
+  <div class="layui-row layui-col-space10">
+
+    <div class="layui-col-md8">
+        <!-- 填充内容 -->
+        <div class="layui-card">
+            <div class="layui-card-body" style="padding: 20px;">
+              <div class="layui-row">
+                <div class="layui-col-md8">
+                    <img src="{$AdminLogin.face}" class="layui-admin-avatar">
+                    <div class="layui-admin-content">
+                        <span class="h4">早安，{$AdminLogin.nickname|default=$AdminLogin.name}，开始您一天的工作吧！</span>
+                        <span>今日多云转阴，18℃ - 22℃，出门记得穿外套哦~</span>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-admin-workplace">
+                        <div class="workplace-header">
+                            <span><i class="layui-icon layui-icon-list" ></i>项目数</span>
+                        </div>
+                        <div class="workplace-content">13</div>
+                    </div>
+
+                    <div class="layui-admin-workplace">
+                        <div class="workplace-header">
+                            <span><i class="layui-icon layui-icon-date date" ></i>待办项</span>
+                        </div>
+                        <div class="workplace-content">3/16</div>
+                    </div>                    
+                    <div class="layui-admin-workplace">
+                        <div class="workplace-header">
+                            <span><i class="layui-icon layui-icon-notice notice" ></i>消息</span>
+                        </div>
+
+                        <div class="workplace-content">2,352</div>
+                    </div>
+                </div>
+              </div>                
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-col-md4">
+        <div class="layui-card">
+          <div class="layui-card-body" style="padding: 20px;">
+            <div style="height: 78px">
+                <ul>
+                    <a href="javascript:;" class="workplace-action" title="派单">派单</a>
+                    <a href="javascript:;" class="workplace-action" title="出库单">出库单</a>
+                    <a href="javascript:;" class="workplace-action" title="审核数据">审核数据</a>
+                    <a href="javascript:;" class="workplace-action" title="申请假期">申请假期</a>
+                    <a href="javascript:;" class="workplace-action" title="友情链接">友情链接 <span class="layui-badge-dot"></span></a>
+                    <a href="javascript:;" class="workplace-action" title="客户记录">客户记录</a>
+                    <a href="javascript:;" class="workplace-action" title="已完成任务">已完成任务</a>
+                </ul>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+   
+  <div class="layui-row layui-col-space10">
+   <div class="layui-col-md2">
+            <div class="layui-card smallblock" sa-event="tabs" lay-url="{:url('/system.user/index',[],false)}" lay-title="{:__('会员管理')}" >
+                <div class="layui-card-body" >
+                    <div class="layui-small-block">
+                        <div><i class="layui-icon layui-icon-user"></i></div>
+                        <div class="layui-small-block-title" >用户</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md2">
+            <div class="layui-card smallblock" sa-event="tabs" lay-url="{:url('/index/analysis',[],false)}" lay-title="{:__('分析页')}" >
+                <div class="layui-card-body">
+                    <div class="layui-small-block">
+                        <div><i class="layui-icon layui-icon-chart " style="color: #b0e689"></i></div>
+                        <div class="layui-small-block-title">分析</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md2">
+            <div class="layui-card smallblock" sa-event="tabs" lay-url="{:url('/index/monitor',[],false)}" lay-title="{:__('监控页')}" >
+                <div class="layui-card-body">
+                    <div class="layui-small-block">
+                        <div><i class="layui-icon layui-icon-chart-screen" style="color: #fe9c6e"></i></div>
+                        <div class="layui-small-block-title">监控</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md2">
+            <div class="layui-card smallblock" sa-event="tabs" lay-url="{:url('/system.category/index',[],false)}" lay-title="{:__('栏目管理')}" >
+                <div class="layui-card-body">
+                    <div class="layui-small-block">
+                        <div><i class="layui-icon layui-icon-template-1" style="color: #b37eeb"></i></div>
+                        <div class="layui-small-block-title">内容</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md2">
+            <div class="layui-card smallblock" sa-event="tabs" lay-url="{:url('/system.systemlog/index',[],false)}" lay-title="{:__('操作日志')}" >
+                <div class="layui-card-body">
+                    <div class="layui-small-block">
+                        <div><i class="layui-icon layui-icon-list" style="color: #88e4de" ></i></div>
+                        <div class="layui-small-block-title">日志</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md2">
+            <div class="layui-card smallblock" sa-event="tabs" lay-url="{:url('/index/basecfg',[],false)}" lay-title="{:__('基本设置')}" >
+                <div class="layui-card-body">
+                    <div class="layui-small-block">
+                        <div><i class="layui-icon layui-icon-set-sm" style="color: #ffc069"></i></div>
+                        <div class="layui-small-block-title">设置</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+   
+  <div class="layui-row layui-col-space10">
+      <div class="layui-col-md4">
+        <div class="layui-card">
+          <div class="layui-card-header">最新动态</div>
+          <div class="layui-card-body">
+            <ul class="layui-timeline">
+              <li class="layui-timeline-item">
+                <i class="layui-icon layui-timeline-axis"></i>
+                <div class="layui-timeline-content layui-text">
+                  <div class="layui-timeline-title">2021年底，swiftAdmin 1.3 发布，并发展成最受欢迎的极速开发框架（期望）</div>
+                </div>
+              </li>
+              <li class="layui-timeline-item">
+                <i class="layui-icon layui-timeline-axis"></i>
+                <div class="layui-timeline-content layui-text">
+                  <div class="layui-timeline-title">2021年8月，swiftAdmin 里程碑版本 1.2.1 发布</div>
+                </div>
+              </li>
+              <li class="layui-timeline-item">
+                <i class="layui-icon layui-timeline-axis"></i>
+                <div class="layui-timeline-content layui-text">
+                  <div class="layui-timeline-title">2021年3月15日，接收反馈BUG，持续优化。</div>
+                </div>
+              </li>
+
+              <li class="layui-timeline-item">
+                <i class="layui-icon layui-timeline-axis"></i>
+                <div class="layui-timeline-content layui-text">
+                  <div class="layui-timeline-title">2021年2月26日，在元宵节编写完成发布工作。</div>
+                </div>
+              </li>
+              <li class="layui-timeline-item">
+                <i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-timeline-axis"></i>
+                <div class="layui-timeline-content layui-text">
+                  <div class="layui-timeline-title">2021年1月，swiftAdmin框架开始编写</div>
+                </div>
+              </li>
+            </ul>              
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-md4">
+        <div class="layui-card">
+          <div class="layui-card-header">我的任务</div>
+          <div class="layui-card-body task">
+            <table class="layui-table" lay-skin="nob">
+            <colgroup>
+              <col>
+              <col>
+              <col width="250">
+              <col >
+            </colgroup>
+            <thead>
+              <tr>
+                <th>发起人</th>
+                <th>发起时间</th>
+                <th >当前进度</th>
+                <th>&nbsp;状态</th>
+              </tr> 
+            </thead>
+            <tbody>
+              <tr>
+                <td>权栈</td>
+                <td>2021/01/28 10:23:46</td>
+                <td>
+                    <div class="layui-progress">
+                        <div class="layui-progress-bar layui-bg-blue" lay-percent="92%" style="width: 92%;"></div>
+                    </div>
+                </td>
+                <td>
+                    <span class="layui-badge layui-bg-blue"  lay-tips="这里可以增加额外的提示信息！" >已完成</span>
+                </td>
+              </tr>
+              <tr >
+                <td>张爱玲</td>
+                <td>2021/01/28 10:23:46</td>
+                <td>
+                    <div class="layui-progress">
+                        <div class="layui-progress-bar layui-bg-orange" lay-percent="30%" style="width: 30%;"></div>
+                    </div>
+                </td>
+                <td>
+                    <span class="layui-badge layui-bg-orange" lay-tips="当前任务出现BUG急需修复！" >待修复</span>
+                </td>
+              </tr>
+              <tr>
+                <td>岳飞</td>
+                <td>2021/01/28 10:23:46</td>
+                <td>
+                    <div class="layui-progress">
+                        <div class="layui-progress-bar layui-bg-green" lay-percent="83%" style="width: 83%;"></div>
+                    </div>
+                </td>
+                <td>
+                    <span class="layui-badge layui-bg-green">进行中</span>
+                </td>
+              </tr>
+              <tr>
+                <td>张三丰</td>
+                <td>2021/01/28 10:23:46</td>
+                <td>
+                    <div class="layui-progress">
+                        <div class="layui-progress-bar layui-bg-red" lay-percent="54%" style="width: 54%;"></div>
+                    </div>
+                </td>
+                <td>
+                    <span class="layui-badge">已延期</span>
+                </td>
+              </tr>
+              <tr>
+                <td>乔峰</td>
+                <td>2021/01/28 10:23:46</td>
+                <td>
+                    <div class="layui-progress">
+                        <div class="layui-progress-bar layui-bg-cyan" lay-percent="10%" style="width: 10%;"></div>
+                    </div>
+                </td>
+                <td>
+                    <span class="layui-badge layui-bg-cyan">未开始</span>
+                </td>
+              </tr>
+            </tbody>
+            </table>               
+          </div>
+        </div>
+      </div>
+
+      <div class="layui-col-md4">
+        <div class="layui-card">
+          <div class="layui-card-header">版本信息</div>
+          <div class="layui-card-body">
+                <table class="layui-table">
+                  <colgroup>
+                    <col width="90">
+                    <col>
+                  </colgroup>
+                  <tbody>
+                    <tr>
+                      <td>当前版本</td>
+                      <td>v1.0.0 <a href="http://www.swiftadmin.net/" target="_blank" style="padding-left: 10px;">日志</a> 
+                        <a href="javascript:;" sa-event="update" style="padding-left: 5px;">检查更新</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>前端框架</td>
+                      <td>layui-v2.6.* / 多语言 / 多布局 / 前端鉴权</td>
+                    </tr>
+                    <tr>
+                      <td>后端框架</td>
+                      <td>ThinkPHP6.*</td>
+                    </tr>
+                    <tr>
+                      <td>PHP版本</td>
+                      <td>支持>=8.*</td>
+                    </tr>
+                    <tr>
+                      <td>主要特色</td>
+                      <td><font color="red">ant design</font> / 零门槛 / 响应式 / 清爽</td>
+                    </tr>
+                    <tr>
+                      <td>获取渠道</td>
+                      <td style="padding-bottom: 0;">
+                        <div class="layui-btn-container">
+                          <a href="http://www.swiftadmin.net/goods/" target="_blank" class="layui-btn layui-btn-danger">获取授权</a>
+                          <a href="http://www.swiftadmin.net/down/" target="_blank" class="layui-btn">立即下载</a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>              
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="layui-row layui-col-space10">
+      <div class="layui-col-md4">
+        <div class="layui-card" style="height: 323px;overflow:hidden;">
+          <div class="layui-card-header">热帖评论</div>
+          <div class="layui-card-body" >
+                <div class="layui-carousel" id="carousel">
+
+                  <div carousel-item>
+                    <ul class="layui-row layui-col-space10">
+                        <table class="layui-table" lay-skin="nob">
+                            <colgroup>
+                              <col>
+                              <col width="80">
+                            </colgroup>
+                            <thead>
+                              <tr>
+                                <th>标题</th>
+                                <th>发帖人</th>
+                              </tr> 
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>PHP 是一种创建动态交互性站点的强有力的服务器端脚本语言</td>
+                                <td>权栈</td>
+                               
+                              </tr>
+                              <tr >
+                                <td>PHP 是一种创建动态交互性站点的强有力的服务器端脚本语言</td>
+                                <td>张爱玲</td>
+                              </tr>
+                              <tr>
+                                <td>PHP 是一种创建动态交互性站点的强有力的服务器端脚本语言</td>
+                                <td>权栈</td>
+                               
+                              </tr>
+                              <tr >
+                                <td>PHP 是一种创建动态交互性站点的强有力的服务器端脚本语言</td>
+                                <td>张爱玲</td>
+                              </tr>
+                              <tr>
+                                <td>PHP 是一种创建动态交互性站点的强有力的服务器端脚本语言</td>
+                                <td>权栈</td>
+                               
+                              </tr>                            
+                            </tbody>
+                        </table>               
+                    </ul>
+
+                    <ul class="layui-row layui-col-space10">
+                        <table class="layui-table" lay-skin="nob">
+                            <colgroup>
+                              <col>
+                              <col width="80">
+                            </colgroup>
+                            <thead>
+                              <tr>
+                                <th>评论内容</th>
+                                <th>点赞数</th>
+                              </tr> 
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>听说swiftAdmin极速开发框架还不错哦！</td>
+                                <td>666688</td>
+                              </tr>
+                              <tr>
+                                <td>听说swiftAdmin极速开发框架还不错哦！</td>
+                                <td>666688</td>
+                              </tr>    
+                              <tr>
+                                <td>听说swiftAdmin极速开发框架还不错哦！</td>
+                                <td>666688</td>
+                              </tr>
+                              <tr>
+                                <td>听说swiftAdmin极速开发框架还不错哦！</td>
+                                <td>666688</td>
+                              </tr>
+                              <tr>
+                                <td>听说swiftAdmin极速开发框架还不错哦！</td>
+                                <td>666688</td>
+                              </tr>                                          
+                            </tbody>
+                        </table>               
+                    </ul>
+                  </div>
+                </div>              
+          </div>
+        </div>
+      </div>  
+
+      <div class="layui-col-md4">
+        <div class="layui-card">
+          <div class="layui-card-header">访问增长率</div>
+          <div class="layui-card-body">
+              <div id="fwzzl" style="height: 260px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-md4">
+        <div class="layui-card">
+          <div class="layui-card-header">小组成员</div>
+          <div class="layui-card-body" style="height: 260px" >
+            <div class="console-user-group">
+                <img src="/static/admin/images/user.png" class="console-user-group-head" alt=""/>
+                <div class="console-user-group-name">周星星</div>
+                <div class="console-user-group-desc">产品负责人</div>
+                <span class="layui-badge layui-badge-green">在线</span>
+            </div>
+            <div class="console-user-group">
+                <img src="/static/admin/images/user.png" class="console-user-group-head" alt=""/>
+                <div class="console-user-group-name">周星星</div>
+                <div class="console-user-group-desc">项目负责人</div>
+                <span class="layui-badge layui-badge-green">在线</span>
+            </div>
+            <div class="console-user-group">
+                <img src="/static/admin/images/user.png" class="console-user-group-head" alt=""/>
+                <div class="console-user-group-name">周星星</div>
+                <div class="console-user-group-desc">产品负责人</div>
+                <span class="layui-badge layui-badge-red">离线</span>
+            </div>
+            <div class="console-user-group">
+                <img src="/static/admin/images/user.png" class="console-user-group-head" alt=""/>
+                <div class="console-user-group-name">周星星</div>
+                <div class="console-user-group-desc">测试负责人</div>
+                <span class="layui-badge layui-badge-red">离线</span>
+            </div>
+            <div class="console-user-group">
+                <img src="/static/admin/images/user.png" class="console-user-group-head" alt=""/>
+                <div class="console-user-group-name">周星星</div>
+                <div class="console-user-group-desc">测试负责人</div>
+                <span class="layui-badge layui-badge-red">离线</span>
+            </div>               
+          </div>
+        </div>
+      </div>  
+  </div>   
+   
+</div>
+
+<include file="/public/footer" />
+
+<script>
+
+    layui.use(['admin','carousel'], function () {
+
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#carousel'
+            ,width: '100%' //设置容器宽度
+            ,arrow: 'none' //始终显示箭头
+        });
+
+        var myCharts = echarts.init(document.getElementById('fwzzl'));
+
+        var option = {
+            xAxis: {
+                type: 'category',
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [150, 230, 224, 218, 135, 147, 260],
+                type: 'line'
+            }]
+        };
+
+        myCharts.setOption(option);
+
+        // 窗口大小改变事件
+        window.onresize = function () {
+            myCharts.resize();
+        };
+    })
+
+</script>
+</body>
+</html>

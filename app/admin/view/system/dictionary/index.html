@@ -1,0 +1,117 @@
+<include file="/public/header" />
+<include file="/public/header" />
+<!-- // 重定位Style -->
+<style>
+    html, body,.layui-fluid, .layui-card,.layui-card-body,.layui-col-md3,.layui-col-md9 {
+        /*height: 98%;*/
+    }
+    .layui-card-header.layuiadmin-card-header-auto {
+        border-bottom: 0px;
+        padding-bottom: 0px;
+    }
+    ul li {
+        height: 28px;
+        line-height: 28px;
+        clear: both;
+        margin-bottom: 5px;
+        cursor: pointer;
+        color: #666;
+        border-bottom: 1px solid #f9f5f5;
+    }
+    ul li:hover {
+        background-color: #f9f5f5;
+    }
+
+    ul li span {
+        display: inline-block;
+        float: left;
+    }
+
+    ul li span.key {
+        margin: 0px 8px;
+        width: 16px;
+    }
+
+    ul li span.name {
+        margin: 0px 10px;
+        width: 150px;
+    }    
+
+    ul li span.length {
+        float: right;
+        color: rgb(24, 144, 255);
+    }
+
+</style>
+<div class="layui-col-md3">
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <h3>数据库字典</h3>
+            </div>
+            <div class="layui-card-body">
+                <ul>
+                    <volist name="list" id="vo">
+                        <li> <span class="key">{$key+1}</span>
+                            <span class="name">{$vo.name}</span>
+                            <span class="comment">{$vo.comment}</span>
+                            <span class="length">{$vo.length}</span>
+                        </li>
+                    </volist>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="layui-col-md9" >
+    <!-- // 展示数据 -->
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <!-- // 默认操作按钮 -->
+            <div class="layui-card-header layuiadmin-card-header-auto ">
+  
+            </div>
+
+            <!-- // 创建数据实例 -->
+            <table id="lay-tableList" lay-filter="lay-tableList"></table>        
+        </div>
+    </div>
+</div>
+
+<include file="/public/footer" />
+<script>
+    layui.use(['admin','layer','table','jquery'], function () {
+
+        var admin = layui.admin;
+        var layer = layui.layer;
+        var table = layui.table;        // 表格
+        var jquery = layui.jquery;   
+
+        // 定义表格URL
+        var tableURL = "{:url('/system.dictionary/index')}";
+        // 基础表格
+        var isTable = table.render({
+            elem: "#lay-tableList"
+            ,url: tableURL
+            ,cols: [[
+                {type: 'numbers', title: '{:__("ID")}'},
+                {field: 'field', align: 'center', title: '{:__("字段")}'},
+                {field: 'comment', align: 'center', title: '{:__("字段注释")}'},
+                {field: 'type', align: 'center', title: '{:__("数据类型")}'},
+                {field: 'default', align: 'center', title: '{:__("默认值")}'},
+                {field: 'null', align: 'center', title: '{:__("非空值")}'},
+                {field: 'collation', align: 'center', title: '{:__("排序规则")}'},
+            ]]
+        })
+
+        // 加载表格数据
+        jquery('ul li').click(function(event) {
+            var tables = jquery(this).children('.name').text();
+            var url = tableURL + '?table=' + tables;
+            table.reload('lay-tableList', {
+                url: url
+            });
+        })
+    });
+</script>

@@ -1,0 +1,252 @@
+<include file="/public/header" />
+<!-- 重定位style -->
+<style>
+.form-item-title {
+    text-align: center;
+    position: relative;
+}
+
+.form-item-title:before {
+    content: "";
+    position: absolute;
+    border-top: 1px dashed #ccc;
+    left: 40px;
+    right: 40px;
+    top: 8px;
+    z-index: -1;
+}
+
+.form-item-title > span {
+    background-color: white;
+    padding: 0 10px;
+    font-size: 13px;
+    color: #666;
+}    
+
+.layui-tab-content {
+  background-color: #fff;
+}
+
+.layui-form-item .layui-input-inline {
+    width: 300px;
+}
+
+.layui-short-select .layui-form-select {
+    display: inline-block;
+    width: 95px;
+}
+
+
+
+</style>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <!-- // 默认操作按钮 -->
+        <div class="layui-card-body">
+        <form id="baseForm" action="{:url('/system.rewrite/basecfg')}" lay-filter="baseForm" class="layui-form layui-row model-form" style="padding: 0px; " wid100>
+
+            <div class="layui-tab layui-tab-brief" style="margin: 0px;margin-bottom: 10px;">
+              <ul class="layui-tab-title">
+                <li class="layui-this">URL设置</li>
+                <li>静态生成</li>                                     
+              </ul>
+
+                <div class="layui-tab-content pl30">
+                    <div class="layui-tab-item  layui-show">
+                     <div class="layui-form-item ">
+                     <label class="layui-form-label">URL模式</label>
+                        <div class="layui-input-inline" style="width:300px;">
+                            <input type="radio" name="rewrite[URL_MODEL]"   
+                                value="1" title="伪静态"  <if condition="$rewrite['URL_MODEL'] eq 1 "> checked </if> >
+                            <input type="radio" name="rewrite[URL_MODEL]"   
+                                value="2" title="纯静态"  <if condition="$rewrite['URL_MODEL'] eq 2 "> checked </if> >
+                            <input type="radio" name="rewrite[URL_MODEL]"   
+                                value="0" title="动态URL" <if condition="$rewrite['URL_MODEL'] eq 0 "> checked </if> >
+                        </div>
+                      </div>
+                      <div class="layui-form-item ">
+                        <label class="layui-form-label">列表页</label>
+                            <div class="layui-input-inline " >
+                                <select name="rewrite[list_page]" >
+                                    <option value="">请选择分类页模式</option> <volist name="listPage" id="vo">
+                                    <option value="{$vo}" <if condition="$rewrite['list_page'] eq $vo "> selected </if> >{$vo}</option>
+                                    </volist>
+                                </select>
+                            </div>  
+                            <div class="layui-form-mid layui-word-aux">* 列表页URL格式，推荐{listdir}/{sublist}/list_{page}.html</div>                    
+                      </div>
+                      <div class="layui-form-item ">
+                            <label class="layui-form-label">内容页</label>
+                            <div class="layui-input-inline">
+                                <select name="rewrite[content_page]" >
+                                    <option value="">请选择内容页模式</option> <volist name="contentPage" id="vo">
+                                    <option value="{$vo}" <if condition="$rewrite['content_page'] eq $vo "> selected </if> >{$vo}</option>
+                                    </volist>
+                                </select>
+                            </div>  
+                          <div class="layui-form-mid layui-word-aux">* 内容页URL格式，推荐{listdir}/{id}.html</div>                    
+                      </div>     
+
+                      <div class="layui-form-item ">
+                        <label class="layui-form-label">筛选页</label>
+                          <div class="layui-input-inline">
+                              <input name="rewrite[list_type]" type="text" class="layui-input" lay-verType="tips" lay-verify="required" value="{$rewrite.list_type}"/>
+                          </div>  
+                          <div class="layui-form-mid layui-word-aux">* 筛选页URL格式，参数{id}/{pid}/{cid}/{tid}/{hid}...自选</div>                    
+                      </div>  
+
+                    <fieldset class="layui-elem-field layui-field-title"><legend style="font-size: 16px">sitemap设置</legend></fieldset>  
+                    <div class="layui-form-item ">
+                      <label class="layui-form-label">自动生成</label>
+                        <div class="layui-input-inline">
+                            <input type="radio" name="sitemap[status]"   
+                            value="1" title="开启"  <if condition="$sitemap['status'] eq 1 "> checked </if>>
+                            <input type="radio" name="sitemap[status]"   
+                            value="0" title="关闭"  <if condition="$sitemap['status'] eq 0 "> checked </if>>                            
+                        </div>  
+                        <div class="layui-form-mid layui-word-aux">* 更新内容时候自动更新网站地图</div> 
+                    </div>
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">更新频率</label>
+                        <div class="layui-input-inline layui-short-select">
+                            <select name="sitemap[index_freq]" >
+                                <option value="">首页</option>
+                                <option value="always" selected="true">实时</option>
+                                <option value="hourly">每小时</option>
+                                <option value="daily">每天</option>
+                                <option value="weekly">每周</option>
+                                <option value="monthly">每月</option>
+                                <option value="yearly">每年</option>
+                                <option value="never">从不</option>
+                            </select>   
+                            <select name="sitemap[list_freq]" >
+                                <option value="">列表页</option>
+                                <option value="always">实时</option>
+                                <option value="hourly" selected="true">每小时</option>
+                                <option value="daily">每天</option>
+                                <option value="weekly">每周</option>
+                                <option value="monthly">每月</option>
+                                <option value="yearly">每年</option>
+                                <option value="never">从不</option>
+                            </select> 
+                            <select name="sitemap[content_freq]">
+                                <option value="">内容页</option>
+                                <option value="always">实时</option>
+                                <option value="hourly">每小时</option>
+                                <option value="daily" selected="true">每天</option>
+                                <option value="weekly">每周</option>
+                                <option value="monthly">每月</option>
+                                <option value="yearly">每年</option>
+                                <option value="never">从不</option>
+                            </select>                          
+                        </div>
+                        <div class="layui-form-mid layui-word-aux"><font color="red">* </font>XML地图文件changefreq字段值。</div>
+                    </div>
+                    
+                    <div class="layui-form-item ">
+                      <label class="layui-form-label">priority优先级</label>
+                       <div class="layui-input-inline layui-short-select">
+                            <select name="sitemap[index_priority]" >
+                                <option value="">首页</option>
+                                <option value="0.1">0.1</option>
+                                <option value="0.2">0.2</option>
+                                <option value="0.3">0.3</option>
+                                <option value="0.4">0.4</option>
+                                <option value="0.5">0.5</option>
+                                <option value="0.6">0.6</option>
+                                <option value="0.7">0.7</option>
+                                <option value="0.8">0.8</option>
+                                <option value="0.9">0.9</option>
+                                <option value="1.0" selected >1.0</option>
+                            </select>   
+                            <select name="sitemap[list_priority]" >
+                                <option value="">列表页</option>
+                                <option value="0.1">0.1</option>
+                                <option value="0.2">0.2</option>
+                                <option value="0.3">0.3</option>
+                                <option value="0.4">0.4</option>
+                                <option value="0.5">0.5</option>
+                                <option value="0.6">0.6</option>
+                                <option value="0.7">0.7</option>
+                                <option value="0.8" selected >0.8</option>
+                                <option value="0.9">0.9</option>
+                                <option value="1.0">1.0</option>
+                            </select> 
+                            <select name="sitemap[content_priority]" >
+                                <option value="">内容页</option>
+                                <option value="0.1">0.1</option>
+                                <option value="0.2">0.2</option>
+                                <option value="0.3">0.3</option>
+                                <option value="0.4">0.4</option>
+                                <option value="0.5">0.5</option>
+                                <option value="0.6" selected >0.6</option>
+                                <option value="0.7">0.7</option>
+                                <option value="0.8">0.8</option>
+                                <option value="0.9">0.9</option>
+                                <option value="1.0">1.0</option>
+                            </select>                          
+                       </div>
+                       <div class="layui-form-mid layui-word-aux"><font color="red">* </font>XML地图文件priority字段值。</div>
+                    </div>
+                    <div class="layui-form-item ">
+                      <label class="layui-form-label">生成XML上限</label>
+                        <div class="layui-input-inline">
+                            <input name="sitemap[map_xml_max]" type="text" 
+                                class="layui-input" maxlength="5" lay-verType="tips" lay-verify="required" value="{$sitemap.map_xml_max}"/>
+                        </div>  
+                        <div class="layui-form-mid layui-word-aux">* 单个XML地图文件地址上限。</div>               
+                    </div>
+                    <div class="layui-form-item ">
+                      <label class="layui-form-label">地图保存目录</label>
+                        <div class="layui-input-inline">
+                            <input name="sitemap[map_xml_path]"  type="text" 
+                                class="layui-input" lay-verType="tips" lay-verify="required" value="{$sitemap.map_xml_path}"/>
+                        </div>     
+                        <div class="layui-form-mid layui-word-aux"><font color="red">* </font>XML文件目录，建议非根目录防止被采集！</div>          
+                    </div>   
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">实时推送token</label>
+                        <div class="layui-input-inline">
+                            <input name="sitemap[map_xml_token]"  type="text" 
+                                class="layui-input" lay-verType="tips" lay-verify="required" value="{$sitemap.map_xml_token}"/>
+                        </div>     
+                        <div class="layui-form-mid layui-word-aux"><font color="red">* 百度搜索资源平台</font> 的准入密钥,发布文章实时推送！</div>          
+                    </div> 
+
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">数据实时统计</label>
+                        <div class="layui-input-inline">
+                            <div style="height: 33px;line-height: 33px">
+                                XML文件 <span class="layui-badge layui-bg-blue">{$sitemap.count}</span> 个，
+                                地址 <span class="layui-badge layui-bg-cyan">{$sitemap.total}</span> 条，
+                            </div>
+                        </div>     
+                        <div class="layui-form-mid layui-word-aux"><font color="red">* </font>当前已生成的XML文件和URL地址数量！</div>          
+                    </div>
+                    <div class="layui-footer layui-form-item layui-center "  >
+                        <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('取消')}</button>
+                        <button class="layui-btn" lay-filter="submitIframe" lay-submit >{:__('提交')}</button>
+                    </div>
+                  </div>
+                  <div class="layui-tab-item">
+                   TODO...
+                  </div>
+              </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<include file="/public/footer" />
+<script>
+    layui.use(['admin','form'], function () {
+        var jquery = layui.jquery;
+        var admin = layui.admin;
+        var form = layui.form;
+
+    })
+</script>

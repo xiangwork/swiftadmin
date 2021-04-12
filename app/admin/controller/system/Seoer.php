@@ -1,0 +1,58 @@
+<?php
+declare (strict_types = 1);
+// +----------------------------------------------------------------------
+// | swiftAdmin 极速开发框架 [基于ThinkPHP6开发]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2019-2020 http://www.swiftadmin.net
+// +----------------------------------------------------------------------
+// | swiftAdmin.net High Speed Development Framework
+// +----------------------------------------------------------------------
+// | Author: 权栈 <coolsec@foxmail.com>，河北赢图网络科技版权所有
+// +----------------------------------------------------------------------
+namespace app\admin\controller\system;
+
+
+use app\AdminController;
+
+class Seoer extends AdminController 
+{
+    // 初始化函数
+    public function initialize() 
+    {
+        parent::initialize();
+    }
+
+    /**
+     * 获取资源 
+     */    
+    public function index() 
+    {
+        return view();
+    }
+
+
+    /**
+     * 查询站点
+     */
+    public function getsitelist() 
+    {
+
+    }
+
+    /**
+     * 查询目录
+     */
+    public function getsitedir()
+    {
+
+    }
+
+    /**
+     * 查询数据
+     */
+    public function getdata()
+    {
+        
+    }
+
+}   

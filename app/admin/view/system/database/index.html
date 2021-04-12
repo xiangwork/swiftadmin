@@ -1,0 +1,60 @@
+<include file="/public/header" />
+<div class="layui-fluid">
+    <div class="layui-card">
+        <!-- // 默认操作按钮 -->
+        <div class="layui-card-header layuiadmin-card-header-auto ">
+            <div class="layui-form">
+                <div class="layui-inline" >
+                    <!-- // 添加数据页面 -->
+                    <button class="layui-btn icon-btn" lay-batch="lay-tableList"  lay-url="{:url('/system.database/optimize')}" lay-nodel="false" >
+                        <i class="layui-icon layui-icon-add-1"></i>{:__('优化数据库')}
+                    </button>
+                    <button class="layui-btn icon-btn" lay-batch="lay-tableList"  lay-url="{:url('/system.database/repair')}" lay-nodel="false" >
+                        <i class="layui-icon layui-icon-senior"></i>{:__('修复数据库')}
+                    </button>
+                    <button class="layui-btn icon-btn" lay-batch="lay-tableList"  lay-url="{:url('/system.database/export')}" lay-nodel="false" >
+                        <i class="layui-icon layui-icon-export"></i>{:__('备份数据库')}
+                    </button>
+                    <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('数据库配置')}" lay-area="500px,350px" lay-url="{:url('/system.database/config')}" >
+                        <i class="layui-icon layui-icon-form"></i>{:__('数据库配置')}
+                    </button>
+                </div>
+            </div>
+        </div> 
+
+        <!-- // 创建数据表实例 -->
+        <table id="lay-tableList" lay-filter="lay-tableList"></table>        
+    </div>
+</div>
+
+<!-- // 列表工具栏 -->
+<script type="text/html" id="tableBar"> 
+    <a class="layui-table-text" lay-ajax lay-url="{:url('/system.database/optimize/')}id/{{d.name}}"  >{:__('优化')}</a>
+    <div class="layui-divider layui-divider-vertical"></div>
+    <a class="layui-table-text" lay-ajax lay-url="{:url('/system.database/repair/')}id/{{d.name}}"  >{:__('修复')}</a>
+</script>
+
+<include file="/public/footer" />
+<script>
+    layui.use(['admin','table'], function () {
+        var jquery = layui.jquery;
+        var table = layui.table;
+        // 初始化表
+        var isTable = table.render({
+            elem: "#lay-tableList"
+            ,url: "{:url('/system.database/index')}"
+            ,cols: [[
+                {type: 'checkbox'},
+                {type: 'numbers'},
+                {field: 'name', align: 'center',sort: true, title: '数据表名'},
+                {field: 'engine', align: 'center', title: '{:__("引擎")}'},
+                {field: 'data_length', align: 'center', title: '{:__("数据表大小")}'},
+                {field: 'general', align: 'center',title: '{:__("排序规则")}'},
+                {field: 'comment', align: 'center', title: '数据表注释'},
+                {field: 'createtime', align: 'center', title: '{:__("创建时间")}'},
+                {align: 'center', toolbar: '#tableBar',width: 160, title: '{:__("操作")}'},
+            ]]
+        })
+
+    })
+</script>

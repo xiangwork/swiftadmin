@@ -1,0 +1,23 @@
+	<div class="layui-container" >
+		<div class="layui-logo">
+			<a href="/"><img src="http://www.swiftadmin.net/static/admin/images/logo.png" alt="logo" height="26">SwiftAdmin</a>
+		</div>
+
+		<ul class="layui-nav">
+			<li class="layui-nav-item active"><a href="/" class="nav-link">主页</a></li>
+			<li class="layui-nav-item "><a href="/" class="nav-link">关于</a></li>
+			<li class="layui-nav-item "><a href="/" class="nav-link">服务</a></li>
+			<li class="layui-nav-item layui-hide-xs"><a href="/" class="nav-link">特性</a></li>
+			<li class="layui-nav-item layui-hide-xs"><a href="/" class="nav-link">项目</a></li>
+			<li class="layui-nav-item layui-hide-xs"><a href="/comment" class="nav-link">评论模块</a></li>
+			<li class="layui-nav-item layui-hide-xs"><a href="/" class="nav-link">联系我们</a></li>
+		</ul>
+
+		<div class="layui-nav layui-hide-xs fr" id="login">
+			<notempty name="$user.id"> <li class="layui-nav-item"><a class="" href="/user/index" >会员中心</a></li> <else/>
+
+			<li class="layui-nav-item"><a href="javascript:;" lay-open  lay-title="用户注册" lay-area="430px,355px" lay-url="/user/register" >注册</a></li>
+			<li class="layui-nav-item"><a href="javascript:;" lay-open  lay-title="用户登录" lay-area="430px,355px" lay-url="/user/login" >登录</a></li>
+			</notempty>
+		</div>
+	</div>

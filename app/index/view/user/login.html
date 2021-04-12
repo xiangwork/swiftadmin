@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SwiftAdmin 用户登录</title>
+<include file="public:header">
+</head>
+<body>
+
+<div class="layui-fluid">
+	<div class="login-link">
+		<span class="other">第三方账号登录：</span> 
+		<span>
+			<a href="javascript:void(0);"  data-url="{:url('/third/login',['type'=>'weixin'])}" class="layui-icon layui-icon-login-wechat"></a>
+			<a href="javascript:void(0);"  data-url="{:url('/third/login',['type'=>'qq'])}"  	class="layui-icon layui-icon-login-qq"></a>
+			<a href="javascript:void(0);"  data-url="{:url('/third/login',['type'=>'weibo'])}"  class="layui-icon layui-icon-login-weibo"></a>
+		</span>
+	</div>
+	<form class="layui-form layui-form-fixed" action="/user/login" method="post" >
+
+
+		<div class="layui-form-item">
+		<label class="layui-form-label">用户帐号</label>
+		<div class="layui-input-block">
+		  <input type="text" id="name" name="name" lay-verify="title" autocomplete="off" placeholder="请输入帐号" class="layui-input" value="test">
+		</div>
+		</div>
+		<div class="layui-form-item">
+		<label class="layui-form-label">密码</label>
+		<div class="layui-input-block">
+		  <input type="password" id="pwd" name="pwd" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input" value="admin123">
+		</div>
+		</div>
+		<div class="layui-form-item" style="margin-top: 22px;text-align: center;">
+			<button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="submitIframe">立即提交</button>
+			<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		</div>				
+	</form>								
+</div>
+</body>
+
+</html>

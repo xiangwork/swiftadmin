@@ -1,0 +1,65 @@
+<include file="/public/header" />
+<!-- // 重定位Style -->
+<style>
+    html, body,.layui-fluid, .layui-card,.layui-card-body,.layui-col-md3,.layui-col-md9 {
+        height: 99%;
+    }
+    .layui-card-header.layuiadmin-card-header-auto {
+        border-bottom: 0px;
+        padding-bottom: 0px;
+    }
+</style>
+<div class="layui-col-md3">
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header layuiadmin-card-header-auto"></div>
+            <div class="layui-card-body">
+                <div id="tree"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="layui-col-md9" >
+    <!-- // 展示数据 -->
+    <div class="layui-fluid" id="fluid">
+        <div class="layui-card">
+            <div class="layui-card-header layuiadmin-card-header-auto"></div>
+            <div class="layui-card-body">
+                <div style="height: 98%;width: 100%">.</div>
+            </div>
+        </div>
+    </div>
+    
+    <iframe src="#" frameborder="0" style="display: none;" id="recycle" style="height: 98%;width: 100%" ></iframe>
+</div>
+
+<include file="/public/footer" />
+<script>
+    layui.use(['admin','table','tree'], function () {
+        var jquery = layui.jquery;
+        var tree = layui.tree;
+        var table = layui.table;
+
+        var data = layui.admin.event.getAjaxData("{:url('/system.recyclebin/index')}");
+    
+        tree.render({
+          elem: '#tree'
+          ,data: data
+          ,click: function(obj){
+            console.log(obj);
+            var recycle = obj.data;
+            if (recycle.router.indexOf('recyclebin') !== -1) {
+                jquery('#recycle').attr('src',recycle.router);
+                jquery('#recycle').css({
+                    width: '100%',
+                    height: '98%'
+                });
+                jquery('#recycle').show();
+                jquery('#fluid').remove();
+            }
+          }
+        });
+
+    })
+</script>

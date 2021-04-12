@@ -1,0 +1,80 @@
+<include file="/public/header" />
+<style>
+    textarea {
+        width: 98%;
+        height: 50px;
+        padding: 6px;
+        background-color: #f2f2f2;
+    } 
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <!-- // 默认操作按钮 -->
+        <form action="{:url('/system.comment/edit')}" class="layui-form">
+            <input type="hidden" name="id" value="{$data.id}" >    
+            <div class="layui-form-item">
+                <label class="layui-form-label">{:__('评论用户')}</label>
+                <div class="layui-input-inline " style="margin-top: 6px;">{$data.name|default='游客'}</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">{:__('评论内容')}</label>
+                <div class="layui-input-block">
+                <textarea id="content" name="content" class="layui-textarea" >{$data.content}</textarea>
+                </div>
+            </div>
+
+        <div class="layui-footer layui-form-item layui-center "  >
+            <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('取消')}</button>
+            <button class="layui-btn" lay-filter="submitIframe"  lay-submit>{:__('提交')}</button>
+        </div>
+        </form>
+
+        <!-- // 创建数据实例 -->
+        <table id="lay-tableList" lay-filter="lay-tableList"></table>        
+    </div>
+</div>
+
+<!-- // 列表状态栏 -->
+<script type="text/html" id="columnStatus">
+    <input type="checkbox" lay-filter="switchStatus" lay-url="{:url('/system.comment/status')}" value="{{d.id}}" lay-skin="switch"
+     {{d.status==1?'checked':''}}  />
+</script>
+
+<!-- // 列表工具栏 -->
+<script type="text/html" id="tableBar"> 
+    <a class="layui-table-text" lay-title="{:__('查看评论')}" lay-area="80%,82%" lay-url="{:url('/system.comment/view/')}id/{{d.id}}" lay-event="edit">{:__('查看')}</a>
+    <div class="layui-divider layui-divider-vertical"></div>
+    <a class="layui-table-text" lay-url="{:url('/system.comment/del/')}id/{{d.id}}" lay-event="del">{:__('删除')}</a>
+</script>
+
+<include file="/public/footer" />
+<script>
+    layui.use(['admin','table'], function () {
+        var jquery = layui.jquery;
+        var table = layui.table;
+        /*
+         * 初始化表格
+        */
+        var isTable = table.render({
+            elem: "#lay-tableList"
+            ,url: "{:url('/system.comment/view/')}id/{$data.id}"
+            ,page: true
+            ,cols: [[
+                {type: 'checkbox', width:45},
+                {field: 'id', align: 'center',sort: true,width: 80,  title: 'ID'},
+                {field: 'uid', align: 'center',sort: true,width: 80,templet:function(d){
+                    return d.uid == 0 ? '无' : d.uid;
+                },  title: 'UID'},
+                {field: 'name', align: 'left', width:120,templet:function(d){
+                    return d.name === null ? '游客' : d.name;
+                },title: '{:__("昵称")}'},
+                {field: 'content', align: 'left',title: '{:__("评论内容")}'},                
+                {field: 'status', align: 'center',width:120,templet:'#columnStatus',title: '{:__("状态")}'},
+                {field: 'ip', align: 'center',width:160,title: '{:__("登录IP")}'},
+                {field: 'createtime', align: 'center', width:160,templet: '<div>{{ layui.util.toDateString(d.createtime*1000, "yyyy-MM-dd HH:mm:ss") }}</div>',  title: '{:__("评论时间")}'},
+                {align: 'center', toolbar: '#tableBar', width:160, title: '{:__("操作")}'},
+            ]]
+        })
+
+    })
+</script>

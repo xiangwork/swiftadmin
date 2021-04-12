@@ -1,0 +1,172 @@
+<include file="/public/header" />
+<link rel="stylesheet" type="text/css" href="__STATICADMIN__css/plugin.css?v=<php> echo rand(100,100000);</php>">
+<!-- // 重定位Style -->
+<style type="text/css">
+	.layui-flow-more {
+		clear: both;
+	}
+</style>
+<!-- // 展示数据 -->
+<div class="layui-fluid">
+    <div class="layui-card layui-elem">
+        <!-- // 默认操作按钮 -->
+        <div class="layui-card-header layuiadmin-card-header-auto ">
+		<blockquote class="layui-elem-quote">模板市场：将向着共享化、全面化、专业化、深度化、免费化的多元方向发展</blockquote>        	
+        <div class="layui-form">
+            <div class="layui-form-item">
+				<label class="layui-form-label">适用站点：</label>
+				<div class="layui-input-block" name="type">
+					<span class="layui-template-select active first" lay-value="">全部</span>
+					<span class="layui-template-select" lay-value="网络设计">网络设计</span>
+					<span class="layui-template-select" lay-value="婚庆摄影">婚庆摄影</span>
+					<span class="layui-template-select" lay-value="机械电子">机械电子</span>
+					<span class="layui-template-select" lay-value="医疗保健">医疗保健</span>
+					<span class="layui-template-select" lay-value="农业化工">农业化工</span>
+					<span class="layui-template-select" lay-value="酒类食品">酒类食品</span>
+					<span class="layui-template-select" lay-value="租车金融">租车金融</span>
+					<span class="layui-template-select" lay-value="建材装修">建材装修</span>
+					<span class="layui-template-select" lay-value="新闻博客">新闻博客</span>
+					<span class="layui-template-select" lay-value="学校培训">学校培训</span>
+					<span class="layui-template-select" lay-value="其他行业">其他行业</span>
+				</div>
+            </div>
+            <div class="layui-form-item">
+				<label class="layui-form-label">模板颜色：</label>
+				<div class="layui-input-block" name="color">
+					<span class="layui-template-select active first">全部</span>
+					<span class="layui-template-select" lay-value="蓝色">蓝色</span>
+					<span class="layui-template-select" lay-value="红色">红色</span>
+					<span class="layui-template-select" lay-value="橙色">橙色</span>
+					<span class="layui-template-select" lay-value="黄色">黄色</span>
+					<span class="layui-template-select" lay-value="绿色">绿色</span>
+					<span class="layui-template-select" lay-value="黑白">黑白</span>				
+					<span class="layui-template-select" lay-value="紫色">紫色</span>				
+					<span class="layui-template-select" lay-value="灰色">灰色</span>				
+					<span class="layui-template-select" lay-value="棕色">棕色</span>				
+					<span class="layui-template-select" lay-value="多色">多色</span>				
+				</div>
+            </div>
+            <div class="layui-form-item">
+				<label class="layui-form-label">标签选项：</label>
+				<div class="layui-input-block" name="pay">
+					<span class="layui-template-select active first">全部</span>
+					<span class="layui-template-select" lay-value="1">免费</span>
+					<span class="layui-template-select" lay-value="2">收费</span>
+					<div class="layui-divider layui-divider-vertical"></div>
+					<span name="label">
+						<span class="layui-template-select" lay-value="响应式">响应式</span>
+						<span class="layui-template-select" lay-value="HTML5">HTML5</span>
+						<span class="layui-template-select" lay-value="Layui">Layui</span>
+						<span class="layui-template-select" lay-value="BooSstrap">BooSstrap</span>
+						<span class="layui-template-select" lay-value="移动端">移动端</span>
+					</span>
+				</div>
+            </div>
+        </div>   
+        </div>
+
+        <!-- // 创建数据实例 -->
+       	<div id="template" class="layui-row layui-col-space30" style="padding: 20px"></div>
+    </div>
+</div>
+
+<script type="text/html" id="noting">
+<div class="layui-message-list-empty" style="margin: 15% auto;text-align: center;">
+	<img src="/static/admin/images/noting.png"><div>没有数据</div>
+</div>
+</script>
+
+<include file="/public/footer" />
+<script>
+    layui.use(['admin','plugin','flow','jquery'], function () {
+
+        var admin = layui.admin;
+        var flow = layui.flow;
+        var jquery = layui.jquery;
+        var plugin = layui.plugin;
+        var template = {$template|raw};
+
+	    /**
+	     * 查询模板信息
+	     */
+	    jquery('.layui-template-select').click(function(res){
+	        var that = jquery(this);
+	        if (that.hasClass('active') && !that.hasClass('first')) {
+	            that.removeClass('active');
+	            that.siblings('span.first').addClass('active');
+	        }else {
+	            that.siblings('.active').removeClass('active');
+	            that.addClass('active');
+	        }
+	        // 查询参数
+	        var data = {}, elem = jquery('.active');
+	        elem.each(function(e,n){
+	            var value = jquery(n).attr('lay-value') || undefined
+	            ,type = jquery(n).parent().attr('name');
+	            data[type] = value;
+	            
+	        })
+
+	        jquery('#template').html('');
+	        tempAjaxData(data);
+	    })
+
+	    // 流加载模板
+       	var tempAjaxData = function(data) {
+
+		    flow.load({
+		        elem: '#template'
+		        ,done: function(page, next) { 
+					jquery.ajax({
+			             url: plugin.apiUrl + '/template/index?page='+page,
+			             type: 'POST',
+			             dataType: 'json',
+			             timeout: 2000,
+			             data: data, 
+			             success: function(res) {
+			                   var list = [];
+
+			                   layui.sessionData('api_template_data',{
+				                   	key:'data',
+				                   	value: res.data,
+			                   });
+			                   layui.each(res.data, function(index, item) {
+								var html = '<div class="layui-col-md2">';
+									html += '<div class="layui-project ">';
+									html += '<img class="layui-project-cover" lay-images="'+item.id+'" src="'+item.image+'"> ';
+									html += '<div class="layui-project-body"> <h2>'+item.title+'</h2>';
+									html += '<div class="layui-project-text layui-text">'+item.description+'</div> ';
+									html += '<div class="layui-project-desc">';
+									html += '<span class="layui-badge layui-bg-gray">'+item.type+'</span>';
+									if (item.price > 0) {
+									   	html += '<span class="layui-badge">￥'+ item.price +'</span>';
+									}else {
+									 	html += '<span class="layui-badge layui-bg-gray">免费</span>';
+									}
+
+									if (template.indexOf(item.name) != -1) {
+									   html += '<button type="button" class="layui-btn layui-btn-sm layui-btn-danger layui-uninstall"';
+									   html += 'layui-value="'+item.id+'" layui-name="'+item.name+'" >卸载</button>';
+									} else {
+									   html += '<button type="button" class="layui-btn layui-btn-sm layui-btn-normal layui-install"';
+									   html += 'layui-value="'+item.id+'" layui-name="'+item.name+'" >安装</button>';
+									}
+
+									html += '</div></div></div></div>';
+									list.push(html);
+								}); 
+			        			next(list.join(''), page < res.last_page);
+			             },
+			             error: function(res) {
+			                  layui.iziToast.error({
+			                     message: '模板市场服务器异常！',
+			                 });
+			             }
+		        	})
+				}
+		    });
+       	}
+
+       	tempAjaxData();
+    });
+</script>

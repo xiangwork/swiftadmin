@@ -1,0 +1,154 @@
+<include file="/public/header" />
+<include file="/public/header" />
+<!-- // 重定位Style -->
+<style>
+    html, body,.layui-fluid, .layui-card,.layui-card-body,.layui-col-md3,.layui-col-md9 {
+        height: 98%;
+    }
+    .layui-card-header.layuiadmin-card-header-auto {
+        border-bottom: 0px;
+        padding-bottom: 0px;
+    }
+    .layui-form-item .layui-input-inline .layui-form-radio {
+        margin-right: 1px;
+    }
+</style>
+
+<!-- // 展示数据 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <!-- // 默认操作按钮 -->
+        <div class="layui-card-header layuiadmin-card-header-auto ">
+        <div class="layui-form">
+            <div class="layui-form-item">
+
+            <div class="layui-inline"><div class="layui-input-inline ">
+                <input name="name" class="layui-input" type="text" placeholder="{:__('关键字搜索')}"/></div>
+            </div>
+
+            <div class="layui-inline" >
+                <!-- // 默认搜索 -->
+                <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit><i class="layui-icon layui-icon-search"></i>{:__('搜索')}</button>
+                <!-- // 打开添加页面 -->
+                <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加接口')}" lay-area="500px" lay-url="#editforms" >
+                    <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
+                </button>
+                <!-- // 导入返回数据 -->
+                <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('返回示例')}" lay-area="500px" lay-url="#restfulforms" >
+                    <i class="layui-icon layui-icon-add-1"></i>{:__('返回示例')}
+                </button>                
+            </div>
+            </div>
+        </div>   
+        </div>
+
+        <!-- // 创建数据实例 -->
+        <table id="lay-tableList" lay-filter="lay-tableList"></table>        
+    </div>
+</div>
+
+<!--  -->
+
+<!-- // 添加编辑数据 -->
+<script type="text/html" id="editforms" >
+<div class="layui-fluid layui-bg-white" >
+    <form class="layui-form layui-form-fixed" lay-filter="editforms" >
+    <input type="text" name="id" hidden="">
+    <input type="text" name="pid" value="{$data.id}" hidden=""> 
+    <input type="text" name="sort" hidden=""> 
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">* </font>{:__('参数名称')}</label>
+        <div class="layui-input-block">
+            <input name="name" placeholder="{:__('请填写参数名称')}" type="text" class="layui-input"  lay-verType="tips" lay-verify="required" />
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">* </font>{:__('参数类型')}</label>
+        <div class="layui-input-block">
+            <select name="type" lay-verType="tips" lay-verify="required"> 
+                <option value="Integer">Integer</option>
+                <option value="String" >String</option>
+                <option value="Array">Array</option>
+                <option value="Float">Float</option>
+                <option value="Boolean">Boolean</option>
+                <option value="File">File</option>
+                <option value="Enum">Enum</option>
+                <option value="Mobile">Mobile</option>
+                <option value="Object">Object</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:__('参数说明')}</label>
+        <div class="layui-input-block">
+            <textarea name="content" id="content" cols="30" rows="10" style="min-height: 60px;" 
+            placeholder="{:__('请输入返回参数说明')}" class="layui-textarea" ></textarea>
+        </div>
+    </div>
+
+    <div class="layui-footer layui-form-item layui-center"  >
+        <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('取消')}</button>
+        <button class="layui-btn" lay-add="{:url('/system.api/restfulAdd')}" lay-edit="{:url('/system.api/restfulEdit')}" lay-filter="submitPage"  lay-submit>{:__('提交')}</button>
+    </div>
+    </form>
+</div>
+</script>
+
+<!-- // 请求示例数据 -->
+<script type="text/html" id="restfulforms" >
+<div class="layui-fluid layui-bg-white" >
+    <form  action="{:url('/system.api/edit')}" class="layui-form layui-form-fixed" lay-filter="restfulforms" >
+    <!-- // 因为编写为自己的数据表所以这里写ID -->
+    <input type="text" name="id" value="{$data.id}" hidden="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">{:__('返回示例')}</label>
+        <div class="layui-input-block">
+            <textarea name="restful" cols="30" rows="10" style="min-height: 200px;" 
+            placeholder="{:__('请输入返回示例')}" class="layui-textarea" >{$data.restful}</textarea>
+        </div>
+    </div>
+
+    <div class="layui-footer layui-form-item layui-center"  >
+        <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('取消')}</button>
+        <button class="layui-btn" lay-filter="submitPage"  lay-submit>{:__('提交')}</button>
+    </div>
+    </form>
+</div>
+</script>
+
+<!-- // 列表编辑框 -->
+<script type="text/html" id="tableBar"> 
+    <a class="layui-table-text" lay-title="{:__('编辑')} {{d.name}}" lay-url="#editforms" lay-area="500px" lay-event="edit" >{:__('编辑')}</a>
+	<div class="layui-divider layui-divider-vertical"></div>
+    <a class="layui-table-text" lay-url="{:url('/system.api/restfulDel/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
+</script>
+
+<include file="/public/footer" />
+<script>
+    layui.use(['admin','table'], function () {
+
+        var admin = layui.admin;
+        var table = layui.table;        // 表格
+
+        // 定义表格URL
+        var tableURL = "{:url('/system.api/restful')}?id={$data.id}";
+
+        // 基础表格
+        var isTable = table.render({
+            elem: "#lay-tableList"
+            ,url: tableURL
+            ,cols: [[
+                {type: 'numbers',title: '{:__("序号")}'},
+                {field: 'name', align: 'center', title: '{:__("参数名称")}'},
+                {field: 'type', align: 'center', title: '{:__("数据类型")}'},
+                {field: 'sort', align: 'center', title: '{:__("排序")}'},
+                {field: 'content', align: 'center', title: '{:__("字段说明")}'},
+                {field: 'createtime', align: 'center', width: 160,title: '{:__("创建时间")}'},
+                {align: 'center', toolbar: '#tableBar',width: 200, title: '{:__("操作")}'},
+            ]]
+        })
+
+    });
+</script>

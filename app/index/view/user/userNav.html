@@ -1,0 +1,9 @@
+{:hook('user_sidenav_before')}
+<ul class="layui-nav layui-nav-tree" lay-filter="demo" style="margin-right: 10px;">
+	<li class="layui-nav-item {:check_nav_active('/user/index')}"><a href="/user/index">我的主页</a></li>
+	<li class="layui-nav-item {:check_nav_active('/user/profile')}"><a href="/user/profile">个人资料</a></li>
+	<li class="layui-nav-item {:check_nav_active('/user/changepwd')}"><a href="/user/changepwd">修改密码</a></li>
+	<li class="layui-nav-item {:check_nav_active('/user/appid')}"><a href="/user/appid">申请APPID</a></li>
+	<li class="layui-nav-item {:check_nav_active('/user/logout')}"><a href="/user/logout">退出</a></li>
+</ul>
+{:hook('user_sidenav_after')}
