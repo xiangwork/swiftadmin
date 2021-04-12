@@ -1,62 +1,91 @@
 SwiftAdminPHP 极速后台开发框架
 ===============
-> `SwiftAdmin` 基于ThinkPHP6版本开发， 学习本手册有利于您快速的掌握本框架的开发架构！
+
+> 基于ThinkPHP6版本开发， 学习本手册有利于您快速的掌握本框架的开发架构！
 
 <div align="center">
 <img src="https://images.gitee.com/uploads/images/2021/0412/110400_6a5e130d_904542.png"/>
 </div>
 
+<b>请注意，本框架只支持PHP8版本，低版本已经不兼容了~ 系统安装后默认密码为admin888</b>
 
-
-<p><a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-Apache%202-blue.svg" alt="swiftadmin"></a>
+<a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-Apache%202-blue.svg" alt="swiftadmin"></a>
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/ThinkPHP-6+-brightgreen.svg" alt="swiftadmin"></a>
 <a href="https://gitee.com/meystack/swiftadmin/stargazers"><img src="https://gitee.com/meystack/swiftadmin/badge/star.svg?theme=dark" alt="star"></a>
-<a href="https://gitee.com/meystack/swiftadmin/members"><img src="https://gitee.com/meystack/swiftadmin/badge/fork.svg?theme=dark" alt="fork"></a></p>
-
-交流讨论QQ群：<p><a href="https://qm.qq.com/cgi-bin/qm/qr?k=Idivrh-log25t0ryx19nWeqUk8oFrI-X&jump_from=webapi"><img src="https://img.shields.io/badge/一群-68221484-blue.svg" alt="一群"></a>
+<a href="https://gitee.com/meystack/swiftadmin/members"><img src="https://gitee.com/meystack/swiftadmin/badge/fork.svg?theme=dark" alt="fork"></a><a href="https://qm.qq.com/cgi-bin/qm/qr?k=Idivrh-log25t0ryx19nWeqUk8oFrI-X&jump_from=webapi"><img src="https://img.shields.io/badge/一群-68221484-blue.svg" alt="一群"></a>
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=L_SKDh46TnWDVrudKEON2XAlgm02RNic&jump_from=webapi"><img src="https://img.shields.io/badge/二群-68221585-blue.svg" alt="二群"></a>
-<a href="https://qm.qq.com/cgi-bin/qm/qr?k=p6N-b7AkWiESpcrZmOKWpm3t05qt4MQ-&jump_from=webapi"><img src="https://img.shields.io/badge/三群-68221618-blue.svg" alt="三群"></a></p>
+<a href="https://qm.qq.com/cgi-bin/qm/qr?k=p6N-b7AkWiESpcrZmOKWpm3t05qt4MQ-&jump_from=webapi"><img src="https://img.shields.io/badge/三群-68221618-blue.svg" alt="三群"></a>
 
-## 开发初衷
+# 开发初衷
 
 1. `SwiftAdmin` 框架的开发，主要也是为了减少在自己开发过程中的频繁造轮子，并且swiftAdmin框架主张简单就是高效的原则，相信没有比判断0或者1更有效率的算法了吧，所以最简单的东西才是效率最高的，可能你的应用场景很复杂，但是你可以把复杂的事情简单化，复杂的维度无外乎  `n+0 or 1` 
 
-
-
 2. 在最开始接触互联网的时候，都是用一些开源的CMS系统制作自己的网站，后期因为扩展和二次开发的问题，导致觉得很多东西并不是那么简单易用，比如后台的很多JS代码封装的不是很好，而且界面也操作性很差，所以自己开发这款框架封装了很多常用的特性，足以满足日常后台的开发需要，在使用的过程中你会发现，SA框架里面用的最多的是属性而不是对象，一是为了在书写HTML标签的时候方便。二是为了和layui本身区分开！这样让你更容易在这个上面进行扩展！
-
-
 
 3. 由于我本人不太喜欢一键增删改查，因为一键增删改查的方式并不适合大多数硬性的应用场景和逻辑需求，你可能在后期需要摈弃大多数利用了一键CURD的方法进行重载函数，虽然swiftadmin框架里面也有，但swiftadmin框架的设计初衷是为了在易用性和操作性上折中找一个方案来做，当前基于第一个版本的SA框架在这方面的表现还不是特别好。但随着应用场景和市场的检验和优化，本框架会逐步的进行完善和提高性能！
 
-
-
 4. 在市面上目前的开源极速开发框架的学习成本略高，想搞一个学习成本极低，但性能不低的框架！
 
-
-
 5. 想着开发一款底层设计配置和应用分开的系统，这样对于很多小白用户不会在项目已经上线运行中的时候，误操作系统的配置导致数据丢失，错乱的问题。比如有些字段需要手动在数据库进行修改，
-
-### 文档地址 https://www.yuque.com/meystack/swiftadmin
-
-## 侧重点
+## 文档地址 https://www.yuque.com/meystack/swiftadmin 
+<br/><br/>
+# 侧重点
 
 1、swiftAdmin的架构和开发更倾向于内容管理系统[CMS]的方向，所以如果你使用本框架搭建一个简易的API管理系统，那么你需要自行删除一些不必要的代码文件！使得你的项目在SA精简框架下更易维护！
 
-
 2、系统默认的缓存机制为redis缓存，所以请确保安装redis扩展和服务器[摒弃操蛋的file缓存吧]
 
-
 3、如果你只是需要一个极简的API管理系统，那么建议你删除不需要的模块和菜单项！
+<br/><br/>
+# 安装使用
+
+1、首先将本框架直接clone到你本地,或者直接下载
+```
+git clone https://gitee.com/meystack/swiftadmin.git
+```
+<font color="#dd0000">2、以宝塔面板为例：将你的网站访问目录修改为public文件夹</font>
+
+3、在根目录直接执行 composer install 命令加载第三方库即可！
+```
+composer install
+```
+<br/>
+
+## 集成功能
+* AUTH权限 支持公有/私有权限 
+* 角色管理  支持栏目权限
+* 用户管理
+* 公司管理
+* 部门管理
+* 岗位管理
+* 导航管理
+* API模块 支持token鉴权，支持细分规则
+* 插件模块
+
+> 这个管理模块太多，就不一个个写了，你可以看下面的图片，更多的功能请下载安装后发现！
+
+### 运营模块
+* 广告管理
+
+### 框架图片
+
+<img src="https://images.gitee.com/uploads/images/2021/0412/135434_82477f64_904542.png" width="500" height="300">
+<img src="https://images.gitee.com/uploads/images/2021/0412/135446_e5a0fb94_904542.png" width="500" height="300">
+<img src="https://images.gitee.com/uploads/images/2021/0412/135451_c75d3ca2_904542.png" width="500" height="300">
+<img src="https://images.gitee.com/uploads/images/2021/0412/135457_d4429ce5_904542.png" width="500" height="300">
+
+<img src="https://images.gitee.com/uploads/images/2021/0412/135519_aa76fdcf_904542.gif" >
+<img src="https://images.gitee.com/uploads/images/2021/0412/140708_8baf92f1_904542.gif" >
+<img src="https://images.gitee.com/uploads/images/2021/0412/140105_5a54caaf_904542.gif" >
 
 
-## 如何使用？
+# 如何使用？
 > 推荐你以下两种快速使用SwiftAdmin的方法：<br/>
 > 一、 你可以在此基础上直接进行二次开发，前端已经为你准备了若干个常用的PHP接口文件<br/>
 > 二、 你可以在后台插件管理中安装你所需要的完整应用或者部分插件，注意安装完整应用的话，
 >      是会直接覆盖index.php的，但是会生成一个文件冲突TXT以供查阅！
 
-## 授权协议
+# 授权协议
 
 1. 本软件支持个人/企业免费商用，二次开发，但必须保留SwiftAdmin的版权标识，包括但不限于（logo、素材、代码注释）
 1. 使用本框架不得用于开发违反国家有关政策的相关软件和应用，否则要付法律责任！
@@ -64,22 +93,3 @@ SwiftAdminPHP 极速后台开发框架
 1. 本软件依法享有国家著作权保护，故使用本软件者不得恶意篡改本源码，包括但不限于（植入木马病毒，编写违法应用）进行恶意传播。
 1. 不得对本软件进行二次专收或倒卖，不得对本软件进行二次包装后声称为自己的产品等，请尊重国家著作权法！
 1. 如需去除软件版权，请购买域名授权，授权期间本软件作者有义务对授权者提供技术支持！
-
-
-
-关于`本框架`的入门建议、代码规范、踩坑指南以及常见问题可以参考官方的《[入门必读]()》教程，推荐新手阅读。
-
-
-发布本资料须遵守开放出版许可协议 MIT 或者更新版本。 
-未经版权所有者明确授权，禁止发行本文档及其被实质上修改的版本。 
-未经版权所有者事先授权，禁止将此作品及其衍生作品以标准（纸质）书籍形式发行。 
-使用SwiftAdmin软件构建的任何项目和应用中如包含的信息内容和服务内容（包括但不限于文字、图片、视频、不当言论等）
-以及任何可能导致的法律风险，与SwiftAdmin无关，本软件仅为一款方便开发者构建各类应用的管理员后台基础框架，本身不包含任何非法的功能，欢迎广大授权者进行监督。
-
-如果有兴趣再发行或再版本手册的全部或部分内容，不论修改过与否，或者有任何问题，请联系版权所有者 [coolsec@foxmail.com](mailto:coolsec@foxmail.com)。 
-对SwiftAdmin有任何疑问或者建议，请加入官方QQ群  <a href="https://qm.qq.com/cgi-bin/qm/qr?k=Idivrh-log25t0ryx19nWeqUk8oFrI-X&jump_from=webapi"><img src="https://img.shields.io/badge/一群-68221484-blue.svg" alt="一群"></a>
-<a href="https://qm.qq.com/cgi-bin/qm/qr?k=L_SKDh46TnWDVrudKEON2XAlgm02RNic&jump_from=webapi"><img src="https://img.shields.io/badge/二群-68221585-blue.svg" alt="二群"></a>
-<a href="https://qm.qq.com/cgi-bin/qm/qr?k=p6N-b7AkWiESpcrZmOKWpm3t05qt4MQ-&jump_from=webapi"><img src="https://img.shields.io/badge/三群-68221618-blue.svg" alt="三群"></a>
-有关SwiftAdmin项目及本文档的最新资料，请及时访问SwiftAdmin项目主站 [http://www.swiftadmin.net](http://www.swiftadmin.net)。
-> 本文档版权归`SwiftAdmin`文档小组所有，本文档及其描述的内容受有关法律的版权保护，对本文档内容任何形式的非法复制，将导致相应的法律责任。
-
