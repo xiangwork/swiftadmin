@@ -1,8 +1,6 @@
 SwiftAdminPHP 极速后台开发框架
 ===============
-
 > 基于ThinkPHP6版本开发， 学习本手册有利于您快速的掌握本框架的开发架构！
-
 <div align="center">
 <img src="https://images.gitee.com/uploads/images/2021/0412/110400_6a5e130d_904542.png"/>
 </div>
@@ -26,7 +24,6 @@ SwiftAdminPHP 极速后台开发框架
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=p6N-b7AkWiESpcrZmOKWpm3t05qt4MQ-&jump_from=webapi"><img src="https://img.shields.io/badge/三群-68221618-blue.svg" alt="三群"></a>
 
 # 开发初衷
-
 1. `SwiftAdmin` 框架的开发，主要也是为了减少在自己开发过程中的频繁造轮子，并且swiftAdmin框架主张简单就是高效的原则，相信没有比判断0或者1更有效率的算法了吧，所以最简单的东西才是效率最高的，可能你的应用场景很复杂，但是你可以把复杂的事情简单化，复杂的维度无外乎  `n+0 or 1` 
 
 2. 在最开始接触互联网的时候，都是用一些开源的CMS系统制作自己的网站，后期因为扩展和二次开发的问题，导致觉得很多东西并不是那么简单易用，比如后台的很多JS代码封装的不是很好，而且界面也操作性很差，所以自己开发这款框架封装了很多常用的特性，足以满足日常后台的开发需要，在使用的过程中你会发现，SA框架里面用的最多的是属性而不是对象，一是为了在书写HTML标签的时候方便。二是为了和layui本身区分开！这样让你更容易在这个上面进行扩展！
@@ -39,7 +36,6 @@ SwiftAdminPHP 极速后台开发框架
 
 
 # 侧重点
-
 1、swiftAdmin的架构和开发更倾向于内容管理系统[CMS]的方向，当然你也可以当中API系统使用<br/>
 
 2、系统默认的缓存机制为redis缓存，所以请确保安装redis扩展和服务器[摒弃操蛋的file缓存吧]<br/>
@@ -49,10 +45,8 @@ SwiftAdminPHP 极速后台开发框架
 4、本框架会侧重于SEO优化、流量管理、蜘蛛池、区块链以及采集方面的应用！！！<br/>
 
 5、本框架会逐渐偏向于社区版开源的方向，主要由社区共同的爱好者免费开发维护插件，所以本框架可能不会有太多收费的插件！
-<br/>
 
 # 安装使用
-
 1、首先将本框架直接clone到你本地,或者直接下载
 ```
 git clone https://gitee.com/meystack/swiftadmin.git
@@ -65,7 +59,6 @@ git clone https://gitee.com/meystack/swiftadmin.git
 ```
 composer install
 ```
-<br/>
 
 # 集成功能
 * AUTH权限 支持公有/私有权限 
@@ -82,7 +75,6 @@ composer install
 > 系统已经自带了第三方社会化登录，还有前端的用户注册/邮件发送，评论/点击/评分功能
 
 # 组件属性
-
 本框架封装了layui前端页面的很多属性，比如：
 ```
  表单提交，时间组件、滑块、评分、开关、下拉框、颜色选择器
