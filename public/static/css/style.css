@@ -1,0 +1,331 @@
+
+body {
+    background: #fff;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+}
+a {
+    cursor: pointer;
+}
+
+.clear {
+    clear: both;
+}
+
+.fr {
+    float: right;
+}
+
+.fl {
+    float: left;
+}
+
+.hidden {
+	display: none;
+}
+
+.layui-center {
+	text-align: center;
+}
+
+.layui-fluid {
+	padding: 15px;
+}
+
+#userNav .active {
+    color: #000!important;
+    background: #f2f2f2;
+}
+
+.layui-form-label {
+    padding: 6px 15px;
+}
+
+#header {
+	position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+    height: 60px;
+    line-height: 60px;
+	overflow: hidden;
+}
+
+.layui-nav-scroll {
+	background-color: #fff;
+	box-shadow: 0 0 10px 0 rgba(0,0,0,0.06);
+    color: #000!important;
+}
+
+#header .layui-logo img {
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+
+#header .layui-logo a {
+    color: #000;
+    outline: 0;
+    font-size: 20px;
+    font-weight: 500;
+    text-decoration: none!important;
+}
+
+#header .layui-nav {
+    position: absolute;
+    left: 190px;
+    top: 0;
+    padding: 0;
+    background: none;
+}
+
+#header .layui-nav .layui-nav-item a {
+	line-height: 26px;
+    color: #9b9bae;
+    font-size: 15px;
+    font-weight: 400;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+    background-color: transparent!important;
+    padding: 6px 0;
+    margin: 0 18px;
+}
+
+#header .layui-nav li.active a, #header .layui-nav-item a:hover {
+    color: #3956de!important;
+}
+
+#header #login {
+	right: 20px;
+	left: unset;
+	width: 150px;
+}
+
+#header .nav-item a {
+	color: #fff;
+	font-size: 16px;
+}
+
+#header .nav-item a img {
+	border-radius: 50%;
+	width: 32px;
+	height: 32px;
+	margin-right: 15px;
+}
+
+#content {
+	height: 100%;
+    padding-top: 150px;
+    padding-bottom: 150px;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+@media screen and (max-width: 992px) {
+  #content {
+  	padding: 0px;
+  }
+}
+
+#content .layui-swift-box {
+	margin-top: 100px; 
+}
+
+#content .layui-swift-box h1 {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+#content .layui-swift-box p {
+    margin-top: 20px;
+    font-size: 15px;
+    line-height: 30px;
+    color: #9b9bae!important;
+}
+
+#content .layui-swift-box a {
+	margin-right: 10px;
+}
+
+#content .layui-swift-desc {
+	margin-top: 10px;
+}
+
+#content .layui-swift-images {
+	margin-top: 10px;
+}
+
+#content .layui-swift-images img {
+	width: 169px;
+    margin-top: 20px;
+    margin-right: 5px;
+    cursor: pointer;
+    padding: 2px;
+    border: 1px solid #fff;
+}
+
+#content .layui-swift-images img:hover {
+	border: 1px solid #c7d0f9;
+}
+
+.layui-form-fixed {
+	padding-right: 35px;
+	padding-top: 30px;
+}
+
+.login-link {
+    padding: 20px 0 20px 0;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.login-link span.other {
+    font-size: 12px;
+    color: #999;
+}
+
+.login-link a {
+    vertical-align: middle;
+    margin-left: 13px;
+    width: 56px;
+    height: 56px;
+    font-size: 36px;
+    color: #999
+}
+
+.login-link a:hover {
+	color: #1890ff;
+}
+
+.layui-input, .layui-select, .layui-textarea {
+	height: 30px;
+	line-height: 30px;
+}
+
+.layui-form-item .layui-input-inline {
+	width: 230px;
+}
+
+.layui-nav-tree .layui-nav-item a:hover {
+	background-color: #f2f2f2;
+}
+
+#content .layui-nav-tree .layui-nav-bar {
+	background: 0 0;
+}
+
+#content .layui-user-desc {
+	margin-top: 5px;
+}
+
+#content .layui-user-desc p {
+	margin-top: 10px;
+	border-bottom: 1px solid #f6f6f6;
+}
+
+#content .layui-user-desc p span {
+	font-weight: bold;
+	margin-right: 10px;
+}
+
+#content .layui-form-label {
+	padding: 5px 15px;
+}
+
+#content .layui-form-mid {
+	padding: 5px 0!important;
+}
+
+/* 修改原有样式 */
+.layui-btn-normal {
+	background: #2F4056;
+}
+
+.layui-nav .layui-this:after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after {
+	background: 0 0 ;
+}
+
+.layui-nav-tree {
+	width: 100%;
+}
+
+.layui-nav {
+	background-color: #fff;
+	color: #000
+}
+
+.layui-nav .layui-nav-item a {
+	padding-left: 35px;
+}
+
+.layui-nav .layui-nav-item a,.layui-nav .layui-nav-item a:hover, .layui-nav .layui-this a {
+	color: #000
+}
+
+.layui-nav-itemed>a {
+	color: #000!important;
+	background: #f2f2f2
+}
+
+@media screen and (max-width: 992px) {
+  #content {
+  	padding-top: 100px;
+  }
+}
+
+.layui-user-avatar {
+    width: 110px;
+    height: 110px;
+    position: relative;
+    display: inline-block;
+    border-radius: 50%;
+    border: 2px solid #eee;
+    margin-left: 120px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.layui-user-avatar img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+}
+
+.layui-user-avatar:hover:after {
+    content: '\e65d';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    color: #eee;
+    background: rgba(0, 0, 0, 0.5);
+    font-family: layui-icon;
+    font-size: 24px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    cursor: pointer;
+    line-height: 110px;
+    border-radius: 50%;
+}
+
+#footer {
+	background-image: url(/static/images/hero-1-bg-img.png);
+    background: #292d32;
+    background-position: center center;
+    background-size: cover;
+    width: 100%;
+	position: fixed;
+    right: 0;
+    bottom: 0;
+    background-repeat: no-repeat;
+}
+
+#footer .layui-footer {
+	margin: 0px auto;	
+    height: 53px;
+    line-height: 53px;
+    padding: 20px 0px;
+    color: rgba(255,255,255,0.7);
+}

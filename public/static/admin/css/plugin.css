@@ -1,0 +1,131 @@
+body,.layui-fluid {
+	height: 100%;
+    /*background: #fff;*/
+}
+
+.layui-col-md3 {
+	width: 20%;
+}
+
+.website,.website:hover {
+	color: #fff;
+	border-bottom: 1px solid #fff;
+}
+
+@media screen and (max-width: 450px) {
+	.layui-col-md3 {
+		width: 100%;
+	}
+}
+
+.layui-project .layui-project-cover {
+	height: 150px;
+}
+
+.layui-project-body {
+	padding: 10px;
+}
+
+.layui-project .layui-project-body > h2 {
+	font-size: 15px;
+}
+
+.layui-elem .layui-plugin-select,.layui-elem .layui-template-select {
+	cursor: pointer;
+	padding: 1px 10px;
+	border-radius: 2px;
+	padding-bottom: 3px;
+}
+
+.layui-elem .layui-plugin-select:hover,.layui-elem .layui-template-select:hover {
+	color: #fff;
+	background: #1890ff;
+}
+
+.layui-elem .layui-plugin-select.active,.layui-elem .layui-template-select.active {
+	color: #fff;
+	background: #1890ff;
+}
+
+.layui-elem .layui-hot.active,.layui-elem .layui-hot:hover  {
+	background: #FE232D;
+}
+
+span .layui-btn {
+	margin-bottom: 2px;
+}
+
+i.layui-icon-picture {
+	color: #1890ff;
+	margin-left:3px;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.layui-badge-dot {
+	margin-bottom: 2px;
+	margin-left: 2px;
+}
+
+.layui-input-key {
+	height: 24px;
+	margin-top: 4px;
+	margin-left: 10px;
+}
+
+button[lay-filter="formSearch"] {
+	margin-left: 10px;
+    margin-bottom: 4px;
+    padding: 0px 12px;
+}
+
+.layui-fluid {
+    overflow: hidden;
+}
+
+.layui-form-item .layui-input-inline {
+    width: 243px;
+}
+
+.layui-elem-quote {
+    padding: 10px;
+}
+
+.layui-elem-plugin {
+	background: #FF5722;
+	color: #fff;
+	border-color: #FF5722;
+}
+
+.layui-elem-tips {
+	background: #FFB800;
+	color: #fff;
+	border-color: #FFB800;
+}
+
+.layui-form-fixed {
+    padding: 15px;
+}
+
+.layui-layer-title {
+	color: #fff;
+    height: 50px;
+    line-height: 50px;
+    background-color: #191a23;
+    border: 0;
+}
+
+.layui-plugin-tables {
+	display: none;
+	overflow: hidden;
+	margin-top: 10px;
+	width: 343px;
+	padding-left: 3px;
+	padding-bottom: 3px;
+}
+
+.layui-plugin-tables span {
+	padding-top:2px;
+	padding-left: 3px;
+	display: inline-block;
+}

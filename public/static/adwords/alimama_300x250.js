@@ -1,0 +1,1 @@
+document.write("<script>当前未过滤XSS，如不需要请删除该模块！</script>");

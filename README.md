@@ -2,9 +2,13 @@ SwiftAdminPHP 极速后台开发框架
 ===============
 > `SwiftAdmin` 基于ThinkPHP6版本开发， 学习本手册有利于您快速的掌握本框架的开发架构！
 
-![logo](https://images.gitee.com/uploads/images/2021/0412/110400_6a5e130d_904542.png "logo.png")
-
-[     ](https://gitee.com/meystack/swiftadmin/)                                                       ![](https://cdn.nlark.com/yuque/0/2021/svg/8402819/1610364922243-0b15baa9-4ed4-4b1c-abfe-13e08d844790.svg#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=118&size=0&status=done&style=none&width=118)  ![](https://cdn.nlark.com/yuque/0/2021/svg/8402819/1610364922073-b2bfd470-e92f-495f-bef8-5f6923e91b5c.svg#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=100&size=0&status=done&style=none&width=100)  ![](https://cdn.nlark.com/yuque/0/2021/svg/8402819/1610364921931-98fdac7d-cf4d-4bed-b8a1-d5d0d17c07a3.svg#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=86&size=0&status=done&style=shadow&width=86)  [![](https://cdn.nlark.com/yuque/0/2021/svg/8402819/1610364920693-f9a5b0b9-3bb2-4cdb-bf26-300d2c102b36.svg#align=left&display=inline&height=21&margin=%5Bobject%20Object%5D&originHeight=21&originWidth=75&size=0&status=done&style=none&width=75)](https://gitee.com/meystack/swiftadmin/)
+<div style="align: center">
+<img src="https://images.gitee.com/uploads/images/2021/0412/110400_6a5e130d_904542.png"/>
+</div>
+<p><a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-Apache%202-blue.svg" alt="swiftadmin"></a>
+<a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/ThinkPHP-6+-brightgreen.svg" alt="swiftadmin"></a>
+<a href="https://gitee.com/meystack/swiftadmin/stargazers"><img src="https://gitee.com/meystack/swiftadmin/badge/star.svg?theme=dark" alt="star"></a>
+<a href="https://gitee.com/meystack/swiftadmin/members"><img src="https://gitee.com/meystack/swiftadmin/badge/fork.svg?theme=dark" alt="fork"></a></p>
 
 ## 开发初衷
 
@@ -26,7 +30,7 @@ SwiftAdminPHP 极速后台开发框架
 
 5. 想着开发一款底层设计配置和应用分开的系统，这样对于很多小白用户不会在项目已经上线运行中的时候，误操作系统的配置导致数据丢失，错乱的问题。比如有些字段需要手动在数据库进行修改，
 
-
+### 文档地址 https://www.yuque.com/meystack/swiftadmin
 
 ## 侧重点
 
