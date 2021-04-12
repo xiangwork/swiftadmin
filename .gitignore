@@ -2,7 +2,6 @@
 /.vscode
 /vendor
 /runtime
-/public/index.php
 /public/error
 *.log
 .env
