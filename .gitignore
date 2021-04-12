@@ -7,5 +7,6 @@
 /extend/conf/install.lock
 /public/error
 README.TXT
+.gitignore
 *.log
 .env
