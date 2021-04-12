@@ -66,7 +66,7 @@ class AdminController extends BaseController
      * 不需要鉴权的方法
      * @var array
      */
-	public $notAuth = [
+	public $noNeedLogin = [
 		'/index/index', // 后台首页
 	];
 
@@ -85,7 +85,7 @@ class AdminController extends BaseController
 		$authURL = '/'.$controller.'/'.$action;
 		
 		// 校验权限
-		if (!in_array($authURL,$this->notAuth)) {
+		if (!in_array($authURL,$this->noNeedLogin)) {
 	
 			$this->auth = Auth::instance();
 			if (!$this->auth->SuperAdmin() 

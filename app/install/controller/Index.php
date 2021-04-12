@@ -91,6 +91,7 @@ class Index
                 }
             }
             
+            halt($post);
             cache('mysql',$post,3600);
             return json(['code'=>200,'url'=>'/install.php/index/step3']);
         }
@@ -242,8 +243,8 @@ class Index
                 copy($index,public_path().$admin.'.php');
 
                 // 清理安装包
-                // recursiveDelete(app_path());
-                // unlink(public_path().'install.php');
+                recursiveDelete(app_path());
+                unlink(public_path().'install.php');
             } 
             catch (\Throwable $th) {
                 echo $th->getMessage();

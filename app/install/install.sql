@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 12/04/2021 10:42:42
+ Date: 12/04/2021 14:47:16
 */
 
 SET NAMES utf8mb4;
@@ -53,7 +53,7 @@ CREATE TABLE `sa_admin`  (
 -- ----------------------------
 -- Records of sa_admin
 -- ----------------------------
-INSERT INTO `sa_admin` VALUES (1, '1', '1', '', 'admin', '权栈', '8bcb6ea31d829170b639e33d2da633d2', 1, 'a:3:{i:0;s:21:\"家有傻猫两三只\";i:1;s:15:\"隔壁帅小伙\";i:2;s:9:\"技术宅\";}', '/upload/avatar/f8e34ec67a2a0233_100x100.png', '海阔天空，有容乃大', 'admin@swiftadmin.net', '0310', '15100038819', '高级管理人员', 113, '河北省邯郸市', 2130706433, 1618157406, 3232254977, 1, NULL, 1596682835, 1618158246, NULL);
+INSERT INTO `sa_admin` VALUES (1, '1', '1', '', 'admin', '权栈', '8bcb6ea31d829170b639e33d2da633d2', 1, 'a:3:{i:0;s:21:\"家有傻猫两三只\";i:1;s:15:\"隔壁帅小伙\";i:2;s:9:\"技术宅\";}', '/upload/avatar/f8e34ec67a2a0233_100x100.png', '海阔天空，有容乃大', 'admin@swiftadmin.net', '0310', '15100038819', '高级管理人员', 114, '河北省邯郸市', 2130706433, 1618209462, 3232254977, 1, NULL, 1596682835, 1618209462, NULL);
 INSERT INTO `sa_admin` VALUES (2, '2', '4', '5,6', 'ceshi', '白眉大侠', '8bcb6ea31d829170b639e33d2da633d2', 1, 'a:3:{i:0;s:5:\"Think\";i:1;s:12:\"铁血柔肠\";i:2;s:12:\"道骨仙风\";}', '/upload/avatar/a7ab69d052d46a33_100x100.jpg', '吃我一招乾坤大挪移', 'baimei@swiftadmin.net', '0310', '15188888888', '刀是什么刀，菜刀~来一记webshell~', 20, '河北省邯郸市廉颇大道110号指挥中心', 2130706433, 1618158681, 3232254977, 1, '', 1609836672, 1618191555, NULL);
 
 -- ----------------------------
@@ -749,21 +749,6 @@ INSERT INTO `sa_department` VALUES (2, 1, '河北分公司', '河北省邯郸市
 INSERT INTO `sa_department` VALUES (3, 2, '市场部', '一楼', '大乔', '15100010003', 'xiaoqiao@foxmail.com', '', 3, 1, 1611228586, NULL);
 INSERT INTO `sa_department` VALUES (4, 2, '开发部', '二楼', '赵云', '15100010003', 'zhaoyun@shijiazhuang.com', '', 4, 1, 1611228626, NULL);
 INSERT INTO `sa_department` VALUES (5, 2, '营销部', '二楼', '许攸', '15100010003', 'xuyou@henan.com', '', 5, 1, 1611228674, NULL);
-
--- ----------------------------
--- Table structure for sa_download
--- ----------------------------
-DROP TABLE IF EXISTS `sa_download`;
-CREATE TABLE `sa_download`  (
-  `id` int(11) NOT NULL,
-  `cid` int(11) NULL DEFAULT NULL,
-  `delete_time` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_download
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for sa_friendlink

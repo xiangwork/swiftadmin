@@ -17,7 +17,6 @@ use app\common\library\Auth;
 // 前台全局控制器基类
 class HomeController extends BaseController 
 {
-
     /**
      * 数据库实例
      * @var object

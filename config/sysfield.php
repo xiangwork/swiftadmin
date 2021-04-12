@@ -229,11 +229,6 @@ return [
     'createtime' => 'int(11)',
     'delete_time' => 'int(11)',
   ],
-  'download' => [
-    'id' => 'int(11)',
-    'cid' => 'int(11)',
-    'delete_time' => 'int(11)',
-  ],
   'friendlink' => [
     'id' => 'tinyint(4) unsigned',
     'title' => 'varchar(32)',

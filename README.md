@@ -6,8 +6,17 @@ SwiftAdminPHP 极速后台开发框架
 <div align="center">
 <img src="https://images.gitee.com/uploads/images/2021/0412/110400_6a5e130d_904542.png"/>
 </div>
+<p align="center"><strong>价值源自分享</strong></p>
 
-<b>请注意，本框架只支持PHP8版本，低版本已经不兼容了~ 系统安装后默认密码为admin888</b>
+<p align="center">
+	<a href="https://www.swiftadmin.net" target="_blank">官方平台</a> 
+	<a href="http://demo.swiftadmin.net/admin.php"  target="_blank">在线演示</a> 
+	<a href="https://www.yuque.com/meystack/swiftadmin"  target="_blank">在线使用手册</a>
+</p>
+
+<b>请注意，本框架只支持PHP8版本，低版本已经不兼容了~ </b><br/>
+<b>请注意，框架安装成功后会自动删除安装脚本文件！！！</b><br/>
+<b>请注意，系统安装后默认密码为admin888</b><br/>
 
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-Apache%202-blue.svg" alt="swiftadmin"></a>
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/ThinkPHP-6+-brightgreen.svg" alt="swiftadmin"></a>
@@ -27,16 +36,23 @@ SwiftAdminPHP 极速后台开发框架
 4. 在市面上目前的开源极速开发框架的学习成本略高，想搞一个学习成本极低，但性能不低的框架！
 
 5. 想着开发一款底层设计配置和应用分开的系统，这样对于很多小白用户不会在项目已经上线运行中的时候，误操作系统的配置导致数据丢失，错乱的问题。比如有些字段需要手动在数据库进行修改，
-## 文档地址 https://www.yuque.com/meystack/swiftadmin 
+
 <br/><br/>
+
 # 侧重点
 
-1、swiftAdmin的架构和开发更倾向于内容管理系统[CMS]的方向，所以如果你使用本框架搭建一个简易的API管理系统，那么你需要自行删除一些不必要的代码文件！使得你的项目在SA精简框架下更易维护！
+1、swiftAdmin的架构和开发更倾向于内容管理系统[CMS]的方向，当然你也可以当中API系统使用<br/>
 
-2、系统默认的缓存机制为redis缓存，所以请确保安装redis扩展和服务器[摒弃操蛋的file缓存吧]
+2、系统默认的缓存机制为redis缓存，所以请确保安装redis扩展和服务器[摒弃操蛋的file缓存吧]<br/>
 
-3、如果你只是需要一个极简的API管理系统，那么建议你删除不需要的模块和菜单项！
+3、如果你只是需要一个极简的API管理系统，那么建议你删除不需要的模块和菜单项！<br/>
+
+4、本框架会侧重于SEO优化、流量管理、蜘蛛池、区块链以及采集方面的应用！！！<br/>
+
+5、本框架会逐渐偏向于社区版开源的方向，主要由社区共同的爱好者免费开发维护插件，所以本框架可能不会有太多收费的插件！
+
 <br/><br/>
+
 # 安装使用
 
 1、首先将本框架直接clone到你本地,或者直接下载
@@ -44,14 +60,16 @@ SwiftAdminPHP 极速后台开发框架
 git clone https://gitee.com/meystack/swiftadmin.git
 ```
 <font color="#dd0000">2、以宝塔面板为例：将你的网站访问目录修改为public文件夹</font>
-
+```
+请自行安装宝塔面板，并做好相关配置！
+```
 3、在根目录直接执行 composer install 命令加载第三方库即可！
 ```
 composer install
 ```
 <br/>
 
-## 集成功能
+# 集成功能
 * AUTH权限 支持公有/私有权限 
 * 角色管理  支持栏目权限
 * 用户管理
@@ -63,9 +81,9 @@ composer install
 * 插件模块
 * 广告管理
 > 这个管理模块太多，就不一个个写了，你可以看下面的图片，更多的功能请下载安装后发现！
-> 系统已经自带了第三方社会化登录，还有
+> 系统已经自带了第三方社会化登录，还有前端的用户注册/邮件发送，评论/点击/评分功能
 
-## 组件属性
+# 组件属性
 
 本框架封装了layui前端页面的很多属性，比如：
 ```
@@ -73,16 +91,31 @@ composer install
  lay-ajax/lay-open/lay-batch/lay-event/lay-upload/lay-image-hover/lay-image-click # 具体的可以参考开发文档
 ```
 
-### 框架图片
+# 软件截图
+<table>
+    <tr>
+        <td><img src="https://images.gitee.com/uploads/images/2021/0412/135434_82477f64_904542.png"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2021/0412/135446_e5a0fb94_904542.png"/></td>
+    </tr>
+    <tr>
+        <td><img src="https://images.gitee.com/uploads/images/2021/0412/135451_c75d3ca2_904542.png"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2021/0412/135457_d4429ce5_904542.png"/></td>
+    </tr>
+</table>
 
-<img src="https://images.gitee.com/uploads/images/2021/0412/135434_82477f64_904542.png" width="500" height="300">
-<img src="https://images.gitee.com/uploads/images/2021/0412/135446_e5a0fb94_904542.png" width="500" height="300">
-<img src="https://images.gitee.com/uploads/images/2021/0412/135451_c75d3ca2_904542.png" width="500" height="300">
-<img src="https://images.gitee.com/uploads/images/2021/0412/135457_d4429ce5_904542.png" width="500" height="300">
+# 项目演示
+<table>
+	<tr>
+		<td><img src="https://images.gitee.com/uploads/images/2021/0412/135519_aa76fdcf_904542.gif"/></td>
+	</tr>
+	<tr>
+		<td><img src="https://images.gitee.com/uploads/images/2021/0412/140708_8baf92f1_904542.gif"/></td>
+	</tr>	
+	<tr>
+		<td><img src="https://images.gitee.com/uploads/images/2021/0412/151945_66490698_904542.gif"/></td>
+	</tr>	    
+</table>
 
-<img src="https://images.gitee.com/uploads/images/2021/0412/135519_aa76fdcf_904542.gif" >
-<img src="https://images.gitee.com/uploads/images/2021/0412/140708_8baf92f1_904542.gif" >
-<img src="https://images.gitee.com/uploads/images/2021/0412/140105_5a54caaf_904542.gif" >
 
 
 # 如何使用？
