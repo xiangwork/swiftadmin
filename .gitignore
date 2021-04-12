@@ -6,5 +6,6 @@
 /public/admin.php
 /extend/conf/install.lock
 /public/error
+README.TXT
 *.log
 .env
