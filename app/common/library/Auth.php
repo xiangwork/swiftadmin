@@ -125,7 +125,7 @@ class Auth
     public function __construct($config = [])
     {
         $this->Admin = session('AdminLogin');
-        $this->request = Request::instance();
+        $this->request = \think\facade\Request::instance();
     }
 
     /**
