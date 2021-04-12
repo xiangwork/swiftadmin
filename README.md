@@ -1,4 +1,4 @@
-SwiftAdminPHP
+前言
 ===============
 > 基于ThinkPHP6版本开发， 学习本手册有利于您快速的掌握本框架的开发架构！
 <div align="center">
