@@ -2,7 +2,7 @@ SwiftAdminPHP 极速后台开发框架
 ===============
 > 基于ThinkPHP6版本开发， 学习本手册有利于您快速的掌握本框架的开发架构！
 <div align="center">
-<img src="https://images.gitee.com/uploads/images/2021/0412/110400_6a5e130d_904542.png"/>
+<img src="https://images.gitee.com/uploads/images/2021/0412/110400_6a5e130d_904542.png" width="100" height="100"/>
 </div>
 <p align="center"><strong>价值源自分享</strong></p>
 
