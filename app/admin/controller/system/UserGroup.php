@@ -17,7 +17,6 @@ use app\common\model\system\UserGroup  as UserGroupModel;
 
 class UserGroup extends AdminController 
 {
-   
     // 初始化函数
     public function initialize() 
 	{
