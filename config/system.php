@@ -113,11 +113,11 @@ return [
   ],
   'payface' => [
     'alipay' => [
-      'app_id' => '2021000117628417',
-      'ali_public_key' => 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlmgwiCuMXJ/gFNU3tMOubHOANoOiRNrdZMiDgzohtD/3T2k71vMV6SNiqxut/Rvv1Cn4phneeycVfrh7XYCL/FiNeFdUPr++5k0nvwkVqdHHRGDvKbDem7jHsBi5Zk49Lv++EI7Fn/p25cwBpj8WbjoHrbWkec2unKv9u9CBjscejQvZ3P2seDZo33VB1gnabYM0HHmlXYRx2dLSNOMz+++WUcXmb6s/f1yAf94lHpLgnHjziXZDk/mETD9SOsp6Ca+9CFUdhku2NLlc9CwF8fCh+kkLa+tYqwEpY1/+Kbq4gO2/Bwn5m2yyH6D3kwW0ORyW7fh1rG0mH5zI0CqCZQIDAQAB',
-      'private_key' => 'MIIEogIBAAKCAQEAicgMM+/G05Kd0IVQhIyCMWUOIgXoLWQULXwDy/SSWzWSeGgEedg61YoKRd4j1DLL9Hhbxp0+v4yHfFjVghPzOUfV8zFJwuLE74flvYnQWz17IuBbjswGoZj3dn9ThqBi4dQPr2LnufNTSJyt5rvOsBDSL17ns8KpUfQk4LUaPGKPVWHCSSii85DaTEk6vWqHRMk+qZbOryjtlinOIji+ruy4fJtOCqrMHBlZGjMwdVVBPwkB5eHIUZrRHlpHhYvcNnHeLVYBv+1ejpqtG9s0IxmHaDxkZqZro2tfgnQ+M1fgmisx/IpQvQSsLG6L4hcI4DrBf8g9akpGTEadnFFbzwIDAQABAoIBAHWF8oq2grTjAcPkgxqcs0yosxZoTXOyQtfNSXvF4LT2DDqyFudLflu4xCx2X79XmMqtgzL125kNqF9zcqLim3uHf8JRj2YxgeQC2f8DN3ssBQVptA8ojpt2W9Zyou9ZjR6tgLeMOLZPDAIKyvbdyV466t3HKQIXD9A83Nvi/j70WfgNkVULq32K2ZXkNsOo2jYfd+dds2JQPOrWG1DComvGD2LCk7CWGWGHgUVtGeRLwCHiS7NckPkXIwDOYeNGLEXG0Hzt99LSbCa8BKL4PY43pBLlxj8DZ8MIYe/buoXzGZqgVcl3KS76738QJwh8HidpmeNcYu/ECC1O/ME8SEkCgYEA3jd+dVrLHZnXRDf0dyWlRPNYEzg4aWKrWmlN7+jjCljb4tyH9Ib6384NKm9QD41OgeOD0pdI8EjC3sy2yv+QYpnSWr0bRv1952rTMhH/R2xqEMOmdp22W7VLfZ8K12wcAYYHF4OLQLJ8dTIjBh1CvpdCFBR8LEt//CHYRamQidUCgYEAnrplMBPKB8BgxTaLsBbYTk60eY+mfgc1aOILBdGzS5wZJUTE6gG+gSHITQjgLFzNIWp78yW6Z9soXypRKpHcgE/XpxF6GiSPTDvFRFq+Qru5/+XgazI30LQIWSy3u4TtvNM40ujJj8p5IKu9TOW8rgd8Pb9ilm32DnX/PB4SHRMCgYAzlTQwr7PImkaDGm4QHlf/6nD+fSVzKSlXomwqDahuZXQddE3G8HJZ823Q9OfjxEx+ED8walfPF0TNDT49Xxe4G7bdw1oKn5tTVdPSoqTcgokYfSIuFKwZG7t7XKjamsjhfag1yB5SFVyYo9vHdpFgxqHbIWo1qgz6jSyz9wmLRQKBgGIhcI+BnISgTfN+3mt2JDJ9fBwvUEpYIJAAN7pYQ9W54t3knyzg+SsSfKgLlbQ3h2ZiU9EmARFWL6ZuHhIIbV8yfWu/ZVKmSaViynmQ9FGDh+GJ9+2t9U3lD8g52jlnXCdCGr5hxsNL9QjaxES3P6gD3q66FLRVtSqJjstW9/HbAoGAf0y71TQx90Lx4jqbuzG4L5zEE6qtmFhhYWTi0D9c+PBrqXLjrZtEk/f+GTHbjttR0uw3CuKAWg/hzk3ouqzMGaGxIbMzNn+XiE2GfjLk13NuEa565oFYs9LGSsfax+2hnvgwvFfdj4d405jdu9/WVGUNmiSvBMEYhsHsapFKIN4=',
-      'return_url' => 'http://www.swiftadmin.net/order/pay',
-      'notify_url' => 'http://www.swiftadmin.net/order/pay',
+      'app_id' => '',
+      'ali_public_key' => '',
+      'private_key' => '',
+      'return_url' => '',
+      'notify_url' => '',
       'cert_client' => '',
       'cert_key' => '',
       'mode' => 'dev',
