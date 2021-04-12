@@ -5,10 +5,17 @@ SwiftAdminPHP 极速后台开发框架
 <div align="center">
 <img src="https://images.gitee.com/uploads/images/2021/0412/110400_6a5e130d_904542.png"/>
 </div>
+
+
+
 <p><a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-Apache%202-blue.svg" alt="swiftadmin"></a>
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/ThinkPHP-6+-brightgreen.svg" alt="swiftadmin"></a>
 <a href="https://gitee.com/meystack/swiftadmin/stargazers"><img src="https://gitee.com/meystack/swiftadmin/badge/star.svg?theme=dark" alt="star"></a>
 <a href="https://gitee.com/meystack/swiftadmin/members"><img src="https://gitee.com/meystack/swiftadmin/badge/fork.svg?theme=dark" alt="fork"></a></p>
+
+交流讨论QQ群：<p><a href="https://qm.qq.com/cgi-bin/qm/qr?k=Idivrh-log25t0ryx19nWeqUk8oFrI-X&jump_from=webapi"><img src="https://img.shields.io/badge/一群-68221484-blue.svg" alt="一群"></a>
+<a href="https://qm.qq.com/cgi-bin/qm/qr?k=L_SKDh46TnWDVrudKEON2XAlgm02RNic&jump_from=webapi"><img src="https://img.shields.io/badge/二群-68221585-blue.svg" alt="二群"></a>
+<a href="https://qm.qq.com/cgi-bin/qm/qr?k=p6N-b7AkWiESpcrZmOKWpm3t05qt4MQ-&jump_from=webapi"><img src="https://img.shields.io/badge/三群-68221618-blue.svg" alt="三群"></a></p>
 
 ## 开发初衷
 
@@ -70,7 +77,9 @@ SwiftAdminPHP 极速后台开发框架
 以及任何可能导致的法律风险，与SwiftAdmin无关，本软件仅为一款方便开发者构建各类应用的管理员后台基础框架，本身不包含任何非法的功能，欢迎广大授权者进行监督。
 
 如果有兴趣再发行或再版本手册的全部或部分内容，不论修改过与否，或者有任何问题，请联系版权所有者 [coolsec@foxmail.com](mailto:coolsec@foxmail.com)。 
-对SwiftAdmin有任何疑问或者建议，请加入官方QQ群  ![](https://cdn.nlark.com/yuque/0/2021/svg/8402819/1610365016652-71ef17b2-710a-4ff1-9857-c8a79b85b55b.svg#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=98&size=0&status=done&style=none&width=98)  ![](https://cdn.nlark.com/yuque/0/2021/svg/8402819/1610365017264-ef3810ec-cd21-460d-8b1b-9e621df0f975.svg#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=98&size=0&status=done&style=none&width=98) ![](https://cdn.nlark.com/yuque/0/2021/svg/8402819/1610365134411-34fad338-fa2c-427a-bc6f-2dc609072799.svg#align=left&display=inline&height=20&margin=%5Bobject%20Object%5D&originHeight=20&originWidth=98&size=0&status=done&style=none&width=98) 
+对SwiftAdmin有任何疑问或者建议，请加入官方QQ群  <a href="https://qm.qq.com/cgi-bin/qm/qr?k=Idivrh-log25t0ryx19nWeqUk8oFrI-X&jump_from=webapi"><img src="https://img.shields.io/badge/一群-68221484-blue.svg" alt="一群"></a>
+<a href="https://qm.qq.com/cgi-bin/qm/qr?k=L_SKDh46TnWDVrudKEON2XAlgm02RNic&jump_from=webapi"><img src="https://img.shields.io/badge/二群-68221585-blue.svg" alt="二群"></a>
+<a href="https://qm.qq.com/cgi-bin/qm/qr?k=p6N-b7AkWiESpcrZmOKWpm3t05qt4MQ-&jump_from=webapi"><img src="https://img.shields.io/badge/三群-68221618-blue.svg" alt="三群"></a>
 有关SwiftAdmin项目及本文档的最新资料，请及时访问SwiftAdmin项目主站 [http://www.swiftadmin.net](http://www.swiftadmin.net)。
 > 本文档版权归`SwiftAdmin`文档小组所有，本文档及其描述的内容受有关法律的版权保护，对本文档内容任何形式的非法复制，将导致相应的法律责任。
 
