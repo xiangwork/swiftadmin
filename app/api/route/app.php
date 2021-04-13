@@ -13,7 +13,7 @@ use think\facade\Route;
 Route::rule('wiki','wiki/index');
 Route::rule('token','auth/token');
 // 导入自定义路由	
-require app_path().'route\\api.php';
+require app_path().'route/api.php';
 
 // 定义模板路由
 Route::group('template',function(){

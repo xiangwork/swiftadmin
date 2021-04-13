@@ -631,7 +631,7 @@ class Admin extends AdminController
 
                 // 清理模板
                 if ($type == 'all' || $type == 'template') {
-                    recursiveDelete(root_path().'runtime'.'\\temp');
+                    recursiveDelete(root_path().'runtime'.'/temp');
                 }
 
                 // 清理插件缓存

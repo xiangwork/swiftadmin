@@ -47,7 +47,7 @@ class Rewrite extends AdminController
         $rewrite = config('system.rewrite');
         $sitemap = config('system.sitemap');
         $map_xml_path = public_path().$sitemap['map_xml_path'];
-        $result = glob($map_xml_path.'\\*.xml');
+        $result = glob($map_xml_path.'/*.xml');
         foreach ($result as $key => $value) {
            $xmlfile = simplexml_load_file($value);
            $total += count($xmlfile);

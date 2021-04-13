@@ -23,7 +23,7 @@ class Adwords extends AdminController
     {
 		parent::initialize();
         $this->model = new AdwordsModel();
-        $this->path = public_path().'static\\adwords\\';
+        $this->path = public_path().'stati/adwords/';
     }
 
     /**
