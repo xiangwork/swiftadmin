@@ -13,6 +13,3 @@ use think\facade\Route;
 // 全局变量规则
 Route::pattern(['name'=>'\w+','id'=>'\w+']);
 Route::get('captcha/[:config]','\\think\\captcha\\CaptchaController@index');
-
-// // 定义插件路由
-// Route::any('plugin/[:plugin]/[:controller]/[:action]', "\\think\\plugin\\Router@execute");
