@@ -1428,7 +1428,6 @@ a {
     box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
     position: absolute;
     right: 0;
-    z-index: 999;
     border: 0;
     overflow: hidden
 }
@@ -1512,7 +1511,6 @@ a {
     cursor: pointer;
     transition: all .3s;
     border-left: 1px solid #eee;
-    z-index: 1000;
     background-color: white
 }
 
