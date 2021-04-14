@@ -15,6 +15,9 @@
 <b>请注意，本框架只支持PHP8版本，低版本已经不兼容了~ </b><br/>
 <b>请注意，框架安装成功后会自动删除安装脚本文件！！！</b><br/>
 <b>请注意，系统安装后默认账号密码为 admin admin888 </b><br/>
+<b>后台演示 <a href="http://demo.swiftadmin.net/admin.php"  target="_blank">http://demo.swiftadmin.net/admin.php</a> </b><br/>
+<b>管理员账号 admin admin888 </b><br/>
+<b>测试账号  ceshi admin888 </b>注意：auth类在前端也有鉴权操作，所以你可以测试看返回的数据<br/>
 
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-Apache%202-blue.svg" alt="swiftadmin"></a>
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/ThinkPHP-6.0.8-brightgreen.svg" alt="thinkphp"></a>
@@ -60,6 +63,11 @@ git clone https://gitee.com/meystack/swiftadmin.git
 3、在根目录直接执行 composer install 命令加载第三方库即可！
 ```
 composer install
+```
+或者使用一键安装命令 请确保你的机器上安装了 Composer
+```
+通过 Composer 来管理依赖，Linux系统请sudo composer install
+git clone https://gitee.com/meystack/swiftadmin.git ./src && cd src && composer install
 ```
 
 # 集成功能
