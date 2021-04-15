@@ -91,7 +91,7 @@ class Index
                 }
             }
             
-            halt($post);
+            
             cache('mysql',$post,3600);
             return json(['code'=>200,'url'=>'/install.php/index/step3']);
         }
