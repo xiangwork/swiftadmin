@@ -12,6 +12,8 @@
 	<a href="https://www.yuque.com/meystack/swiftadmin"  target="_blank">在线使用手册</a>
 </p>
 
+===== 目前半个月打算升级优化AUTH权限类，如果你的应用只是一个CMS不需要权限那就无所谓了！
+
 <b>请注意，本框架只支持PHP8版本，低版本已经不兼容了~ </b><br/>
 <b>请注意，框架安装成功后会自动删除安装脚本文件！！！</b><br/>
 <b>请注意，系统安装后默认账号密码为 admin admin888 </b><br/>
