@@ -1,17 +1,17 @@
 /*
- Navicat Premium Data Transfer
+ Navicat MySQL Data Transfer
 
  Source Server         : localhost_3306
  Source Server Type    : MySQL
  Source Server Version : 50726
  Source Host           : localhost:3306
- Source Schema         : saphp
+ Source Schema         : swiftadmin
 
  Target Server Type    : MySQL
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 12/04/2021 14:47:16
+ Date: 25/04/2021 19:01:48
 */
 
 SET NAMES utf8mb4;
@@ -53,8 +53,8 @@ CREATE TABLE `sa_admin`  (
 -- ----------------------------
 -- Records of sa_admin
 -- ----------------------------
-INSERT INTO `sa_admin` VALUES (1, '1', '1', '', 'admin', '权栈', '8bcb6ea31d829170b639e33d2da633d2', 1, 'a:3:{i:0;s:21:\"家有傻猫两三只\";i:1;s:15:\"隔壁帅小伙\";i:2;s:9:\"技术宅\";}', '/upload/avatar/f8e34ec67a2a0233_100x100.png', '海阔天空，有容乃大', 'admin@swiftadmin.net', '0310', '15100038819', '高级管理人员', 114, '河北省邯郸市', 2130706433, 1618209462, 3232254977, 1, NULL, 1596682835, 1618209462, NULL);
-INSERT INTO `sa_admin` VALUES (2, '2', '4', '5,6', 'ceshi', '白眉大侠', '8bcb6ea31d829170b639e33d2da633d2', 1, 'a:3:{i:0;s:5:\"Think\";i:1;s:12:\"铁血柔肠\";i:2;s:12:\"道骨仙风\";}', '/upload/avatar/a7ab69d052d46a33_100x100.jpg', '吃我一招乾坤大挪移', 'baimei@swiftadmin.net', '0310', '15188888888', '刀是什么刀，菜刀~来一记webshell~', 20, '河北省邯郸市廉颇大道110号指挥中心', 2130706433, 1618158681, 3232254977, 1, '', 1609836672, 1618191555, NULL);
+INSERT INTO `sa_admin` VALUES (1, '1', '2', '3', 'admin', '权栈', '8bcb6ea31d829170b639e33d2da633d2', 1, 'a:3:{i:0;s:21:\"家有傻猫两三只\";i:1;s:15:\"隔壁帅小伙\";i:2;s:9:\"技术宅\";}', '/upload/avatar/f8e34ec67a2a0233_100x100.jpg', '海阔天空，有容乃大', 'admin@swiftadmin.net', '0310', '15100038819', '高级管理人员', 123, '河北省邯郸市', 2130706433, 1618632027, 3232254977, 0, NULL, 1596682835, 1618715053, NULL);
+INSERT INTO `sa_admin` VALUES (2, '2', '1', '5,6', 'ceshi', '白眉大侠', '8bcb6ea31d829170b639e33d2da633d2', 1, 'a:3:{i:0;s:5:\"Think\";i:1;s:12:\"铁血柔肠\";i:2;s:12:\"道骨仙风\";}', '/upload/avatar/f8e34ec67a2a0233_100x100.jpg', '吃我一招乾坤大挪移', 'baimei@your.com', '0310', '15188888888', '刀是什么刀，菜刀~来一记webshell~', 24, '河北省邯郸市廉颇大道110号指挥中心', 2130706433, 1618735372, 3232254977, 1, '违规', 1609836672, 1618735372, NULL);
 
 -- ----------------------------
 -- Table structure for sa_admin_access
@@ -63,8 +63,8 @@ DROP TABLE IF EXISTS `sa_admin_access`;
 CREATE TABLE `sa_admin_access`  (
   `uid` mediumint(8) UNSIGNED NOT NULL COMMENT '用户ID',
   `group_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '管理员分组',
-  `rules` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '自定义权限',
-  `cateids` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目权限',
+  `rules` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '自定义权限',
+  `cates` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目权限',
   PRIMARY KEY (`uid`) USING BTREE,
   INDEX `uid`(`uid`) USING BTREE,
   INDEX `group_id`(`group_id`) USING BTREE
@@ -74,7 +74,7 @@ CREATE TABLE `sa_admin_access`  (
 -- Records of sa_admin_access
 -- ----------------------------
 INSERT INTO `sa_admin_access` VALUES (1, '1', NULL, NULL);
-INSERT INTO `sa_admin_access` VALUES (2, '2', '', '');
+INSERT INTO `sa_admin_access` VALUES (2, '2', '2,14,45,46,47,48,49,50,51,52,280,281,282,283,17,69,70,71,72,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,19,20,96,97,98,99,100,101,102,103,104,105,106,107,21,108,109,110,111,112,113,114,115,116,22,117,7,30,172,173,174,175,176,177,178,179,31,180,181,182,183,184,185,186,187,188,32,189,190,191,192,193,194,195,196,33,197,198,199,34,200,201,202,203,204,205,206', '');
 
 -- ----------------------------
 -- Table structure for sa_admin_group
@@ -89,20 +89,21 @@ CREATE TABLE `sa_admin_group`  (
   `type` int(2) NULL DEFAULT NULL COMMENT '分组类型',
   `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
   `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `rules` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '规则字符串',
-  `cateids` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目权限',
+  `rules` varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '规则字符串',
+  `cates` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '栏目权限',
   `color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '颜色',
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户组表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户组表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_admin_group
 -- ----------------------------
-INSERT INTO `sa_admin_group` VALUES (1, 0, NULL, '超级管理员', 'admin', 1, 1, '网站超级管理员组的', '1', NULL, 'layui-bg-blue', 1607832158, NULL);
-INSERT INTO `sa_admin_group` VALUES (2, 1, 2, '网站编辑', 'editor', 1, 1, '负责公司软文的编写', '2,14,45,15,53,54,55', '1,2', 'layui-bg-cyan', 1607832158, NULL);
-INSERT INTO `sa_admin_group` VALUES (3, 2, 2, '市场部', 'market', 0, 1, '市场部，项目需要', '', '2', 'layui-bg-gray', 1609162674, NULL);
+INSERT INTO `sa_admin_group` VALUES (1, 0, NULL, '超级管理员', 'admin', 1, 1, '网站超级管理员组的', NULL, NULL, 'layui-bg-blue', 1607832158, NULL);
+INSERT INTO `sa_admin_group` VALUES (2, 1, 2, '网站编辑', 'editor', 1, 1, '负责公司软文的编写', '3,16,61,62,63,64,65,66,67,68,4,17,69,70,71,72,18,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95', '', 'layui-bg-cyan', 1607832158, NULL);
+INSERT INTO `sa_admin_group` VALUES (4, 2, NULL, '阿萨德', '按说', NULL, 1, '阿萨德', '', '', NULL, 1618652499, NULL);
+INSERT INTO `sa_admin_group` VALUES (5, 1, NULL, '网站编辑的下方', '12', NULL, 1, '21', '', '', NULL, 1618652563, NULL);
 
 -- ----------------------------
 -- Table structure for sa_admin_rules
@@ -119,14 +120,14 @@ CREATE TABLE `sa_admin_rules`  (
   `condition` char(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '正则表达式',
   `sort` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '排序',
   `icons` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '图标',
-  `auth` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
-  `status` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态码',
+  `auth` tinyint(3) NULL DEFAULT 1 COMMENT '状态',
+  `status` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'normal' COMMENT '状态码',
   `isSystem` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '系统级,只可手动操作',
   `updatetime` int(11) NOT NULL DEFAULT 0 COMMENT '添加时间',
   `createtime` int(11) NOT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 280 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单权限表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 285 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单权限表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_admin_rules
@@ -142,7 +143,7 @@ INSERT INTO `sa_admin_rules` VALUES (8, 0, '插件应用', '#', '#', 0, NULL, ''
 INSERT INTO `sa_admin_rules` VALUES (9, 0, '会员管理', '#', '#', 0, NULL, '', 9, 'layui-icon-user', 1, 'normal', 0, 1614259556, 1614259556, NULL);
 INSERT INTO `sa_admin_rules` VALUES (10, 0, '其他设置', '#', '#', 0, NULL, '', 10, 'layui-icon-about', 1, 'normal', 0, 1614259568, 1614259568, NULL);
 INSERT INTO `sa_admin_rules` VALUES (11, 1, '控制台', '/index/console', 'index:console', 0, NULL, '', 11, '', 0, 'normal', 0, 1614259969, 1614259945, NULL);
-INSERT INTO `sa_admin_rules` VALUES (12, 1, '分析页', '/index/analysis', 'index:analysis', 0, NULL, '', 12, '', 0, 'normal', 0, 1614259966, 1614259966, NULL);
+INSERT INTO `sa_admin_rules` VALUES (12, 1, '分析页', '/index/analysis', 'index:analysis', 0, NULL, '', 12, '', 0, 'normal', 0, 1619166587, 1614259966, NULL);
 INSERT INTO `sa_admin_rules` VALUES (13, 1, '监控页', '/index/monitor', 'index:monitor', 0, NULL, '', 13, '', 0, 'normal', 0, 1614260189, 1614260189, NULL);
 INSERT INTO `sa_admin_rules` VALUES (14, 2, '栏目管理', '/system.category/index', 'system.category:index', 0, NULL, '', 14, '', 1, 'normal', 0, 1614260208, 1614260208, NULL);
 INSERT INTO `sa_admin_rules` VALUES (15, 2, '导航管理', '/system.navmenu/index', 'system.navmenu:index', 0, NULL, '', 15, '', 1, 'normal', 0, 1614260227, 1614260227, NULL);
@@ -155,7 +156,7 @@ INSERT INTO `sa_admin_rules` VALUES (21, 4, '菜单管理', '/system.adminrules/
 INSERT INTO `sa_admin_rules` VALUES (22, 4, '操作日志', '/system.systemlog/index', 'system.systemlog:index', 0, NULL, '', 22, '', 1, 'normal', 0, 1614260759, 1614260751, NULL);
 INSERT INTO `sa_admin_rules` VALUES (23, 5, 'URL生成', '/system.rewrite/index', 'system.rewrite:index', 0, NULL, '', 23, '', 1, 'normal', 0, 1614260780, 1614260780, NULL);
 INSERT INTO `sa_admin_rules` VALUES (24, 5, 'SEO优化', '/system.seoer/index', 'system.seoer:index', 0, NULL, '', 24, '', 1, 'normal', 0, 1614260798, 1614260798, NULL);
-INSERT INTO `sa_admin_rules` VALUES (25, 5, '友情链接', '/system.friendlink/index', 'system.friendlink:index', 0, NULL, '', 25, '', 1, 'normal', 0, 1614260823, 1614260823, NULL);
+INSERT INTO `sa_admin_rules` VALUES (25, 5, '友情链接', '/system.friendlink/index', 'system.friendlink:index', 0, NULL, '', 30, '', 1, 'normal', 0, 1618922566, 1614260823, NULL);
 INSERT INTO `sa_admin_rules` VALUES (26, 5, '采集接口', '/system.collect/index', 'system.collect:index', 0, NULL, '', 26, '', 1, 'normal', 0, 1614260836, 1614260836, NULL);
 INSERT INTO `sa_admin_rules` VALUES (27, 6, '项目管理', '/system.project/index', 'system.project:index', 0, NULL, '', 27, '', 1, 'normal', 0, 1614260870, 1614260870, NULL);
 INSERT INTO `sa_admin_rules` VALUES (28, 6, '接口配置', '/system.api/index', 'system.api:index', 0, NULL, '', 28, '', 1, 'normal', 0, 1614260885, 1614260885, NULL);
@@ -401,15 +402,20 @@ INSERT INTO `sa_admin_rules` VALUES (267, 44, '添加', '/system.dictionary/add'
 INSERT INTO `sa_admin_rules` VALUES (268, 44, '编辑', '/system.dictionary/edit', 'system.dictionary:edit', 1, NULL, '', 268, '', 1, 'normal', 0, 1614413136, 1614413136, NULL);
 INSERT INTO `sa_admin_rules` VALUES (269, 44, '删除', '/system.dictionary/del', 'system.dictionary:del', 1, NULL, '', 269, '', 1, 'normal', 0, 1614413136, 1614413136, NULL);
 INSERT INTO `sa_admin_rules` VALUES (270, 44, '状态', '/system.dictionary/status', 'system.dictionary:status', 2, NULL, '', 270, '', 1, 'normal', 0, 1614413136, 1614413136, NULL);
-INSERT INTO `sa_admin_rules` VALUES (271, 44, '回收站', '/system.dictionary/recyclebin', 'system.dictionary:recyclebin', 2, NULL, '', 271, '', 1, NULL, 0, 1614413136, 1614413136, NULL);
-INSERT INTO `sa_admin_rules` VALUES (272, 44, '还原', '/system.dictionary/restore', 'system.dictionary:restore', 2, NULL, '', 272, '', 1, NULL, 0, 1614413136, 1614413136, NULL);
-INSERT INTO `sa_admin_rules` VALUES (273, 44, '销毁', '/system.dictionary/destroy', 'system.dictionary:destroy', 2, NULL, '', 273, '', 1, NULL, 0, 1614413136, 1614413136, NULL);
-INSERT INTO `sa_admin_rules` VALUES (274, 10, '栏目限权', 'everycate', 'everycate', 3, '是否限制栏目权限！', '', 274, '', 1, NULL, 1, 1614413293, 1614413252, NULL);
-INSERT INTO `sa_admin_rules` VALUES (275, 10, '编辑限权', 'privateauth', 'privateauth', 3, '只可编辑自己发布的数据！请勿删除！', '', 275, '', 1, NULL, 1, 1614413315, 1614413315, NULL);
-INSERT INTO `sa_admin_rules` VALUES (276, 10, '附件上传', '/upload/upload', 'upload:upload', 2, NULL, '', 276, '', 0, NULL, 0, 1614424707, 1614424707, NULL);
-INSERT INTO `sa_admin_rules` VALUES (277, 10, '查看模板', '/index.tpl/showtpl', 'index.tpl:showtpl', 2, NULL, '', 277, '', 1, NULL, 0, 1614427716, 1614427716, NULL);
-INSERT INTO `sa_admin_rules` VALUES (278, 10, '编辑模板', '/index.tpl/edittpl', 'index.tpl:edittpl', 2, NULL, '', 278, '', 1, NULL, 0, 1614427741, 1614427741, NULL);
-INSERT INTO `sa_admin_rules` VALUES (279, 10, '头像上传', '/upload/avatar', 'upload:avatar', 2, NULL, '', 285, '', 0, NULL, 0, 1618158541, 1618158541, NULL);
+INSERT INTO `sa_admin_rules` VALUES (271, 44, '回收站', '/system.dictionary/recyclebin', 'system.dictionary:recyclebin', 2, NULL, '', 271, '', 1, 'normal', 0, 1614413136, 1614413136, NULL);
+INSERT INTO `sa_admin_rules` VALUES (272, 44, '还原', '/system.dictionary/restore', 'system.dictionary:restore', 2, NULL, '', 272, '', 1, 'normal', 0, 1614413136, 1614413136, NULL);
+INSERT INTO `sa_admin_rules` VALUES (273, 44, '销毁', '/system.dictionary/destroy', 'system.dictionary:destroy', 2, NULL, '', 273, '', 1, 'normal', 0, 1614413136, 1614413136, NULL);
+INSERT INTO `sa_admin_rules` VALUES (274, 10, '栏目限权', 'everycate', 'everycate', 3, '是否限制栏目权限！', '', 274, '', 1, 'normal', 1, 1614413293, 1614413252, NULL);
+INSERT INTO `sa_admin_rules` VALUES (275, 10, '编辑限权', 'privateauth', 'privateauth', 3, '只可编辑自己发布的数据！请勿删除！', '', 275, '', 1, 'normal', 1, 1614413315, 1614413315, NULL);
+INSERT INTO `sa_admin_rules` VALUES (276, 10, '附件上传', '/system.upload/upload', 'system.upload:upload', 2, NULL, '', 276, '', 0, 'normal', 0, 1614424707, 1614424707, NULL);
+INSERT INTO `sa_admin_rules` VALUES (277, 10, '查看模板', '/index.tpl/showtpl', 'index.tpl:showtpl', 2, NULL, '', 277, '', 1, 'normal', 0, 1614427716, 1614427716, NULL);
+INSERT INTO `sa_admin_rules` VALUES (278, 10, '编辑模板', '/index.tpl/edittpl', 'index.tpl:edittpl', 2, NULL, '', 278, '', 1, 'normal', 0, 1614427741, 1614427741, NULL);
+INSERT INTO `sa_admin_rules` VALUES (279, 10, '头像上传', '/upload/avatar', 'upload:avatar', 2, NULL, '', 285, '', 0, 'normal', 0, 1618158541, 1618158541, NULL);
+INSERT INTO `sa_admin_rules` VALUES (280, 2, '内容管理', '/system.content/index', 'system.content:index', 0, NULL, '', 280, '', 1, 'normal', 0, 1618533490, 1618532768, NULL);
+INSERT INTO `sa_admin_rules` VALUES (281, 280, '查看', '/system.content/index', 'system.content:index', 1, NULL, '', 228, '', 1, 'normal', 0, 1614411464, 1614411464, NULL);
+INSERT INTO `sa_admin_rules` VALUES (282, 280, '添加', '/system.content/add', 'system.content:add', 1, NULL, '', 229, '', 1, 'normal', 0, 1614411464, 1614411464, NULL);
+INSERT INTO `sa_admin_rules` VALUES (283, 280, '编辑', '/system.content/edit', 'system.content:edit', 1, NULL, '', 230, '', 1, 'normal', 0, 1614411465, 1614411465, NULL);
+INSERT INTO `sa_admin_rules` VALUES (284, 5, '标签管理', '/system.tags/index', 'system.tags:index', 0, NULL, '', 25, '', 1, 'normal', 0, 1618922693, 1618922598, NULL);
 
 -- ----------------------------
 -- Table structure for sa_adwords
@@ -420,10 +426,11 @@ CREATE TABLE `sa_adwords`  (
   `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '广告标题',
   `alias` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '广告标识',
   `pic` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '封面',
-  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '代码',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '代码',
   `remind` tinyint(1) NULL DEFAULT 1 COMMENT '到期提醒',
   `status` smallint(1) NULL DEFAULT 1 COMMENT '状态',
   `expirestime` int(11) NULL DEFAULT NULL COMMENT '过期时间',
+  `updatetime` int(11) NULL DEFAULT NULL COMMENT '更新时间',
   `createtime` int(11) NOT NULL COMMENT '添加时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
@@ -432,7 +439,7 @@ CREATE TABLE `sa_adwords`  (
 -- ----------------------------
 -- Records of sa_adwords
 -- ----------------------------
-INSERT INTO `sa_adwords` VALUES (1, '阿里联盟', 'alimama_300x250', '', '<script>当前未过滤XSS，如不需要请删除该模块！</script>', 1, 1, 1612022400, 1610942227, NULL);
+INSERT INTO `sa_adwords` VALUES (1, '阿里联盟', 'alimama_300x250', '/upload/images/2021-04-21/607f877516a50.jpeg', '<script>当前未过滤XSS，如不需要请删除该模块！</script>', 1, 1, 1619793011, 1619015549, 1610942227, NULL);
 
 -- ----------------------------
 -- Table structure for sa_api
@@ -557,6 +564,62 @@ INSERT INTO `sa_api_restful` VALUES (1, 1, 'num', 'Integer', 1, '返回数据长
 INSERT INTO `sa_api_restful` VALUES (2, 1, 'code', 'Integer', 2, '应用返回的响应代码', 1612104178);
 
 -- ----------------------------
+-- Table structure for sa_article
+-- ----------------------------
+DROP TABLE IF EXISTS `sa_article`;
+CREATE TABLE `sa_article`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `pid` int(11) NOT NULL COMMENT '当前栏目',
+  `cid` int(11) NOT NULL COMMENT '当前模型',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '标题',
+  `hash` char(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '哈希值',
+  `access` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '访问权限',
+  `letter` char(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '首字母',
+  `color` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题颜色',
+  `pinyin` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '拼音标识',
+  `thumb` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '缩略图',
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '文章封面',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容字段',
+  `attribute` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '当前属性',
+  `seo_title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO标题',
+  `seo_keywords` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO关键词',
+  `seo_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'SEO描述',
+  `hits` mediumint(8) NULL DEFAULT NULL COMMENT '点击量',
+  `hits_day` mediumint(8) NULL DEFAULT NULL COMMENT '日点击',
+  `hits_week` mediumint(8) NULL DEFAULT NULL COMMENT '周点击',
+  `hits_month` mediumint(8) NULL DEFAULT NULL COMMENT '月点击',
+  `hits_lasttime` int(11) NULL DEFAULT NULL COMMENT '点击时间',
+  `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
+  `stars` tinyint(1) NULL DEFAULT NULL COMMENT '星级',
+  `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
+  `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态',
+  `up` mediumint(8) NULL DEFAULT NULL COMMENT '顶一下',
+  `down` mediumint(8) NULL DEFAULT NULL COMMENT '踩一下',
+  `gold` decimal(3, 1) NULL DEFAULT NULL COMMENT '评分',
+  `golder` smallint(6) NULL DEFAULT NULL COMMENT '评分人数',
+  `skin` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板文件',
+  `reurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '来源URL',
+  `readurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问地址',
+  `author` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '作者',
+  `admin_id` int(11) NULL DEFAULT NULL COMMENT '管理员id',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '会员投稿id',
+  `jumpurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '跳转地址',
+  `updatetime` int(11) NULL DEFAULT 0 COMMENT '更新时间',
+  `createtime` int(11) NULL DEFAULT 0 COMMENT '创建时间',
+  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章模型数据表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sa_article
+-- ----------------------------
+INSERT INTO `sa_article` VALUES (2, 1, 1, '测试下啊', '6fe97759aa27a0c9', '2,3', 'C', '', '121', '/upload/images/2021-04-19/607d773cf1a15.jpg', '/upload/images/2021-04-19/607ce69bce8ef.png', '&lt;p&gt;&lt;strong&gt;asdasx&lt;/strong&gt;shuode&lt;/p&gt;\n&lt;p&gt;&lt;strong&gt;saxlkjs d&lt;/strong&gt;&lt;/p&gt;', NULL, '', '', '', 89577, 0, 0, 0, 0, 3, 4, NULL, 1, 0, 0, 6.0, 0, '', '', NULL, 'iaozhang', NULL, NULL, '', 1618845304, 1617417100, NULL);
+INSERT INTO `sa_article` VALUES (3, 1, 1, '呵呵。这是一篇文章', 'a0b923820dcc509a', '', 'H', '', 'hhzsypwz', '', '', '&lt;p&gt;&lt;br data-mce-bogus=&quot;1&quot;&gt;&lt;/p&gt;', NULL, '', '', '', 0, 0, 0, 0, NULL, 3, 0, NULL, 1, 0, 0, 0.0, 0, '', '', NULL, '', NULL, NULL, '', 1619285363, 1618845506, NULL);
+INSERT INTO `sa_article` VALUES (5, 1, 1, '爱丽丝肯德基阿萨德dddx', 'a0b923820dcc509a', '', 'A', '', 'alskdjasd', '', '', '&lt;p&gt;asdasd&lt;/p&gt;', '', '', 'asdasd', 'asdasd', 0, 0, 0, 0, NULL, 5, 0, 0, 1, 0, 0, 0.0, 0, '', '', NULL, 'admin', 1, NULL, '', 1619311875, 1618845644, NULL);
+INSERT INTO `sa_article` VALUES (6, 1, 1, '1111', 'a0b923820dcc509a', '', '', '', '', '', '', '&lt;p&gt;asdasdasdasd&lt;/p&gt;', '', '', 'asdasdasdasd', 'asdasdasdasd', 0, 0, 0, 0, NULL, 6, 0, 0, 1, 0, 0, 0.0, 0, '', '', NULL, 'admin', 1, NULL, '', 1619275294, 1618845837, NULL);
+INSERT INTO `sa_article` VALUES (8, 1, 1, '快讯！特斯拉已提交车辆原始数据', 'a0b923820dcc509a', '', 'K', '', 'kxtslytjclyssj', '/upload/images/2021-04-23/thumb_6082531ccc682.jpeg', '/upload/images/2021-04-23/6082531ccc682.jpeg', '&lt;div class=&quot;index-module_textWrap_3ygOc&quot; style=&quot;font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px; font-size: 16px; line-height: 24px; color: #333333; text-align: justify;&quot;&gt;极目新闻记者 余渊 郑州报道&lt;/p&gt;\n&lt;/div&gt;\n&lt;div class=&quot;index-module_textWrap_3ygOc&quot; style=&quot;margin-top: 22px; font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px; font-size: 16px; line-height: 24px; color: #333333; text-align: justify;&quot;&gt;刚刚，极目新闻记者采访获悉，特斯拉已提交事发前半小时的车辆原始数据。&lt;/p&gt;\n&lt;/div&gt;\n&lt;div class=&quot;index-module_mediaWrap_213jB&quot; style=&quot;display: flex; margin-top: 36px; font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;div class=&quot;index-module_contentImg_JmmC0&quot; style=&quot;display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; flex-direction: column; -webkit-box-align: center; align-items: center; width: 599px;&quot;&gt;&lt;img class=&quot;index-module_large_1mscr&quot; style=&quot;border: 0px; width: 599px; border-radius: 13px;&quot; src=&quot;/upload/images/2021-04-23/6082531ccc682.jpeg&quot; width=&quot;640&quot; /&gt;&lt;/div&gt;\n&lt;/div&gt;\n&lt;div class=&quot;index-module_textWrap_3ygOc&quot; style=&quot;margin-top: 36px; font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px; font-size: 16px; line-height: 24px; color: #333333; text-align: justify;&quot;&gt;4月22日下午5时46分，特斯拉相关工作人员告诉极目新闻记者，22日上午他们已经将加盖公章的数据拿到了郑州市市场监督管理局，但该局工作人员建议，由当事车主来对接接收。&lt;/p&gt;\n&lt;/div&gt;\n&lt;div class=&quot;index-module_textWrap_3ygOc&quot; style=&quot;margin-top: 22px; font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px; font-size: 16px; line-height: 24px; color: #333333; text-align: justify;&quot;&gt;该工作人员称，22日下午，他们多次致电张女士及其家属，但一直未能联系上。22日下午5时30分，他们已经通过快递的形式，将相关数据寄出。&lt;/p&gt;\n&lt;/div&gt;\n&lt;div class=&quot;index-module_textWrap_3ygOc&quot; style=&quot;margin-top: 22px; font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px; font-size: 16px; line-height: 24px; color: #333333; text-align: justify;&quot;&gt;4月19日，因在上海车展&amp;ldquo;车顶维权&amp;rdquo;扰乱公共秩序，河南特斯拉车主张女士被上海警方行政拘留5日。此前，她曾质疑特斯拉&amp;ldquo;刹车失灵&amp;rdquo;多次发声（极目新闻曾连续报道）。事件一时引发全国关注。&lt;/p&gt;\n&lt;/div&gt;\n&lt;div class=&quot;index-module_textWrap_3ygOc&quot; style=&quot;margin-top: 22px; font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px; font-size: 16px; line-height: 24px; color: #333333; text-align: justify;&quot;&gt;更多精彩资讯请在应用市场下载&amp;ldquo;极目新闻&amp;rdquo;客户端。&lt;/p&gt;\n&lt;/div&gt;', NULL, '', '极目,新闻记者,特斯,数据,22日,余渊,郑州', '极目新闻记者 余渊 郑州报道 刚刚，极目新闻记者采访获悉，特斯拉已提交事发前半小时的车辆原始数据。 4月22日下午5时46分，特斯拉相关工作人员告诉极目...', 0, 0, 0, 0, NULL, 8, 0, 0, 1, 0, 0, 0.0, 0, '', '', NULL, 'admin', 1, NULL, '', 1619312089, 1619153692, NULL);
+
+-- ----------------------------
 -- Table structure for sa_category
 -- ----------------------------
 DROP TABLE IF EXISTS `sa_category`;
@@ -565,26 +628,37 @@ CREATE TABLE `sa_category`  (
   `pid` smallint(3) NOT NULL COMMENT '父类di',
   `cid` tinyint(1) NOT NULL COMMENT '模型id',
   `title` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '栏目名称',
+  `access` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问权限',
   `pinyin` varchar(90) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '栏目路径/拼音',
-  `seotitle` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目SEO标题',
-  `keywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目SEO关键字',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目SEO描述',
+  `image` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '图片地址',
+  `seo_title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目SEO标题',
+  `seo_keywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目SEO关键字',
+  `seo_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目SEO描述',
+  `contribute` int(1) NULL DEFAULT 0 COMMENT '是否支持投稿',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '栏目单页信息',
   `sort` smallint(3) NULL DEFAULT NULL COMMENT '排序id',
   `skin` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '栏目列表页',
+  `status` tinyint(1) NULL DEFAULT 1 COMMENT '栏目状态',
+  `readurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问地址',
   `skin_detail` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '栏目内容页',
   `skin_child` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '栏目子页面',
   `skin_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '栏目筛选页',
-  `status` tinyint(1) NULL DEFAULT 1 COMMENT '栏目状态',
   `jumpurl` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目跳转地址',
+  `updatetime` int(11) NULL DEFAULT NULL COMMENT '更新时间',
+  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '栏目管理' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '栏目管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_category
 -- ----------------------------
-INSERT INTO `sa_category` VALUES (1, 0, 3, '电影', 'dianying', '', '', '', 1, 'video', 'video_detail', 'video_child', 'video_type', 1, 'http://', NULL);
-INSERT INTO `sa_category` VALUES (2, 0, 1, '文章管理', 'wenzhang', '', '', '', 2, 'article', 'article_detail', 'article_child', 'article_type', 1, 'http://', NULL);
+INSERT INTO `sa_category` VALUES (1, 0, 1, '解决方案', NULL, 'case', NULL, '', '', '', NULL, NULL, 1, 'article', 1, NULL, 'article_detail', 'article_child', 'article_type', 'http://', NULL, NULL, NULL);
+INSERT INTO `sa_category` VALUES (2, 0, 2, '成功案例', '', 'case', '', '', '', '', 0, NULL, 2, 'page', 1, NULL, 'page_detail', 'page_child', 'page_type', 'http://', 1619171366, NULL, NULL);
+INSERT INTO `sa_category` VALUES (3, 0, 3, '插件市场', '2,3', 'plugin', NULL, '', '', '', NULL, NULL, 3, 'down', 1, NULL, 'down_detail', 'down_child', 'down_type', '', NULL, NULL, NULL);
+INSERT INTO `sa_category` VALUES (4, 0, 4, '服务支持', '', 'service', '', '', '', '', 0, '<p>呵呵阿萨德爱上了空间下拉谁的asdasd</p><p><mark class=\"marker-yellow\"><strong>粗口</strong></mark></p>', 4, 'article', 1, NULL, 'article_detail', 'article_child', 'article_type', '', NULL, NULL, NULL);
+INSERT INTO `sa_category` VALUES (5, 0, 5, '秒杀服务器', '', 'fqw', '', '', '', '', 0, '', 5, 'article', 1, NULL, 'article_detail', 'article_child', 'article_type', 'http://www.baidu.com', NULL, NULL, NULL);
+INSERT INTO `sa_category` VALUES (6, 1, 2, '测试', '2,3', 'ceshi', '', '', '', '', 0, '&lt;div class=&quot;index-module_textWrap_3ygOc&quot; style=&quot;font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px; font-size: 16px; line-height: 24px; color: #333333; text-align: justify;&quot;&gt;&lt;span class=&quot;bjh-p&quot;&gt;中新网4月23日电 据日本共同社报道，日本复兴厅对旨在宣传核电站处理水&amp;ldquo;安全性&amp;rdquo;的海报进行了修改，删除了表示处理水中所含放射性物质氚的卡通形象，改为元素符号&amp;ldquo;T&amp;rdquo;，并于22日公开了新海报。&lt;/span&gt;&lt;/p&gt;\n&lt;/div&gt;\n&lt;div class=&quot;index-module_mediaWrap_213jB&quot; style=&quot;display: flex; margin-top: 36px; font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;div class=&quot;index-module_contentImg_JmmC0&quot; style=&quot;display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; flex-direction: column; -webkit-box-align: center; align-items: center; width: 599px;&quot;&gt;&lt;img class=&quot;index-module_normal_Bq4DA&quot; style=&quot;border: 0px; margin: 0px auto; border-radius: 13px;&quot; src=&quot;/upload/images/2021-04-23/608299a673c98.jpeg&quot; width=&quot;520&quot; /&gt;&lt;/div&gt;\n&lt;/div&gt;\n&lt;div class=&quot;index-module_textWrap_3ygOc&quot; style=&quot;margin-top: 36px; font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px; font-size: 16px; line-height: 24px; color: #333333; text-align: justify;&quot;&gt;日本复兴厅修改了海报，删除了上图中表示处理水中所含放射性物质氚的卡通形象，改为下图中的元素符号&amp;ldquo;T&amp;rdquo;。(图片来源：日本复兴厅官网)&lt;/p&gt;\n&lt;/div&gt;\n&lt;div class=&quot;index-module_textWrap_3ygOc&quot; style=&quot;margin-top: 22px; font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px; font-size: 16px; line-height: 24px; color: #333333; text-align: justify;&quot;&gt;&lt;span class=&quot;bjh-p&quot;&gt;13日，日本政府在内阁会议上正式决定，将在两年后把东京电力福岛第一核电站的处理水陆续排入太平洋，引发多方反对。为了宣传处理水的&amp;ldquo;安全性&amp;rdquo;，复兴厅当天在官网上发布包括氚卡通形象的海报和视频，&amp;ldquo;放射性氚&amp;rdquo;被拟化成像&amp;ldquo;吉祥物&amp;rdquo;般的可爱角色。&lt;/span&gt;&lt;/p&gt;\n&lt;/div&gt;\n&lt;div class=&quot;index-module_textWrap_3ygOc&quot; style=&quot;margin-top: 22px; font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px; font-size: 16px; line-height: 24px; color: #333333; text-align: justify;&quot;&gt;&lt;span class=&quot;bjh-p&quot;&gt;日本复兴厅负责人当时表示，将&amp;ldquo;放射性氚&amp;rdquo;做成&amp;ldquo;吉祥物&amp;rdquo;，是因为这很&amp;ldquo;平易近人&amp;rdquo;，希望塑造一种既不是&amp;ldquo;善&amp;rdquo;、也不是&amp;ldquo;恶&amp;rdquo;的中间感觉。&lt;/span&gt;&lt;/p&gt;\n&lt;/div&gt;\n&lt;div class=&quot;index-module_textWrap_3ygOc&quot; style=&quot;margin-top: 22px; font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px; font-size: 16px; line-height: 24px; color: #333333; text-align: justify;&quot;&gt;&lt;span class=&quot;bjh-p&quot;&gt;然而，该海报发布后，&amp;ldquo;与福岛面临的严峻现实之间，感觉上存在偏差&amp;rdquo;等批评接踵而来，14日复兴厅撤下了海报和视频。&lt;/span&gt;&lt;/p&gt;\n&lt;/div&gt;\n&lt;div class=&quot;index-module_textWrap_3ygOc&quot; style=&quot;margin-top: 22px; font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px; font-size: 16px; line-height: 24px; color: #333333; text-align: justify;&quot;&gt;&lt;span class=&quot;bjh-p&quot;&gt;20日，复兴相平泽胜荣道歉称：&amp;ldquo;以令人感到不快的方式发布了信息，由衷表示道歉。&amp;rdquo;&lt;/span&gt;&lt;/p&gt;\n&lt;/div&gt;\n&lt;div class=&quot;index-module_textWrap_3ygOc&quot; style=&quot;margin-top: 22px; font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px; font-size: 16px; line-height: 24px; color: #333333; text-align: justify;&quot;&gt;&lt;span class=&quot;bjh-p&quot;&gt;海报和视频的制作委托给广告业巨头电通公司，花费了数百万日元的费用。据悉，海报的修改没有委托外部企业，而是由复兴厅职员操作，因此并未产生新增费用。正在讨论在尽可能不产生费用的情况下修改视频的方法，视频修正版的发布时间未定。&lt;/span&gt;&lt;/p&gt;\n&lt;/div&gt;\n&lt;div class=&quot;index-module_textWrap_3ygOc&quot; style=&quot;margin-top: 22px; font-family: arial; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px; font-size: 16px; line-height: 24px; color: #333333; text-align: justify;&quot;&gt;&lt;span class=&quot;bjh-p&quot;&gt;复兴厅原计划在福岛县内也分发这些海报。负责人表示&amp;ldquo;因为引发了问题，所以将谨慎对待用于在(福岛)当地的说明&amp;rdquo;，强调称会讨论今后如何应对。&lt;/span&gt;&lt;/p&gt;\n&lt;/div&gt;', 6, '', 1, NULL, '', '', '', '', 1619171750, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sa_channel
@@ -603,17 +677,16 @@ CREATE TABLE `sa_channel`  (
   `createtime` int(11) NOT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据模型表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据模型表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_channel
 -- ----------------------------
 INSERT INTO `sa_channel` VALUES (1, '文章模型', 'article', 'article', 'article_detail', 'article_child', 'article_type', 1, 1596712387, 1595545811, NULL);
 INSERT INTO `sa_channel` VALUES (2, '图片模型', 'image', 'image', 'image_detail', 'image_child', 'image_type', 2, 1596711899, 1595545853, NULL);
-INSERT INTO `sa_channel` VALUES (3, '视频模型', 'video', 'vod', 'video_detail', 'video_child', 'video_type', 3, 1595061806, 1595545827, NULL);
-INSERT INTO `sa_channel` VALUES (4, '下载模型', 'down', 'down', 'down_detail', 'down_child', 'down_type', 4, 1595061806, 1595545858, NULL);
-INSERT INTO `sa_channel` VALUES (5, '单页模型', 'page', 'page', 'page_detail', 'page_child', 'page_type', 5, 1595061806, 1595545839, NULL);
-INSERT INTO `sa_channel` VALUES (6, '产品模型', 'product', 'product', 'produc_detail', 'product_child', 'product_type', 6, 1595061806, 1595061806, NULL);
+INSERT INTO `sa_channel` VALUES (3, '视频模型', 'video', 'video', 'video_detail', 'video_child', 'video_type', 3, 1618708753, 1595545827, NULL);
+INSERT INTO `sa_channel` VALUES (4, '下载模型', 'download', 'download', 'down_detail', 'down_child', 'down_type', 4, 1618708738, 1595545858, NULL);
+INSERT INTO `sa_channel` VALUES (5, '产品模型', 'product', 'product', 'produc_detail', 'product_child', 'product_type', 6, 1595061806, 1595061806, NULL);
 
 -- ----------------------------
 -- Table structure for sa_collect
@@ -633,7 +706,7 @@ CREATE TABLE `sa_collect`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据采集接口' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据采集接口' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_collect
@@ -682,16 +755,16 @@ INSERT INTO `sa_comment` VALUES (12, 1, 2, 0, 0, 1, '登录状态下的评论', 
 INSERT INTO `sa_comment` VALUES (13, 1, 2, 12, 12, 113, '呵呵的', 0, 0, 2130706433, 0, 1, 1613528905, 1613528905, NULL);
 INSERT INTO `sa_comment` VALUES (14, 1, 2, 0, 0, 0, '呵呵', 1, 10, 2130706433, 0, 1, 1613536466, 1613536466, NULL);
 INSERT INTO `sa_comment` VALUES (15, 1, 2, 0, 0, 113, '呵呵', 18, 36, 2130706433, 0, 1, 1613536520, 1613536520, NULL);
-INSERT INTO `sa_comment` VALUES (16, 1, 2, 10, 10, 113, '在这里回复看看', 0, 0, 2130706433, 0, 1, 1614411817, 1613536552, NULL);
-INSERT INTO `sa_comment` VALUES (17, 1, 2, 15, 15, 113, '123132', 0, 0, 2130706433, 0, 1, 1613536653, 1613536653, NULL);
-INSERT INTO `sa_comment` VALUES (18, 1, 2, 14, 14, 113, '211212', 0, 0, 2130706433, 0, 1, 1613536691, 1613536691, NULL);
+INSERT INTO `sa_comment` VALUES (16, 1, 2, 10, 10, 113, '在这里回复看看', 0, 0, 2130706433, 0, 1, 1619253770, 1613536552, 1619253770);
+INSERT INTO `sa_comment` VALUES (17, 1, 2, 15, 15, 113, '123132', 0, 0, 2130706433, 0, 1, 1619253770, 1613536653, 1619253770);
+INSERT INTO `sa_comment` VALUES (18, 1, 2, 14, 14, 113, '211212', 0, 0, 2130706433, 0, 1, 1619253765, 1613536691, 1619253765);
 INSERT INTO `sa_comment` VALUES (19, 1, 2, 18, 14, 113, '奥术大师大', 0, 0, 2130706433, 0, 1, 1613536707, 1613536707, NULL);
 INSERT INTO `sa_comment` VALUES (20, 1, 2, 0, 0, 1, '测试看看', 1, 5, 2130706433, 0, 1, 1617417100, 1617417100, NULL);
-INSERT INTO `sa_comment` VALUES (21, 1, 2, 0, 0, 1, '11111', 1, 1, 2130706433, 0, 1, 1617417174, 1617417174, NULL);
-INSERT INTO `sa_comment` VALUES (22, 1, 2, 0, 0, 1, '2222', 1, 1, 2130706433, 0, 1, 1617417227, 1617417227, NULL);
-INSERT INTO `sa_comment` VALUES (23, 1, 2, 15, 15, 1, '12313', 0, 0, 2130706433, 0, 1, 1617417296, 1617417296, NULL);
-INSERT INTO `sa_comment` VALUES (24, 1, 2, 0, 0, 1, '这里是一个什么评论', 0, 1, 2130706433, 0, 1, 1617417311, 1617417311, NULL);
-INSERT INTO `sa_comment` VALUES (25, 1, 2, 15, 15, 1, '12313', 0, 0, 2130706433, 0, 1, 1617417339, 1617417339, NULL);
+INSERT INTO `sa_comment` VALUES (21, 1, 2, 0, 0, 1, '11111', 1, 1, 2130706433, 0, 1, 1619253761, 1617417174, 1619253761);
+INSERT INTO `sa_comment` VALUES (22, 1, 2, 0, 0, 1, '2222', 1, 1, 2130706433, 0, 1, 1619194125, 1617417227, NULL);
+INSERT INTO `sa_comment` VALUES (23, 1, 2, 15, 15, 1, '12313', 0, 0, 2130706433, 0, 1, 1619192477, 1617417296, 1619192477);
+INSERT INTO `sa_comment` VALUES (24, 1, 2, 0, 0, 1, '这里是一个什么评论', 0, 1, 2130706433, 0, 1, 1619192477, 1617417311, 1619192477);
+INSERT INTO `sa_comment` VALUES (25, 1, 2, 15, 15, 1, '12313', 0, 0, 2130706433, 0, 1, 1619192477, 1617417339, 1619192477);
 INSERT INTO `sa_comment` VALUES (26, 1, 2, 0, 0, 1, '<img src=\"/static/images/face/2.gif\"/>', 1, 0, 2130706433, 0, 1, 1617417419, 1617417419, NULL);
 
 -- ----------------------------
@@ -747,8 +820,103 @@ CREATE TABLE `sa_department`  (
 INSERT INTO `sa_department` VALUES (1, 0, '北京总部', '北京市昌平区体育馆南300米', '秦老板', '1510000001', 'coolsec@foxmail.com', '总部，主要负责广告的营销，策划！', 1, 1, 1611213045, NULL);
 INSERT INTO `sa_department` VALUES (2, 1, '河北分公司', '河北省邯郸市丛台区政府路', '刘备', '15100020003', 'liubei@qq.com', '', 2, 1, 1611227478, NULL);
 INSERT INTO `sa_department` VALUES (3, 2, '市场部', '一楼', '大乔', '15100010003', 'xiaoqiao@foxmail.com', '', 3, 1, 1611228586, NULL);
-INSERT INTO `sa_department` VALUES (4, 2, '开发部', '二楼', '赵云', '15100010003', 'zhaoyun@shijiazhuang.com', '', 4, 1, 1611228626, NULL);
+INSERT INTO `sa_department` VALUES (4, 2, '开发部', '二楼2', '赵云', '15100010003', 'zhaoyun@shijiazhuang.com', '', 4, 1, 1611228626, NULL);
 INSERT INTO `sa_department` VALUES (5, 2, '营销部', '二楼', '许攸', '15100010003', 'xuyou@henan.com', '', 5, 1, 1611228674, NULL);
+
+-- ----------------------------
+-- Table structure for sa_dictionary
+-- ----------------------------
+DROP TABLE IF EXISTS `sa_dictionary`;
+CREATE TABLE `sa_dictionary`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `pid` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '字典分类id',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字典名称',
+  `alias` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字典值',
+  `sort` int(11) NULL DEFAULT NULL COMMENT '排序号',
+  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
+  `updatetime` int(11) NULL DEFAULT 0 COMMENT '更新时间',
+  `createtime` int(11) NULL DEFAULT 0 COMMENT '创建时间',
+  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sa_dictionary
+-- ----------------------------
+INSERT INTO `sa_dictionary` VALUES (1, 0, '公司类型', 'ctype', 1, '', 1619335705, 1619315177, NULL);
+INSERT INTO `sa_dictionary` VALUES (2, 0, '性别', 'sex', 2, '', 1619317798, 1619317798, NULL);
+INSERT INTO `sa_dictionary` VALUES (3, 2, '男', '1', 3, '', 1619328741, 1619318908, NULL);
+INSERT INTO `sa_dictionary` VALUES (4, 2, '女', '0', 4, '备注', 1619328739, 1619318917, NULL);
+INSERT INTO `sa_dictionary` VALUES (5, 2, '未知', '-1', 5, '', 1619319450, 1619318926, NULL);
+INSERT INTO `sa_dictionary` VALUES (6, 1, '联盟', 'union', 6, '', 1619333525, 1619330991, NULL);
+INSERT INTO `sa_dictionary` VALUES (7, 1, '代码', 'code', 7, '', 1619331113, 1619331113, NULL);
+INSERT INTO `sa_dictionary` VALUES (8, 0, 'union', '11', 8, '', 1619335818, 1619333402, 1619335818);
+INSERT INTO `sa_dictionary` VALUES (9, 0, '数据维护', 'data', 9, '', 1619335721, 1619335721, NULL);
+INSERT INTO `sa_dictionary` VALUES (10, 0, '多表', '11', 10, '', 1619348044, 1619335795, 1619348044);
+INSERT INTO `sa_dictionary` VALUES (11, 1, 'union', 'dd', 11, '', 1619335801, 1619335801, NULL);
+
+-- ----------------------------
+-- Table structure for sa_download
+-- ----------------------------
+DROP TABLE IF EXISTS `sa_download`;
+CREATE TABLE `sa_download`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `pid` int(11) NULL DEFAULT NULL COMMENT '当前栏目',
+  `cid` int(11) NULL DEFAULT NULL COMMENT '当前模型',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称标题',
+  `hash` char(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '哈希值',
+  `access` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问权限',
+  `letter` char(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '首字母',
+  `color` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题颜色',
+  `pinyin` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '拼音标识',
+  `thumb` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '缩略图',
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文章封面',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容字段',
+  `attribute` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '当前属性',
+  `seo_title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO标题',
+  `seo_keywords` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO关键词',
+  `seo_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'SEO描述',
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '下载地址',
+  `file_code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '软件提取码',
+  `file_size` int(11) NULL DEFAULT NULL COMMENT '软件大小',
+  `file_ext` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '软件后缀名',
+  `file_type` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '软件类型',
+  `file_language` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '软件语言',
+  `file_env` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '运行软件',
+  `file_auth` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '授权方式',
+  `file_author` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '软件作者',
+  `file_website` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '软件官网',
+  `file_downtotal` int(11) NULL DEFAULT NULL COMMENT '下载次数',
+  `hits` mediumint(8) NULL DEFAULT NULL COMMENT '点击量',
+  `hits_day` mediumint(8) NULL DEFAULT NULL COMMENT '日点击',
+  `hits_week` mediumint(8) NULL DEFAULT NULL COMMENT '周点击',
+  `hits_month` mediumint(8) NULL DEFAULT NULL COMMENT '月点击',
+  `hits_lasttime` int(11) NULL DEFAULT NULL COMMENT '点击时间',
+  `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
+  `stars` tinyint(1) NULL DEFAULT NULL COMMENT '星级',
+  `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
+  `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态',
+  `up` mediumint(8) NULL DEFAULT NULL COMMENT '顶一下',
+  `down` mediumint(8) NULL DEFAULT NULL COMMENT '踩一下',
+  `gold` decimal(3, 1) NULL DEFAULT NULL COMMENT '评分',
+  `golder` smallint(6) NULL DEFAULT NULL COMMENT '评分人数',
+  `skin` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板文件',
+  `reurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '来源URL',
+  `readurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问地址',
+  `author` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '作者',
+  `admin_id` int(11) NULL DEFAULT NULL COMMENT '管理员id',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '会员投稿id',
+  `jumpurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '跳转地址',
+  `updatetime` int(11) NULL DEFAULT 0 COMMENT '更新时间',
+  `createtime` int(11) NULL DEFAULT 0 COMMENT '创建时间',
+  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '下载模型数据表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sa_download
+-- ----------------------------
+INSERT INTO `sa_download` VALUES (2, 4, 4, '迅捷PDF转换器 8.7.8', 'a2f3e71d9181a67b', '3,2', 'X', '#983434', 'xjzhq', '/upload/images/2021-04-22/thumb_60815a1e5cfc7.jpg', '/upload/images/2021-04-22/60815a1e5cfc7.jpg', '&lt;div class=&quot;sub-section&quot; style=&quot;margin-top: 20px; border: 0px none; background: #ffffff; color: #333333; font-family: arial, \'Microsoft YaHei\', 微软雅黑; font-size: 12px;&quot;&gt;\n&lt;div class=&quot;section-header&quot; style=&quot;background: none; height: 24px; overflow: visible; padding: 0px; border: 0px none; line-height: 24px;&quot;&gt;\n&lt;h2 class=&quot;section-title&quot; style=&quot;margin: 0px; padding: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 14px; line-height: 24px; float: none; border: 0px none;&quot;&gt;迅捷PDF转换器下载 官方版软件截图&lt;/h2&gt;\n&lt;/div&gt;\n&lt;div class=&quot;screenshot-box&quot; style=&quot;width: 680px; height: 295px; overflow: hidden; margin: 9px 0px 0px; padding: 0px 0px 7px;&quot;&gt;\n&lt;ul class=&quot;screenshot-items clearfix&quot; style=&quot;margin: 0px; padding: 0px; list-style: none; width: 2040px; background: #f2f2f2;&quot;&gt;\n&lt;li class=&quot;item&quot; style=&quot;margin: 0px; padding: 0px 10px 0px 0px; display: table-cell; float: left; height: 250px; overflow: hidden; line-height: 250px; vertical-align: middle;&quot;&gt;&lt;a class=&quot;pic&quot; style=&quot;color: #333333; text-decoration-line: none; outline: none 0px; word-break: break-all;&quot; href=&quot;/&quot;&gt;&lt;img style=&quot;border: 0px; vertical-align: middle; opacity: 1;&quot; title=&quot;[迅捷PDF转换器下载 官方版] 点击看大图&quot; src=&quot;/upload/images/2021-04-22/60815a1e5cfc7.jpg&quot; alt=&quot;迅捷PDF转换器 8.7.8&quot; width=&quot;400&quot; height=&quot;250&quot; /&gt;&lt;/a&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/div&gt;\n&lt;/div&gt;\n&lt;div class=&quot;sub-section&quot; style=&quot;margin-top: 20px; border: 0px none; background: #ffffff; color: #333333; font-family: arial, \'Microsoft YaHei\', 微软雅黑; font-size: 12px;&quot;&gt;\n&lt;div class=&quot;section-header&quot; style=&quot;background: none; height: 24px; overflow: visible; padding: 0px; border: 0px none; line-height: 24px;&quot;&gt;\n&lt;h2 class=&quot;section-title&quot; style=&quot;margin: 0px; padding: 0px; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 14px; line-height: 24px; float: none; border: 0px none;&quot;&gt;迅捷PDF转换器下载 官方版软件简介&lt;/h2&gt;\n&lt;/div&gt;\n&lt;div class=&quot;summary-text&quot;&gt;\n&lt;div class=&quot;text-wrap&quot; style=&quot;position: relative; max-height: 810px; overflow: hidden; margin: 8px 0px 0px; color: #666666; line-height: 22px;&quot;&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px;&quot;&gt;迅捷PDF转换器一款功能强大、操作简单的PDF转换成word转换器，支持PDF文档和doc、ppt、图片以及txt文档等多种格式之间的转换，zol提供迅捷PDF转换器官方版下载。&lt;/p&gt;\n&lt;p style=&quot;margin: 0px; padding: 0px;&quot;&gt;pdf转换器软件的转换效果非常出众，其采用的深度解析技术，对于复杂的pdf文件内容也可以做到精准转换。迅捷PDF转换器基于深度PDF转换技术的转换核心，采用了先进的超线程技术，融合最新的批量PDF文件添加转换功能，使得用户可以在同一时间内完成大量PDF文件的转换，极大地提升了软件的转换效率。目前，最新版本的迅捷PDF转换器，已经成功支持任意文件格式的转换。&lt;/p&gt;\n&lt;/div&gt;\n&lt;/div&gt;\n&lt;/div&gt;', '2,4,5', '', 'PDF,转换器,迅捷,下载,官方,软件,文档', '迅捷PDF转换器下载 官方版软件截图 迅捷PDF转换器下载 官方版软件简介 迅捷PDF转换器一款功能强大、操作简单的PDF转换成word转换器，支持PD...', NULL, '', 11220, '.exe', '国产软件', '简体中文', '', '开源软件', 'admin', '', 100, 0, 0, 0, 0, NULL, 1, 3, 0, 1, 0, 0, 0.0, 0, '', '', NULL, 'admin', 1, NULL, '', 1619285360, 1619089950, NULL);
 
 -- ----------------------------
 -- Table structure for sa_friendlink
@@ -759,18 +927,19 @@ CREATE TABLE `sa_friendlink`  (
   `title` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '友链名称',
   `logo` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '友链logo',
   `url` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '友链地址',
+  `type` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '友链类型',
   `sort` tinyint(4) NULL DEFAULT NULL COMMENT '排序ID',
-  `type` tinyint(1) NULL DEFAULT 0 COMMENT '友链类型',
   `status` tinyint(1) NULL DEFAULT 1 COMMENT '友链状态',
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '友情链接表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '友情链接表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_friendlink
 -- ----------------------------
-INSERT INTO `sa_friendlink` VALUES (1, '百度', '', 'http://www.baidu.com/', 0, 0, 1, 1602040473, NULL);
+INSERT INTO `sa_friendlink` VALUES (1, '百度', '/upload/images/2021-04-23/6082688028cc5.png', 'http://www.baidu.com/', '社区', 0, 1, 1602040473, NULL);
+INSERT INTO `sa_friendlink` VALUES (2, 'thinkphp', '', 'http://www.thinkphp.cn', '合作伙伴', NULL, 1, 1619159727, NULL);
 
 -- ----------------------------
 -- Table structure for sa_guestbook
@@ -798,6 +967,59 @@ CREATE TABLE `sa_guestbook`  (
 -- Records of sa_guestbook
 -- ----------------------------
 INSERT INTO `sa_guestbook` VALUES (1, 0, 0, '游客', 'SwiftAdmin后台极速开发框架，安全高效，简单易懂，不错不错！', '感谢老铁支持！！！', 2130706433, 1, 1612536747, 1611143750, NULL);
+
+-- ----------------------------
+-- Table structure for sa_image
+-- ----------------------------
+DROP TABLE IF EXISTS `sa_image`;
+CREATE TABLE `sa_image`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `pid` int(11) NOT NULL COMMENT '当前栏目',
+  `cid` int(11) NOT NULL COMMENT '当前模型',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '标题',
+  `hash` char(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '哈希值',
+  `access` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问权限',
+  `letter` char(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '首字母',
+  `color` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题颜色',
+  `pinyin` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '拼音标识',
+  `thumb` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '缩略图',
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文章封面',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容字段',
+  `album` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '相册图集',
+  `attribute` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '当前属性',
+  `seo_title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO标题',
+  `seo_keywords` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO关键词',
+  `seo_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'SEO描述',
+  `hits` mediumint(8) NULL DEFAULT NULL COMMENT '点击量',
+  `hits_day` mediumint(8) NULL DEFAULT NULL COMMENT '日点击',
+  `hits_week` mediumint(8) NULL DEFAULT NULL COMMENT '周点击',
+  `hits_month` mediumint(8) NULL DEFAULT NULL COMMENT '月点击',
+  `hits_lasttime` int(11) NULL DEFAULT NULL COMMENT '点击时间',
+  `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
+  `stars` tinyint(1) NULL DEFAULT NULL COMMENT '星级',
+  `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
+  `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态',
+  `up` mediumint(8) NULL DEFAULT NULL COMMENT '顶一下',
+  `down` mediumint(8) NULL DEFAULT NULL COMMENT '踩一下',
+  `gold` decimal(3, 1) NULL DEFAULT NULL COMMENT '评分',
+  `golder` smallint(6) NULL DEFAULT NULL COMMENT '评分人数',
+  `skin` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板文件',
+  `reurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '来源URL',
+  `readurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问地址',
+  `author` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '作者',
+  `admin_id` int(11) NULL DEFAULT NULL COMMENT '管理员id',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '会员投稿id',
+  `jumpurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '跳转地址',
+  `updatetime` int(11) NULL DEFAULT 0 COMMENT '更新时间',
+  `createtime` int(11) NULL DEFAULT 0 COMMENT '创建时间',
+  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '图片模型数据表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sa_image
+-- ----------------------------
+INSERT INTO `sa_image` VALUES (1, 2, 2, '相册数据集合', '9d4c2f636f067f89', '', 'X', '', 'xcsjjh', '', '', '&lt;p&gt;这里是简介&lt;/p&gt;', 'a:4:{i:0;a:2:{s:3:\"src\";s:44:\"/upload/images/2021-04-22/6081952b27a36.jpeg\";s:5:\"title\";s:7:\"说明1\";}i:1;a:2:{s:3:\"src\";s:44:\"/upload/images/2021-04-22/6081952b27a36.jpeg\";s:5:\"title\";s:7:\"说明2\";}i:2;a:2:{s:3:\"src\";s:44:\"/upload/images/2021-04-22/6081952b27a36.jpeg\";s:5:\"title\";s:7:\"说明3\";}i:3;a:2:{s:3:\"src\";s:44:\"/upload/images/2021-04-22/6081952b27a36.jpeg\";s:5:\"title\";s:7:\"说明4\";}}', '4', '', '这里,简介', '这里是简介', 0, 0, 0, 0, NULL, 1, 3, 0, 1, 0, 0, 0.0, 0, '', '', NULL, 'admin', 1, NULL, '', 1619109426, 1619107275, NULL);
 
 -- ----------------------------
 -- Table structure for sa_jobs
@@ -846,7 +1068,131 @@ CREATE TABLE `sa_navmenu`  (
 -- ----------------------------
 INSERT INTO `sa_navmenu` VALUES (1, 0, '导航测试', '/xiazai', 1, 1, 1610788293, NULL);
 INSERT INTO `sa_navmenu` VALUES (2, 1, '二级导航2', '/daohang', 2, 1, 1610788293, NULL);
-INSERT INTO `sa_navmenu` VALUES (3, 1, '网站编辑3', '/xiazai', 3, 1, 1610788293, NULL);
+INSERT INTO `sa_navmenu` VALUES (3, 1, '网站编辑3', '/xiazaiD', 3, 1, 1610788293, NULL);
+
+-- ----------------------------
+-- Table structure for sa_order
+-- ----------------------------
+DROP TABLE IF EXISTS `sa_order`;
+CREATE TABLE `sa_order`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `cid` int(11) NOT NULL COMMENT '分类id/模板/插件',
+  `pid` int(11) NOT NULL COMMENT '商品id',
+  `oid` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '订单id',
+  `uid` int(11) NOT NULL COMMENT '用户id',
+  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '商品名称',
+  `type` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '支付类型',
+  `status` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '支付状态',
+  `updatetime` int(1) NULL DEFAULT NULL COMMENT '更新时间',
+  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户订单表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sa_order
+-- ----------------------------
+INSERT INTO `sa_order` VALUES (1, 1, 3, '1', 1, 'demo', 'alipay', 0, 1602812266, 1602812266);
+INSERT INTO `sa_order` VALUES (7, 1, 9, '202103280941377632983812', 1, 'docs', NULL, 0, NULL, 1616895697);
+INSERT INTO `sa_order` VALUES (8, 1, 10, '202103280941441671909324', 1, 'upyun', NULL, 0, NULL, 1616895704);
+INSERT INTO `sa_order` VALUES (9, 1, 7, '202103281058587145057719', 1, 'comment', NULL, 0, NULL, 1616900338);
+INSERT INTO `sa_order` VALUES (10, 1, 4, '202103281134152464396132', 1, 'nologinurl', NULL, 0, NULL, 1616902455);
+INSERT INTO `sa_order` VALUES (11, 1, 2, '202103281139473912805227', 1, 'mobilediy', NULL, 0, NULL, 1616902787);
+INSERT INTO `sa_order` VALUES (18, 2, 3, '202103301021327264761146', 1, 'test', NULL, 0, NULL, 1617070892);
+INSERT INTO `sa_order` VALUES (19, 2, 2, '202103301216141675830143', 1, 'null', NULL, 0, NULL, 1617077774);
+INSERT INTO `sa_order` VALUES (20, 1, 15, '202103301601237176188929', 1, 'customform', NULL, 0, NULL, 1617091283);
+INSERT INTO `sa_order` VALUES (21, 1, 13, '202104100948165691994217', 1, 'bos', NULL, 0, NULL, 1618019296);
+INSERT INTO `sa_order` VALUES (22, 1, 15, '202104101133303777332542', 1, 'customform1', NULL, 1, NULL, 1618025610);
+INSERT INTO `sa_order` VALUES (23, 1, 21, '202104102031148446787233', 1, 'driverschool', NULL, 0, NULL, 1618057874);
+INSERT INTO `sa_order` VALUES (24, 1, 10, '202104111048141068506144', 1, 'cloudfiles', NULL, 0, NULL, 1618109294);
+INSERT INTO `sa_order` VALUES (25, 1, 16, '202104111119115185508142', 1, 'wxo', NULL, 1, NULL, 1618111151);
+
+-- ----------------------------
+-- Table structure for sa_plugin
+-- ----------------------------
+DROP TABLE IF EXISTS `sa_plugin`;
+CREATE TABLE `sa_plugin`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `type` int(1) NULL DEFAULT NULL COMMENT '类型',
+  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标识',
+  `title` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
+  `intro` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '简述',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述信息',
+  `image` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '封面',
+  `screenshots` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '相册',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '作者id',
+  `author` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '作者',
+  `url` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'URL地址',
+  `demourl` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '演示地址',
+  `filepath` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '插件路径',
+  `qq` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '作者QQ',
+  `stars` int(1) NULL DEFAULT NULL COMMENT '星级',
+  `score` decimal(6, 0) NULL DEFAULT NULL COMMENT '评分',
+  `version` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '版本',
+  `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '价格',
+  `sort` int(11) NULL DEFAULT NULL COMMENT '排序号',
+  `extendedprice` decimal(10, 2) NULL DEFAULT NULL COMMENT '高级版价格',
+  `likes` int(10) NULL DEFAULT NULL COMMENT '点击次数',
+  `download` int(10) NULL DEFAULT NULL COMMENT '下载次数',
+  `status` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '状态',
+  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+  `updatetime` int(11) NULL DEFAULT NULL COMMENT '更新时间',
+  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 52 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sa_plugin
+-- ----------------------------
+INSERT INTO `sa_plugin` VALUES (2, 5, 'mobilediy', '移动端DIY拖拽布局组件', '基于uni-app开发的DIY可视化拖拽布局组件', '适配H5/APP/各大平台小程序，支持任意整合使用基于uniapp开发的应用系统。', 'https://cdn.fastadmin.net/uploads/addons/mobilediy.png', 'https://cdn.fastadmin.net/uploads/20210318/c1d96d5fe53f995469cab245dd82c60d.jpg#https://cdn.fastadmin.net/uploads/20210318/f49a4f3a637662cd9d03fb224348ce6a.jpg#https://cdn.fastadmin.net/uploads/20210318/f457d7d5ba900bafb4f1a8c40683071f.jpg#https://cdn.fastadmin.net/uploads/20210318/07dd3178cf2a280aac26bbd8bc1b188c.png#https://cdn.fastadmin.net/uploads/20210318/ef3e0d19e78968f44c003c2b1ede3f87.png#https://cdn.fastadmin.net/uploads/20210318/4a00ac21c88318f64992b09743a31f9f.png#https://cdn.fastadmin.net/uploads/20210318/d6655afa8c52e434e052165ea8344aec.png#https://cdn.fastadmin.net/uploads/20210318/81242ed0451d4843212fa3d7dda315ea.png', NULL, 'zhj9922', 'https://www.fastadmin.net/store/mobilediy.html', 'http://diy2.xiaowo6.cn/H5', NULL, '', NULL, 0, '1.0.0', 29.00, NULL, 79.00, 0, 18, 1, 1605884501, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (3, 5, 'demo', 'web云打印机', '一款基于ThinkPHP5+FastAdmin的Web云打印机', '强大灵活的web云打印，包括（易联云，飞鹅，中午）', 'https://cdn.fastadmin.net/uploads/addons/uniprint.png', 'https://cdn.fastadmin.net/uploads/20201112/138162d8cb7f8f9dfe36c631ab285168.png#https://cdn.fastadmin.net/uploads/20201112/b34d8f8cacf5bd40f6d7847819cbf613.png#https://cdn.fastadmin.net/uploads/20201112/249f7fcfdf7e9aaf96bf2655d393498f.png', NULL, 'joelzheng', 'https://www.fastadmin.net/store/uniprint.html', '', '/upload/plugin/demo.zip', '', NULL, 0, '1.0.2', 19.90, NULL, 49.90, 2, 88, 1, 1605927585, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (4, 5, 'nologinurl', '免登录自动鉴权链接', '生成指定用户一次性无需登录自动鉴权URL', '可生成指定用户的一次性无需登录自动鉴权URL，常用于通知消息中的链接', 'https://cdn.fastadmin.net/uploads/addons/nologinurl.png', 'https://cdn.fastadmin.net/uploads/20201209/a9d683e032030a2b5e17e95516ced364.png', NULL, '白衣素袖', 'https://www.fastadmin.net/store/nologinurl.html', 'http://login.ggacm.org/url/5WqLCy', NULL, '', NULL, 4, '1.0.0', 19.90, NULL, 199.00, 3, 34, 1, 1607589624, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (5, 2, 'recharge', '会员充值余额插件', '快速添加余额充值和余额日志功能', '用于整合FastAdmin会员在线充值余额', 'https://cdn.fastadmin.net/uploads/addons/recharge.png', 'https://cdn.fastadmin.net/uploads/20181123/63c0bbd16384ac707def19d705773a2e.png#https://cdn.fastadmin.net/uploads/20181123/7190987233670b76079fb59f9dba67a9.png#https://cdn.fastadmin.net/uploads/20181123/31f4972150c660d667db386053606191.png', NULL, '官方', 'https://www.fastadmin.net/store/recharge.html', '', NULL, '', NULL, 0, '1.0.9', 0.00, NULL, 0.00, 66, 11402, 1, 1542986018, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (6, 5, 'geetest', '全新极验验证码', '为你的FastAdmin添加上AI智能验证码', '将FastAdmin中的前后台验证码切换为极验验证码', 'https://cdn.fastadmin.net/uploads/addons/geetest.png', 'https://cdn.fastadmin.net/uploads/20181112/dc8e5258fa0a7862ce48019368a4cb5b.png#https://cdn.fastadmin.net/uploads/20181112/95f4fdc82ffbf2d5af9242bedc0dca5a.png#https://cdn.fastadmin.net/uploads/20181112/cdd652332c91fb4b27570327440ffe4e.png', NULL, '官方', 'https://www.fastadmin.net/store/geetest.html', '', NULL, '', NULL, 5, '1.0.0', 0.00, NULL, 0.00, 62, 14679, 1, 1541999586, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (7, 9, 'comment', '一站式社会化评论系统', '快速搭建自己的一站式网站评论系统', '基于FastAdmin和ThinkPHP极速开发的类式多说,畅言,友言的一站式网站评论管理系统', 'https://cdn.fastadmin.net/uploads/addons/comment.png', 'https://cdn.fastadmin.net/uploads/20180720/bd53c142c3d27491e8cff8e780ae42de.png#https://cdn.fastadmin.net/uploads/20180720/99b9e25e4f53c57baa95a54b224f0d46.png#https://cdn.fastadmin.net/uploads/20180720/9ce8059853f0f62dca54ed69c53b7b49.png#https://cdn.fastadmin.net/uploads/20180720/426cb174adb5342db9c26878e2753366.png#https://cdn.fastadmin.net/uploads/20180720/80e2807ec4cf3eeacc6d436c8cc7dd4d.png#https://cdn.fastadmin.net/uploads/20180720/f3cbd9f1341e6734d7e0746e88a0e889.png', NULL, '官方', 'https://www.fastadmin.net/store/comment.html', '', NULL, '', NULL, 5, '1.0.4', 99.90, NULL, 199.00, 20, 1264, 1, 1532087960, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (8, 6, 'markdown', 'Markdown编辑器', '一款简洁强大的Markdown编辑器', '在线快速编写Markdown内容,支持预览、剪贴板粘贴图片上传等功能', 'https://cdn.fastadmin.net/uploads/addons/markdown.png', 'https://cdn.fastadmin.net/uploads/20180505/8919cca24fa7aa3cb78fd584e40804f9.png', NULL, '官方', 'https://www.fastadmin.net/store/markdown.html', '', NULL, '', NULL, 5, '1.0.1', 0.00, NULL, 0.00, 52, 11191, 1, 1525489286, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (9, 9, 'docs', 'Markdown文档生成插件', '可根据Markdown文件生成文档', '将Github或本地Git环境中的Markdown文件解析并生成HTML，可在线浏览或导出为HTML离线浏览', 'https://cdn.fastadmin.net/uploads/addons/docs.png', 'https://cdn.fastadmin.net/uploads/20180505/5529b0be0a4e67a2f8061450a0f303f6.png#https://cdn.fastadmin.net/uploads/20180505/6921356e84a7d3af11d43536bfa42c99.png#https://cdn.fastadmin.net/uploads/20180505/f6ab62258e38179a6d5a308a847a704a.png#https://cdn.fastadmin.net/uploads/20180505/ee62613dcaec9767b66baf9dd9ef399b.png#https://cdn.fastadmin.net/uploads/20180505/654c12cdf8be11ad072bf0c5018e853f.png', NULL, '官方', 'https://www.fastadmin.net/store/docs.html', '', NULL, '', NULL, 5, '1.0.4', 99.00, NULL, 299.00, 57, 1505, 1, 1502687956, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (10, 7, 'cloudfiles', '云上传存储插件', '支持客户端直传、服务端中转、分片上传', '启用后将使用又拍云作为默认云存储，支持直传和中转两种上传模式', 'https://cdn.fastadmin.net/uploads/addons/upyun.png', '', NULL, '官方', 'https://www.fastadmin.net/store/upyun.html', '', '/upload/plugin/cloudfiles.zip', '', NULL, 0, '1.1.1', 19.90, NULL, 59.00, 67, 4095, 1, 1500000000, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (11, 6, 'loginbg', '登录背景图', '后台登录背景图', '可自定义后台登录背景图，支持随机和固定模式', 'https://cdn.fastadmin.net/uploads/addons/loginbg.png', '', NULL, '官方', 'https://www.fastadmin.net/store/loginbg.html', '', NULL, '', NULL, 5, '1.0.1', 0.00, NULL, 0.00, 55, 18097, 1, 1500000000, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (12, 4, 'qrcoded', '二维码生成', '前台二维码生成示例', '一个简单的通过PHP生成二维码的示例', 'https://cdn.fastadmin.net/uploads/addons/qrcode.png', 'https://cdn.fastadmin.net/uploads/20180505/c769e488e1cfa928c0a84af431089e2c.png', NULL, '官方', 'https://www.fastadmin.net/store/qrcode.html', '', NULL, '', NULL, 5, '1.0.4', 0.00, NULL, 0.00, 79, 19015, 1, 1500000000, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (13, 7, 'bos', '百度BOS云存储上传插件', '支持客户端直传、服务端中转、分片上传', '将百度BOS作为默认云存储，支持直传和中转两种上传模式', 'https://cdn.fastadmin.net/uploads/addons/bos.png', '', NULL, '官方', 'https://www.fastadmin.net/store/bos.html', '', NULL, '', NULL, 0, '1.1.1', 19.90, NULL, 59.00, 10, 93, 1, 1576896081, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (14, 5, 'bdtts', '百度语音合成', '百度语音合成插件', '百度语音合成', 'https://cdn.fastadmin.net/uploads/addons/bdtts.png', 'https://cdn.fastadmin.net/uploads/20201113/4986a019f743eb27b0b2e93926da1392.png', NULL, '10516487', 'https://www.fastadmin.net/store/bdtts.html', '', NULL, '', NULL, 4, '1.0.0', 0.00, NULL, 0.00, 3, 462, 1, 1605232746, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (15, 4, 'customform1', 'vue可视化表单设计器', '兼容pc+wap，可hook页面引入，提供vue源码', '前端基于vue+iview开发，兼容pc+wap端，提供hook页面引入，实时预览修改样式', 'https://cdn.fastadmin.net/uploads/addons/customform.png', 'https://cdn.fastadmin.net/uploads/20201102/de89251cbd354dee4af67b79d65d1cc8.png#https://cdn.fastadmin.net/uploads/20201102/e4575708af229af67583175043473015.png#https://cdn.fastadmin.net/uploads/20201102/0d6e312b0bc96968845879f9df01b28c.png#https://cdn.fastadmin.net/uploads/20201102/ac5259c7900bbd2a498983797673b291.png#https://cdn.fastadmin.net/uploads/20201102/0eb5ce2622fb92a2f44b8c3eedfbcfe2.png#https://cdn.fastadmin.net/uploads/20201102/5171f4886de41367bc67ea30b6665827.png', NULL, '佐', 'https://www.fastadmin.net/store/customform.html', 'http://balltest.mboo.com.cn/yHwMKztUau.php', NULL, '', NULL, 4, '1.0.4', 49.90, NULL, 199.00, 14, 272, 1, 1604310696, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (16, 5, 'wxo', '微信管理插件', '自动回复、多菜单管理、粉丝&素材管理', '自动回复、多菜单管理、粉丝&素材管理', 'https://cdn.fastadmin.net/uploads/addons/wxo.png', 'https://cdn.fastadmin.net/uploads/20201106/cc09817908537270c5381e000be3e1ef.png#https://cdn.fastadmin.net/uploads/20201106/8a59c805c343811074b61edfe02b1f5d.png#https://cdn.fastadmin.net/uploads/20201106/7c70321c686f0edf854dae41a5c82217.png#https://cdn.fastadmin.net/uploads/20201106/4839560e8e285fa284056e62fffef0d1.png#https://cdn.fastadmin.net/uploads/20201106/79011bf1ef07939afb591b1e411ef1c9.png', NULL, '小星', 'https://www.fastadmin.net/store/wxo.html', '', NULL, '', NULL, 0, '1.0.0', 19.90, NULL, 69.90, 2, 127, 1, 1604632860, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (17, 3, 'bdfanyi', '百度通用翻译', '百度通用翻译插件', '百度通用翻译插件', 'https://cdn.fastadmin.net/uploads/addons/bdfanyi.png', 'https://cdn.fastadmin.net/uploads/20201109/c8ed4c35d6a58b430f9e3e4dfddf955d.png#https://cdn.fastadmin.net/uploads/20201109/2adce3cc47dfdda983234169ef4eac2b.png', NULL, '10516487', 'https://www.fastadmin.net/store/bdfanyi.html', '', NULL, '', NULL, 4, '1.0.0', 0.00, NULL, 0.00, 0, 294, 1, 1605237068, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (18, 9, 'ygame', '赛事报名系统', '基于Fastadmin和Uniapp开发的赛事报名系统', '基于Fastadmin和Uniapp开发的赛事报名系统', 'https://cdn.fastadmin.net/uploads/addons/ygame.png', 'https://cdn.fastadmin.net/uploads/20210113/f9d3acb0ee7dbeb144cf97e55957f808.jpg#https://cdn.fastadmin.net/uploads/20210113/3b789bc61cd2d134ccc3e0c21e987453.jpg#https://cdn.fastadmin.net/uploads/20210113/8957b0999f37b1a52b757000ad113fd4.jpg#https://cdn.fastadmin.net/uploads/20201027/0a480ece49c929e872a7ba49aef2da86.jpg#https://cdn.fastadmin.net/uploads/20201027/618cc37b23c3ff65c472017ce4fed5b5.jpg#https://cdn.fastadmin.net/uploads/20201027/a08c7b860f9d830a13545e7816da4eeb.jpg#https://cdn.fastadmin.net/uploads/20201027/fceead31556b34e67cf3c63b9548dbe9.jpg#https://cdn.fastadmin.net/uploads/20201027/69639bb132766f14361b1eece88ddfcb.jpg#https://cdn.fastadmin.net/uploads/20201027/f0af1b34fac1086f6c75ff83211fc09c.jpg', NULL, 'piupiu', 'https://www.fastadmin.net/store/ygame.html', 'https://www.fastadmin.net/preview/ygame.html', NULL, '', NULL, 4, '1.0.2', 99.00, NULL, 399.00, 3, 130, 1, 1603868473, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (19, 6, 'mindmap', '思维导图-树形图', '一套基于ThinkPHP5+FastAdmin的思维导图网站系统', '基于thinkPHP5+FastAdmin+Vue+Antv G6+iView开发，是一套完整可拓展性的思维导图制作网站', 'https://cdn.fastadmin.net/uploads/addons/mindmap.png', 'https://cdn.fastadmin.net/uploads/20201020/8c35c6d5e13e7b7923c355b95ce6ff72.png#https://cdn.fastadmin.net/uploads/20201020/72d1de8bf8984b6ab139fee8df941844.png#https://cdn.fastadmin.net/uploads/20201020/fc9a58cb12d9e0ebcccbb7d487b23767.png#https://cdn.fastadmin.net/uploads/20201020/73f41d3dc127ad9a76fd10c3346c45f0.png#https://cdn.fastadmin.net/uploads/20201020/6af196b31368b5f7ed73a99a620f819a.png#https://cdn.fastadmin.net/uploads/20201020/fcd6d2ab0af4203a5f5376fbeb6fa1ef.png#https://cdn.fastadmin.net/uploads/20201020/a3ec9481a6ca4d148f88c503d94200de.png#https://cdn.fastadmin.net/uploads/20201020/767d7262de013de89ae87dcb4e52089b.png#https://cdn.fastadmin.net/uploads/20201020/49427b94d00b3e53a6ed3a6737c0d9e1.png#https://cdn.fastadmin.net/uploads/20201020/373025f869cfc3aaf8cb256416bc7397.png#https://cdn.fastadmin.net/uploads/20201020/0a4c2c963911ebf5b916006fbe415997.png', NULL, '佐', 'https://www.fastadmin.net/store/mindmap.html', 'http://mboo.com.cn/addons/mindmap/index/index', NULL, '', NULL, 0, '1.0.0', 0.00, NULL, 0.00, 3, 804, 1, 1603117344, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (20, 2, 'yalimedia', '音视频课程点播系统', '基于阿里云视频点播服务的课程点播插件', '基于FastAdmin+Uniapp开发的课程点播插件，包含音视频、图文课程', 'https://cdn.fastadmin.net/uploads/addons/yalimedia.png', 'https://cdn.fastadmin.net/uploads/20210113/5921431323befd048a3daa3ffb9ac692.jpg#https://cdn.fastadmin.net/uploads/20210113/6ec68658c1485030c214e335c944c2b7.jpg#https://cdn.fastadmin.net/uploads/20210113/a52a453ce373205ce32d9695b67e35d2.jpg#https://cdn.fastadmin.net/uploads/20210113/e89bb277014e22e227732dd28a20b472.jpg#https://cdn.fastadmin.net/uploads/20210113/cb6815e656ddba4c830a08f97a3dfbdd.jpg#https://cdn.fastadmin.net/uploads/20210113/2598c39c9c6e4cde8037185bd546c42d.jpg#https://cdn.fastadmin.net/uploads/20210112/feeb35d51d4a6ace71e5f83ebaa20a51.jpg#https://cdn.fastadmin.net/uploads/20210112/c005b42809f1ed91f610a9d1b421c9d9.jpg#https://cdn.fastadmin.net/uploads/20210112/2abb1cabc1bb1686adb41bd21afc3047.jpg#https://cdn.fastadmin.net/uploads/20210112/6e758f9586bc0e56d112452767a6f9f3.jpg#https://cdn.fastadmin.net/uploads/20210112/8eb1220c1013da6497e5f9faf0680ec4.jpg#https://cdn.fastadmin.net/uploads/20210112/83ba3dc8739f4c7fd5ab4c9e91817dce.jpg#https://cdn.fastadmin.net/uploads/20210112/1233d052139f4a4eddd28e7f95683aa0.jpg#https://cdn.fastadmin.net/uploads/20210112/c5c67a9a6cf288b4dc3b47e5d4fd4c81.jpg', NULL, 'piupiu', 'https://www.fastadmin.net/store/yalimedia.html', 'https://www.fastadmin.net/preview/yalimedia.html', NULL, '', NULL, 5, '1.0.0', 99.00, NULL, 299.00, 7, 117, 1, 1610524340, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (21, 2, 'driverschool', '驾校管理系统', '基于ThinkPHP+FastAdmin搭建的安全智能驾校管理系统', '方便、安全、智能的驾校信息管理系统，让您的管理效率翻倍，管理工作不累', 'https://cdn.fastadmin.net/uploads/addons/driverschool.png', 'https://cdn.fastadmin.net/uploads/20201016/cb2a882c4354c95fd73bc1a80b57b5b3.jpg#https://cdn.fastadmin.net/uploads/20201016/97a7d5be4e62dc2e42153ba922e70e96.png#https://cdn.fastadmin.net/uploads/20201016/0b203697d7cf36f0aa5dfbe94a93bff6.png#https://cdn.fastadmin.net/uploads/20201016/10f68efcc1863544aef755e21cf18d12.png#https://cdn.fastadmin.net/uploads/20201016/af9bce16c5396b2af9d0df3ea26baf4a.png', NULL, 'wowkie', 'https://www.fastadmin.net/store/driverschool.html', 'http://driverschool.huopian.net/LUmYbdXEkg.php', NULL, '', NULL, 0, '1.0.1', 168.00, NULL, 468.00, 4, 598, 1, 1602812266, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (22, 4, 'yjqrcode', '二维码防伪追溯查询', '二维码扫码查询真伪', '基于FastAdmin+ThinkPHP开发的二维码扫码查询真伪', 'https://cdn.fastadmin.net/uploads/addons/yjqrcode.png', 'https://cdn.fastadmin.net/uploads/20201013/8231b4f1411c4df86ce977cb192e769b.png#https://cdn.fastadmin.net/uploads/20201013/f89503c012e0a467f3caa04ef2ce2ec7.png#https://cdn.fastadmin.net/uploads/20201013/4a808386e5b15d57dd5a77c7e2f82496.png#https://cdn.fastadmin.net/uploads/20201013/1085203b54c4f41a59d484107a29e6a9.png#https://cdn.fastadmin.net/uploads/20201013/93c24e492aab37afc4eebf1fafc64c2f.png#https://cdn.fastadmin.net/uploads/20201013/b5f441812db53b78b5e55cfcc15d02d2.png#https://cdn.fastadmin.net/uploads/20201013/78dc274a169b65dc58924cdd0c15ded5.png#https://cdn.fastadmin.net/uploads/20201013/4952f2c7171657507158fd0a1ba27bf9.png', NULL, '云极', 'https://www.fastadmin.net/store/yjqrcode.html', '', NULL, '', NULL, 0, '1.0.0', 99.00, NULL, 299.00, 5, 45, 1, 1602513005, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (23, 3, 'suisunwechat', '公众号管理插件', '微信菜单,公众号客服,素材管理,消息群发,粉丝数据等', '基于EasyWeChat4.x封装的公众号管理插件', 'https://cdn.fastadmin.net/uploads/addons/suisunwechat.png', 'https://cdn.fastadmin.net/uploads/20201013/12796c584f46dc32a27cf98719bdae57.png#https://cdn.fastadmin.net/uploads/20201013/9db39b9e9789951b1345f611a2ec3b06.png#https://cdn.fastadmin.net/uploads/20201013/bf718ffa210d4dd0295f8e419b7f6299.png#https://cdn.fastadmin.net/uploads/20201013/d0a4a7b5918ac64eb5e7b724c1b9dd92.png#https://cdn.fastadmin.net/uploads/20201013/d1c3bba3800d077a1cf811d94d685fa1.png#https://cdn.fastadmin.net/uploads/20201013/bc5ced78a480eac7ef6e203ac6eb43ef.png#https://cdn.fastadmin.net/uploads/20201013/8d18c231c843c715043bff2d85af1121.png', NULL, 'javes', 'https://www.fastadmin.net/store/suisunwechat.html', '', NULL, '', NULL, 0, '1.0.2', 59.00, NULL, 199.00, 3, 182, 1, 1602512174, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (24, 10, 'lodop', 'Lodop打印模板', '让Web打印易起来~~', '开发者绑定打印类名与内容,让用户自行设计打印模板...', 'https://cdn.fastadmin.net/uploads/addons/lodop.png', 'https://cdn.fastadmin.net/uploads/20200819/7c670294d026c130189a352cc2086304.png#https://cdn.fastadmin.net/uploads/20200819/2473c9c9c8db704da3753852101fffd4.png#https://cdn.fastadmin.net/uploads/20200819/806476599b9e5ca7fbac4353ee47b882.png#https://cdn.fastadmin.net/uploads/20200819/aa32027a4a2b1aa46b84714969803aa4.png', NULL, '杨清云', 'https://www.fastadmin.net/store/lodop.html', '', NULL, '', NULL, 4, '1.0.1', 29.00, NULL, 99.00, 2, 72, 1, 1603360164, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (25, 4, 'vipgroup', 'VIP会员组', '基于Fastadmin的会员分组的VIP会员组', '基于Fastadmin的会员分组的VIP会员组', 'https://cdn.fastadmin.net/uploads/addons/vipgroup.png', 'https://cdn.fastadmin.net/uploads/20200811/c33ad491653f835f7973dfb205c2489a.jpg#https://cdn.fastadmin.net/uploads/20200811/db881baf3839a1445c05da3a635bad4a.jpg#https://cdn.fastadmin.net/uploads/20200811/20c9008a972a6c9ac5b046e659352e31.jpg#https://cdn.fastadmin.net/uploads/20200811/f15d37a7cebcb1320d0d1ca1f833e2e2.jpg#https://cdn.fastadmin.net/uploads/20200906/3e60ec89bd5e3ad567065301472f2313.jpg#https://cdn.fastadmin.net/uploads/20200906/1095b43f952fe0f692c9cc3dfb1aeafc.png', NULL, 'CoderRay', 'https://www.fastadmin.net/store/vipgroup.html', '', NULL, '', NULL, 4, '1.0.1', 49.00, NULL, 129.00, 7, 104, 1, 1597158240, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (26, 4, 'distinct', '数据库数据查重工具', '数据库数据查重及去重工具', '可根据选择字段对数据表进行查重及去重', 'https://cdn.fastadmin.net/uploads/addons/distinct.png', 'https://cdn.fastadmin.net/uploads/20200821/c0836414cf8417b77a5218bb180555bf.png', NULL, 'xiaoyu5062', 'https://www.fastadmin.net/store/distinct.html', '', NULL, '', NULL, -3, '1.0.2', 9.90, NULL, 29.90, 1, 62, 1, 1596872591, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (27, 4, 'myblock', '自定义资料插件', '用于显示各种自定义数据信息', '定义并显示多种数据格式，如：文本、图片、文件、富文本内容、数据列表等', 'https://cdn.fastadmin.net/uploads/addons/myblock.png', 'https://cdn.fastadmin.net/uploads/20200807/fb029866e88af5d87359d78442cc0365.png#https://cdn.fastadmin.net/uploads/20200807/8336d073a5b4a34ac6582aa5e99e9658.png#https://cdn.fastadmin.net/uploads/20200807/01a5cdfa3c55f99bce9bbe95774c5138.png#https://cdn.fastadmin.net/uploads/20200807/5d7a6516ac6897db770cb2121c1a122b.png#https://cdn.fastadmin.net/uploads/20200807/27a9c3f95f32c7007b36f0b43dae2e2e.png#https://cdn.fastadmin.net/uploads/20200822/529f38b79452c823a31cc7ce69e52192.png', NULL, 'lotuscheng', 'https://www.fastadmin.net/store/myblock.html', '', NULL, '', NULL, 0, '1.0.1', 49.90, NULL, 150.00, 3, 26, 1, 1596811897, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (28, 4, 'qyexternal', '企业微信客户管理', '一款对用户友好的企业客户管理终端', '企业微信外部联系人管理，支持多个企业微信，新增客户、聊天数据、客户流失等数据统计功能。', 'https://cdn.fastadmin.net/uploads/addons/qyexternal.png', 'https://cdn.fastadmin.net/uploads/20200805/a18504aae8bf33489adc30aa872cda1e.png#https://cdn.fastadmin.net/uploads/20200805/ea98d96f22e5dfc9199f73f724b36f50.png#https://cdn.fastadmin.net/uploads/20200805/6c8d8b1c7c9e0340876ccd2944a4eb61.png#https://cdn.fastadmin.net/uploads/20200805/4f9064e46da8496f41ef61a6e130a0c5.png#https://cdn.fastadmin.net/uploads/20200805/b539cd6e867313c0f09020b26c700517.png#https://cdn.fastadmin.net/uploads/20200805/06136c12e6b6c2365f1ec197ba3e77cd.png', NULL, 'Ghaoo', 'https://www.fastadmin.net/store/qyexternal.html', '', NULL, '', NULL, 0, '1.0.1', 59.00, NULL, 299.00, 1, 88, 1, 1596618611, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (29, 2, 'customcharts', 'DIY图表统计工具', '图表统计工具，通过表单添加数据即可完成图表统计工作', '数据图表统计管理工具，通过表单添加数据即可完成图表统计工作。', 'https://cdn.fastadmin.net/uploads/addons/customcharts.png', 'https://cdn.fastadmin.net/uploads/20200806/0cf929e827a4c172bafe02e0060bb28b.png#https://cdn.fastadmin.net/uploads/20200806/e89734d65e763d3dfb89364e98ac0a24.png#https://cdn.fastadmin.net/uploads/20200806/481facafa3b4c4e3d410105fbc31d9d9.png#https://cdn.fastadmin.net/uploads/20200806/64a099d64b49d7b705b08643eb22c1d1.png#https://cdn.fastadmin.net/uploads/20200806/1b74d251ddbb730039bc20167168c6ed.png', NULL, 'Xing6', 'https://www.fastadmin.net/store/customcharts.html', 'https://www.fastadmin.net/preview/customcharts.html', NULL, '', NULL, 0, '1.0.3', 39.90, NULL, 99.90, 6, 612, 1, 1596549406, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (30, 1, 'mrbs', '会议室预约', '一款移动端会议室、房间预约插件', '移动端会议室、房间预约插件', 'https://cdn.fastadmin.net/uploads/addons/mrbs.png', 'https://cdn.fastadmin.net/uploads/20200719/01d8beeda997af3dce17e409c7000d06.png#https://cdn.fastadmin.net/uploads/20200719/419024532d354d4795c6dc1931cb8c9b.png#https://cdn.fastadmin.net/uploads/20200719/fa29fb650791ccab33aca91eea0594fd.png', NULL, 'lscho', 'https://www.fastadmin.net/store/mrbs.html', 'https://www.fastadmin.net/preview/mrbs.html', NULL, '', NULL, 0, '1.0.2', 49.90, NULL, 149.90, 1, 63, 1, 1595154296, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (31, 9, 'wwh', '企业官网（移动端自适应模板）', '含产品、新闻、HR等多个模块，支持作为网站首页', '含产品中心、解决方案、新闻中心、HR等多个模块，支持作为网站首页', 'https://cdn.fastadmin.net/uploads/addons/wwh.png', 'https://cdn.fastadmin.net/uploads/20210309/e16a0e8ff78e2351027ccb5a850c4437.png#https://cdn.fastadmin.net/uploads/20210309/a2a87144f740790d90479ddbbfef7704.png#https://cdn.fastadmin.net/uploads/20201013/a01ce28ed4fac2897a019e0d3ef97d00.png#https://cdn.fastadmin.net/uploads/20201023/5432f6960e2651c89a9261fb34786ad0.png#https://cdn.fastadmin.net/uploads/20201023/4b20db12de72a118450543c18e2a31ae.png#https://cdn.fastadmin.net/uploads/20201013/b87a7d85a6c8c552649f7aa078ca3d1a.png#https://cdn.fastadmin.net/uploads/20201013/57b0e877bd5265d3fa7d66908d535775.png#https://cdn.fastadmin.net/uploads/20201020/0a878ca0408376b5658947e3084c0bb6.png#https://cdn.fastadmin.net/uploads/20201020/5c9bd31c80b09277d57ad1a1a7227bf4.png', NULL, 'wwh', 'https://www.fastadmin.net/store/wwh.html', 'http://demo.wuwenhui.cn/wwh/', NULL, '', NULL, 0, '1.0.4', 89.00, NULL, 199.00, 6, 846, 1, 1594709574, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (32, 9, 'weblog', '网站日志分析助手', '分析服务器各站点蜘蛛占比,URL/IP统计,访问状态统计', '分析Apache/Ngnix响应日志文件，协助管理员分析服务器各站点蜘蛛占比、URL统计、IP统计、访问状态统计等', 'https://cdn.fastadmin.net/uploads/addons/weblog.png', 'https://cdn.fastadmin.net/uploads/20200720/b265e20bdd8e990ea1e58aa676b39f04.png#https://cdn.fastadmin.net/uploads/20200720/7b5f992df0e7c24031cf5aed5957d388.png#https://cdn.fastadmin.net/uploads/20200720/21fb8153d2ee5a218f72784d7a9aa1f8.png#https://cdn.fastadmin.net/uploads/20200720/d20bcaf112fa28d1ab34856c4a304689.png#https://cdn.fastadmin.net/uploads/20200720/ef05d99134a072f492b2229eda8b0471.png#https://cdn.fastadmin.net/uploads/20200720/246d6b5bd91c94ac6554e630d07e91a5.png', NULL, 'Xing6', 'https://www.fastadmin.net/store/weblog.html', '', NULL, '', NULL, 0, '1.0.0', 9.90, NULL, 39.90, 7, 93, 1, 1594654216, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (33, 4, 'apilog', 'API访问监测分析', 'API访问监测分析及预警，快速了解接口运行情况', 'API访问监测分析及预警，快速了解接口运行情况', 'https://cdn.fastadmin.net/uploads/addons/apilog.png', 'https://cdn.fastadmin.net/uploads/20200709/8352adabc043cb1ed93c2d2bf8e82ccf.png#https://cdn.fastadmin.net/uploads/20200709/25ed7d3eb87682223e2b9394a440868f.png#https://cdn.fastadmin.net/uploads/20200709/f9df4ded673275992c08b96408ae8136.png#https://cdn.fastadmin.net/uploads/20200709/3ff7bfbc25d4a52b51cc6a3f88311952.png#https://cdn.fastadmin.net/uploads/20200725/96fb1f80078d4e68abefdda880dc7ce6.png#https://cdn.fastadmin.net/uploads/20200725/63ba9c9a18c8da24e85c9b97fdc4b62c.png#https://cdn.fastadmin.net/uploads/20200709/e4f4c5bc334b5e146155a04ec5059e61.png#https://cdn.fastadmin.net/uploads/20200725/4832de411b7c3034f5d10df84b573659.png#https://cdn.fastadmin.net/uploads/20200725/e4edfd462359879f29e68d4391aafc19.png#https://cdn.fastadmin.net/uploads/20200725/3719f31f231782c3027fd456703a4777.png#https://cdn.fastadmin.net/uploads/20200725/404e85da6a44a1b3d3b4143da68f1c59.png#https://cdn.fastadmin.net/uploads/20200725/204ea4189223d157dc2eec9fdf6021c3.png', NULL, 'xiaoyu5062', 'https://www.fastadmin.net/store/apilog.html', '', NULL, '', NULL, 0, '1.0.2', 59.90, NULL, 199.90, 10, 294, 1, 1594189578, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (34, 3, 'ezprint', '模板打印插件', '通过后端配置打印模板实现前端打印', '通过后端配置打印模板实现前端打印', 'https://cdn.fastadmin.net/uploads/addons/ezprint.png', 'https://cdn.fastadmin.net/uploads/20200626/783d818bc0d60084639da3a541bcab7b.png#https://cdn.fastadmin.net/uploads/20200626/f085c11aad1982366ffdce55994ed9a7.png#https://cdn.fastadmin.net/uploads/20200626/a5ffd493841eff483ef86c05ce4dcc4e.png', NULL, 'anderson', 'https://www.fastadmin.net/store/ezprint.html', '', NULL, '', NULL, 4, '1.0.0', 39.90, NULL, 99.00, 3, 209, 1, 1593168986, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (35, 9, 'webim', 'WebIM在线聊天系统', 'WebIM即时通讯是一款在线聊天系统。', '基于FastAdmin+GatewayWorker+LayIM开发的一款在线聊天系统。', 'https://cdn.fastadmin.net/uploads/addons/webim.png', 'https://cdn.fastadmin.net/uploads/20200618/3989f24941ebc4d7b376206500efc269.png#https://cdn.fastadmin.net/uploads/20200618/a60e4da5361314d79f00a35977b4ab43.png#https://cdn.fastadmin.net/uploads/20200618/05f3979a3a5c73e10239ea16f3a178f4.png#https://cdn.fastadmin.net/uploads/20200618/c936474aed333ac70fab51ac84b0a3ef.png#https://cdn.fastadmin.net/uploads/20200618/5d96f07f7bd9759add6871d09fbb11a4.png#https://cdn.fastadmin.net/uploads/20200618/4df4d916590ed588bdb1ef2277bd2c3a.png#https://cdn.fastadmin.net/uploads/20200618/7b57432b55febbe0cd2d349cb830cbed.png#https://cdn.fastadmin.net/uploads/20200619/c6977afbf2b2413566375ce37745a968.png#https://cdn.fastadmin.net/uploads/20200619/5781b2c9aaa1a72dd76c65adf247ef91.png#https://cdn.fastadmin.net/uploads/20200618/89c7a0e8b1c693b6604cb779afd04068.png#https://cdn.fastadmin.net/uploads/20200618/2e40113ba10bd5f1d4a0f7a3aee3d015.png#https://cdn.fastadmin.net/uploads/20200618/b033ba360082367a479f8359155d3f41.png#https://cdn.fastadmin.net/uploads/20200618/2d47db37d79f4d6bc820efffaedba680.png#https://cdn.fastadmin.net/uploads/20200704/cdb859e780e288a9c062eebecfd19933.png#https://cdn.fastadmin.net/uploads/20200725/3d3d47f49be06d008de8900585176f9a.png#https://cdn.fastadmin.net/uploads/20200725/fa3d43220615d4a4df53395c330fe60c.png', NULL, 'Xing6', 'https://www.fastadmin.net/store/webim.html', 'https://www.fastadmin.net/preview/webim.html', NULL, '', NULL, 0, '1.0.5', 199.00, NULL, 499.00, 0, 396, 1, 1592469416, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (36, 3, 'alidns', '阿里云域名解析管理', '阿里云域名解析管理', '阿里云域名解析管理', 'https://cdn.fastadmin.net/uploads/addons/alidns.png', 'https://cdn.fastadmin.net/uploads/20200618/239b1dea25a045ece6246b4c606d5367.png#https://cdn.fastadmin.net/uploads/20200618/dbdd6e4862f13f190516093eefdb898a.png#https://cdn.fastadmin.net/uploads/20200618/4e8a3ca00dee551818c6e82584154bd6.png', NULL, 'xiaoyu5062', 'https://www.fastadmin.net/store/alidns.html', '', NULL, '', NULL, 4, '1.1.0', 19.90, NULL, 59.90, 1, 24, 1, 1592298562, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (37, 4, 'datatask', '数据表备份还原', '根据数据重要程度设置不同的备份频率', '根据数据重要程度设置不同的备份频率', 'https://cdn.fastadmin.net/uploads/addons/datatask.png', 'https://cdn.fastadmin.net/uploads/20200615/44724d7dfb50ac8c7a7f527ed4e3bd01.png#https://cdn.fastadmin.net/uploads/20200615/e9704fe2f59dde64428ac8a631b51e7e.png#https://cdn.fastadmin.net/uploads/20200615/c76815cae2035ea38a106a12b71bca79.png#https://cdn.fastadmin.net/uploads/20200615/c54ce2308e1dd27333f5eda4aad226ed.png', NULL, 'ACoder', 'https://www.fastadmin.net/store/datatask.html', '', NULL, '', NULL, 4, '1.0.0', 0.00, NULL, 0.00, 3, 1602, 1, 1592230610, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (38, 3, 'oauth', 'OAuth2 服务端', 'OAuth2.0 身份认证系统服务端的 thinkphp5 的完整实现', 'OAuth2.0 身份认证系统服务端的 thinkphp5 的完整实现，提供全部无加密源码及完整使用文档', 'https://cdn.fastadmin.net/uploads/addons/oauth.png', 'https://cdn.fastadmin.net/uploads/20200613/7da0ab15f23663dd1aa7087935f96ea5.png#https://cdn.fastadmin.net/uploads/20200613/95b02fff467c54c9ebaa4469a009a8dd.png#https://cdn.fastadmin.net/uploads/20200613/7715083ec1e8323e637db4451c1d0cf3.png#https://cdn.fastadmin.net/uploads/20200613/49b83a812b2004096a32d774bcce3f2c.png#https://cdn.fastadmin.net/uploads/20200613/69df101d71956959a35b9782f9f1739b.png#https://cdn.fastadmin.net/uploads/20200613/a6ad9588b1fa3d44366afe1099bd24f2.png#https://cdn.fastadmin.net/uploads/20200613/e6848e42a40606ea57db0ef5a3a9c9db.png#https://cdn.fastadmin.net/uploads/20200613/0bd257610f9a0b0b16cff5033543593f.png#https://cdn.fastadmin.net/uploads/20200613/7a3c533a64989af7e6d407f6c5b4997d.png', NULL, 'Ghaoo', 'https://www.fastadmin.net/store/oauth.html', '', NULL, '', NULL, 4, '1.0.1', 159.90, NULL, 299.90, 5, 126, 1, 1592036171, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (39, 5, 'rboot', 'Rboot机器人', 'rboot是一款可以工作在不同的聊天服务上的助手机器人', 'rboot是一款可以通过扩展实现本地或远程甚至硬件系统的运维办公自动化系统', 'https://cdn.fastadmin.net/uploads/addons/rboot.png', 'https://cdn.fastadmin.net/uploads/20200613/c82c244d85b0bfb086ab19328cb2be68.png#https://cdn.fastadmin.net/uploads/20200613/463b1bc0871a2ba9a6481e453c06611c.png#https://cdn.fastadmin.net/uploads/20200613/9dedd6b7e7fa224b31ae17b95172189d.png#https://cdn.fastadmin.net/uploads/20200613/a5d37d79ae5bd168c568b3a9888f8894.png#https://cdn.fastadmin.net/uploads/20200613/82165b2fc115950fc91a92f40799d4ce.png#https://cdn.fastadmin.net/uploads/20200613/f41336869a68a3b32dd8ad8b524ef30a.png', NULL, 'Ghaoo', 'https://www.fastadmin.net/store/rboot.html', '', NULL, '', NULL, 4, '1.1.0', 159.00, NULL, 299.00, 6, 55, 1, 1592017421, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (40, 4, 'faredis', 'Redis数据管理工具', 'Redis数据管理工具', 'Redis数据管理工具，支持Redis五种类型修改', 'https://cdn.fastadmin.net/uploads/addons/faredis.png', 'https://cdn.fastadmin.net/uploads/20200610/556b15670e6db611d6005f112d7ce2a4.png#https://cdn.fastadmin.net/uploads/20200610/d9be00c441e0fdeca5214b4048e6945d.png#https://cdn.fastadmin.net/uploads/20200610/13d1e73457fbef02430762412aa0e388.png#https://cdn.fastadmin.net/uploads/20200610/d0a37fd5f4298cb19cf25ae861ecd3cd.png#https://cdn.fastadmin.net/uploads/20200610/d6835fabe9299f774244e6c4b11a6f9d.png#https://cdn.fastadmin.net/uploads/20200610/9bc4d7d2afbf8eb531db447dd91b1750.png', NULL, 'xiaoyu5062', 'https://www.fastadmin.net/store/faredis.html', '', NULL, '', NULL, 4, '1.0.3', 9.90, NULL, 59.90, 7, 318, 1, 1591773156, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (41, 1, 'unilive', '微信小程序直播管理', '实时同步微信管理后台的直播数据，本地储存与管理直播信息', '实时同步微信管理后台的直播数据，本地储存与管理直播信息', 'https://cdn.fastadmin.net/uploads/addons/unilive.png', 'https://cdn.fastadmin.net/uploads/20200607/5681bf3d1931574d4f824e6538791088.png#https://cdn.fastadmin.net/uploads/20200607/8f8447c24f3768be98279abfba88196c.png#https://cdn.fastadmin.net/uploads/20200607/c8f465e1b4ceeaf8323d8fd4afe370b1.png', NULL, 'joelzheng', 'https://www.fastadmin.net/store/unilive.html', 'https://www.fastadmin.net/preview/unilive.html', NULL, '', NULL, 0, '1.0.0', 19.90, NULL, 99.90, 3, 133, 1, 1591532147, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (42, 4, 'lang', '语言文件管理', '管理lang目录下面语言文件', '可视化管理lang目录下面语言文件,添加修改语言文件字段', 'https://cdn.fastadmin.net/uploads/addons/lang.png', 'https://cdn.fastadmin.net/uploads/20200607/7ac17191159bb843db68c2ab06326d70.png#https://cdn.fastadmin.net/uploads/20200607/8e9f05e7a22783609d835abab8d70e51.png#https://cdn.fastadmin.net/uploads/20200607/04c8df89e5ec72fe9e8693b6f59edec4.png', NULL, 'NEKGod', 'https://www.fastadmin.net/store/lang.html', '', NULL, '', NULL, 4, '1.0.0', 0.00, NULL, 0.00, 7, 1668, 1, 1591526909, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (43, 1, 'csmvip', 'VIP会员包月套餐', '会员包月的服务,可用于官方CMS插件', '会员包月的服务,可用于官方CMS插件', 'https://cdn.fastadmin.net/uploads/addons/csmvip.png', 'https://cdn.fastadmin.net/uploads/20200604/7840c5904f4d57e0e2b07a0c0728e931.jpg#https://cdn.fastadmin.net/uploads/20200604/85cd888bd50eb9d33d5531e88eaf8fd9.jpg#https://cdn.fastadmin.net/uploads/20200604/81171ea6bafcd2ab3eb78fb131b707cc.jpg#https://cdn.fastadmin.net/uploads/20200604/8e69efa87ffcc96e806f546d052a2402.jpg#https://cdn.fastadmin.net/uploads/20200604/b77c69036788c37914b3413da60a48f1.jpg', NULL, 'chenshiming', 'https://www.fastadmin.net/store/csmvip.html', 'https://www.fastadmin.net/preview/csmvip.html', NULL, '', NULL, 4, '1.0.2', 49.90, NULL, 250.00, 2, 245, 1, 1591283704, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (44, 9, 'pointsmarket', '会员充值送积分营销插件', '会员充值送积分营销插件', '会员充值送积分营销插件、可用积分兑换相关会员组功能', 'https://cdn.fastadmin.net/uploads/addons/pointsmarket.png', 'https://cdn.fastadmin.net/uploads/20200602/25af2f6d7e51a8d1ab5ca75c601dde8b.png#https://cdn.fastadmin.net/uploads/20200918/4e63b72108e0233954dbf4c5b61cbd70.png', NULL, 'amplam', 'https://www.fastadmin.net/store/pointsmarket.html', '', NULL, '', NULL, 4, '1.0.0', 9.90, NULL, 19.90, 1, 29, 1, 1604042197, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (45, 5, 'git', 'git自动部署', 'git自动部署更新', 'git自动部署更新', 'https://cdn.fastadmin.net/uploads/addons/git.png', 'https://cdn.fastadmin.net/uploads/20200601/78e309cd5f91655c340e0fa814988f8f.jpg#https://cdn.fastadmin.net/uploads/20200601/a15ff613fd5ba988445820b9656c8adc.png', NULL, 'hnh000', 'https://www.fastadmin.net/store/git.html', '', NULL, '', NULL, 4, '1.0.0', 19.90, NULL, 99.00, 7, 130, 1, 1590976581, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (46, 5, 'wxdata', '微信公众号数据分析', '微信公众号运营数据分析', '包含数据同步，用户分析，图文分析及单篇群发的数据分析，全面了解公众号的运营情况', 'https://cdn.fastadmin.net/uploads/addons/wxdata.png', 'https://cdn.fastadmin.net/uploads/20200529/7f0f2dbe88e46d95fd45a436f36213ff.png#https://cdn.fastadmin.net/uploads/20200529/4cc0c7cf0df03f7ca6a5e651e897d28d.png#https://cdn.fastadmin.net/uploads/20200529/344c42f48c33807df098c842d2bdc59b.png#https://cdn.fastadmin.net/uploads/20200529/6ce25256d8bd4848b1eab32e416c1b68.png#https://cdn.fastadmin.net/uploads/20200529/dabb2e6d1966072a24505e6f64cb2dea.png#https://cdn.fastadmin.net/uploads/20200529/ee5622341e8cdefcdfc03318cd3eddfa.png', NULL, 'xiaoyu5062', 'https://www.fastadmin.net/store/wxdata.html', '', NULL, '', NULL, 4, '1.0.0', 39.90, NULL, 188.88, 0, 75, 1, 1590731632, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (47, 8, 'workwxbot', '企业微信机器人', '实现运维 或 办公 自动化的机器人', '利用企业微信自建应用实现的机器人助手，它可以通过扩展脚本以实现 运维 或 办公 自动化。', 'https://cdn.fastadmin.net/uploads/addons/workwxbot.png', 'https://cdn.fastadmin.net/uploads/20200528/0a9ed16800d5d2932e7077cf0a3a3ab5.png#https://cdn.fastadmin.net/uploads/20200528/c848e94e266f2e4e58d678a185e3b49b.png#https://cdn.fastadmin.net/uploads/20200528/e8f2063daefa4b03a21366f2e6e3ada4.png#https://cdn.fastadmin.net/uploads/20200528/3e8d6bc3579e54e9f9122c4a5e6b8e94.png#https://cdn.fastadmin.net/uploads/20200528/0d98081b845949a6c3e3812e3942768c.png#https://cdn.fastadmin.net/uploads/20200528/32a7d08e21ba7d135695a7b8668c6ef8.png', NULL, 'guhao', 'https://www.fastadmin.net/store/workwxbot.html', '', NULL, '', NULL, 4, '1.0.0', 89.90, NULL, 159.90, 3, 79, 1, 1590637179, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (48, 8, 'translate', '谷歌自动翻译', '可以帮您将任意语种翻译为任意语种', '谷歌翻译插件是一个可以自动调用谷歌翻译，帮您将任意语种的语言翻译为任意语种', 'https://cdn.fastadmin.net/uploads/addons/translate.png', 'https://cdn.fastadmin.net/uploads/20200525/4b84ec518939fbb7ad71ea8d0b09342a.png#https://cdn.fastadmin.net/uploads/20200525/1c3af7af8d249d2b99b8cbb95904695a.png', NULL, 'proxy', 'https://www.fastadmin.net/store/translate.html', '', NULL, '', NULL, 4, '1.0.0', 19.90, NULL, 199.00, 4, 36, 1, 1590417688, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (49, 2, 'csmhistory', '记录历史版本', '数据记录的历史版本保存,CMS插件的伴侣', '数据记录的历史版本保存和查询,支持CMS插件的内容历史记录', 'https://cdn.fastadmin.net/uploads/addons/csmhistory.png', 'https://cdn.fastadmin.net/uploads/20200524/dbee0184093d32b80f445208cc52d6d6.jpg#https://cdn.fastadmin.net/uploads/20200524/3d189bcdf6e14ee164751f39b174f8a2.jpg#https://cdn.fastadmin.net/uploads/20200524/2c281031d35132634067c1314ccc4ee5.jpg', NULL, 'chenshiming', 'https://www.fastadmin.net/store/csmhistory.html', 'https://www.fastadmin.net/preview/csmhistory.html', NULL, '', NULL, 4, '1.0.1', 39.90, NULL, 250.00, 2, 51, 1, 1590328279, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (50, 5, 'csmding', '钉钉对接套件', '包括sdk对接/pc和移动登录支持/推送消息等', '包括sdk对接/pc和移动登录支持/推送消息等', 'https://cdn.fastadmin.net/uploads/addons/csmding.png', 'https://cdn.fastadmin.net/uploads/20200522/49bccdc759de41c0db1a2af7aec20fe0.jpg#https://cdn.fastadmin.net/uploads/20200522/b32ba8eeb1980f4e5e3f2e4b723719fa.jpg#https://cdn.fastadmin.net/uploads/20200522/89f35c694e6a99c7747d2f04d72f5f1d.jpg', NULL, 'chenshiming', 'https://www.fastadmin.net/store/csmding.html', 'https://www.fastadmin.net/preview/csmding.html', NULL, '', NULL, 4, '1.0.7', 69.90, NULL, 499.00, 1, 131, 1, 1590160809, NULL, NULL);
+INSERT INTO `sa_plugin` VALUES (51, 2, 'banip', '禁止IP访问', '禁止IP访问', '禁止IP访问', 'https://cdn.fastadmin.net/uploads/addons/banip.png', 'https://cdn.fastadmin.net/uploads/20200521/bd643607186e704fdd98f27612c48021.png#https://cdn.fastadmin.net/uploads/20200521/7f48672e8067cb2f8029e6d9287fa6c2.png#https://cdn.fastadmin.net/uploads/20200521/e812ffbc7d0edec2d126f871e7de8387.png', NULL, '27025011', 'https://www.fastadmin.net/store/banip.html', '', NULL, '', NULL, 4, '1.0.0', 0.00, NULL, 0.00, 6, 1732, 1, 1589939772, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sa_pluginhook
@@ -863,7 +1209,7 @@ CREATE TABLE `sa_pluginhook`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '插件钩子管理' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '插件钩子管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_pluginhook
@@ -873,6 +1219,62 @@ INSERT INTO `sa_pluginhook` VALUES (2, 'user_sidenav_before', 'plugin', '用户�
 INSERT INTO `sa_pluginhook` VALUES (3, 'user_sidenav_after', 'plugin', '用户左侧菜单后置', '用户菜单后置hook', 3, 1, 1617428915, NULL);
 INSERT INTO `sa_pluginhook` VALUES (4, 'template', '插件', '插件安装，禁用启用，切换模板触发', '为你插件目录下的template文件夹', 4, 1, 1617428969, NULL);
 INSERT INTO `sa_pluginhook` VALUES (5, 'clouduploads', '插件', '支持腾讯云阿里云上传钩子', '', 5, 1, 1617432900, NULL);
+
+-- ----------------------------
+-- Table structure for sa_product
+-- ----------------------------
+DROP TABLE IF EXISTS `sa_product`;
+CREATE TABLE `sa_product`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `pid` int(11) NOT NULL COMMENT '当前栏目',
+  `cid` int(11) NOT NULL COMMENT '当前模型',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '标题',
+  `hash` char(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '哈希值',
+  `access` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问权限',
+  `letter` char(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '首字母',
+  `color` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题颜色',
+  `pinyin` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '拼音标识',
+  `thumb` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '缩略图',
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文章封面',
+  `album` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '产品图册',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容字段',
+  `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '产品价格',
+  `discount` decimal(10, 2) NULL DEFAULT NULL COMMENT '优惠价格',
+  `inventory` int(11) NULL DEFAULT NULL COMMENT '库存余量',
+  `attribute` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '当前属性',
+  `seo_title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO标题',
+  `seo_keywords` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO关键词',
+  `seo_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'SEO描述',
+  `hits` mediumint(8) NULL DEFAULT NULL COMMENT '点击量',
+  `hits_day` mediumint(8) NULL DEFAULT NULL COMMENT '日点击',
+  `hits_week` mediumint(8) NULL DEFAULT NULL COMMENT '周点击',
+  `hits_month` mediumint(8) NULL DEFAULT NULL COMMENT '月点击',
+  `hits_lasttime` int(11) NULL DEFAULT NULL COMMENT '点击时间',
+  `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
+  `stars` tinyint(1) NULL DEFAULT NULL COMMENT '星级',
+  `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
+  `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态',
+  `up` mediumint(8) NULL DEFAULT NULL COMMENT '顶一下',
+  `down` mediumint(8) NULL DEFAULT NULL COMMENT '踩一下',
+  `gold` decimal(3, 1) NULL DEFAULT NULL COMMENT '评分',
+  `golder` smallint(6) NULL DEFAULT NULL COMMENT '评分人数',
+  `skin` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板文件',
+  `reurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '来源URL',
+  `readurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问地址',
+  `author` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '作者',
+  `admin_id` int(11) NULL DEFAULT NULL COMMENT '管理员id',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '会员投稿id',
+  `jumpurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '跳转地址',
+  `updatetime` int(11) NULL DEFAULT 0 COMMENT '更新时间',
+  `createtime` int(11) NULL DEFAULT 0 COMMENT '创建时间',
+  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '产品模型数据表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sa_product
+-- ----------------------------
+INSERT INTO `sa_product` VALUES (1, 5, 5, 'vivo S9 5G手机 12GB+256GB 印象拾光 前置4400万超清双摄', 'bbce2345d7772b06', '', 'S', '', 'sjyxsgqzwcqss', '/upload/images/2021-04-23/thumb_608239811cb36.jpg', '/upload/images/2021-04-23/608239811cb36.jpg', 'a:3:{i:0;a:2:{s:3:\"src\";s:43:\"/upload/images/2021-04-23/6082318c74778.jpg\";s:5:\"title\";s:0:\"\";}i:1;a:2:{s:3:\"src\";s:43:\"/upload/images/2021-04-23/6082319041b9b.jpg\";s:5:\"title\";s:0:\"\";}i:2;a:2:{s:3:\"src\";s:43:\"/upload/images/2021-04-23/608232bbcaada.jpg\";s:5:\"title\";s:0:\"\";}}', '&lt;div id=&quot;J-detail-pop-tpl-top-new&quot; style=&quot;margin: 0px; padding: 0px; overflow: hidden; color: #666666; font-family: tahoma, arial, \'Microsoft YaHei\', \'Hiragino Sans GB\', u5b8bu4f53, sans-serif; font-size: 12px; background-color: #ffffff;&quot;&gt;\n&lt;div class=&quot;ssd-module-wrap ssd-format-wrap&quot; style=&quot;margin: 0px auto; padding: 0px; position: relative; width: 750px;&quot;&gt;\n&lt;div class=&quot;ssd-format-floor ssd-floor-activity&quot; style=&quot;margin: 0px; padding: 0px; max-height: 380px; overflow: hidden;&quot;&gt;&lt;img style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/608239811cb36.jpg&quot; usemap=&quot;#test6&quot; border=&quot;0&quot; /&gt;&lt;map name=&quot;test6&quot;&gt;\n&lt;area coords=&quot;15,3,739,337&quot; shape=&quot;rect&quot; href=&quot;https://item.jd.com/100018349362.html&quot; target=&quot;_blank&quot; /&gt;\n&lt;/map&gt;&lt;/div&gt;\n&lt;/div&gt;\n&lt;div class=&quot;ssd-module-wrap ssd-format-wrap&quot; style=&quot;margin: 0px auto; padding: 0px; position: relative; width: 750px;&quot;&gt;\n&lt;div class=&quot;ssd-format-floor ssd-floor-shopPrior&quot; style=&quot;margin: 0px; padding: 0px; max-height: 900px; overflow: hidden;&quot;&gt;\n&lt;div class=&quot;ssd-floor-type&quot; style=&quot;margin: 0px; padding: 0px;&quot; data-type=&quot;shopPrior&quot;&gt;&amp;nbsp;&lt;/div&gt;\n&lt;div id=&quot;zbViewFloorHeight_shopPrior&quot; style=&quot;margin: 0px; padding: 0px;&quot;&gt;&lt;/div&gt;\n&lt;img style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/60823981365f8.jpg&quot; usemap=&quot;#test3&quot; border=&quot;0&quot; /&gt;&amp;nbsp;&lt;map name=&quot;test3&quot;&gt;\n&lt;area coords=&quot;256,11,489,264&quot; shape=&quot;rect&quot; href=&quot;https://item.jd.com/100018752514.html&quot; target=&quot;_blank&quot; /&gt;\n&lt;area coords=&quot;504,10,740,266&quot; shape=&quot;rect&quot; href=&quot;https://item.jd.com/100009737523.html&quot; target=&quot;_blank&quot; /&gt;\n&lt;area coords=&quot;14,11,245,267&quot; shape=&quot;rect&quot; href=&quot;https://item.jd.com/100017141382.html&quot; target=&quot;_blank&quot; /&gt;\n&lt;/map&gt;&lt;img style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/608239814a678.jpg&quot; usemap=&quot;#test5&quot; border=&quot;0&quot; /&gt;&lt;map name=&quot;test5&quot;&gt;\n&lt;area coords=&quot;256,288,487,393&quot; shape=&quot;rect&quot; href=&quot;https://lzkj-isv.isvjcloud.com/lzclient/22bc80c21de345edbd2cc78062f692e8/cjwx/common/entry.html?activityId=22bc80c21de345edbd2cc78062f692e8&amp;amp;gameType=wxNineGrid&amp;amp;adsource=tg_storePage&quot; target=&quot;_blank&quot; /&gt;\n&lt;area coords=&quot;503,290,735,393&quot; shape=&quot;rect&quot; href=&quot;https://pro.jd.com/mall/active/2NVU7CSzCbBmCxiwu36rXE7uU6mN/index.html&quot; target=&quot;_blank&quot; /&gt;\n&lt;area coords=&quot;19,410,254,512&quot; shape=&quot;rect&quot; href=&quot;https://jdcs.jd.com/pop/chat?shopId=1000085868&amp;amp;code=1&quot; target=&quot;_blank&quot; /&gt;\n&lt;area coords=&quot;257,406,488,508&quot; shape=&quot;rect&quot; href=&quot;https://pro.jd.com/mall/active/GRHVWBznL3hqtGz6aadAPuLMc8x/index.html&quot; target=&quot;_blank&quot; /&gt;\n&lt;area coords=&quot;503,406,737,509&quot; shape=&quot;rect&quot; href=&quot;https://shopmember.m.jd.com/shopcard?venderId=1000085868&amp;amp;shopId=1000085868&amp;amp;venderType=5&amp;amp;channel=401&quot; target=&quot;_blank&quot; /&gt;\n&lt;/map&gt;&lt;/div&gt;\n&lt;/div&gt;\n&lt;div class=&quot;ssd-module-wrap ssd-format-wrap ssd-format-center&quot; style=&quot;margin: 0px auto; padding: 0px; position: relative; width: 750px; display: flex; -webkit-box-pack: center; justify-content: center;&quot;&gt;\n&lt;div class=&quot;ssd-format-floor ssd-floor-dynamic J_formatDynamic&quot; style=&quot;margin: 0px; padding: 0px;&quot;&gt;&amp;nbsp;&lt;/div&gt;\n&lt;/div&gt;\n&lt;/div&gt;\n&lt;div class=&quot;detail-content clearfix&quot; style=&quot;margin: 10px 0px; padding: 0px; position: relative; background: #f7f7f7; color: #666666; font-family: tahoma, arial, \'Microsoft YaHei\', \'Hiragino Sans GB\', u5b8bu4f53, sans-serif; font-size: 12px;&quot; data-name=&quot;z-have-detail-nav&quot;&gt;\n&lt;div class=&quot;detail-content-wrap&quot; style=&quot;margin: 0px; padding: 0px; width: 990px; float: left; background-color: #ffffff;&quot;&gt;\n&lt;div class=&quot;detail-content-item&quot; style=&quot;margin: 0px; padding: 0px; width: 990px;&quot;&gt;\n&lt;div id=&quot;J-detail-top&quot; style=&quot;margin: 0px; padding: 0px;&quot;&gt;&lt;/div&gt;\n&lt;div id=&quot;J-detail-content&quot; style=&quot;margin: 0px; padding: 0px;&quot;&gt;&lt;br /&gt;\n&lt;div style=&quot;margin: 0px; padding: 0px;&quot;&gt;&amp;nbsp;&lt;/div&gt;\n&lt;div style=&quot;margin: 0px; padding: 0px;&quot;&gt;&amp;nbsp;&lt;/div&gt;\n&lt;div style=&quot;margin: 0px; padding: 0px;&quot; align=&quot;center&quot;&gt;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/608239815d27c.jpg&quot; usemap=&quot;#Map91&quot; border=&quot;0&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/6082398176891.jpg&quot; usemap=&quot;#Map21&quot; border=&quot;0&quot; /&gt;&amp;nbsp;&lt;map name=&quot;Map21&quot;&gt;\n&lt;area coords=&quot;441,163,740,414&quot; shape=&quot;rect&quot; href=&quot;https://item.jd.com/100017255662.html&quot; target=&quot;_blank&quot; /&gt;\n&lt;/map&gt;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/608239818b8ee.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/608239819fb06.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/60823981bb6c4.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/60823981d04cd.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/60823981e5d9e.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/6082398205b06.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/608239821c035.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/60823982306d4.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/6082398267c12.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/608239827af23.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/608239829289d.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/60823982a5ad0.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/60823982cd211.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/60823982dd1a1.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/6082398307d4e.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/6082398321724.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/6082398342ed5.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/6082398356786.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/608239836aadb.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/608239837d2d2.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/60823983914e6.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/60823983a83f5.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/60823983b8884.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/60823983ca191.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/60823983e3cbe.jpg&quot; /&gt;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/6082398405d0b.jpg&quot; /&gt;&amp;nbsp;&amp;nbsp;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/608239841b082.jpg&quot; usemap=&quot;#Map73&quot; border=&quot;0&quot; /&gt;&amp;nbsp;&lt;map name=&quot;Map73&quot;&gt;\n&lt;area coords=&quot;10,25,740,553&quot; shape=&quot;rect&quot; href=&quot;https://pro.jd.com/mall/active/3MqzEEMRDHiGEfcad1VjgHZ8X9nw/index.html&quot; target=&quot;_blank&quot; /&gt;\n&lt;/map&gt;&lt;img class=&quot;&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; vertical-align: middle;&quot; src=&quot;/upload/images/2021-04-23/6082398430e2a.jpg&quot; /&gt;&lt;/div&gt;\n&lt;/div&gt;\n&lt;/div&gt;\n&lt;/div&gt;\n&lt;/div&gt;', 3299.00, 1800.00, 99999, '5', '', '', '', 0, 0, 0, 0, NULL, 1, 0, 0, 1, 0, 0, 0.0, 0, '', '', NULL, 'admin', 1, NULL, '', 1619312489, 1619145018, NULL);
 
 -- ----------------------------
 -- Table structure for sa_project
@@ -895,6 +1297,26 @@ CREATE TABLE `sa_project`  (
 -- Records of sa_project
 -- ----------------------------
 INSERT INTO `sa_project` VALUES (1, 0, '示例应用', '/upload/images/2021-04-06/606c7049b5640.png', '1000001', 'ydFbQVBsRzovUMiISn0m2pLfY9WDTjkq', '这里只是一个示例应用，是为了方便你的API接口分类用的，仅仅只是一个展示功能！', 1612073268, NULL);
+
+-- ----------------------------
+-- Table structure for sa_recyclebin
+-- ----------------------------
+DROP TABLE IF EXISTS `sa_recyclebin`;
+CREATE TABLE `sa_recyclebin`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `cid` int(11) NOT NULL COMMENT '模型id',
+  `pid` int(11) NOT NULL COMMENT '栏目id',
+  `oid` int(11) NOT NULL COMMENT '对象id',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '标题',
+  `category` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '分类',
+  `channel` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '模型',
+  `createtime` int(11) NULL DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '回收站数据表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sa_recyclebin
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for sa_systemlog
@@ -922,7 +1344,38 @@ CREATE TABLE `sa_systemlog`  (
 -- ----------------------------
 -- Records of sa_systemlog
 -- ----------------------------
-INSERT INTO `sa_systemlog` VALUES (1, 'admin', 'admin', 'system.systemlog', 'index', NULL, 'app\\admin\\controller\\system\\Systemlog.php', 37, 'Call to a member function where() on null', 'a:2:{s:4:\"page\";s:1:\"1\";s:5:\"limit\";s:2:\"10\";}', 2130706433, 'GET', '1', 1, 1611569935);
+INSERT INTO `sa_systemlog` VALUES (1, 'admin', 'admin', 'system.systemlog', 'index', NULL, '\\www.swiftadmin.net\\app\\admin\\controller\\system\\Systemlog.php', 37, 'Call to a member function where() on null', 'a:2:{s:4:\"page\";s:1:\"1\";s:5:\"limit\";s:2:\"10\";}', 2130706433, 'GET', '1', 1, 1611569935);
+
+-- ----------------------------
+-- Table structure for sa_tags
+-- ----------------------------
+DROP TABLE IF EXISTS `sa_tags`;
+CREATE TABLE `sa_tags`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '词名称',
+  `type` int(1) NULL DEFAULT 1 COMMENT '1 正常词 2 敏感词',
+  `sort` int(11) NULL DEFAULT NULL COMMENT '字段排序',
+  `total` int(11) NULL DEFAULT NULL COMMENT '标签调用总数',
+  `status` int(1) NULL DEFAULT 1 COMMENT '词语状态',
+  `updatetime` int(11) NULL DEFAULT 0 COMMENT '添加时间',
+  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `id`(`id`) USING BTREE,
+  INDEX `type`(`type`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'SEO关键词库' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sa_tags
+-- ----------------------------
+INSERT INTO `sa_tags` VALUES (1, '你他妈1', 0, 0, 0, 1, 1619185861, 1611213045, NULL);
+INSERT INTO `sa_tags` VALUES (2, '操你妈2', 0, 0, 0, 1, 1618924118, 1611227478, NULL);
+INSERT INTO `sa_tags` VALUES (3, '谣言3', 0, 0, 1, 1, 1618926778, 1611228586, NULL);
+INSERT INTO `sa_tags` VALUES (4, '百度4', 1, 0, 0, 1, 1618926778, 1611228626, NULL);
+INSERT INTO `sa_tags` VALUES (5, '最新电影5', 1, 0, 0, 1, 1618926771, 1611228674, NULL);
+INSERT INTO `sa_tags` VALUES (6, 'SEO6', 1, 0, 0, 1, 1618926774, 1618924018, NULL);
+INSERT INTO `sa_tags` VALUES (7, '排名靠前7', 1, 0, 1, 1, 1618924030, 1618924030, NULL);
+INSERT INTO `sa_tags` VALUES (8, '这里是优化词8', 1, 0, 0, 1, 1618926693, 1618926693, NULL);
 
 -- ----------------------------
 -- Table structure for sa_user
@@ -959,7 +1412,7 @@ CREATE TABLE `sa_user`  (
 -- ----------------------------
 -- Records of sa_user
 -- ----------------------------
-INSERT INTO `sa_user` VALUES (1, 1, 'test', '测试用户', '8bcb6ea31d829170b639e33d2da633d2', '1', '/upload/avatar/a0b923820dcc509a_100x100.png?GS9U8WQvOBhk', 'ceshi@foxmail.com', NULL, 0, 100, '你叫什么？', '不告诉你', 1, 10001, 'qIsSBNpcOuJeyw8mb9KilQFLWX34GEg5', NULL, 2130706433, 1617409577, 84, 2130706433, 1597125391, NULL);
+INSERT INTO `sa_user` VALUES (1, 1, 'test', '测试用户', '32cba3145525fd3a736b4b01b278200c', '1', '/upload/avatar/a0b923820dcc509a_100x100.png?GS9U8WQvOBhk', 'ceshi@foxmail.com', NULL, 0, 100, '你叫什么？', '不告诉你', 1, 10001, 'qIsSBNpcOuJeyw8mb9KilQFLWX34GEg5', NULL, 2130706433, 1618118998, 96, 2130706433, 1597125391, 1619193638);
 
 -- ----------------------------
 -- Table structure for sa_user_group
@@ -996,11 +1449,12 @@ CREATE TABLE `sa_user_invitecode`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户邀请码表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户邀请码表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_user_invitecode
 -- ----------------------------
+INSERT INTO `sa_user_invitecode` VALUES (1, NULL, 'admin123', 1, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sa_user_third
@@ -1023,11 +1477,13 @@ CREATE TABLE `sa_user_third`  (
   `expiretime` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '过期时间',
   PRIMARY KEY (`id`, `user_id`) USING BTREE,
   INDEX `user_id`(`user_id`, `type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '第三方登录表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '第三方登录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_user_third
 -- ----------------------------
+INSERT INTO `sa_user_third` VALUES (1, 1, 'weixin', '', '', '', '', '', NULL, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `sa_user_third` VALUES (2, 1, 'weibo', '', '', '', '', '', NULL, 0, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sa_user_validate
@@ -1043,10 +1499,83 @@ CREATE TABLE `sa_user_validate`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户验证码表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户验证码表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_user_validate
 -- ----------------------------
+INSERT INTO `sa_user_validate` VALUES (5, NULL, '15100038819', '5396', 'changer', 0, 1617337550, NULL);
+INSERT INTO `sa_user_validate` VALUES (6, NULL, '15100038819', '7683', 'changer', 0, 1617632959, NULL);
+
+-- ----------------------------
+-- Table structure for sa_video
+-- ----------------------------
+DROP TABLE IF EXISTS `sa_video`;
+CREATE TABLE `sa_video`  (
+  `id` int(8) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `pid` int(11) NOT NULL COMMENT '当前栏目',
+  `cid` int(11) NULL DEFAULT NULL COMMENT '当前模型',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '视频标题',
+  `alias` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '别名',
+  `hash` char(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '哈希值',
+  `access` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问权限',
+  `letter` char(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '首字母',
+  `color` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题颜色',
+  `pinyin` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '拼音',
+  `desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '简述',
+  `class` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分类小标签',
+  `marks` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '影片备注',
+  `actor` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '演员',
+  `attribute` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '当前属性',
+  `thumb` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '缩略图',
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '文章封面',
+  `director` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '导演',
+  `area` char(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '地区',
+  `language` char(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '语言',
+  `year` smallint(4) NULL DEFAULT NULL COMMENT '年份',
+  `continu` int(20) NULL DEFAULT 0 COMMENT '连载',
+  `total` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '总数',
+  `play` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '播放器组',
+  `server` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务器组',
+  `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '播放器备注',
+  `url` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '播放地址',
+  `isfilm` tinyint(1) NULL DEFAULT 1 COMMENT '已上映、未上映',
+  `filmtime` int(11) NULL DEFAULT NULL COMMENT '上映日期',
+  `minutes` int(11) NULL DEFAULT NULL COMMENT '影片时长',
+  `weekday` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '节目周期，周几播出',
+  `seo_title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO标题',
+  `seo_keywords` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO关键词',
+  `seo_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'SEO描述',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容介绍',
+  `hits` mediumint(8) NULL DEFAULT NULL COMMENT '点击量',
+  `hits_day` mediumint(8) NULL DEFAULT NULL COMMENT '日点击',
+  `hits_week` mediumint(8) NULL DEFAULT NULL COMMENT '周点击',
+  `hits_month` mediumint(8) NULL DEFAULT NULL COMMENT '月点击',
+  `hits_lasttime` int(11) NULL DEFAULT NULL COMMENT '点击时间',
+  `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
+  `stars` tinyint(1) NULL DEFAULT NULL COMMENT '星级',
+  `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
+  `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
+  `up` mediumint(8) NULL DEFAULT NULL COMMENT '顶一下',
+  `down` mediumint(8) NULL DEFAULT NULL COMMENT '踩一下',
+  `gold` decimal(3, 1) NULL DEFAULT NULL COMMENT '评分',
+  `golder` smallint(6) NULL DEFAULT NULL COMMENT '评分人数',
+  `skin` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板文件',
+  `reurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '来源URL',
+  `readurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问地址',
+  `author` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '作者',
+  `admin_id` int(11) NULL DEFAULT NULL COMMENT '管理员id',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '会员投稿id',
+  `jumpurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '跳转地址',
+  `updatetime` int(11) NULL DEFAULT 0 COMMENT '更新时间',
+  `createtime` int(11) NULL DEFAULT 0 COMMENT '创建时间',
+  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '视频模型数据表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sa_video
+-- ----------------------------
+INSERT INTO `sa_video` VALUES (1, 3, 3, '有翡', '电视剧版有匪/有匪', 'asdas', '', 'Y', '#9d3636', NULL, '一句话简述', '台湾是中国的', 'BD高清', '赵丽颖 王一博 张慧雯 陈若轩 周洁琼 孙坚', '5', '/upload/images/2021-04-22/thumb_60811a355453c.jpeg', '/upload/images/2021-04-22/60811a355453c.jpeg', '吴锦源', '大陆', '国语', 2021, 13, '36', 'flv$$$ckplayer$$$video', 'server1$$$$$$server2', '11$$$呵呵~$$$2332323', '第01集$https://d.mhqiyi.com/20210224/LfNO3InW/index.m3u8#第02集$https://mhcdn.mhqiyi.com/20210303/QiLcl2jL/index.m3u8#第03集$https://mhcdn.mhqiyi.com/20210310/RQEIMFWB/index.m3u8#第04集$https://mhcdn.mhqiyi.com/20210317/ZMvPZ7j9/index.m3u8#第05集$https://mhcdn.mhqiyi.com/20210324/MCSw6HK7/index.m3u8#第06集$https://mhcdn.mhqiyi.com/20210331/UUblu301/index.m3u8#第07集$https://cdn3.mh-qiyi.com/20210407/Q5nlTQOH/index.m3u8#第08集$https://cdn4.mh-qiyi.com/20210414/2214_3dba4fa3/index.m3u8#第09集$https://cdn3.mh-qiyi.com/20210421/JmlUvicT/index.m3u8$$$第01集$https://d.mhqiyi.com/20210224/LfNO3InW/index.m3u8#第02集$https://mhcdn.mhqiyi.com/20210303/QiLcl2jL/index.m3u8#第03集$https://mhcdn.mhqiyi.com/20210310/RQEIMFWB/index.m3u8#第04集$https://mhcdn.mhqiyi.com/20210317/ZMvPZ7j9/index.m3u8#第05集$https://mhcdn.mhqiyi.com/20210324/MCSw6HK7/index.m3u8#第06集$https://mhcdn.mhqiyi.com/20210331/UUblu301/index.m3u8#第07集$https://cdn3.mh-qiyi.com/20210407/Q5nlTQOH/index.m3u8#第08集$https://cdn4.mh-qiyi.com/20210414/2214_3dba4fa3/index.m3u8#第09集$https://cdn3.mh-qiyi.com/20210421/JmlUvicT/index.m3u8$$$第02集$https://mhcdn.mhqiyi.com/20210303/QiLcl2jL/index.m3u8#第03集$https://mhcdn.mhqiyi.com/20210310/RQEIMFWB/index.m3u8', 1, 1619712000, 116, '周四', '', '江湖,李徵,年前,祸乱,一代,大侠,南刀', '多年前江湖祸乱，一代大侠南刀李徵奉旨围匪，从此便有了四十八寨。后李徵病逝，江湖名门也相继落败。李徵的女儿李瑾容接任大当家，与周以棠成婚。周家有女初成长，...', '&lt;p&gt;多年前江湖祸乱，一代大侠南刀李徵奉旨围匪，从此便有了四十八寨。后李徵病逝，江湖名门也相继落败。李徵的女儿李瑾容接任大当家，与周以棠成婚。周家有女初成长，周翡所生的朝代却是一个江湖没落的时候，前辈们的光辉与意气风发在南刀李徵逝去后逐渐都销声匿迹了。周翡十三岁那年离家出走，差点命丧洗墨江，被端王谢允救下，冥冥之中结下良缘。三年后，两位头角峥嵘的少年再次在霍家堡相遇，引出了多年前隐匿江湖的各类宗师高手。同时遭到曹贼手下北斗七位高手的追杀，令两位少年陷入了一场暗潮汹涌的阴谋。周翡以&amp;ldquo;破雪刀&amp;rdquo;之招数名震江湖，以浩然之姿，为这江湖名册再添上了浓墨重彩的一笔。&lt;img src=&quot;/upload/images/2021-04-22/60811a355453c.jpeg&quot; alt=&quot;&quot; width=&quot;600&quot; height=&quot;800&quot; /&gt;&lt;/p&gt;', 0, 0, 0, 0, NULL, 0, 3, 0, 1, 0, 0, 0.0, 0, '', '', NULL, '', NULL, NULL, '', 1619265092, 1617632959, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
