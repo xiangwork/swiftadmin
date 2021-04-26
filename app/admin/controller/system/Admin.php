@@ -16,17 +16,15 @@ namespace app\admin\controller\system;
 use app\AdminController;
 use think\facade\Db;
 use think\facade\request;
-use app\common\library\Auth;
 use app\common\model\system\Admin as AdminModel;
 use app\common\model\system\AdminGroup as AdminGroupModel;
-use app\common\model\system\AdminRules as AdminRulesModel;
 use app\common\model\system\AdminAccess as AdminAccessModel;
 
 class Admin extends AdminController
 {
 
     // 分组数组
-    protected $group;
+    protected $group = null;
 
 	// 初始化函数
     public function initialize() 
@@ -54,7 +52,9 @@ class Admin extends AdminController
             $post = input();
             $page = input('page/d') ?? 1;
             $limit = input('limit/d') ?? 10;
-            
+            $limit = input('limit/d') ?? 10;
+            $status = !empty($post['status']) ? $post['status']-1:1;
+
             // 生成查询条件
             $where = array();
             if (!empty($post['name'])) {
@@ -68,27 +68,23 @@ class Admin extends AdminController
             if (!empty($post['group_id'])) {
                 $where[] = ['group_id','find in set',$post['group_id']];
             }
-
-            if (!empty($post['status'])) {
-                if($post['status'] == 1){
-                    $where[]=['status','=','1'];
-                }elseif($post['status'] == 2){
-                    $where[]=['status','=','0'];
-                }		
-            }
-
+            
             // 生成查询数据
+            $where[]=['status','=',$status];
             $count = $this->model->where($where)->count();
             $page = ($count <= $limit) ? 1 : $page;
             $list = $this->model->where($where)->order("id asc")->limit($limit)->page($page)->select()->toArray();
         
             // 循环处理数据
+            $jobsArray = \app\common\model\system\Jobs::select()->toArray();
+            $depsArray = \app\common\model\system\Department::getListTree();
             foreach ($list as $key => $value) {
 
-                $list[$key]['loginip'] = long2ip($value['createip']);
-                $groupIds = explode(',',$value['group_id']);
-                foreach ($groupIds as $field => $group_id) {
-                    if ($result = list_search($this->group,['id'=>$group_id])) {
+                // 组别
+                $group_ids = explode(',',$value['group_id']);
+                foreach ($group_ids as $field => $id) {
+                    // 查找组
+                    if ($result = list_search($this->group,['id'=>$id])) {
                         $list[$key]['group'][$field] = $result;
                     }
                 }
@@ -96,17 +92,45 @@ class Admin extends AdminController
                 if (!empty($list[$key]['group'])) {
                     $list[$key]['group'] = list_sort_by($list[$key]['group'],'id');
                 }
-               
+
+                // 筛选组别
+                foreach ($this->group as $field => $elem) {
+                    $list[$key]['organize'][$field]['name'] = $elem['title'];
+                    $list[$key]['organize'][$field]['value'] = $elem['id'];
+                    if (in_array($elem['id'],$group_ids)) {
+                        $list[$key]['organize'][$field]['selected'] = true;
+                    }
+                }
+
+                // 筛选职位
+                foreach ($jobsArray as $field => $elem) {
+                    $list[$key]['jobs'][$field]['name'] = $elem['title'];
+                    $list[$key]['jobs'][$field]['value'] = $elem['id'];
+                    if (in_array($elem['id'],explode(',',$value['jobs_id']))) {
+                        $list[$key]['jobs'][$field]['selected'] = true;
+                    }
+                }
+
+                $list[$key]['dep'] = $depsArray;
+                $authnodes = $this->auth->_get_auth_nodes($value['id']);
+                $list[$key]['rules'] = $authnodes[$this->auth->authPrivate];
+
+                $authnodes = $this->auth->_get_auth_nodes($value['id'],'cates');
+                $list[$key]['cates'] = $authnodes[$this->auth->authPrivate];
+
+                $list[$key]['loginip'] = long2ip($value['createip']);
             }
             
-            return $this->success('查询成功', "", $list, $count, 0);
+            return $this->success('查询成功', null, $list, $count, 0);
         }
 
-        $depData = Db::name('Department')->select()->toArray();
-        $depData = list_to_tree($depData);
+        $treedata = Db::name('Department')->select()->toArray();
+        $treedata = list_to_tree($treedata);
+        // halt($treedata);
+
 		return view('',[
             'group'=> $this->group,
-            'depData'=> json_encode($depData),
+            'treedata'=> json_encode($treedata),
         ]);
     }
 
@@ -131,7 +155,7 @@ class Admin extends AdminController
             }
 
             // 管理员加密
-            $post['pwd'] = hasha($post['pwd']);
+            $post['pwd'] = hash_pwd($post['pwd']);
             $post['createip'] = ip2long(request()->ip());
             $data = $this->model->create($post);
             if (!is_empty($data->id)) {
@@ -170,7 +194,7 @@ class Admin extends AdminController
                 // 修改密码
                 $data = $this->model->find($id);
 				if (!empty($data) && $data['pwd'] != $post['pwd']) {
-					$post['pwd'] = hasha($post['pwd']);
+					$post['pwd'] = hash_pwd($post['pwd']);
                 }
 
                 if ($this->model->update($post)) {
@@ -184,199 +208,87 @@ class Admin extends AdminController
 		}
     }
 
-    /**
-     * 获取用户组
-     */
-    public function getGroupOrJobs() 
-    {
-        if (request()->isAjax()) {
-
-            $array = [];
-            $authList = [];
-            $ids = input('ids/s');
-            $type = input('type/s');
-            $ids = is_empty($ids) ? [] : explode(',',$ids);
-
-            if ($type == 'jobs') {
-                $array = \app\common\model\system\Jobs::select()->toArray();
-            }
-            else {
-                $array = $this->group;
-            }
-            
-            // 循环处理数据
-            foreach ($array as $key => $value) {
-                $authList[$key]['name'] = $value['title'];
-                $authList[$key]['value'] = $value['id'];
-                if (array_search($value['id'], $ids) !== false) {
-                    $authList[$key]['selected'] = true;
-                }
-            }
-
-            return json_encode($authList);
-        }
-    }
-
-    /**
-     * 获取私有权限
-     */
-    public function getPrivateRules() 
-    {
-        if (request()->isAjax()) {
-            return Auth::instance()->getPrivateRules();
-        }
-    }   
-
-    /**
-     * 查询权限节点
-     */
-    public function queryRules($id) 
-    {
-        if (request()->isAjax()) {
-            return json(Auth::instance()->getauthNode($id));
-        }        
-    }
 
     /**
      * 编辑权限
      */
     public function editRules() 
     {
-
         if (request()->isPost()) {
-
-            $accessId  = input('id/d');
-            $authGroup = input('GroupAuth') ?? [];
-            $authPrivate = input('rules') ?? [];
-            if (empty($authGroup)) {
-                $authList = implode(',',$authPrivate);
-            }else {
-                $authList = array_diff(array_values($authPrivate), $authGroup);
-                $authList = implode(',',$authList);
-            }
-
-            if (!empty($authList)) {
-                if (!Auth::instance()->checkPrivateRules(explode(',',$authList))) {
-                    return $this->error('非法操作!');
-                }
-            }
-            
-            $authRules = AdminAccessModel::where('uid',$accessId)->find();
-            if (empty($authRules)) {
-                $authRules = new AdminAccessModel();
-            }
-
-            $authRules->uid = $accessId;
-            $authRules->rules = $authList;
-            if ($authRules->save()) {
-                return $this->success('更新权限成功！');
-            }
-            return $this->error('更新权限失败！');
-
+            return $this->_update_rulecates();
         }
-    }
-
-    /**
-     * 获取私有栏目权限
-     */
-    public function getPrivateCates() 
-    {
-        if (request()->isAjax()) {
-            return Auth::instance()->getPrivateCateIds();
-        }
-    }   
-
-    /**
-     * 查询栏目权限节点
-     */
-    public function querycates($id) 
-    {
-        if (request()->isAjax()) {
-            return json(Auth::instance()->getauthNode($id,'cateids'));
-        }        
     }
 
     /**
      * 编辑栏目权限
      */
-    public function editCates() 
+    public function editcates() 
     {
+        return $this->_update_rulecates('cates');
+    }
 
+    /**
+     * 更新权限函数
+     * @access      protected
+     * @param       string          $type  规则
+     * @return      mixed|array
+     */
+    protected function _update_rulecates($type = 'rules') 
+    {
         if (request()->isPost()) {
-            $accessId  = input('id/d');
-            $authGroup = input('GroupAuth') ?? [];
-            $authPrivate = input('cateids') ?? [];
-            if (empty($authGroup)) {
-                $authList = implode(',',$authPrivate);
-            }else {
-                $authList = array_diff(array_values($authPrivate), $authGroup);
-                $authList = implode(',',$authList);
-            }
 
-            if (!empty($authList)) {
-                if (!Auth::instance()->checkPrivateCateIds(explode(',',$authList))) {
-                    return $this->error('非法操作!');
+            $uid  = input('uid/d');
+            $rules = input($type) ?? [];
+      
+            if (!empty($uid) && $uid > 0) {
+
+                $access = $this->auth->_get_auth_nodes($uid,$type);
+                $rules  = array_diff($rules,$access[$this->auth->authGroup]);
+           
+                // 权限验证
+                if (!$this->auth->check_rulecates_node($rules,$type,$this->auth->authPrivate)) {
+                    return $this->error('没有权限!');
                 }
-            }
-            
-            $authRules = AdminAccessModel::where('uid',$accessId)->find();
-            if (empty($authRules)) {
-                $authRules = new AdminAccessModel();
-            }
 
-            // 更新权限
-            $authRules->uid = $accessId;
-            $authRules->cateids = $authList;
-            if ($authRules->save()) {
-                return $this->success('更新栏目权限成功！');
+                // 获取个人节点
+                $differ = array_diff($access[$this->auth->authPrivate],$access[$this->auth->authGroup]);
+                $current = [];
+                if (!$this->auth->superAdmin()) {
+                    $current = $this->auth->_get_auth_nodes();
+                    $current = array_diff($differ,$current[$this->auth->authPrivate]);
+                }
+                
+                $rules = array_unique(array_merge($rules, $current));
+                $this->model = new AdminAccessModel();
+                $data = [
+                    "$type" => implode(',',$rules)
+                ];
+
+                if ($this->model->where('uid',$uid)->save($data)) {
+                    return $this->success('更新权限成功！');
+                }
+
+                return $this->error('更新权限失败！');
             }
-            return $this->error('更新栏目权限失败！');
         }
     }
 
     /**
-     * 获取用户菜单
+     * 权限函数接口
+     * @access      public
+     * @return      mixed|array
      */
-    public function getAuthMenus() 
+    public function _get_auth_func()
     {
+        $action = request()->param('action/s');
         if (request()->isAjax()) {
-            
-            $id = $this->getLoginId();
-            $authNode = Auth::instance()->getauthNode($id);
-            $authNode['UserGroupId'] = $this->getAdminLogin('group_id');
-
-            $where[] = ['status','=','normal'];
-            if (!Auth::instance()->SuperAdmin()) {
-                if (!empty($authNode['UserRules'])) {
-                    $where[] = ['id','in',$authNode['UserRules']];
-                }    
-                $list = AdminRulesModel::where($where)->whereOr('auth','0')->order('sort asc')->select()->toArray();         
+            $action = $action ?? '_get_auth_menus';
+            if (is_callable(array($this->auth,$action))) {
+                return call_user_func(array($this->auth, $action),input());
             }
-            else {
-                $list = AdminRulesModel::where($where)->order('sort asc')->select()->toArray();
-            }
-        
-            foreach ($list as $key => $value) {
-                $authNode['UserAuth'][$key] = $value['alias'];
-                $authNode['UserRouter'][$key] = $value['router'];
-                $list[$key]['title'] = __($value['title']);
-                /**
-                 * 鉴权类尽量规避调用缓存
-                 */
-                $authNode['everycate'] = $value['router'] == 'everycate' ? true : false;
-                $authNode['privateauth'] = $value['router'] == 'privateauth' ? true : false;
-                if ($value['type'] !== 0 ) {
-                    unset($list[$key]);
-                }
-            }
+        }
 
-            // 缓存数据
-            session('AdminLogin.AdminAuth',$authNode);
-            $authNode['UserAuthMenu'] = list_to_tree($list);
-            return json($authNode);
-       }
-
-       $this->throwError('',403);
+        $this->throwError('无权访问！',403);
     }
 
     /**
@@ -441,7 +353,7 @@ class Admin extends AdminController
 
         if (request()->isPost()) {
             $post = input(); // 获取POST数据
-            $post['id'] = $this->getLoginId();
+            $post['id'] = $this->admin['id'];
             if ($this->model->update($post)) {
                 return $this->success();
             }
@@ -450,7 +362,7 @@ class Admin extends AdminController
         }
 
         $title = [];
-        $data = $this->model->find($this->getLoginId());
+        $data = $this->model->find($this->admin['id']);
         if (!empty($data['group_id'])) {
             $group = AdminGroupModel::field('title')
                                     ->whereIn('id',$data['group_id'])
@@ -463,8 +375,9 @@ class Admin extends AdminController
 
         $data['group'] = implode('－',$title);
         $data['tags'] =  empty($data['tags']) ? $data['tags'] : unserialize($data['tags']);
-        return view('',['data'=>$data]);
-
+        return view('',[
+            'data'=>$data
+        ]);
     }
 
     /**
@@ -474,7 +387,7 @@ class Admin extends AdminController
     {
         if (request()->isAjax()) {
             $post = input('post.');
-            $id = $this->getLoginId();
+            $id = $this->admin['id'];
             try {
                 //code...
                 switch ($post['field']) {
@@ -537,12 +450,12 @@ class Admin extends AdminController
             }
 
             // 查找数据
-            $where[] = ['id','=',$this->getLoginId()];
-            $where[] = ['pwd','=',hasha($pwd)];
+            $where[] = ['id','=',$this->admin['id']];
+            $where[] = ['pwd','=',hash_pwd($pwd)];
             $result = $this->model->where($where)->find();
 
             if (!empty($result)) {
-                $this->model->where($where)->update(['pwd'=>hasha($post['pass'])]);
+                $this->model->where($where)->update(['pwd'=>hash_pwd($post['pass'])]);
                 $this->success('更改密码成功！');
             }else {
                 $this->error('原始密码输入错误');
@@ -636,7 +549,6 @@ class Admin extends AdminController
 
                 // 清理插件缓存
                 if ($type == 'all' || $type == 'plugin') {
-                    plugin_refresh_hooks();
                 }
             } catch (\Throwable $th) {
                 return $this->error($th->getMessage());

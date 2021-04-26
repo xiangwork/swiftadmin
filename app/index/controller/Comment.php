@@ -85,18 +85,18 @@ class Comment extends HomeController
 		if (request()->isPost()) {
 
 			// 评论开关
-			if (!config('system.user.user_form_status')) {
+			if (!saenv('user_form_status')) {
 				return $this->error('本站评论已关闭！请联系管理员');
 			}
 			
 			// 是否游客评论
-			if (!config('system.user.user_isLogin') && !$this->userId) {
+			if (!saenv('user_isLogin') && !$this->userId) {
 				return $this->error('请登录后发表评论！');
 			}
 
             // 限制发布频率
             $ip = ip2long(request()->ip());
-			$second = config('system.user.user_form_second');
+			$second = saenv('user_form_second');
 			if (cache((string)$ip)) {
 				return $this->error('您的评论太快,休息一下！');
 			}
@@ -111,7 +111,7 @@ class Comment extends HomeController
 			$post['uid'] = $this->userId ?? 0;
 			
 			// 需审核
-			if(config(USERFORMCHECK)) {
+			if(saenv('user_form_check')) {
 				$post['status'] = 0;
 			}
             
@@ -123,7 +123,7 @@ class Comment extends HomeController
 			if (!empty($result)) {
 				cache((string)$ip,$ip,$second);
 				$result['createtime'] = differ_time(time());
-				if(!config(USERFORMCHECK)) {
+				if(!saenv('user_form_check')) {
 					$result['user'] = $result->user;
 					return $this->success('评论成功！',null,$result);
 				}else {

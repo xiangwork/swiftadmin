@@ -17,7 +17,7 @@ class UploadFile extends Validate
 		'images'=>[
 			'fileSize' => 419430400,
 			'fileExt' => 'jpg,jpeg,png,bmp,gif',
-			'fileMime' => 'image/jpeg,image/png,image/gif'], // 这个一定要加上，很重要我认为！
+			'fileMime' => 'image/jpeg,image/png,image/gif'],
 		'video'=>[
 			'fileSize' => 419430400,
 			'fileExt' => 'flv,swf,mkv,avi,rm,rmvb,mpeg,mpg,ogg,ogv,mov,wmv,mp4,webm,mp3,wav,mid'],

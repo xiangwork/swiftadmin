@@ -9,9 +9,9 @@
             <div class="layui-inline">
                 <div class="layui-input-inline">
                     <select name="status">
-                        <option value="1">{:__('按状态查询')}</option>
-                        <option value="1" >{:__('正常')}</option>                                 
-                        <option value="0" >{:__('停用')}</option>
+                        <option value="">{:__('按状态查询')}</option>
+                        <option value="2" >{:__('正常')}</option>                                 
+                        <option value="1" >{:__('停用')}</option>
                     </select>
                 </div>  
             </div>
@@ -45,7 +45,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('上级部门')}</label>
         <div class="layui-input-inline" >
-            <div id="pidNode" name="pid" lay-filter="pidNode" ></div>
+            <div id="pidNode" name="pid" lay-filter="pidNode"></div>
         </div>
         <label class="layui-form-label">{:__('排序号')}</label>
         <div class="layui-input-inline">
@@ -102,7 +102,6 @@
 </div>
 </script>
 
-
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar"> 
     <a class="layui-table-text" lay-title="{:__('编辑')}" lay-area="668px" lay-url="#editforms" lay-event="edit" lay-callback="edit" >{:__('编辑')}</a>
@@ -111,12 +110,14 @@
 </script>
 
 <include file="/public/footer" />
+<script src="__STATICADMIN__module/xmselect/xmselect.js"></script>
 <script>
     layui.use(['admin','form','treetable'], function () {
 
         var jquery = layui.jquery;
         var admin = layui.admin;
         var form = layui.form;
+        var table = layui.table;
         var treetable = layui.treetable;
         var tableURL = "{:url('/system.department/index')}";
 
@@ -178,7 +179,7 @@
                 tips: '请选择上级部门',
                 name: 'pid',
                 height: 'auto',
-                data: admin.event.getAjaxData("{:url('/system.department/getListTree')}"),
+                data: table.cache.depart,
                 radio: true,
                 clickClose: true,
                 initValue: checkedId,
@@ -207,7 +208,7 @@
             form.on("submit(submitPage)",function(post){
 
                 var pageThat = jquery(this);
-
+                pageThat.attr("disabled",true);
                  // 获取提交地址
                 if (typeof(tableThis) !== 'undefined') {
                     _pageUrl = tableThis.event === 'edit' ? pageThat.attr('lay-edit') : pageThat.attr('lay-add');

@@ -10,18 +10,17 @@ declare (strict_types = 1);
 // | Author: 权栈 <coolsec@foxmail.com>，河北赢图网络科技版权所有
 // +----------------------------------------------------------------------
 namespace app\common\library;
+
 use think\facade\Db;
 use think\facade\Cache;
-use think\facade\request;
-
-
-
 use app\common\library\ResultCode;
+use app\common\model\system\AdminAccess;
 use app\common\model\system\ApiCondition;
 use app\common\model\system\User as UserModel;
-use app\common\model\system\UserThird as UserThirdModel;
 use app\common\model\system\Category as CategoryModel;
+use app\common\model\system\Admin as AdminModel;
 use app\common\model\system\AdminRules as AdminRulesModel;
+use app\common\model\system\AdminGroup as AdminGroupModel;
 
 /**
  * 系统全局鉴权类
@@ -42,7 +41,7 @@ class Auth
      * 管理员数据
      * @var array
      */
-    private  $Admin = null;
+    private $admin = null;
 
     /**
      * token令牌
@@ -75,22 +74,23 @@ class Auth
     public $params = [];
 
     /**
-     * 分组权限
+     * 用户组id
      * @var array
      */
-    protected $authGroup = [];   
+    public $group_ids = [];
+
 
     /**
-     * 用户私有权限
+     * 分组标记
      * @var array
      */
-    protected $authPrivate = [];  
+    public $authGroup = '_admin_group_auth';
 
     /**
-     * 返回权限数据
+     * 用户私有标记
      * @var array
      */
-    protected $authListArray = [];
+    public $authPrivate = '_admin_private_auth';
 
     /**
      * 保活时间
@@ -124,15 +124,15 @@ class Auth
      */
     public function __construct($config = [])
     {
-        $this->Admin = session('AdminLogin');
+        $this->admin = session('AdminLogin');
         $this->request = \think\facade\Request::instance();
     }
 
     /**
      * 初始化
      * @access public
-     * @param array $options 参数
-     * @return auth
+     * @param  array $options 参数
+     * @return object
      */
 
     public static function instance($options = [])
@@ -147,17 +147,15 @@ class Auth
 
     /**
      * 检查权限
-     * @param $name string|array  	需要验证的规则列表,支持逗号分隔的权限规则或索引数组
-     * @param $uid   int           	认证用户的id
-     * @param int    $type 			认证类型
-     * @param string $mode 			执行check的模式
-     * @param string $relation 		如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
-     * @return bool               	通过验证返回true;失败返回false
+     * @param string|array  $name   	    需要验证的规则列表,支持逗号分隔的权限规则或索引数组
+     * @param int           $uid            认证用户的id
+     * @param int           $type 			认证类型
+     * @param string        $mode 			执行check的模式
+     * @param string        $relation 		如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
+     * @return bool               	        通过验证返回true;失败返回false
      */
-    public function checkauth($name, $uid, $type = 1, $mode = 'url', $relation = 'or') 
+    public function checkauth($name, $uid = 0, $type = 1, $mode = 'url', $relation = 'or') 
     {
-        $this->authListArray = $this->getAuthList();
-        
         // 转换格式
         if (is_string($name)) {
             $name = strtolower($name);
@@ -173,7 +171,7 @@ class Auth
             $REQUEST = unserialize(strtolower(serialize($this->request->param())));
         }
 
-        foreach ($this->authListArray as $key => $auth) {
+        foreach ($this->get_auth_list($uid) as $auth) {
 
             // 非鉴权接口
             $router = $auth['router'];
@@ -209,7 +207,7 @@ class Auth
                 }
             }
         }
-
+        
         $authList = array_unique($authList);
         if ('or' == $relation && !empty($authList)) {
             return true;
@@ -225,238 +223,200 @@ class Auth
 
     /**
      * 获取权限节点
+     * @param  int      $uid    用户id
+     * @param  string   $type   节点类型
+     * @return array
      */
-    public function getauthNode($pk, $type = 'rules') 
+    public function _get_auth_nodes($uid = null, string $type = 'rules')
     {
-
-        // 获取角色数据
-        $id = (int)$pk ?? session('AdminLogin.id');
-        $authRules = Db::name('admin_access')->where('uid',$id)->find();
+        // 私有节点
+        $authGroup = $authPrivate = [];
+        $uid = $uid ?? $this->admin['id'];
+        $authnodes = AdminAccess::where('uid',$uid)->find();
+        if (!empty($authnodes[$type])) {
+            $authPrivate = explode(',', $authnodes[$type]);
+        }
         
-        // 用户私有权限
-        if (!empty($authRules[$type])) {
-            $this->authPrivate = explode(',', $authRules[$type]);
+        // 用户组节点
+        if (!empty($authnodes['group_id'])) {
+            $groupnodes = AdminGroupModel::whereIn('id',$authnodes['group_id'])->select()->toArray();
+            foreach ($groupnodes as $value) {
+                $nodes = !empty($value[$type]) ? explode(',', $value[$type]) : [];
+                $authGroup = array_unique(array_merge($authGroup, $nodes));
+                $authPrivate = array_unique(array_merge($authPrivate, $nodes));
+            }
         }
 
-        // 用户分组权限
-        if (!empty($authRules['group_id'])) {
-            $authGroup = Db::name('admin_group')->whereIn('id',$authRules['group_id'])->select()->toArray();
-            foreach ($authGroup as $key => $value) {
-                $groupRules = !empty($value[$type]) ? explode(',', $value[$type]) : [];
-                if ($type == 'rules') {
-                    $this->authListArray['GroupAuthList'][$value['alias']] = $groupRules;
+        // 返回数据集
+        $array[$this->authGroup] = $authGroup ?? [];
+        $array[$this->authPrivate] = $authPrivate ?? [];
+        return $array;
+    }
+
+    /**
+     * 获取权限菜单
+     * @access  public
+     * @return  JSON|Array
+     */
+    public function _get_auth_menus()
+    {
+        // 查找节点
+        $where[] = ['status','=','normal'];
+        $auth_nodes = $this->_get_auth_nodes();
+        $list = $this->get_auth_list($this->admin['id'] ,$auth_nodes);
+
+        // 循环处理数据
+        foreach ($list as $key => $value) {
+            $list[$key]['title'] = __($value['title']);
+            $auth_nodes['everycate'] = $value['router'] == 'everycate' ? true : false;
+            $auth_nodes['privateauth'] = $value['router'] == 'privateauth' ? true : false;
+        }
+
+        if ($this->superAdmin()) {
+            $auth_nodes['supersadmin'] = true;
+        }
+
+        $auth_nodes['_admin_auth_menus_'] = list_to_tree($list);
+        return json_encode($auth_nodes,JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * 查询权限列表
+     * @param  int      $uid        用户id
+     * @param  array    $nodes      已获取节点
+     * @return mixed
+     */
+    public function get_auth_list($uid = 0, array $nodes = []) 
+    {
+        // 查找节点
+        $where[] = ['status','=','normal'];
+        if (!$this->superAdmin()) {
+            $auth_nodes = !empty($nodes) ? $nodes : $this->_get_auth_nodes($uid);
+            return AdminRulesModel::where(function ($query) use ($where,$auth_nodes) {
+                if (empty($auth_nodes[$this->authPrivate])) {
+                    $where[] = ['auth','=','0'];
+                    $query->where($where);
+                }else {
+                    $where[] = ['id','in',$auth_nodes[$this->authPrivate ]];
+                    $query->where($where)->whereOr('auth','0');
                 }
-                $this->authGroup = array_unique(array_merge($this->authGroup, $groupRules));
-                $this->authPrivate = array_unique(array_merge($this->authPrivate, $groupRules));
-            }
-        }
-
-        // 拼装数据
-        $this->authListArray['GroupRules'] = $this->authGroup ?? [];
-        $this->authListArray['UserRules'] = $this->authPrivate ?? [];
-        return $this->authListArray;
-    }
-
-    /**
-     * 管理组权限节点
-     */
-    public function getGroupRules($id = null) 
-    {
-        return $this->getGroupOrPrivateAuth('GroupRules',$id);
-    }
-    /**
-     * 私有权限节点
-     */
-    public function getPrivateRules($id = null) 
-    {   
-        return $this->getGroupOrPrivateAuth('UserRules',$id);   
-    }
-
-    /**
-     * 获取权限节点
-     */
-    public function getGroupOrPrivateAuth($GorPrivate,$id = null) 
-    {
-
-        if (!$this->SuperAdmin()) {
-            $id = $id ?? $this->Admin['id'];
-            $authNode = $this->getauthNode($id);
-            // 默认获取
-            if (!empty($authNode[$GorPrivate])) { 
-                $where[] = ['id','in',$authNode[$GorPrivate]];
-            }else {
-                $where[] = ['auth','=','0']; 
-            }
-
-            // 返回节点
-            $list = AdminRulesModel::where($where)->select()->toArray();
-            foreach ($list as $key => $value) {
-                $list[$key]['title'] = __($value['title']);
-            }
-
-            return $list ? json(list_to_tree($list)) : json();
-        }
-
-        return json(AdminRulesModel::getListTree());
-    }
-
-    /**
-     * 管理组栏目节点
-     */
-    public function getGroupCateIds($id = null) 
-    {
-        return $this->getGroupOrPrivateCateIds('GroupRules',$id);
-    }
-
-    /**
-     * 私有栏目节点
-     */
-    public function getPrivateCateIds($id = null) 
-    {
-        return $this->getGroupOrPrivateCateIds('UserRules',$id);       
-    }
-
-    /**
-     * 获取栏目节点
-     */
-    public function getGroupOrPrivateCateIds($GorPrivate,$id = null) 
-    {
-        if (!$this->SuperAdmin()) {
-            $id = $id ?? $this->Admin['id'];
-            $authNode = $this->getauthNode($id,'cateids');
-            if (!empty($authNode[$GorPrivate])) { 
-                $where[] = ['id','in',$authNode[$GorPrivate]];
-            }else {
-                $where[] = ['id','=','error']; 
-            }
-
-            // 返回节点
-            $list = CategoryModel::where($where)->select()->toArray();
-            foreach ($list as $key => $value) {
-                $list[$key]['title'] = __($value['title']);
-            }
-
-            return $list ? json(list_to_tree($list)) : json();
+            })->order('sort asc')->select()->toArray();
         }
         
-        return json(CategoryModel::getListTree());
+        return AdminRulesModel::where($where)->order('sort asc')->select()->toArray();
     }
 
-
     /**
-     * 管理组规则鉴权
+     * 查询权限节点
+     * @access public
+     * @param mixed|null $type
+     * @param mixed|null $class
+     * @return \think\response\Json
      */
-    public function checkGroupRules($rules) 
+    public function get_rulecates_tree($type = null, $class = null, $tree = true)
     {
-        return $this->checkRulesORCateIds($rules,'GroupRules');
+        
+        $list  = [];
+        if (is_array($type) && $type) {
+            $class = $type['class'] ?? $this->authGroup;
+            $type  = $type['type'] ?? 'rules';
+        }
+
+        $class = $class != $this->authGroup ? $this->authPrivate : $class;
+        $auth_nodes = $this->_get_auth_nodes($this->admin['id'], $type);
+        if ($type && $type == 'rules') {
+
+            $where[] = ['status','=','normal'];
+            if (!$this->superAdmin()) {
+                $list = AdminRulesModel::where(function ($query) use ($where,$auth_nodes,$class) {
+                    if (empty($auth_nodes[$class])) {
+                        $where[] = ['auth','=','0'];
+                        $query->where($where);
+                    }else {
+                        $where[] = ['id','in',$auth_nodes[$class]];
+                        $query->where($where)->whereOr('auth','0');
+                    }
+                })->order('sort asc')->select()->toArray();
+            }
+            else {
+                $list = AdminRulesModel::where($where)->order('sort asc')->select()->toArray();
+            }
+        } else {
+            if (!$this->superAdmin()) {
+                if (!empty($auth_nodes[$class])) {
+                    $list = CategoryModel::whereIn('id',$auth_nodes[$class])->where('status',1)->select()->toArray();
+                }
+            }
+            else {
+                $list = CategoryModel::select()->toArray();
+            }
+        }
+
+        return $tree ? ($list ? json_encode(list_to_tree($list)) : json()) : $list;
     }
 
     /**
-     * 管理组栏目鉴权
-     */
-    public function checkGroupCateIds($cateIds) 
+     * 校验节点 避免越权
+     * @access public
+     * @param mixed|null $rules
+     * @param string|null $type
+     * @param string|null $class
+     * @return bool
+     **/
+    public function check_rulecates_node($rules = null, string $type = null, string $class = null)
     {
-        return $this->checkRulesORCateIds($cateIds,'GroupRules','cateids');
-    }
-
-    /**
-     * 个人节点鉴权
-     */
-    public function checkPrivateRules($rules) 
-    {
-        return $this->checkRulesORCateIds($rules,'UserRules');
-    }
-
-    /**
-     * 个人栏目鉴权
-     */
-    public function checkPrivateCateIds($cateIds) 
-    { 
-        return $this->checkRulesORCateIds($cateIds,'UserRules','cateids');     
-    }
-
-    /**
-     * 节点元素鉴权
-     */
-    public function checkRulesORCateIds($rules, $GorPrivate ,$type = 'rules') 
-    {
-        if (!$this->SuperAdmin() && !empty($rules)) {
-            $id = $id ?? $this->Admin['id'];
-            $nodes = $this->getauthNode($id,$type); // 获取节点权限
-            $differ = array_unique(array_merge($rules,$nodes[$GorPrivate]));
-            if (count($differ) > count($nodes[$GorPrivate])) {
+        if (!$this->superAdmin() && !empty($rules)) {
+            $type   = !empty($type) ? $type :'rules';
+            $class  = !empty($class) ? $class : $this->authGroup;
+            $class  = $class != $this->authGroup ? $this->authPrivate : $class;
+            $auth_nodes = $this->_get_auth_nodes($this->admin['id'], $type);
+            $differ = array_unique(array_merge($rules, $auth_nodes[$class]));
+            if (count($differ) > count($auth_nodes[$class])) {
                 return false;
             }
         }
 
         return true;
     }
-
-    /**
-     * 查询权限列表
-     */
-    public function getAuthList() 
-    {
-
-        $where = [];
-        $id = $this->Admin['id'];
-        $authNode = $this->getauthNode($id);
-        if (!$this->SuperAdmin()) {
-
-            if (!empty($authNode['UserRules'])) {
-                $where[] = ['id','in',$authNode['UserRules']];
-            }
-
-            // 过滤不需要鉴权节点
-            return AdminRulesModel::where($where)->whereOr('auth','0')->order('sort asc')->select()->toArray();
-        }
-
-        return AdminRulesModel::where($where)->order('sort asc')->select()->toArray();
-    }
     
     /**
-     * 检测管理员 改为数据库查询
+     * 超级管理员
+     * @access      public
+     * @return      bool
      */
-    public function SuperAdmin() 
+    public function superAdmin() 
     {
-        $groupIds = Db::name('admin')->field('group_id')->find($this->Admin['id']);
-        $groupIds = explode(',',$groupIds['group_id']);
-        return array_search(1,$groupIds) !== false ? true : false;
+        $group_ids = AdminModel::field('group_id')->find($this->admin['id']);
+        $group_ids = explode(',',$group_ids['group_id']);
+        $this->group_ids = $group_ids;
+        return array_search(1,$group_ids) !== false ? true : false;
     }
 
     /**
      * 管理组分级鉴权
+     * @param array $group_ids 
+     * @return bool
      */
-    public function checkGroupDiffer($groupId = []) 
+    public function check_group_auth(array $group_ids = [])
     {
-
-        if ($this->SuperAdmin()) {
+        if ($this->superAdmin()) {
             return true;
         }
 
-        // 操作的用户组
-        if (!is_array($groupId)) {
-            $groupId = array($groupId);
-        }
-
-        $ids = Db::name('admin')->field('group_id')->find($this->Admin['id']);
-        $LoginGroup = Db::name('admin_group')->whereIn('id',$ids['group_id'])->select()->toArray();
-
-        foreach ($groupId as $value) {
-
-            // 查询用户组信息
-            $data = Db::name('admin_group')->where('id',$value)->find();
-            if (empty($data)) {
-                return false;
-            }
-
-            foreach ($LoginGroup as $values) {
-                if ($data['pid'] < $values['id']|| $data['pid'] == $values['pid']) {
-                    return false;
-                }  
+        // 查询数据
+        $list = AdminGroupModel::select()->toArray();
+        foreach ($list as $value) {
+            // 循环处理组PID
+            if (in_array($value['id'], $group_ids)) {
+                foreach ($this->group_ids as $id) {
+                    $self = list_search($list,['id'=>$id]);
+                    if (!empty($self) && 
+                        ($value['pid'] < $self['id'] || $value['pid'] == $self['pid']) ) {
+                        return false;
+                    }
+                }
             }
         }
-
         return true;
     }
 
@@ -468,7 +428,7 @@ class Auth
     public function getUserInfo($uid = null) 
     {
 
-        $uid = $uid ?? $this->Admin['id'];
+        $uid = $uid ?? $this->admin['id'];
         static $userinfo = [];
 
         $user = Db::name('admin');
@@ -495,7 +455,7 @@ class Auth
             $where[] = ['name','=',htmlspecialchars(trim($name))];
         }
 
-        $where[] = ['pwd','=',hasha($pwd)];
+        $where[] = ['pwd','=',hash_pwd($pwd)];
         $this->userData = UserModel::where($where)->find();
         if (!empty($this->userData)) {
             if($this->userData['status'] != 1) { 
@@ -541,7 +501,7 @@ class Auth
         $restful = Cache::get($this->classHash);
         if (empty($restful)) {
             $restful = Db::name('api')->where('class',$class)->find();
-            Cache::set($this->classHash, $restful,config(CACHETIME));
+            Cache::set($this->classHash, $restful,saenv('cache_time'));
         }
 
         // 校验请求方式
@@ -566,7 +526,6 @@ class Auth
             
             // 默认走普通流程
             $list = $this->getAPIAuthList();
-            // halt($list);
             if (!$nodes = list_search($list,['class'=>$class])) {
                 $this->setError(ResultCode::AUTH_ERROR);
                 return false;
@@ -577,7 +536,7 @@ class Auth
                 return false;
             }
         }
-        else if ($restful['status'] = DISABLE) {
+        else if ($restful['status'] == DISABLE) {
             $this->setError(ResultCode::API_DISABLE);
             return false;
         }
@@ -623,8 +582,8 @@ class Auth
                           'user.app_id'=>$this->params['app_id'],
                           'user.app_secret'=>$this->params['app_secret'],
                         ])->select()->toArray();
-
-            Cache::set($this->nodeHash, $list, config(CACHETIME));
+            // 修改后请清理缓存
+            Cache::set($this->nodeHash, $list, saenv('cache_time'));
         }
 
         return $list ?? [];
@@ -798,7 +757,7 @@ class Auth
 
         $sign = [
             'ip' => request()->ip(),
-            'auth_key'=> config('system.auth.auth_key'),
+            'auth_key'=> saenv('auth_key'),
             'time'=> $time,
             'uid'=> $uid,
         ];
@@ -816,7 +775,7 @@ class Auth
     {
         $check = [
             'ip' => request()->ip(),
-            'auth_key'=> config('system.auth.auth_key'),
+            'auth_key'=> saenv('auth_key'),
             'time'=> $time,
         ];
 

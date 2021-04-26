@@ -16,7 +16,7 @@ class Admin extends Validate
     protected $rule =   [
 		'test_filed' => 'max:255',
         'name'  => 'require|min:2|max:12|chsAlphaNum',
-        'pwd|密码'   => 'require|min:6|max:32',
+        'pwd|密码'   => 'require|min:6|max:64',
     ];
 	
     

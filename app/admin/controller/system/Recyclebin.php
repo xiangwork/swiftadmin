@@ -11,10 +11,10 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 namespace app\admin\controller\system;
 
-
 use app\AdminController;
-use app\common\library\Auth;
-use app\common\model\system\AdminRules;
+use think\facade\Db;
+use app\common\model\system\Channel;
+use app\common\model\system\Recyclebin as RecyclebinModel;
 
 class Recyclebin extends AdminController
 {
@@ -22,6 +22,7 @@ class Recyclebin extends AdminController
     public function initialize() 
     {
 		parent::initialize();
+        $this->model = new RecyclebinModel();
     }
 
     /**
@@ -30,52 +31,102 @@ class Recyclebin extends AdminController
     public function index() {
 
         if (request()->isAjax()) {
-            $parent = []; 
-            $systemMenu = AdminRules::select()->toArray();
-            $result = Auth::instance()->getAuthList();
-            foreach ($result as $key => $value) {
-                if (!preg_match('/.*?:recyclebin/i',$value['alias'],$match)) {
-                    continue;
-                }
 
-                $router = str_replace('recyclebin','index',$value['alias']);
-                foreach ($systemMenu as $field => $data) {
-                    if ($data['alias'] == $router) {
-                        if ($data['pid'] == $value['pid']) {
-                            continue;
-                        }
-                        // 改变路由地址
-                        $data['router'] = (string)url($value['router'],[],false);
-                        $parent[] = $data;
-                        if ($data['pid'] != 0 && !\list_search($parent,['id'=>$data['pid']])) {
-                            $parent = array_merge($parent,$this->closure($data['pid'],$systemMenu));
-                        }
-                    }
-                }
+            // 生成查询条件
+            $post = input();
+            $where = array();
+            if (!empty($post['title'])) {
+                $where[] = ['title','like','%'.$post['title'].'%'];
             }
 
-            foreach ($parent as $key => $value) {
-                $parent[$key]['spread'] = true;
-                $parent[$key]['title'] = __($value['title']);
-            }
-    
-            return json(list_to_tree($parent));
+            // 生成查询数据
+            $list = $this->model->where($where)->order("id asc")->select()->toArray();
+            return $this->success('查询成功', NULL, $list, count($list), 0);
         }
         
         return view();
     }
+    
+    /**
+     * 恢复数据
+     * @access public
+     * @param  null
+     * @return string
+     */	
+	public function restore()
+	{
+
+        if (request()->isAjax()) {
+            
+			Db::startTrans();
+			try {
+
+                $list = $this->model->where($this->_before_where())->select();
+                foreach ($list as $item) {
+                    $index = Channel::get_channel_list($item['cid']);
+                    if (!empty($index)) {
+
+                        Db::name($index['table'])
+                            ->where('id',$item['oid'])
+                            ->update(['delete_time'=>null]);
+                        $this->status += $item->delete();
+                    }
+                }
+
+                Db::commit();
+            } catch (\PDOException $e) {
+                Db::rollback();
+                return $this->error($e->getMessage());
+            } catch (\Throwable $th) {
+                Db::rollback();
+                return $this->error($th->getMessage());
+            }
+            
+            $this->status && $this->success();
+        }
+
+        return $this->error();
+	}
 
     /**
-     * 递归查询
-     */
-    public function closure(&$pid,$list,&$array = []) {
-        $finder = list_search($list,['id'=>$pid]);
-        $array[] = $finder;
-        if ($finder['pid'] != 0) {
-            $this->closure($finder['pid'],$list,$array);
+     * 删除资源/清空回收站
+     * @access protected
+     * @param  null      		
+     * @return string		
+     */	
+	public function destroy() 
+	{
+
+        if (request()->isAjax()) {
+            Db::startTrans();
+			try {
+
+                $list = $this->model->where($this->_before_where())->select();
+                foreach ($list as $item) {
+                    $index = Channel::get_channel_list($item['cid']);
+                    if (!empty($index)) {
+
+                        Db::name($index['table'])
+                            ->where('id',$item['oid'])
+                            ->delete();
+                        $this->status += $item->delete();
+                    }
+                }
+    
+                Db::commit();
+            } catch (\PDOException $e) {
+                Db::rollback();
+                return $this->error($e->getMessage());
+            } catch (\Throwable $th) {
+                Db::rollback();
+                return $this->error($th->getMessage());
+            }
+            
+            $this->status && $this->success();
         }
-        return $array;
-    }
+
+        return $this->error();
+	}
 
     /**
      * 重载添加

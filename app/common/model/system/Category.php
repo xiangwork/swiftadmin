@@ -4,9 +4,8 @@ declare (strict_types = 1);
 namespace app\common\model\system;
 
 use think\Model;
-use think\facade\Db;
 use think\model\concern\SoftDelete;
-
+use app\common\library\Content;
 /**
  * @mixin \think\Model
  */
@@ -21,61 +20,135 @@ class Category extends Model
     protected $createTime = 'createtime';
 	protected $updateTime = 'updatetime';
 	
+    public function channel()
+    {
+        return $this->hasOne(channel::class,'id','cid');
+    }
+
    /**
    * 获取无限极分类
    * @access public static   
-   * @param string  $tips    名称格式
    * @param int     $pid     栏目父ID
    * @param array   $array   引用数组
    * @param string  $blank   替换字符
    * @param int     $level   栏目等级   
    * @return json
    */
-    public static function getListCate($tips='',$pid=0, &$array=[], $blank=0,$level = 0)
+    public static function getListCate($pid = 0, $cid = 0, array $param = [], &$array=[], $blank=0, $level = 0)
     {
-		// 获取所有分类
-		$result = self::where('pid',$pid)->order('sort asc')->select()->toArray();
+		// 获取字段
+        $field = isset($param['field']) ? $param['field'] : '*';
+
+        if (trim($field) != '*') {
+            $field = explode(',',$field);
+            if (!array_search('id' , $field)) {
+                $field[] = 'id';
+            }
+            $field = implode(',',$field);
+        }
+
+        $order = isset($param['order']) ? $param['order'] : 'id asc';
+        $limit = isset($param['order']) && $level < 1 ? $param['limit'] : 1000;
+
+		$result = self::where(function($query) use ($pid,$cid) {
+    
+            if (!empty($cid) && $cid >= 1) {
+                $where['cid'] = $cid;
+            }
+
+            $where['pid'] = $pid;
+            $query->where($where);
+
+        })->field($field)->order($order)->limit($limit)->select()->toArray();
+
         foreach ($result as $key => $value) {
-			if(!empty($tips)) { 
-			    //自定义名称显示格式
-                $catename = $tips.$value['title'];				
-				$value['title'] = str_repeat('',$blank).$catename;
-			}
 			$value['_level'] = $level;
-            $array[] = $value; unset($result[$key]);
-            self::getListCate($tips,$value['id'], $array, $blank+1,$level+1);
+            $value['url'] = $value['title'];
+            $array[] = $value; 
+            unset($result[$key]);
+            self::getListCate($value['id'],$cid, $param, $array, $blank+1,$level+1);
         }
 
        return $array;
 	}
 
-	/**
-	 * 树形分类
-	 */
-	public static function getListTree() 
+    /**
+     * 树形分类
+     * @access      public
+     * @param       string       $field      字段信息
+     * @return      tree||array
+     */
+	public static function getListTree(string $field = '')
     {
-        $array = self::select()->toArray();
+        if (empty($field)) {
+            $field = '*';
+        }
+        
+        $array = self::field($field)->select()->toArray();
 		if (is_array($array) && !empty($array)) {
 			return list_to_tree($array);
 		}
 	}
 
-	/**
-	 * 栏目统计
-	 */
-	public static function getListCount($model, $where) 
+    /**
+     * 栏目统计
+     * @access      public
+     * @param       object       $model      数据模型
+     * @param       array        $where      查询条件
+     * @return      array
+     */
+	public static function getlistcount($model, $where) 
     {
 		if (!empty($model) && is_array($where)) {
 			return self::name($model)->where($where)->count();
 		}
     }
-
-    // 字段修改器
-    public function setSortAttr($value) 
+    
+    /**
+     * 获取标题拼音
+     * @access      public
+     * @param       string       $pinyin      属性值
+     * @param       array        $data        当前数组
+     * @return      string
+     */
+    public function setPinyinAttr($pinyin, $data) 
     {
-        if (is_empty($value)) {
-            return self::count('id') + 1;
+        return Content::setPinyinAttr($pinyin,$data);
+    }
+
+    /**
+     * 修改内容数据
+     * @access  public
+     * @param   string  $content
+     * @return  string
+     */
+    public function setContentAttr($content,$data)
+    {
+        return Content::setContentAttr($content,$data);
+    }
+
+    /**
+     * 获取内容数据
+     * @access  public
+     * @param   string  $content
+     * @return  string
+     */
+    public function getContentAttr($content,$data)
+    {
+        return Content::getContentAttr($content,$data);
+    }
+
+    /**
+     * 字段排序
+     * @access  public
+     * @param   int  $sort
+     * @return  int 
+     */
+    public function setSortAttr($sort) 
+    {
+        if (is_empty($sort)) {
+            return self::count('id')+1;
         }
-        return $value;
+        return $sort;
     }
 }

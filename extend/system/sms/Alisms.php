@@ -64,7 +64,7 @@ class Alisms {
      */
     public function __construct()
     {
-        $this->config = config('system.smsface.alisms');
+        $this->config = saenv('alisms');
         $this->request = \think\facade\Request::instance();
     }
 

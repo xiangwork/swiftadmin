@@ -66,7 +66,7 @@ class Sms
     public function __construct()
     {
         // 此配置项为数组。
-        if ($snsface = config('system.smsface')) {
+        if ($snsface = saenv('smsface')) {
             $this->config = array_merge($this->config, $snsface);
         }
 
@@ -119,7 +119,7 @@ class Sms
 
             // 读取短信模板
             $type = $this->config['type'];
-            $config = include(root_path()."extend/user/sms/sms.php");
+            $config = include(root_path()."extend/conf/sms/sms.php");
             if ($config[$type][$method]['template']) {
                 $template = $config[$type][$method]['template'];
             }
@@ -143,7 +143,7 @@ class Sms
                 $result = UserValidate::where("mobile",$phone)->order('id desc')->find();
                 if (!empty($result)) {
                     $difftime = time() - strtotime($result['createtime']);
-                    if (($difftime / 60) <= config(USERVALITIME)) {
+                    if (($difftime / 60) <= saenv('user_valitime')) {
                         $this->setError("请求的频率过快，请稍后再试！");
                         return false;
                     }
@@ -314,7 +314,7 @@ class Sms
 
         if (!empty($this->objectValidate)) {
             $difftime = time() - strtotime($this->objectValidate['createtime']);
-            if (($difftime / 60) <= config(USERVALITIME)) {
+            if (($difftime / 60) <= saenv('user_valitime')) {
                 return true;
             }
 

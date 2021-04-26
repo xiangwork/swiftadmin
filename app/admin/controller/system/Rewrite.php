@@ -44,8 +44,8 @@ class Rewrite extends AdminController
     {
 
         $total = 0; // 读取配置
-        $rewrite = config('system.rewrite');
-        $sitemap = config('system.sitemap');
+        $rewrite = saenv('rewrite');
+        $sitemap = saenv('sitemap');
         $map_xml_path = public_path().$sitemap['map_xml_path'];
         $result = glob($map_xml_path.'/*.xml');
         foreach ($result as $key => $value) {
@@ -79,10 +79,16 @@ class Rewrite extends AdminController
                 return $this->error('保存失败，请重试!');
             }
 
-            return $this->error('保存成功！');
+            return $this->success('保存成功！');
         }
+    }
 
-        // TODO...
+    /**
+     * 生成静态页面
+     */
+    public function create()
+    {
+        
     }
 
 }   

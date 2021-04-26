@@ -65,6 +65,7 @@
     <a class="layui-table-text" lay-url="{:url('/system.navmenu/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 <include file="/public/footer" />
+<script src="__STATICADMIN__module/xmselect/xmselect.js"></script>
 <script>
     layui.use(['admin','table','form'], function () {
         var jquery = layui.jquery;
@@ -135,7 +136,6 @@
             })
 
 
-            // 监听权限提交
             form.on("submit(submitPage)",function(post){
 
                 // 获取用户id
@@ -143,6 +143,7 @@
                 _pageUrl = !status ? pageThat.attr('lay-edit') : pageThat.attr('lay-add');
                  
                 // 开始POST提交数据
+                pageThat.attr("disabled",true);
                 jquery.post(_pageUrl,
                     post.field, function(res){
                         if (res.code == 200) {
@@ -163,7 +164,6 @@
             })
 
         }
-
 
     })
 </script>

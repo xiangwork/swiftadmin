@@ -30,7 +30,7 @@ class Ftp
     public function __construct()
     {
         // 此配置项为数组。
-        if ($upload = config('system.upload')) {
+        if ($upload = saenv('upload')) {
             $this->config = array_merge($this->config, $upload);
         }
     }

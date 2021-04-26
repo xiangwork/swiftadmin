@@ -23,7 +23,7 @@ class Adwords extends AdminController
     {
 		parent::initialize();
         $this->model = new AdwordsModel();
-        $this->path = public_path().'stati/adwords/';
+        $this->path = public_path().'static/adwords/';
     }
 
     /**
@@ -35,22 +35,16 @@ class Adwords extends AdminController
 
             // 生成查询条件
             $post = input();
+            $status = !empty($post['status']) ? $post['status']-1:1;
             $where = array();
             if (!empty($post['title'])) {
                 $where[] = ['title','like','%'.$post['title'].'%'];
             }
-            
-            if (!empty($post['status'])) {
-                if($post['status'] == 1){
-                    $where[]=['status','=','1'];
-                }else if($post['status'] == 2){
-                    $where[]=['status','=','0'];
-                }		
-            }
 
             // 生成查询数据
+            $where[]=['status','=',$status];
             $list = $this->model->where($where)->order("id asc")->select()->toArray();
-            return $this->success('查询成功', "", $list, count($list), 0);
+            return $this->success('查询成功', NULL, $list, count($list), 0);
         }
 
 		return view();

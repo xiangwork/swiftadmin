@@ -17,6 +17,7 @@ use app\common\library\Auth;
 // 前台全局控制器基类
 class HomeController extends BaseController 
 {
+
     /**
      * 数据库实例
      * @var object
@@ -128,61 +129,12 @@ class HomeController extends BaseController
         }
 
         // 获取站点数据
-        foreach (config('system.site') as $key => $value) {
+        foreach (saenv('site') as $key => $value) {
             $this->app->view->assign($key,$value);
         }
 
         $this->app->view->assign('user',$this->auth->userData);
     }
-
-    /**
-     * 设置登录状态
-     * @access public
-     * @param  array          $result  用户数据
-     * @param  integer        $expire  过期时间
-     * @return void
-     */
-    /*public function setLoginToken($result, int $expire = 0) {
-
-        $payload = [
-            'iss' => config('system.site.site_url'),        // 该JWT的签发者
-            'iat' => time(),                                // 签发时间
-            'exp' => time() + 7200,                         // 过期时间
-            'nbf' => time(),                                // 该时间之前不接收处理该Token
-            'sub'=> [                                       // 面向的用户
-                'id'=> $result['id'],
-                'name'=> $result['name'],
-                'avatar'=> $result['avatar'],
-                'time'=>time(),
-                'exp' => time() + 7200,
-            ],
-
-            'jti'=>md5(uniqid('JWT').time())                // 该Token唯一标识
-        ];
-
-        $token = Jwt::instance()->getToken($payload);
-        
-        cookie('uid',$token, $expire);
-
-        $this->refereTonull();
-    }*/
-
-    /**
-     * 获取用户登录状态
-     * @access public
-     * @param  null
-     * @return integer        用户登录ID
-     */
-    /*public function isLogin() {
-
-        $token = cookie('uid');
-        $userInfo = Jwt::instance()->verifyToken($token);
-        if ($userInfo !== false && is_array($userInfo)) {
-            return $userInfo['sub']['id'];
-        }
-
-        return false;
-    }*/
 
     /**
      * 退出登录
@@ -206,7 +158,7 @@ class HomeController extends BaseController
             }
             
 			$referer = parse_url($_SERVER["HTTP_REFERER"]);
-            if($referer['host'] == config('system.site.site_url') ){
+            if($referer['host'] == saenv('site_url') ){
 				cookie('referer',$_SERVER["HTTP_REFERER"], 604800);
 				return true;
 			}

@@ -52,7 +52,7 @@ class User extends HomeController
     public function register()
     {
 		// 判断是否开启注册
-		if (!config(REGISTERSTATUS)) {
+		if (!saenv('user_status')) {
 			return $this->error('暂未开放注册！');
 		}
 
@@ -70,7 +70,7 @@ class User extends HomeController
 			$where[] = ['createip','=',$post['createip']];
 			$where[] = ['createtime','>',linux_extime(1)];
 			$total = $this->model->where($where)->select();
-			if (!empty($total) && (count($total) >= config(REGISTERSECOND))) {
+			if (!empty($total) && (count($total) >= saenv('user_register_second'))) {
 				return $this->error('当日注册量已达到上限');
             }
 
@@ -86,7 +86,7 @@ class User extends HomeController
             }
 
             // 开始注册
-            $registerType = config(REGISTERSTYLE);
+            $registerType = saenv('user_register_style');
             if ($registerType == 'normal') { 
 
             }
@@ -177,9 +177,9 @@ class User extends HomeController
         if (request()->isPost()) {
             $id = $this->userId;
             
-            $pwd = hasha(input('pwd'));
+            $pwd = hash_pwd(input('pwd'));
             if (input('oldpwd')) {
-                $oldpwd = hasha(input('oldpwd'));
+                $oldpwd = hash_pwd(input('oldpwd'));
             }
             else {
                 $oldpwd = null;
@@ -259,7 +259,7 @@ class User extends HomeController
             $result = \app\common\model\system\UserValidate::where("email",$email)->order('id desc')->find();
             if (!empty($result)) {
                 $difftime = time() - strtotime($result['createtime']);
-                if (($difftime / 60) <= config(USERVALITIME)) {
+                if (($difftime / 60) <= saenv('user_valitime')) {
                     return $this->error("请求的频率过快，请稍后再试！");
                 }
             }
@@ -363,7 +363,7 @@ class User extends HomeController
 		if (!empty($result)) { // 验证是否超时
 			$valicode = json_decode(cookies_decrypt($code),true);
 			$difftime = time() - $valicode['time']; 
-			if (($difftime / 60) <= config('system.user.user_valitime')) {
+			if (($difftime / 60) <= saenv('user_valitime')) {
 				if ($result->save(['valicode'=>'','status'=>1])) {
 					$this->auth->loginState($result);
 					$this->redirect('/');

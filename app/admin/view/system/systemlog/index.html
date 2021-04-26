@@ -129,14 +129,9 @@
 
 <include file="/public/footer" />
 <script>
-    layui.use(['admin','layer','table','form','eleTree'], function () {
+    layui.use(['table'], function () {
 
-        var admin = layui.admin;
-        var layer = layui.layer;
-        var table = layui.table;        // 表格
-        var eleTree = layui.eleTree;    // 权限树
-        var form = layui.form;
-
+        var table = layui.table;  
         // 初始化表
         var isTable = table.render({
             elem: "#lay-tableList"

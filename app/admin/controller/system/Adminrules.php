@@ -64,12 +64,15 @@ class AdminRules extends AdminController
 					$list = array_merge($list,$value);
 				}
 
-				return $this->success('查询成功', '', $list, count($list), 0);
 			}
 
-			if (!empty($list)) {
-				return $this->success('获取成功', '', $list, count($list), 0);
-			}
+			$rules = $this->model->getListTree();
+			return $this->success('获取成功', '',[
+				'item'=> $list,
+				'rules'=> $rules 
+			], 
+			count($list),0);
+			
 		}
 
 		return view('/system/admin/rules');
@@ -147,22 +150,11 @@ class AdminRules extends AdminController
 			$result['title'] = __($result['title']);
 			$array[] = $result;
 			if ($result['pid'] !== 0) {
-				self::parentNode($result['pid'], $array);
+				$this->parentNode($result['pid'], $array);
 			}
 		}
 
 		return $array;
-	}
-
-	/**
-	 * 获取菜单数据
-	 */
-	public function authListTree() 
-	{
-		if (request()->isAjax()) {
-			$nodes = $this->model->getListTree();
-			return json($nodes);
-		}
 	}
 
 }

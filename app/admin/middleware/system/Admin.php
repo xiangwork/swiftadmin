@@ -12,6 +12,7 @@ declare (strict_types = 1);
 
 namespace app\admin\middleware\system;
 use app\common\library\Auth;
+use app\common\library\ResultCode;
 use app\common\model\system\Admin as AdminModel;
 
 class Admin
@@ -25,28 +26,18 @@ class Admin
      */
     public function handle($request, \Closure $next)
     {
-        $id = input('id/s'); 
-		if ($request->isPost() && !empty($id)) {
-            
-            // 查询数据
-            $groupIds = input('group_id/s');
-            $data = AdminModel::find($id);
+        if ($request->isPost()) {
 
-            if (!empty($data)) { 
-
-                if (!empty($groupIds)) {
-                    $groupIds = $data['group_id'];
+            $id = input('id/s');
+            if ($data = AdminModel::getById($id)) {
+                $group_id = input('group_id/s');
+                $group_id = !empty($group_id) ? $group_id.','.$data['group_id'] : $data['group_id'];
+                $group_id = array_unique(explode(',',$group_id));
+                if (!Auth::instance()->check_group_auth($group_id)) {
+                    return json(ResultCode::AUTH_ERROR);
                 }
-                else {
-                    $groupIds = $groupIds.','.$data['group_id'];
-                }
-
-                $groupIds = array_unique(explode(',',$groupIds));
-                if (!Auth::instance()->checkGroupDiffer($groupIds)) {
-                    return json(['msg'=>'没有权限！','code'=>101]);
-                }   
             }
-		}
+        }
 		
 		return $next($request);
     }

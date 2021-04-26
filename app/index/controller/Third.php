@@ -37,7 +37,7 @@ class Third extends HomeController
 
         $this->type = input('type/s') ?? null;
         try {
-            $class = "\\third\\".$this->type;
+            $class = "\\system\\third\\".$this->type;
             $this->oauth = new $class;
         } catch (\Throwable $th) {
             exit("暂时还不支持该方式扩展！");

@@ -29,21 +29,83 @@ class Database extends AdminController
      */
     public function index() 
     {
+        // if (request()->isAjax()) {
+
+        //     $tables = Db::query("SHOW TABLE STATUS");
+        //     $list = [];
+        //     foreach ($tables as $key => $value) {
+        //         $list[$key]['id'] = $value['Name'];
+        //         $list[$key]['name'] = $value['Name'];
+        //         $list[$key]['engine'] = $value['Engine'];
+        //         $list[$key]['data_length'] = format_bytes($value['Data_length']);
+        //         $list[$key]['general'] = $value['Collation'];
+        //         $list[$key]['createtime'] = $value['Create_time'];
+        //         $list[$key]['comment'] = $value['Comment'];
+        //     }
+
+        //     return $this->success('获取成功', null, $list, count($list), 0);
+        // }
+
+        /**
+         * 如果pid为空则pid默认为最小的那个。
+         */
+
+        // $table = input('table/s') ?? 'sa_admin';
+
+        // if (empty($table)) {
+        //     return $this->error();
+        // }
+
+        // $list = [];
+
+
+        // 渲染字典列表
+        // 
+        
+
+        // halt($data);
+        // $data = list_to_tree($data->toArray());
+        // halt($data);
         if (request()->isAjax()) {
-            $tables = Db::query("SHOW TABLE STATUS");
+
+            /**
+             * 默认展示一个
+             * 存在表的时候展示
+             */
+
             $list = [];
-            foreach ($tables as $key => $value) {
-                $list[$key]['id'] = $value['Name'];
-                $list[$key]['name'] = $value['Name'];
-                $list[$key]['engine'] = $value['Engine'];
-                $list[$key]['data_length'] = format_bytes($value['Data_length']);
-                $list[$key]['general'] = $value['Collation'];
-                $list[$key]['createtime'] = $value['Create_time'];
-                $list[$key]['comment'] = $value['Comment'];
+            $table = input('table/s') ?? env('database.PREFIX').'admin';
+            if ($table == 'admin') {
+
+                // 返回所有的表
+                $tables = Db::query("SHOW TABLE STATUS");
+                foreach ($tables as $key => $value) {
+                    $list[$key]['id'] = $value['Name'];
+                    $list[$key]['name'] = $value['Name'];
+                    $list[$key]['comment'] = $value['Comment'];
+                    $list[$key]['data_length'] = format_bytes($value['Data_length']);
+                }
+            } else {
+                // 查询字段。
+                $schema = Db::query('SHOW FULL COLUMNS FROM `'.$table.'`');
+                if (!empty($schema)) {
+                    foreach ($schema as $key => $value) {
+                        $list[$key]['field'] = $value['Field'];
+                        $list[$key]['default'] = $value['Default'];
+                        $list[$key]['type'] = $value['Type'];
+                        $list[$key]['collation'] = $value['Collation'];
+                        $list[$key]['null'] = $value['Null'];
+                        $list[$key]['comment'] = $value['Comment'];
+                    }
+                }
             }
 
-            return $this->success('获取成功', '', $list, count($list), 0);
+            return $this->success('获取成功', null, $list, count($list), 0);            
+
+
         }
+
+
         return view();
     }
 
@@ -116,7 +178,7 @@ class Database extends AdminController
 
         }
 
-        $data = config('system.database');
+        $data = saenv('database');
         return view('',['data'=>$data]);
     }
 
@@ -128,7 +190,7 @@ class Database extends AdminController
 
         if (request()->isPost() && !empty($id) && is_array($id)) {
             
-            $config = config('system.database');
+            $config = saenv('database');
             $config['path'] = public_path().$config['path'].DIRECTORY_SEPARATOR;
 
             // 创建备份文件夹

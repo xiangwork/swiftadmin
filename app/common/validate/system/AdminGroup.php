@@ -30,16 +30,15 @@ class AdminGroup extends Validate
     ];
 	
 	// 自定义验证规则
-    protected function notEqId($value,$rules ,$data)
+    protected function notEqId($value, $rules ,$data)
     {
-
         if ($value == $data['id']) {
             return false;
         }
 
-        if ($value > $data['id']) {
-            if (AdminGroupModel::where('pid',$data['id'])->find()) {
-                $this->message['pid.notEqId'] = '存在子类,禁止修改！';
+        if (!empty($data['id']) && $value > $data['id']) {
+            if (AdminGroupModel::getByPid($data['id'])) {
+                $this->message['pid.notEqId'] = '禁止修改存在子类的栏目';
                 return false;
             }
         }

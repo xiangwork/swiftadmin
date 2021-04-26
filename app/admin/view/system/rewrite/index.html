@@ -1,45 +1,42 @@
 <include file="/public/header" />
 <!-- 重定位style -->
 <style>
-.form-item-title {
-    text-align: center;
-    position: relative;
-}
+    .form-item-title {
+        text-align: center;
+        position: relative;
+    }
 
-.form-item-title:before {
-    content: "";
-    position: absolute;
-    border-top: 1px dashed #ccc;
-    left: 40px;
-    right: 40px;
-    top: 8px;
-    z-index: -1;
-}
+    .form-item-title:before {
+        content: "";
+        position: absolute;
+        border-top: 1px dashed #ccc;
+        left: 40px;
+        right: 40px;
+        top: 8px;
+        z-index: -1;
+    }
 
-.form-item-title > span {
-    background-color: white;
-    padding: 0 10px;
-    font-size: 13px;
-    color: #666;
-}    
+    .form-item-title > span {
+        background-color: white;
+        padding: 0 10px;
+        font-size: 13px;
+        color: #666;
+    }    
 
-.layui-tab-content {
-  background-color: #fff;
-}
+    .layui-tab-content {
+      background-color: #fff;
+    }
 
-.layui-form-item .layui-input-inline {
-    width: 300px;
-}
+    .layui-form-item .layui-input-inline {
+        width: 300px;
+    }
 
-.layui-short-select .layui-form-select {
-    display: inline-block;
-    width: 95px;
-}
-
-
+    .layui-short-select .layui-form-select {
+        display: inline-block;
+        width: 95px;
+    }
 
 </style>
-
 <div class="layui-fluid">
     <div class="layui-card">
         <!-- // 默认操作按钮 -->
@@ -237,16 +234,4 @@
         </div>
     </div>
 </div>
-
-
-
-
 <include file="/public/footer" />
-<script>
-    layui.use(['admin','form'], function () {
-        var jquery = layui.jquery;
-        var admin = layui.admin;
-        var form = layui.form;
-
-    })
-</script>

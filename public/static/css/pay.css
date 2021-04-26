@@ -74,7 +74,7 @@ body {
 .layui-pay-tips {
     height: 60px;
     padding: 8px 0 0px 125px;
-    background: #00c800 url(https://cdn.fastadmin.net/assets/addons/epay/images/scan.png) 50px 15px no-repeat;
+    background: #00c800 url(/static/images/pay/scan.png) 50px 15px no-repeat;
     background-size: 36px 36px;
 }
 

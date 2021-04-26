@@ -125,4 +125,11 @@ class ResultCode
         'status'=>'VERSION_ERROR',
         'msg'=>'版本错误',
     ];
+
+    CONST SYSTEM_DISABLE = [
+        'code'=> -993,
+        'status'=>'VERSION_ERROR',
+        'msg'=>'禁止修改系统属性',
+    ];
+
 }

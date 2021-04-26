@@ -19,7 +19,6 @@ use app\common\model\system\Systemlog;
 // 后台全局控制器基类
 class AdminController extends BaseController 
 {
-
     /**
      * 数据库实例
      * @var object
@@ -42,7 +41,25 @@ class AdminController extends BaseController
      * 数据表名称
      * @var string
      */
-	public $tableName = '';
+	public $tableName = null;
+
+    /**
+     * 控制器/类名
+     * @var string
+     */
+	public $controller = null;
+
+    /**
+     * 控制器方法
+     * @var string
+     */
+	public $action = null;
+
+    /**
+     * 控制器/方法名
+     * @var string
+     */
+	public $method = null;
 
     /**
      * 操作状态
@@ -54,7 +71,19 @@ class AdminController extends BaseController
      * 错误消息
      * @var string
      */
-	public $error = '';
+	public $error = null;
+
+    /**
+     * 管理员信息
+     * @var array
+     */
+    public $admin = null;
+
+    /**
+     * 管理员会话标识
+     * @var string
+     */
+    public $sename = 'AdminLogin';
 
     /**
      * 权限验证类
@@ -68,28 +97,35 @@ class AdminController extends BaseController
      */
 	public $noNeedLogin = [
 		'/index/index', // 后台首页
+		'/system.admin/_get_auth_func',
+		'/system.content/edit',
+		'/upload/upload',
 	];
+
+    /**
+     * 跳转URL地址
+     * @var string
+     */
+	public $JumpUrl = '/';
 
     // 后台应用全局初始化
     protected function initialize()
     {
-		$AdminLogin = session::get('AdminLogin');
-		if (!isset($AdminLogin['id'])) {
+		$this->admin = Session::get($this->sename);
+		if (!isset($this->admin['id'])) {
 			// 非登录跳转页面
 			return $this->redirect(url('/login')->suffix(false));
 		}
 
 		$app = strtolower(str_replace('/','',request()->root()));
-		$controller = request()->controller(true);		
-		$action  = request()->action(true);
-		$authURL = '/'.$controller.'/'.$action;
+		$this->controller = request()->controller(true);		
+		$this->action  = request()->action(true);
+		$this->method = '/'.$this->controller.'/'.$this->action;
 		
 		// 校验权限
-		if (!in_array($authURL,$this->noNeedLogin)) {
-	
-			$this->auth = Auth::instance();
-			if (!$this->auth->SuperAdmin() 
-					&& !$this->auth->checkauth($authURL,$this->getLoginId())) {
+		$this->auth = Auth::instance();
+		if (!in_array($this->method,$this->noNeedLogin)) {
+			if (!$this->auth->SuperAdmin() && !$this->auth->checkauth($this->method,$this->admin['id'])) {
 				if(request()->isAjax()) {
 					return $this->error('没有权限!');
 				}
@@ -100,26 +136,14 @@ class AdminController extends BaseController
 		}
 		
 		// 初始化字段信息
-		$this->sysfield();
-		$this->writeLogs();
-		View::assign(['app'=>$app,'controller'=>$controller,'action'=>$action,'AdminLogin'=>$AdminLogin]);
-	}
-
-	/**
-	 * 登录Id
-	 */
-	public function getLoginId() 
-	{
-		return $this->getAdminLogin('id');
-	}
-
-	/**
-	 * 管理员信息
-	 */
-	public function getAdminLogin($key = null) 
-	{
-		$session = session('AdminLogin');
-		return $key ? $session[$key] : $session;
+		// $this->sysfield();
+		// $this->writeLogs();
+		View::assign([
+			'app'=>$app,
+			'controller'=>$this->controller,
+			'action'=>$this->action,
+			'AdminLogin'=>$this->admin
+		]);
 	}
 
 	/**
@@ -133,6 +157,7 @@ class AdminController extends BaseController
 			$param = input();
 			$param['page'] = input('page/d');
 			$param['limit'] = input('limit/d');
+			$status = !empty($post['status']) ? $post['status']-1:1;
 
 			/**
 			 * 筛选字段
@@ -142,21 +167,15 @@ class AdminController extends BaseController
                 $where[] = ['title','like','%'.input('title').'%'];
 			}
 			
-			if (!empty(input('status'))) {
-				if(input('status') == 1){
-					$where[]=['status','=','1'];
-				}elseif(input('status') == 2){
-					$where[]=['status','=','0'];
-				}		
-			}
 
+			$where[]=['status','=',$status];
 			$count = $this->model->where($where)->count();
 			$limit = is_empty($param['limit']) ? 10 : $param['limit'];
 			$page = ($count <= $limit) ? 1 : $param['page'];
 			$list = $this->model->where($where)->order("id asc")->limit($limit)->page($page)->select()->toArray();
 
 			// TODO..
-			return $this->success('查询成功', "", $list, $count, 0);
+			return $this->success('查询成功', null, $list, $count, 0);
 		}
 
 		return view();
@@ -234,8 +253,7 @@ class AdminController extends BaseController
 	 */
     public function del() 
 	{
-
-        $id = input('id'); 
+        $id = input('id'); 	
         !is_array($id) && ($id = array($id));
 
         if (!empty($id) && is_array($id)) {
@@ -246,105 +264,6 @@ class AdminController extends BaseController
                 $list = $this->model->where($where)->select();
                 foreach ($list as $index => $item) {
                     $this->status += $item->delete();
-                }
-                Db::commit();
-            } catch (\PDOException $e) {
-                Db::rollback();
-                return $this->error($e->getMessage());
-            } catch (\Throwable $th) {
-                Db::rollback();
-                return $this->error($th->getMessage());
-            }
-            
-            $this->status && $this->success();
-        }
-
-        return $this->error();
-	}
-	
-    /**
-     * 查看回收站
-     * @access protected
-     * @param  null      		
-     * @return string		
-     */	
-	public function recyclebin() 
-	{
-
-        if (request()->isAjax()) {
-            $where = [];
-            if (input('name/s')) {
-                $where[] = ['name','like','%'.input('name/s').'%'];
-			}
-
-			try {
-				$list = $this->model->onlyTrashed()->where($where)->select();
-            } catch (\PDOException $e) {
-                return $this->error($e->getMessage());
-            } catch (\Throwable $th) {
-                return $this->error($th->getMessage());
-            }
-            
-            return $this->success('查询成功', "", $list, count($list), 0);
-        }
-
-		$controller = \strtolower(request()->Controller());
-		$controller= (string)url('/'.$controller.'/',[],false);
-		return view('/public/recyclebin',['controller'=>$controller]);
-    }
-
-    /**
-     * 恢复数据/资源
-     * @access protected
-     * @param  null      		
-     * @return string		
-     */	
-	public function restore() 
-	{
-
-        if (request()->isAjax()) {
-            
-			Db::startTrans();
-			try {
-                $list = $this->model->onlyTrashed()
-                                    ->where($this->_before_where())
-                                    ->select();
-                foreach ($list as $index => $item) {
-                    $this->status += $item->restore();
-                }
-
-                Db::commit();
-            } catch (\PDOException $e) {
-                Db::rollback();
-                return $this->error($e->getMessage());
-            } catch (\Throwable $th) {
-                Db::rollback();
-                return $this->error($th->getMessage());
-            }
-            
-            $this->status && $this->success();
-        }
-
-        return $this->error();
-	}
-
-    /**
-     * 删除资源/清空回收站
-     * @access protected
-     * @param  null      		
-     * @return string		
-     */	
-	public function destroy() 
-	{
-
-        if (request()->isAjax()) {
-            Db::startTrans();
-			try {
-                $list = $this->model->onlyTrashed()
-                                    ->where($this->_before_where())
-                                    ->select();
-                foreach ($list as $index => $item) {
-                    $this->status += $item->force()->delete();
                 }
                 Db::commit();
             } catch (\PDOException $e) {
@@ -392,11 +311,11 @@ class AdminController extends BaseController
     
     /**
      * 数据预处理
-     * @access protected
+     * @access public
      * @param  array     	$where   查询条件
      * @return array
      */	
-    private function _before_where($where = []) 
+    public function _before_where($where = []) 
 	{
         $ids = input('id') ?? 'all';
         if (is_array($ids) && !empty($ids)) {
@@ -412,7 +331,7 @@ class AdminController extends BaseController
 
 	/**
 	 * 递归查询父节点
-     * @access protected
+     * @access public
      * @param  int       		$pid   		查询条件
      * @param  array       		$array   返回数组
      * @return array
@@ -476,7 +395,7 @@ class AdminController extends BaseController
 	 */
 	public function writeLogs() 
 	{
-		if (config('system.logs.admin_log_status')) {
+		if (saenv('admin_log_status')) {
 			$array = get_system_logs();
 			$array['type'] = 2;
 
@@ -496,6 +415,10 @@ class AdminController extends BaseController
 		$controller = $controller ?? \strtolower(request()->Controller());
 		if (($begin = strrchr($controller,'.'))) {
 			$controller = \str_replace('.','',$begin);
+		}
+		
+		if (!preg_match("/^[a-zA-Z0-9]+$/", $controller)) {
+			return false;
 		}
 		
 		$fieldArray = config('sysfield.'.$controller);	

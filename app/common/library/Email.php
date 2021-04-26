@@ -53,7 +53,7 @@ class Email
     public function __construct()
     {
         // 此配置项为数组。
-        if ($email = config('system.email')) {
+        if ($email = saenv('email')) {
             $this->config = array_merge($this->config, $email);
         }
 
@@ -180,25 +180,6 @@ class Email
     }
 
     /**
-     * 注册邮件
-     * @param array     $result     用户信息
-     * @param string    $code       激活码
-     * @param array     $config     配置信息
-     * @return this
-    */
-    //   $result->update($array);  当前流量获客已经很难了，所以真心没必要注册激活！
-    //   $config = $this->Lable_Global();
-    //   Email::instance()->register($result->toArray(),$array['valicode'],$config)->send())
-    //   public function register(array $result = [], string $code = '',array $config) {
-    //     $content = read_file(root_path().'extend/user/tpl/register.tpl');
-    //     $clickURL = $config['sitehttp'].'/user/validation?id='.$result['id'].'&code='.$code;
-    //     $content  = str_replace(array('{sitename}','{username}','{url}','{time}','{email}'),
-    //                             array($config['sitename'],$result['name'],$clickURL,date('c'),$config['email']),$content);
-    //     $this->to($result['email'])->Subject('用户'.$result['name'].'激活')->MsgHTML($content);
-    //     return $this;
-    // }
-
-    /**
      * 发送验证码
      */
     public function captcha(string $email, string $code = null, string $event ="default") 
@@ -232,7 +213,7 @@ class Email
         if (!empty($this->objectValidate)) {
 
             $difftime = time() - strtotime($this->objectValidate['createtime']);
-            if (($difftime / 60) <= config(USERVALITIME)) {
+            if (($difftime / 60) <= saenv('user_valitime')) {
                 return true;
             }
 

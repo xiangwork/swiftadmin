@@ -39,22 +39,16 @@ class Api extends AdminController
            $post = input();
            $page = input('page/d') ?? 1;
            $limit = input('limit/d') ?? 10;
-           
+           $status = !empty($post['status']) ? $post['status']-1:1;
+
            // 生成查询条件
            $where = array();
            if (!empty($post['name'])) {
-               $where[] = ['name|class','like','%'.$post['name'].'%'];
-           }
-
-           if (!empty($post['status'])) {
-               if($post['status'] == 1){
-                   $where[]=['status','=','1'];
-               }elseif($post['status'] == 2){
-                   $where[]=['status','=','0'];
-               }		
+                $where[] = ['name|class','like','%'.$post['name'].'%'];
            }
 
            // 生成查询数据
+           $where[]=['status','=',$status];
            $count = $this->model->where($where)->count();
            $page = ($count <= $limit) ? 1 : $page;
            $list = $this->model->where($where)->order("id asc")->limit($limit)->page($page)->select()->toArray();

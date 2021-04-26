@@ -16,7 +16,7 @@ class User extends Validate
     protected $rule =   [
 		'test_filed' => 'max:255',
         'name'  => 'require|min:2|max:12|filters|chsAlphaNum',
-        'pwd|密码'   => 'require|min:6|max:32',
+        'pwd|密码'   => 'require|min:6|max:64',
     ];
 	
     
@@ -43,7 +43,7 @@ class User extends Validate
 	// 自定义验证规则
 	protected function filters($value) 
     {
-		$notallow = config('system.user.user_reg_notallow');
+		$notallow = saenv('user_reg_notallow');
 		$notallow = explode(',',$notallow);
 		foreach ($notallow as $values) {
 			if ($value == $values) {

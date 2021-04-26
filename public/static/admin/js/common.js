@@ -2,7 +2,7 @@
 
 // 以下代码是配置layui扩展模块的目录，每个页面都需要引入
 layui.config({
-    version: 'v1.0.0',
+    version: true,
     base: getProjectUrl() + 'module/'
 }).extend({
     step: 'step/step',

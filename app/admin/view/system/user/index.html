@@ -19,8 +19,8 @@
                 <div class="layui-input-inline">
                     <select name="status">
                         <option value="">{:__('按状态查询')}</option>
-                        <option value="1" >{:__('正常')}</option>                                 
-                        <option value="2" >{:__('关闭')}</option>                             
+                        <option value="2" >{:__('已审核')}</option>                                 
+                        <option value="1" >{:__('未审核')}</option>                             
                     </select>
                 </div>  
             </div>
@@ -80,7 +80,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('组别')}</label>
         <div class="layui-input-block">
-            <select name="group_id">
+            <select name="group_id" lay-search>
                 <option value="">{:__('请选择组别')}</option>
                 <volist name="userGroup" id="vo">
                      <option value="{$vo.id}" >{$vo.title}</option>
@@ -111,8 +111,8 @@
 
 <include file="/public/footer" />
 <script>
-    layui.use(['admin','table'], function () {
-        var jquery = layui.jquery;
+    layui.use(['table'], function () {
+
         var table = layui.table;
         /*
          * 初始化表格
@@ -134,7 +134,7 @@
                 {field: 'logincount', align: 'center',width:100,title: '{:__("登录次数")}'},
                 {field: 'loginip', align: 'center',width:160,title: '{:__("登录IP")}'},
                 {field: 'region', align: 'center',width:160,title: '{:__("登录地址")}'},
-                {field: 'logintime', align: 'center', width:180,templet: '<div>{{ layui.util.toDateString(d.createtime*1000, "yyyy-MM-dd HH:mm:ss") }}</div>',  title: '{:__("登录时间")}'},
+                {field: 'logintime', align: 'center', width:180, title: '{:__("登录时间")}'},
                 {align: 'center', toolbar: '#tableBar', width:160, title: '{:__("操作")}'},
             ]]
         })

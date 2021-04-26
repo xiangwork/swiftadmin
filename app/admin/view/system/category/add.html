@@ -1,171 +1,179 @@
 <include file="/public/header" />
 <!-- // 重定位style -->
-<style>
-    .layui-form-item .layui-input-inline {
-        width: 243px;
-    }
-</style>
+<link href="__STATICADMIN__css/content.css?" rel="stylesheet" type="text/css" />
 <div class="layui-fluid">
-    <form class="layui-form layui-form-fixed" >
-        <gt name="$data.id" value="0"><input type="text" name="id" value="{$data.id}" hidden=""></gt>
-            
-        <div class="layui-fl">
-            
-            <div class="layui-form-item"> 
-                <label class="layui-form-label">{:__('栏目模型')}</label>
-                <div class="layui-input-inline">
-                    <select name="cid" lay-search="true" lay-filter="channel" lay-verType="tips" lay-verify="required" >
-                        <option value="">{:__('请选择模型')}</option>
-                        <volist name="channel" id="vo">
-                        <option value="{$vo.id}" <if condition="$vo['id'] eq $data['cid']"> selected </if> >{$vo.title}</option>
-                        </volist>
-                    </select>
-                </div>
-            </div> 
-            <div class="layui-form-item"> 
-                <label class="layui-form-label">{:__('栏目分类')}</label>
-                <div class="layui-input-inline">
-                    <div id="pid"></div>
-                </div>
-            </div>
+    <form class="layui-form layui-card" >
 
-            <div class="layui-form-item"> 
-                <label class="layui-form-label">{:__('栏目名称')}</label>
-                <div class="layui-input-inline">
-                    <input name="title"  type="text" class="layui-input" value="{$data.title}" lay-verType="tips" lay-verify="required"
-                     placeholder="{:__('请填写栏目名称')}"/>
-                </div>
-            </div>
-            <div class="layui-form-item"> 
-                <label class="layui-form-label">{:__('状&emsp;&emsp;态')}</label>
-                <div class="layui-input-inline">
-                <input type="checkbox" lay-filter="status" value="{$data.id}" lay-skin="switch"  
-                      <if condition="$data.status eq 1"> checked </if> />
-                </div>
-            </div>
+        <div class="layui-card-body">
+        <gt name="$data.id" value="0">
+            <input type="text" name="id" value="{$data.id}" hidden="">
+            <else/>
+            <input type="text" name="id" value="" hidden="">
+        </gt>
+        
+            <div class="layui-tab layui-tab-brief"  >
+                <ul class="layui-tab-title">
+                  <li class="layui-this">{:__('常规选项')}</li>
+                  <li>{:__('高级选项')}</li>
+                  <li>{:__('栏目内容')}</li>
+                </ul>
+                <div class="layui-tab-content" >
+                    <div class="layui-tab-item layui-show">
+                        <div class="layui-fl">
+                            <div class="layui-form-item"> 
+                                <label class="layui-form-label">{:__('栏目模型')}</label>
+                                <div class="layui-input-inline">
+                                    <select name="cid" lay-verType="tips" lay-verify="required" >
+                                        <option value="">{:__('请选择模型')}</option>
+                                        <salibs:channel id="vo">
+                                            <option value="{$vo.id}" <if condition="$vo['id'] eq $data['cid']"> selected </if> >{$vo.title}</option>
+                                        </salibs:channel>
+                                    </select>
+                                </div>
+                            </div> 
+                            <div class="layui-form-item"> 
+                                <label class="layui-form-label">{:__('栏目分类')}</label>
+                                <div class="layui-input-inline">
+                                    <div id="pid"></div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item"> 
+                                <label class="layui-form-label">{:__('栏目名称')}</label>
+                                <div class="layui-input-inline">
+                                    <input name="title"  type="text" class="layui-input" value="{$data.title}" lay-verType="tips" lay-verify="required"
+                                     placeholder="{:__('请填写栏目名称')}"/>
+                                </div>
+                            </div>
+                        </div>
 
-            <div class="layui-form-item"> 
-                <label class="layui-form-label">{:__('分类模板')}</label>
-                <div class="layui-input-inline">
-                    <input name="skin" type="text" class="layui-input"  value="{$data.skin}"  placeholder="{:__('默认生成')}"/>
-                </div>
-            </div>
+                        <div class="layui-fl">
 
-            <div class="layui-form-item"> 
-                <label class="layui-form-label">{:__('列表模板')}</label>
-                <div class="layui-input-inline">
-                    <input name="skin_type" type="text" class="layui-input" value="{$data.skin_type}"  placeholder="{:__('默认生成')}" />
-                </div>
-            </div>      
-            <div class="layui-form-item"> 
-                <label class="layui-form-label">{:__('内容模板')}</label>
-                <div class="layui-input-inline">
-                    <input name="skin_detail" type="text" class="layui-input"   value="{$data.skin_detail}" placeholder="{:__('默认生成')}"/>
-                </div>
-            </div>            
+                            <div class="layui-form-item"> 
+                                <label class="layui-form-label">{:__('排&emsp;序')}</label>
+                                <div class="layui-input-inline">
+                                    <input name="sort" type="number" class="layui-input" value="{$data.sort}" placeholder="{:__('默认生成')}" />
+                                </div>
+                            </div>   
+                            <div class="layui-form-item"> 
+                                <label class="layui-form-label">{:__('权&emsp;限' )}</label>
+                                <div class="layui-input-inline">
+                                    <div id="access"></div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item"> 
+                                <label class="layui-form-label">{:__('拼&emsp;音')}</label>
+                                <div class="layui-input-inline">
+                                    <input name="pinyin"  type="text" class="layui-input" value="{$data.pinyin}" placeholder="{:__('默认生成')}" />
+                                </div>  
+                            </div>
+                        </div>
 
-        </div>
 
-        <div class="layui-fr">
+                        <div class="layui-form-item"> 
+                            <label class="layui-form-label">{:__('栏目图片')}</label>
+                            <div class="layui-input-inline wid650" >
+                                <input name="image" type="text" class="layui-input pic" value="{$data.image}" placeholder="支持base64数据"/>
+                            </div>
+                            <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="pic">{:__('上传图片')}</button>
+                        </div>
+                        <div class="layui-form-item"> 
+                                <label class="layui-form-label">{:__('标&emsp;题')}</label>
+                                <div class="layui-input-inline wid650">
+                                    <input name="seotitle" type="text" class="layui-input" value="{$data.seotitle}"  placeholder="{:__('请填写SEO标题')}" />
+                                </div>
+                            </div>
+                        <div class="layui-form-item"> 
+                            <label class="layui-form-label">{:__('关键字')}</label>
+                            <div class="layui-input-inline wid650">
+                                <input name="keywords" type="text" class="layui-input" value="{$data.keywords}" placeholder="{:__('请填写SEO关键字')}"/>
+                            </div>
+                        </div>
 
-            <div class="layui-form-item"> 
-                <label class="layui-form-label">{:__('排&emsp;序')}</label>
-                <div class="layui-input-inline">
-                    <input name="sort" type="text" class="layui-input" value="{$data.sort}" placeholder="{:__('默认生成')}" />
-                </div>   
-            </div>
-            <div class="layui-form-item"> 
-                <label class="layui-form-label">{:__('别&emsp;名')}</label>
-                <div class="layui-input-inline">
-                    <input name="pinyin"  type="text" class="layui-input" value="{$data.pinyin}" placeholder="{:__('默认生成')}" />
-                </div>  
-            </div>
-            <div class="layui-form-item"> 
-                <label class="layui-form-label">{:__('标&emsp;题')}</label>
-                <div class="layui-input-inline">
-                    <input name="seotitle" type="text" class="layui-input" value="{$data.seotitle}"  placeholder="{:__('请填写SEO标题')}" />
-                </div>
-            </div>
-            <div class="layui-form-item"> 
-                <label class="layui-form-label">{:__('关键字')}</label>
-                <div class="layui-input-inline">
-                    <input name="keywords" type="text" class="layui-input" value="{$data.keywords}" placeholder="{:__('请填写SEO关键字')}"/>
-                </div>
-            </div>
-            <div class="layui-form-item"> 
-                <label class="layui-form-label">{:__('描&emsp;述')}</label>
-                <div class="layui-input-inline">
-                    <input name="description" type="text" class="layui-input" value="{$data.description}" placeholder="{:__('请填写SEO描述信息')}"/>
-                </div>
-            </div>
-            <div class="layui-form-item"> 
-                <label class="layui-form-label">{:__('跳转网址')}</label>
-                <div class="layui-input-inline">
-                    <input name="jumpurl" type="text" class="layui-input" value="{$data.jumpurl}" placeholder="http://"/>
-                </div>
-            </div>      
-            <div class="layui-form-item"> 
-                <label class="layui-form-label">{:__('子页模版')}</label>
-                <div class="layui-input-inline">
-                    <input name="skin_child" type="text" class="layui-input" value="{$data.skin_child}" placeholder="{:__('默认生成')}"/>
-                </div>
-            </div>                              
-        </div>
+                        <div class="layui-form-item"> 
+                            <label class="layui-form-label">{:__('描&emsp;述')}</label>
+                            <div class="layui-input-inline wid650">
+                                <textarea  name="description" style="height: 50px;" class="layui-textarea" placeholder="{:__('请填写SEO描述信息')}" >{$data.description}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item"> 
+                            <label class="layui-form-label">{:__('跳转网址')}</label>
+                            <div class="layui-input-inline wid650">
+                                <input name="jumpurl" type="text" class="layui-input" value="{$data.jumpurl}" placeholder="http://"/>
+                            </div>
+                        </div>  
+                    </div>
+
+                    <div class="layui-tab-item">
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" >{:__('投稿选项')}</label>
+                            <div class="layui-input-inline" >
+                                 <input type="radio" name="contribute"   
+                                 value="1" title="开启"  <if condition="$data.contribute eq 1 "> checked </if> >
+                                 <input type="radio" name="contribute"   
+                                 value="0" title="关闭" <if condition="$data.contribute eq 0 "> checked </if> >
+                            </div>   
+                            <div class="layui-form-mid layui-word-aux">* {:__('是否开启会员投稿支持！')}</div>                
+                        </div> 
+
+                        <div class="layui-form-item"> 
+                            <label class="layui-form-label">{:__('内容页模板')}</label>
+                            <div class="layui-input-inline">
+                                <input name="skin_detail" type="text" class="layui-input"   value="{$data.skin_detail}" placeholder="{:__('默认生成')}"/>
+                            </div>
+                        </div>      
+
+                        <div class="layui-form-item"> 
+                            <label class="layui-form-label">{:__('分类页模板')}</label>
+                            <div class="layui-input-inline">
+                                <input name="skin" type="text" class="layui-input"  value="{$data.skin}"  placeholder="{:__('默认生成')}"/>
+                            </div>
+                        </div>  
+
+                        <div class="layui-form-item"> 
+                            <label class="layui-form-label">{:__('列表页模板')}</label>
+                            <div class="layui-input-inline">
+                                <input name="skin_type" type="text" class="layui-input" value="{$data.skin_type}"  placeholder="{:__('默认生成')}" />
+                            </div>
+                        </div>   
+                        <div class="layui-form-item"> 
+                            <label class="layui-form-label">{:__('子页面模版')}</label>
+                            <div class="layui-input-inline">
+                                <input name="skin_child" type="text" class="layui-input" value="{$data.skin_child}" placeholder="{:__('默认生成')}"/>
+                            </div>
+                        </div> 
+
+                    </div>
+
+                    <div class="layui-tab-item">
+                        <blockquote class="layui-elem-quote">说明：栏目内容是替代原来栏目单页模型的一种灵活方式，可在模板中使用标签调用内容，通常用户企业简介等！</blockquote>
+                        <textarea id="content" name="content" />{$data.content}</textarea>
+                    </div>
+              </div>
+          </div>
+          </div>
     
-        <div class="layui-footer layui-form-item layui-center ">
+        <div class="layui-footer layui-form-footer">
             <button class="layui-btn layui-btn-primary" type="button" sa-event="closeDialog">{:__('取消')}</button>
             <button class="layui-btn" lay-filter="submitIframe" lay-submit>{:__('提交')}</button>
         </div>
     </form>
 </div>
 <include file="/public/footer" />
-
+<script src="__STATICADMIN__module/xmselect/xmselect.js"></script>
+<script src="/static/js/tinymce/tinymce.min.js"></script>
 <script>
-    layui.use(['layer', 'form','admin'], function () {
-        var jquery = layui.jquery;
-        var form = layui.form;
-        var admin = layui.admin,
-            urls = '{:url("/system.channel/modelTpl")}';
-
-            var checkedId = [],data = JSON.parse('{$category|raw}');
-            var select = xmSelect.render({
-                el: '#pid',
-                tips: '{:__("请选择上级菜单")}',
-                name: 'pid',
-                height: 'auto',
-                data: data,
-                radio: true,
-                clickClose: true,
-                initValue: [{$data.pid}],
-                prop: {
-                    value: 'id',
-                    name:'title'
-                },
-                tree: {
-                    show: true,
-                    strict: false,
-                    showLine: false,
-                    clickExpand: false,
-                },
-                model: { 
-                    icon: 'hidden',
-                    label: { 
-                        type: 'text' 
-                    } 
-                },
-                theme: {
-                    color: '#1890FF'
-                }
-            })
-
-        // 监听模板选择事件
-        form.on('select(channel)',function(obj) {
-            jquery.get(urls,{ id: obj.value}, function(res){
-                jquery("[name='skin']").attr('value',res.data.skin);
-                jquery("[name='skin_detail']").attr('value',res.data.skin_detail);
-                jquery("[name='skin_child']").attr('value',res.data.skin_child);
-                jquery("[name='skin_type']").attr('value',res.data.skin_type);                
-            })
-        })  
+    var group = <salibs:usergroupjson name='group' />;
+    var category = <salibs:categoryjson pid="0" />;   
+</script>
+<script>
+    layui.use(['content'],function () {
+        
+        var content = layui.content;
+        // 常规元素渲染
+        content.tinymce('content');
+        content.xmselect('access',group,[{$data.access}]);
+        content.xmselect('pid',category,[{$data.pid}],false);
     });
 </script>

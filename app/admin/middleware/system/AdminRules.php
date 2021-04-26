@@ -11,6 +11,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 
 namespace app\admin\middleware\system;
+use app\common\library\ResultCode;
 use app\common\model\system\AdminRules as AdminRulesModel;
 
 class AdminRules
@@ -24,16 +25,15 @@ class AdminRules
      */
     public function handle($request, \Closure $next)
     {
-        // 过滤系统级属性
-		if ($request->isPost()) {
-            $where[] = ['id','=',input('id/d')];
-            $where[] = ['isSystem','=',1];
-            if (!empty(AdminRulesModel::where($where)->find())) {
-                return json(['msg'=>'系统属性禁止修改！','code'=>101]);
-            }
-		}
-		
-		return $next($request);
+      if ($request->isPost()) {
+              $where[] = ['id','=',input('id/d')];
+              $where[] = ['isSystem','=',1];
+              if (!empty(AdminRulesModel::where($where)->find())) {
+                  return json(ResultCode::SYSTEM_DISABLE);
+              }
+      }
+      
+      return $next($request);
     }
 
 }

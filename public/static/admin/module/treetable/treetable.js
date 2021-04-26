@@ -24,6 +24,14 @@ layui.define(['layer', 'table'], function (exports) {
 
             var mData = [];
             var doneCallback = param.done;
+            if (typeof data.item !== 'undefined') {
+                for (let name in data) {
+                   if (name != 'item') {
+                        table.cache[name] = data[name];
+                   }
+                }
+                data = data.item;
+            }
             var tNodes = data;
             // 补上id和pid字段
             for (var i = 0; i < tNodes.length; i++) {

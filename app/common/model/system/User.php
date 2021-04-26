@@ -71,7 +71,7 @@ class User extends Model
     public function setPwdAttr($value)
     {
         if (!empty($value)) {
-            $value = hasha($value);
+            $value = hash_pwd($value);
         }
 
         return $value;

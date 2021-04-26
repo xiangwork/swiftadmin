@@ -23,9 +23,9 @@ class Tpl extends AdminController
     public function showtpl() 
     {
         // 读取配置文件
-        $list = include (root_path().'extend/user/tpl/tpl.php');
+        $list = include (root_path().'extend/conf/tpl/tpl.php');
         foreach ($list as $key => $value) {
-            $list[$key]['param'] = str_replace('extend/user/tpl/','',$value['path']);
+            $list[$key]['param'] = str_replace('extend/conf/tpl/','',$value['path']);
         }
         
         return view('',['list'=>$list]);
@@ -38,7 +38,7 @@ class Tpl extends AdminController
     {
         if (request()->isPost()) {
             $post = input();
-            $tpl = root_path().'extend/user/tpl/'.$post['tpl'];
+            $tpl = root_path().'extend/conf/tpl/'.$post['tpl'];
             if (write_file($tpl,$post['content'])) {
                 return $this->success('修改邮件模板成功！');
             }
@@ -48,7 +48,7 @@ class Tpl extends AdminController
 
         // 获取模板参数
         $tpl = input('p/s');
-        $content = read_file(root_path().'extend/user/tpl/'.$tpl);
+        $content = read_file(root_path().'extend/conf/tpl/'.$tpl);
         return view('',['tpl'=>$tpl,'content'=>$content]);
     }
 

@@ -38,6 +38,7 @@ class User extends AdminController
             $post = input();
             $page = input('page/d') ?? 1;
             $limit = input('limit/d') ?? 10;
+            $status = !empty($post['status']) ? $post['status']-1:1;
             
             // 生成查询条件
             $where = array();
@@ -49,15 +50,8 @@ class User extends AdminController
                 $where[] = ['group_id','find in set',$post['group_id']];
             }
 
-            if (!empty($post['status'])) {
-                if($post['status'] == 1){
-                    $where[]=['status','=','1'];
-                }elseif($post['status'] == 2){
-                    $where[]=['status','=','0'];
-                }		
-            }
-
             // 生成查询数据
+            $where[]=['status','=',$status];
             $count = $this->model->where($where)->count();
             $page = ($count <= $limit) ? 1 : $page;
             $list = $this->model->where($where)->order("id asc")->limit($limit)->page($page)->select()->toArray();
@@ -139,7 +133,7 @@ class User extends AdminController
 
             // 修改密码
             if (!empty($data) && $data['pwd'] != $post['pwd']) {
-                $post['pwd'] = hasha($post['pwd']);
+                $post['pwd'] = hash_pwd($post['pwd']);
             }
 
             if ($this->model->update($post)) {

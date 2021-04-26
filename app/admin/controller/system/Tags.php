@@ -1,0 +1,56 @@
+<?php
+declare (strict_types = 1);
+// +----------------------------------------------------------------------
+// | swiftAdmin 极速开发框架 [基于ThinkPHP6开发]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2019-2020 http://www.swiftadmin.net
+// +----------------------------------------------------------------------
+// | swiftAdmin.net High Speed Development Framework
+// +----------------------------------------------------------------------
+// | Author: 权栈 <coolsec@foxmail.com>，河北赢图网络科技版权所有
+// +----------------------------------------------------------------------
+namespace app\admin\controller\system;
+
+
+use app\AdminController;
+use app\common\model\system\Tags as TagsModel;
+
+class Tags extends AdminController
+{
+
+	// 初始化操作
+    public function initialize() 
+    {
+		parent::initialize();
+        $this->model = new TagsModel();
+    }
+
+    /**
+     * 获取资源列表
+     */
+    public function index()
+    {
+        if (request()->isAjax()) {
+
+            // 生成查询条件
+            $post  = input();
+            $type  = !empty($post['type']) ? $post['type']-1:1;
+            $status = !empty($post['status']) ? $post['status']-1:1;
+
+            $where = array();
+            if (!empty($post['name'])) {
+                $where[] = ['name','like','%'.$post['name'].'%'];
+            }
+            
+            $where[]=['type','=',$type];
+            $where[]=['status','=',$status];
+
+            // 生成查询数据
+            $list = $this->model->where($where)->order("id asc")->select()->toArray();
+            return $this->success('查询成功', "", $list, count($list), 0);
+        }
+
+		return view();
+    }
+
+}

@@ -35,7 +35,7 @@ class Admin extends Model
 	public static function checkLogin($user,$pwd)
 	{
 		// 密码加盐
-		$where[] = ['pwd','=',hasha(trim($pwd))];
+		$where[] = ['pwd','=',hash_pwd(trim($pwd))];
 		if(filter_var($user, FILTER_VALIDATE_EMAIL)){
 			$where[] = ['email','=',htmlspecialchars(trim($user))];
 		}else{
@@ -52,7 +52,6 @@ class Admin extends Model
      */
 	public static function checkforget($user,$code) 
 	{
-
 		// 校验格式
 		if(filter_var($user, FILTER_VALIDATE_EMAIL)){
 			$where[] = ['email','=',$user];

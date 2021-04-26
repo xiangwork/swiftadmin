@@ -56,7 +56,7 @@ class Jobs extends AdminController
 				$list[$key]['title'] = __($value['title']);
 			}
 
-			return $this->success('查询成功', '', $list, $count, 0);
+			return $this->success('查询成功', null, $list, $count, 0);
 		}
 
 		return view();

@@ -4,13 +4,24 @@ declare (strict_types = 1);
 namespace app\api\controller;
 
 use app\ApiController;
+use app\common\library\ResultCode;
 
 /**
  * API用户登录
  */
-class Template extends ApiController
+class User extends ApiController
 {
+	public $authWorkflow = false;
 
+	// 初始化函数
+    public function initialize()
+    {
+        parent::initialize();
+	}
+
+    /**
+     * 用户登录
+     */
     public function login() {
 
         if (request()->isPost()) {
@@ -23,6 +34,6 @@ class Template extends ApiController
             }
             return $this->success('登录成功',null,['token' => $this->auth->token]);
 		}
-
+    
     }
 }

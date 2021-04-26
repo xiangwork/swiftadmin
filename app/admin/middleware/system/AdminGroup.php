@@ -11,9 +11,8 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 
 namespace app\admin\middleware\system;
-
-
 use app\common\library\Auth;
+use app\common\library\ResultCode;
 
 class AdminGroup
 {
@@ -26,14 +25,18 @@ class AdminGroup
      */
     public function handle($request, \Closure $next)
     {
-      $id = input('id/d');
-      if ($request->isPost() && !empty($id)) {
-          if (!Auth::instance()->checkGroupDiffer($id)) {
-            return json(['msg'=>'没有权限！','code'=>101]);
-          }
+
+      if (request()->isPost()) {
+          
+          $id = input('id');
+          if (!empty($id) && $id >= 1) {
+            if (!Auth::instance()->check_group_auth((array)$id)) {
+              return json(ResultCode::AUTH_ERROR);
+            }    
+          }  
       }
 
       return $next($request);
     }
-
+    
 }

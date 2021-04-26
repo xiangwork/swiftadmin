@@ -23,7 +23,7 @@ class AdminFile extends AdminController
     public function initialize()
     {
         parent::initialize();
-        $this->upload = config('system.upload.upload_path');
+        $this->upload = saenv('upload_path');
 	}
 	
     /**

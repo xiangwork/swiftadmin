@@ -8,9 +8,9 @@
             <div class="layui-inline">
                 <div class="layui-input-inline">
                     <select name="status">
-                        <option value="1">{:__('按状态查询')}</option>
-                        <option value="1" >{:__('已审核')}</option>                                 
-                        <option value="0" >{:__('未审核')}</option>
+                        <option value="">{:__('按状态查询')}</option>
+                        <option value="2" >{:__('已审核')}</option>                                 
+                        <option value="1" >{:__('未审核')}</option>
                     </select>
                 </div>  
             </div>
@@ -23,7 +23,7 @@
                 <!-- // 默认搜索 -->
                 <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit><i class="layui-icon layui-icon-search"></i>{:__('搜索')}</button>
                 <!-- // 删除所有 -->
-                <button class="layui-btn icon-btn layui-btn-danger" lay-batch="lay-tableList"  lay-url="{:url('/system.comment/del')}" >
+                <button class="layui-btn icon-btn layui-btn-danger" lay-batch="lay-tableList" lay-field="cid"  lay-url="{:url('/system.comment/del')}" >
                   <i class="layui-icon layui-icon-delete"></i>{:__('删除')}
                 </button>
             </div>
@@ -51,8 +51,8 @@
 
 <include file="/public/footer" />
 <script>
-    layui.use(['admin','table'], function () {
-        var jquery = layui.jquery;
+    layui.use(['table'], function () {
+
         var table = layui.table;
         /*
          * 初始化表格

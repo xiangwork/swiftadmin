@@ -12,10 +12,7 @@ declare (strict_types = 1);
 namespace app\admin\controller\system;
 
 use app\AdminController;
-use app\common\library\Auth;
 use app\common\model\system\AdminGroup as AdminGroupModel;
-
-
 class AdminGroup extends AdminController
 {
 	// 初始化函数
@@ -23,9 +20,7 @@ class AdminGroup extends AdminController
 	{
 		parent::initialize();
 		$this->model = new AdminGroupModel();
-		$this->middleware = [
-			\app\admin\middleware\system\AdminGroup::class,
-	    ];
+		$this->middleware = [\app\admin\middleware\system\AdminGroup::class];
 	}
 	
     /**
@@ -60,7 +55,7 @@ class AdminGroup extends AdminController
 				$list[$key]['title'] = __($value['title']);
 			}
 
-			return $this->success('查询成功', '', $list, $count, 0);
+			return $this->success('查询成功', null, $list, $count, 0);
 		}
 
 		return view('/system/admin/group',['group'=>$this->model->getListGroup()]);
@@ -74,6 +69,7 @@ class AdminGroup extends AdminController
 		if (request()->isPost()) {
 			// 接收数据
 			$post = input('post.');
+			// halt($post);
 			$post = safe_field_model($post, $this->model::class);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
@@ -106,16 +102,6 @@ class AdminGroup extends AdminController
 	}
 
 	/**
-	 * 获取权限
-	 */
-	public function queryRules() 
-	{
-		if (request()->isAjax()) {
-			return Auth::instance()->getGroupRules();
-		}
-	}
-	
-	/**
 	 * 更新权限
 	 */
 	public function editRules() 
@@ -125,10 +111,15 @@ class AdminGroup extends AdminController
 			$id = input('id/d');
 
 			if (!is_empty($id) && is_numeric($id)) {
+
 				$rules = input('rules') ?? [];
-				$array = ['id'=>$id,'rules'=>implode(',',$rules)];
-				if (!Auth::instance()->checkGroupRules($rules)) {
-					return $this->error('非法数据！');
+				$array = [
+					'id'=>$id,
+					'rules'=>implode(',',$rules)
+				];
+
+				if (!$this->auth->check_rulecates_node($rules)) {
+					return $this->error('没有权限！');
 				}
 
 				if ($this->model->update($array)) {
@@ -141,28 +132,23 @@ class AdminGroup extends AdminController
 	}
 
 	/**
-	 * 获取栏目
-	 */
-	public function queryCate() 
-	{
-		if (request()->isAjax()) {
-			return Auth::instance()->getGroupCateIds();
-		}
-	}
-
-	/**
 	 * 更新栏目
 	 */
-	public function editCate() 
+	public function editCates() 
 	{
 		if (request()->isPost()) {
 
 			$id = input('id/d');
 			if (!is_empty($id) && is_numeric($id)) {
-				$cateids = input('cateids') ?? [];
-				$array = ['id'=>$id,'cateids'=>implode(',',$cateids)];
-				if (!Auth::instance()->checkGroupCateIds($cateids)) {
-					return $this->error('非法数据！');
+
+				$cates = input('cates') ?? [];
+				$array = [
+					'id'=>$id,
+					'cates'=>implode(',',$cates)
+				];
+
+				if (!$this->auth->check_rulecates_node($cates,'cates')) {
+					return $this->error('没有权限！');
 				}
 
 				if ($this->model->update($array)) {

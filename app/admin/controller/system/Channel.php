@@ -41,22 +41,4 @@ class Channel extends AdminController
 			return $this->error();
 		}
     }
-
-    // 模版函数
-	public function modeltpl()
-    {
-        if (request()->isAjax()) {
-            $id = input('id/d');
-            $data = $this->model->find($id);
-            if (!empty($data)) {
-                return $this->success('获取成功','',$data->toArray());
-            }
-
-            return $this->error('error');
-        }
-
-	}
-
-
-
 }

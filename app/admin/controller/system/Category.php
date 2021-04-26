@@ -17,9 +17,6 @@ use app\common\model\system\Category as CategoryModel;
 
 class Category extends AdminController
 {
-
-    public $tableName = '管理员';
-
 	// 初始化操作
     public function initialize() 
     {
@@ -32,7 +29,6 @@ class Category extends AdminController
      */
     public function index()
     {
-
         if (request()->isAjax()) {
 
 			// 接收参数
@@ -41,7 +37,7 @@ class Category extends AdminController
 
             // 获取数据
             $list = $this->model->getListCate();
-            $channel = ChannelModel::getListChannel();
+            $channel = ChannelModel::get_channel_list();
 
             if (!is_empty($model)) {
                 $model = list_search($channel, ['title'=> '/'.$model.'/']);
@@ -76,7 +72,7 @@ class Category extends AdminController
                     }
                 }
 
-                return $this->success('查询成功', "", $list, count($list), 0);
+                return $this->success('查询成功', null, $list, count($list), 0);
             }
         }
 
@@ -91,26 +87,18 @@ class Category extends AdminController
 		if (request()->isPost()) {
 
 			$post = input('post.');
-            $post = safe_field_model($post,$this->model::class);
+            $post = safe_validate_model($post,$this->model::class);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
             }
-
-            if (empty($post['pinyin'])) {
-                $post['pinyin'] = preg_replace('/\s*/','',pinyin($post['title']));
-            }
-
             if ($this->model->create($post)) {
                 return $this->success();
             }
-            
 			return $this->error(); 
         }
 
 		return view('',[
             'data'=> $this->getField(),
-            'category'=> json_encode($this->model->getListTree()),
-            'channel'=> ChannelModel::getListChannel()
 		]);
     }
 
@@ -125,28 +113,30 @@ class Category extends AdminController
         if (request()->isPost()) {
             
             $post = input('post.'); 
-            $post = safe_field_model($post,$this->model::class);
+            $post['pid'] = input('post.pid'); 
+            $post['cid'] = input('post.cid'); 
+            $post = safe_validate_model($post,$this->model::class);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
             }
 
-            // 查询模型
-            $channel = ChannelModel::getListChannel($data['cid']);
-            $cateCount = $this->model->getListCount($channel['table'],array('cid' => $data['id']));
-            if (!empty($cateCount)) {
-                $check = false;
-                if ($post['pid'] != 0) {
-                    $channelPid = ChannelModel::getListChannel($post['pid']);
-                    if ($channelPid['cid'] !== $post['cid']) {
-                        $check = true;
-                    }
-                }
+            // 查询栏目统计
+            $existing = $this->model::getlistcount(
+                $data->channel->table,
+                array(
+                    'pid' => $data['id']
+                )
+            );
 
-                if ($post['cid'] != $data['cid'] || $check){
+            // 避免跨模型操作
+            if (!empty($existing)) {
+                $parent = $this->model->getById($post['pid']);
+                if (($post['cid'] && $data->cid != $post['cid'])
+                    ||($parent && $parent->cid != $data->cid)) {
                     return $this->error('当前分类存在未处理数据！');
                 }
             }
-            
+
             if ($this->model->update($post)){
                 return $this->success();
             }
@@ -155,11 +145,7 @@ class Category extends AdminController
         }
 
 		// 渲染模板
-		return view('add',[
-            'data'=> $data,
-            'category'=> json_encode($this->model->getListTree()),
-            'channel'=> ChannelModel::getListChannel()
-		]);
+		return view('add',['data'=> $data]);
     }
 
 }

@@ -127,18 +127,14 @@
 
 <include file="/public/footer" />
 <script>
-    layui.use(['admin','table'], function () {
+    layui.use(['table'], function () {
 
-        var admin = layui.admin;
-        var table = layui.table;        // 表格
-
-        // 定义表格URL
-        var tableURL = "{:url('/system.api/restful')}?id={$data.id}";
+        var table = layui.table; 
 
         // 基础表格
         var isTable = table.render({
             elem: "#lay-tableList"
-            ,url: tableURL
+            ,url: "{:url('/system.api/restful')}?id={$data.id}"
             ,cols: [[
                 {type: 'numbers',title: '{:__("序号")}'},
                 {field: 'name', align: 'center', title: '{:__("参数名称")}'},

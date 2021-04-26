@@ -120,16 +120,19 @@
 </script>
 
 <include file="/public/footer" />
+<script src="__STATICADMIN__module/xmselect/xmselect.js"></script>
 <script>
     layui.use(['admin','form','treetable','iconHhysFa'], function () {
 
         var jquery = layui.jquery;
         var admin = layui.admin;
         var form = layui.form;
+        var table = layui.table;
         var treetable = layui.treetable;
         var iconHhysFa = layui.iconHhysFa;
         var tableURL = "{:url('/system.adminrules/index')}";
 
+        
         // 渲染初始化表格
         var renderTable = function (tableURL) {
             treetable.render({
@@ -140,6 +143,7 @@
                 treePidName: 'pid',
                 url: tableURL,
                 cellMinWidth: 100,
+                treeDefaultClose: true,
                 cols: [[
                     {type: 'numbers'},
                     {field: 'title', title: '{:__("菜单名称")}'},
@@ -161,8 +165,7 @@
                         }, align: 'center'
                     },
                     {field: 'sort',  width: 80, align: 'center',title: '{:__("排序")}'},
-                    {field: 'createtime', align: 'center',templet: '<div>{{ layui.util.toDateString(d.createtime*1000, "yyyy-MM-dd HH:mm:ss") }}</div>',
-                         title: '{:__("创建时间")}'},
+                    {field: 'createtime', align: 'center',title: '{:__("创建时间")}'},
                     {align: 'center', toolbar: '#tableBar', width: 220,title: '{:__("操作")}'},
                 ]]
             });
@@ -219,7 +222,7 @@
             inputchange();
 
             // 监听提交
-            listenPost(colletction);            
+            listenPost(colletction);          
         }
 
         // 渲染权限select元素
@@ -240,13 +243,13 @@
                     }
                 }
             }
-            
+
             var select = xmSelect.render({
                 el: '#treeNode',
                 tips: '请选择上级菜单',
                 name: 'pid',
                 height: 'auto',
-                data: admin.event.getAjaxData("{:url('/system.adminrules/authListTree')}"),
+                data: table.cache['rules'],
                 radio: true,
                 clickClose: true,
                 initValue: checkedId,
@@ -306,7 +309,7 @@
             form.on("submit(submitPage)",function(post){
 
                 var pageThat = jquery(this);
-
+                pageThat.attr("disabled",true);
                  // 获取提交地址
                 if (typeof(tableThis) !== 'undefined') {
                     _pageUrl = tableThis.event === 'edit' ? pageThat.attr('lay-edit') : pageThat.attr('lay-add');
@@ -338,7 +341,7 @@
                             }else { // 添加则更新列表
                                 renderTable(tableURL);
                             }
-
+                            admin.saPHPInit(true);
                             // 关闭当前窗口
                             layer.close(colletction.index);
                         }else {

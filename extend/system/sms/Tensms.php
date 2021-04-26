@@ -76,7 +76,7 @@ class Tensms {
      */
     public function __construct()
     {
-        $this->config = config('system.smsface.tensms');
+        $this->config = saenv('tensms');
         $this->timestamp = time();
         $this->request = \think\facade\Request::instance();
     }

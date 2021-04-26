@@ -35,19 +35,14 @@ class Pluginhook extends AdminController
             // 生成查询条件
             $post = input();
             $where = array();
+            $status = !empty($post['status'])?$post['status']-1:1;
+            
             if (!empty($post['title'])) {
                 $where[] = ['title','like','%'.$post['title'].'%'];
             }
-            
-            if (!empty($post['status'])) {
-                if($post['status'] == 1){
-                    $where[]=['status','=','1'];
-                }else if($post['status'] == 2){
-                    $where[]=['status','=','0'];
-                }		
-            }
 
             // 生成查询数据
+            $where[]=['status','=',$status];
             $list = $this->model->where($where)->order("id asc")->select()->toArray();
             return $this->success('查询成功', "", $list, count($list), 0);
           

@@ -17,7 +17,7 @@ class Provider extends Handle
          * 默认捕获所有异常信息
          */
         if ($e instanceof \Throwable) {
-            $status = config('system.logs.system_log_status');
+            $status = saenv('system_log_status');
             if ($status && !empty($e->getMessage()) && $e->getLine() >= 1) {
                 $systemlogs = get_system_logs();
                 $systemlogs['type'] = 1;

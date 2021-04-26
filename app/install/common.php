@@ -55,17 +55,6 @@ if (!function_exists('check_dirfile')) {
     }
 }
 
-if (!function_exists('hasha')) {
-    /**
-     * md5密码加盐
-     */
-	function hasha($string)
-    {
-		$digest = hash_hmac("sha512", $string, '!dJ&S6@GliG3');
-		return md5($digest);
-	}
-}
-
 if (!function_exists('recursiveDelete')) {
     /**
      * 递归删除目录

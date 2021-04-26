@@ -23,20 +23,20 @@ class Channel extends Model
     /**
      * 获取模型数据
      */
-    public static function getListChannel($id = null) 
+    public static function get_channel_list($id = null) 
     { 
 
         $data = cache(\SYSTEM.'channel');
-        if (empty($data)) {
+        // if (empty($data)) {
             $data = self::select()->toArray();
             foreach ($data as $key => $value) {
                 $data[$key]['title'] = __($value['title']);
             }
 
-            if(config(\CACHESTATUS)) {
+            if(saenv('cache_status')) {
                 cache(\SYSTEM.'channel', $data);
             }
-        }
+        // }
 
         // 判断数据
         if (!empty($data) && $data !== 0) {

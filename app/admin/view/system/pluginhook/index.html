@@ -10,6 +10,16 @@
         <div class="layui-card-header layuiadmin-card-header-auto ">
         <div class="layui-form">
             <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <select name="status">
+                        <option value="">{:__('按状态查询')}</option>
+                        <option value="2" >{:__('正常')}</option>                                 
+                        <option value="1" >{:__('关闭')}</option>                             
+                    </select>
+                </div>  
+            </div>
             <div class="layui-inline">
                 <div class="layui-form-label">{:__('事件查询')}</div>
                 <div class="layui-input-inline "><input name="title" class="layui-input" type="text" placeholder="{:__('事件名称')}"/></div>
@@ -97,8 +107,8 @@
 </script>
 <include file="/public/footer" />
 <script>
-    layui.use(['admin','table'], function () {
-        var jquery = layui.jquery;
+    layui.use(['table'], function () {
+
         var table = layui.table;
         /*
          * 初始化表格

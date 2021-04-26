@@ -122,12 +122,12 @@ abstract class BaseController
         $msg = !empty($msg) ? __($msg) :  __('操作成功！');
 
         $result = [
-            'code' => $code,
-            'msg'  => $msg,
-            'data' => $data,
+            'code'  => $code,
+            'msg'   => $msg,
+            'data'  => $data,
             'count' => $count,
-            'url'  =>(string)$url,
-            'wait' => $wait,
+            'url'   =>(string)$url,
+            'wait'  => $wait,
         ];
 
         $type = $this->getResponseType();

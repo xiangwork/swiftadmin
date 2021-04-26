@@ -65,6 +65,7 @@
                   <li>{:__('核心设置')}</li>
                   <li>{:__('附件设置')}</li>
                   <li>{:__('图片水印')}</li> 
+                  <li>{:__('视频设置')}</li>
                   <li>{:__('接口配置')}</li>
                   <li>{:__('用户中心')}</li> 
                   <li>{:__('自定义变量')}</li> 
@@ -242,6 +243,16 @@
                             value="0" title="关闭"  <if condition="$config['logs']['system_log_status'] eq 0 "> checked </if>>
                         </div>    
                         <div class="layui-form-mid layui-word-aux"><font color="red">* </font>{:__('系统全局错误异常记录，建议开启监测')}</div>           
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{:__('清理非本站链接')}</label>
+                        <div class="layui-input-inline">
+                            <input type="radio" name="site[site_notlink]"
+                            value="1" title="开启"  <if condition="$config['site']['site_notlink'] eq 1 "> checked </if> >
+                            <input type="radio" name="site[site_notlink]"   
+                            value="0" title="关闭"  <if condition="$config['site']['site_notlink'] eq 0 "> checked </if>>
+                        </div>    
+                        <div class="layui-form-mid layui-word-aux"><font color="red">** </font>{:__('开启后发送内容自动清理非本站链接')}</div>           
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">{:__('插件冲突缓存')}</label>
@@ -424,13 +435,20 @@
     
     
                     <div class="layui-form-item ">
-                    <label class="layui-form-label">{:__('远程图片地址')}</label>
+                        <label class="layui-form-label">{:__('远程图片地址')}</label>
                         <div class="layui-input-inline" >
                             <input type="text" name="upload[upload_http_prefix]" autocomplete="off" value="{$config.upload.upload_http_prefix}" class="layui-input">
-                        </div> 
+
+                        </div>
+                        <label class="layui-form-label">{:__('自动下载图片')}</label>
+                        <div class="layui-input-inline" >
+                            <select name="upload[upload_http_auto]">
+                                <option value="1" <eq name="$config['upload']['upload_http_auto']" value="1" > selected="" </eq> >{:__('开启')}</option>
+                                <option value="0" <eq name="$config['upload']['upload_http_auto']" value="0" > selected="" </eq> >{:__('关闭')}</option>
+                            </select>
+                        </div>  
                         <div class="layui-form-mid layui-word-aux">
-                            <font color="red">* {:__('非 / 结尾，FTP/OSS/COS都是使用这个域名')}</font>
-                            <i class="layui-icon layui-icon-speaker" lay-tips="* {:__('FTP模式域名使用 A 解析，云端OSS模式使用 CNAME 解析！')}" ></i>
+                            <font color="red">* {:__('开启后，发表内容会自动将图片下载或上传云空间')}</font>
                         </div>  
                     </div>
     
@@ -672,7 +690,96 @@
                         </div>                              
 
                         </div>
-                   </div>
+                    </div>
+                    <!-- // 视频配置信息开始 -->
+                    <div class="layui-tab-item">
+                        
+                        <div class="layui-form-item" >
+                            <label class="layui-form-label">播放器：</label>
+                            <div class="layui-input-inline"style="width: 145px;">
+                                <input type="text" name="play[play_width]" placeholder="播放器宽度" value="{$config['play']['play_width']}" class="layui-input" >
+                            </div>
+                            <div class="layui-input-inline"style="width: 145px;">
+                                <input type="text" name="play[play_height]" placeholder="播放器高度" value="{$config['play']['play_height']}" class="layui-input" >
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">* 播放器的高度和宽度设置 </div> 
+                        </div>
+
+
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">开启列表：</label>
+                            <div class="layui-input-inline" >
+                              <select name="play[play_show]" >
+                                  <option value="1">开启</option>
+                                  <option value="0" selected="">关闭</option>
+                              </select>                       
+                            </div>                 
+                            <div class="layui-form-mid layui-word-aux">* 附件的保存路径和风格。</div>  
+                        </div> 
+
+                        <div class="layui-form-item ">
+                           <label class="layui-form-label">广告时长：</label>
+                            <div class="layui-input-inline" >
+                                <input type="text" name="play[play_second]" autocomplete="off" value="{$config.play.play_second}" class="layui-input">
+                            </div> 
+                            <div class="layui-form-mid layui-word-aux">* 设置为0则不启用。</div>  
+                        </div>
+
+                        <div class="layui-form-item">
+                        <label class="layui-form-label">地区列表:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="play[play_area]" autocomplete="off" value="{$config.play.play_area}" class="layui-input">
+                            </div>  
+                        </div>  
+
+                        <div class="layui-form-item">
+                        <label class="layui-form-label">年代列表:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="play[play_year]" autocomplete="off" value="{$config.play.play_year}" class="layui-input">
+                            </div> 
+                        </div>  
+                        <div class="layui-form-item">
+                        <label class="layui-form-label">视频版本:</label>
+                            <div class="layui-input-block" >
+                                <input type="text" name="play[play_version]" autocomplete="off" value="{$config.play.play_version}" class="layui-input">
+                            </div>   
+                        </div> 
+                        <div class="layui-form-item">
+                        <label class="layui-form-label">视频对白:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="play[play_language]" autocomplete="off" value="{$config.play.play_language}" class="layui-input">
+                            </div> 
+                        </div>                
+                        <div class="layui-form-item">
+                        <label class="layui-form-label">播出周期:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="play[play_week]" autocomplete="off" value="{$config.play.play_week}" class="layui-input">
+                            </div>  
+                        </div> 
+                        <div class="layui-form-item">
+                        <label class="layui-form-label">缓冲广告:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="play[play_playad]" autocomplete="off" value="{$config.play.play_playad}" class="layui-input">
+                            </div> 
+                        </div>  
+
+                        <div class="layui-form-item">
+                        <label class="layui-form-label">下载地址:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="play[play_down]" autocomplete="off" value="{$config.play.play_down}" class="layui-input">
+                            </div> 
+                        </div>  
+
+                        <div class="layui-form-item">
+                        <label class="layui-form-label">服务器组:</label>
+                            <div class="layui-input-block">
+                                <textarea name="play[play_downgorup]" 
+                                class="layui-textarea" placeholder="* 请写入提供下载的服务器组">{$config.play.play_downgorup}</textarea>
+                                <div class="layui-form-mid layui-word-aux">* 下载服务器前缀，前缀名称$$$对应地址每行一个</div>  
+                            </div> 
+                        </div>  
+
+                    </div>
                    <!-- // 接口配置信息开始 -->
                     <div class="layui-tab-item">
                         
@@ -1188,6 +1295,17 @@
                             value="0" title="{:__('关闭')}" <if condition="$config['user']['user_document'] eq 0 "> checked </if> >
                          </div> 
                          <div class="layui-form-mid layui-word-aux">* {:__('是否支持用户投稿到栏目')}。</div>
+                    </div>
+                    
+                    <div class="layui-form-item ">
+                        <label class="layui-form-label">{:__('开启违禁词检测')}</label>
+                         <div class="layui-input-inline" >
+                            <input type="radio" name="user[user_sensitive]"   
+                            value="1" title="{:__('开启')}"  <if condition="$config['user']['user_sensitive'] eq 1 "> checked </if> >
+                            <input type="radio" name="user[user_sensitive]"   
+                            value="0" title="{:__('关闭')}" <if condition="$config['user']['user_sensitive'] eq 0 "> checked </if> >
+                         </div> 
+                         <div class="layui-form-mid layui-word-aux">* {:__('用户投稿违禁词检测，默认开启')}。</div>
                     </div>
                     <div class="layui-form-item ">
                         <label class="layui-form-label">{:__('投稿获得积分')}</label>

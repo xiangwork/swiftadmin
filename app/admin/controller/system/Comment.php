@@ -35,7 +35,7 @@ class Comment extends AdminController
             $post = input();
             $page = input('page/d') ?? 1;
             $limit = input('limit/d') ?? 10;
-            $status = input('status/d') ?? 1;
+            $status = !empty($post['status']) ? $post['status']-1:1;
 
             // 生成查询数据
             $where = array();
@@ -53,7 +53,7 @@ class Comment extends AdminController
             $list = $this->model->where($where)
                                 ->where('status',$status)
                                 ->order('id','desc')
-                                ->field('id,uid,content,count,sid,status,ip,createtime')
+                                ->field('id,cid,uid,content,count,sid,status,ip,createtime')
                                 ->limit($limit)
                                 ->page($page)
                                 ->select()

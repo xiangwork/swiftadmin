@@ -1,0 +1,252 @@
+<include file="/public/header" />
+<!-- // 重定位Style -->
+<style>
+    html, body,.layui-fluid, .layui-card,.layui-card-body,.layui-col-md3,.layui-col-md9 {
+        height: 98.5%;
+    }
+    .layui-card-header.layuiadmin-card-header-auto {
+        border-bottom: 0px;
+        padding-bottom: 0px;
+    }
+
+    .layui-card-body {
+        padding: 0px 30px;
+    }
+
+    .layui-card-header h5 {
+        font-size: 16px;
+    }
+
+    .layui-card-header i.layui-icon-list {
+        font-size: 22px;
+        margin-top: 5px;
+        position: relative;
+        top: 2px;
+    }
+
+    .layui-badge {
+        margin-right: 5px;
+    }
+
+    .eleTree-title {
+        cursor: pointer;
+    }
+
+    .eleTree-group .eleTree-node .eleTree-title {
+        position: relative;
+        line-height: 35px;
+        height: 35px;
+    }
+</style>
+<div class="layui-col-md3">
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header layuiadmin-card-header-auto">
+                <h5>
+                    <i class="layui-icon layui-icon-list"></i> {:__('栏目管理')}</h5>
+                </div>
+            <div class="layui-card-body">
+                <div id="tree"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="layui-col-md9" >
+    <!-- // 展示数据 -->
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <!-- // 默认操作按钮 -->
+            <div class="layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <div class="layui-input-inline">
+                            <select name="status">
+                                <option value="">{:__('按状态查询')}</option>
+                                <option value="2" >{:__('正常')}</option>                                 
+                                <option value="1" >{:__('关闭')}</option>             
+                            </select>
+                        </div>  
+                    </div>
+                    <div class="layui-inline"><div class="layui-input-inline ">
+                        <input name="title" class="layui-input" type="text" placeholder="{:__('关键字搜索')}"/>
+                    </div>
+                </div>
+
+                <div class="layui-inline" >
+                    <!-- // 默认搜索 -->
+                    <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit>
+                        <i class="layui-icon layui-icon-search"></i>{:__('搜索')}
+                    </button>
+                    <!-- // 打开添加页面 -->
+                    <button class="layui-btn icon-btn layui-btn-add" 
+                        lay-open lay-title="{:__('请选择栏目')}" lay-area="300px,560px" 
+                        lay-url="#content" lay-callback="category" lay-value="{:url('/system.content/add/')}" >
+                        <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
+                    </button>
+                    <button class="layui-btn icon-btn" 
+                        lay-open lay-title="{:__('请选择栏目')}" lay-area="300px,560px" 
+                        lay-url="#content" lay-callback="category" lay-value="{:url('/system.content/move/')}" >
+                        <i class="layui-icon layui-icon-transfer "></i>{:__('批量移动')}
+                    </button>
+                </div>
+                </div>
+            </div>   
+            </div>
+
+            <!-- // 创建数据实例 -->
+            <table id="lay-tableList" lay-filter="lay-tableList"></table>        
+        </div>
+    </div>
+
+</div>
+<!-- // 请选择栏目 -->
+<script type="text/html" id="content">
+    <div class="layui-card-body" style="margin-top: 10px">
+        <div id="category"></div>
+    </div>
+</script>
+<!-- // 列表状态栏 -->
+<script type="text/html" id="status">
+    <input type="checkbox" lay-filter="switchStatus" lay-url="{:url('/system.content/status/')}cid/{{d.cid}}" value="{{d.id}}" lay-skin="switch"
+     {{d.status==1?'checked':''}}  />
+</script>
+<!-- // 列表编辑框 -->
+<script type="text/html" id="tableBar"> 
+    <a class="layui-table-text"
+    lay-url="{:url('/system.content/edit/')}cid/{{d.cid}}/pid/{{d.pid}}/id/{{d.id}}" lay-maxmin="true" lay-area="100%,100%" lay-event="edit" >{:__('编辑')}</a>
+    <div class="layui-divider layui-divider-vertical"></div>
+    <a class="layui-table-text" lay-url="{:url('/system.content/del/')}cid/{{d.cid}}/pid/{{d.pid}}/id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
+</script>
+<include file="/public/footer" />
+<script>
+    layui.use(['admin','eleTree'], function () {
+
+        var admin = layui.admin;
+        var eleTree = layui.eleTree;
+        var table = layui.table; 
+        var jquery = layui.jquery;
+        var tableURL = "{:url('/system.content/index/')}";
+        var authURL  = '{:url("/system.admin/_get_auth_func")}';
+
+        // 数据表格
+        var isTable = table.render({
+            elem: "#lay-tableList"
+            ,url: tableURL
+            ,page: true
+            ,cols: [[
+                {type: 'checkbox'},
+                {type:'numbers' ,align: 'center',sort: true,width: 80,  title: 'ID'},
+                {field: 'title', align: 'left', templet(d) {
+                    var html = '<a href="' + d.readurl +'" target="_blank" style="margin-right:10px;" >'+d.title+'</a>',
+                    templet = ['<span class="layui-badge">头条</span>','<span class="layui-badge layui-bg-orange">推荐</span>',
+                            '<span class="layui-badge layui-bg-green">幻灯</span>','<span class="layui-badge layui-bg-blue">滚动</span>',
+                            '<span class="layui-badge layui-bg-red">图文</span>','<span class="layui-badge layui-bg-cyan">跳转</span>',
+                        ];
+                    if (d.attribute) {
+                        var attr = d.attribute.split(',');
+                        for (let i in attr) {
+                            html += templet[attr[i]-1];
+                        }
+                    }
+                    return html;
+                },title: '{:__("标题")}'},
+                {field: 'category.title',templet:function(d){
+                    if (d.category.title) {
+                        d.category = d.category.title;
+                    }
+                    return d.category;
+                }, align: 'center',width: 120, title: '{:__("分类")}'},
+                {field: 'status', align: 'center',templet:'#status',width: 100, title: '{:__("状态")}'},
+                {field: 'hits', align: 'center',sort: true, width: 100, title: '{:__("浏览量")}'},
+                {field: 'author', align: 'center',width: 100, title: '{:__("发布人")}'},
+                {field: 'createtime', align: 'center', width: 160,title: '{:__("创建时间")}'},
+                {align: 'center', toolbar: '#tableBar',width: 120, title: '{:__("操作")}'},
+            ]]
+            ,done: function(res, curr, count) {
+                if (!res.data || res.code == 101) {
+                    jquery('.layui-table-page').remove();
+                }
+            }
+        })
+
+        // 获取权限列表
+        var createTree = function(elem) {
+            return eleTree({
+                el: '#' + elem ,
+                data: admin.event.getAjaxData(authURL,{ 
+                    action : 'get_rulecates_tree',
+                    type   : 'cates',
+                    class  : 'private'
+                }),
+                highlightCurrent: true,
+                showLine: true,
+                defaultPid: 0,
+                request: {
+                    name: "title",
+                },
+
+                defaultExpandAll: true,
+            })
+        }
+
+        // 重载数据表格
+        var Tree = createTree('tree');
+        Tree.on('click',function(event) {
+
+            param = '?' + jquery.param({
+                'cid': event.data.cid,
+                'pid': event.data.id
+            });
+
+            table.reload('lay-tableList', {
+                url: tableURL + param,
+                where: {}
+            });
+
+            var that = jquery('.layui-btn-add');
+            that.attr('lay-area','100%,100%');
+            that.removeAttr('lay-title lay-callback');
+            that.attr('lay-url',that.attr('lay-value') + param);
+        })
+
+        // 添加栏目回调
+        admin.callback.category = function(clickthis,colletction,config) {
+
+            var Tree = createTree('category');
+            Tree.on('click',function(event) {
+
+                param = '?' + jquery.param({
+                    'cid': event.data.cid,
+                    'pid': event.data.id
+                });
+
+                // 重载地址参数
+                var url = clickthis.attr('lay-value');
+
+                if (url.indexOf('move') == -1) {
+                    clickthis.attr('lay-url',url + param);
+                    clickthis.attr('lay-area','100%,100%');
+                    clickthis.removeAttr('lay-title lay-callback');
+                    parent.layui.jquery(clickthis).trigger('click');
+                } else {
+                    
+                    // 模拟元素点击
+                    var batchthis = jquery('#batch');
+                    if (!batchthis.length) {
+                        var html = '<div id="batch" lay-url="'+url+'?destpid='+event.data.id+'"'; 
+                        html += 'lay-batch="lay-tableList" lay-field="cid"></div>';
+                        jquery(clickthis).parent().append(html);
+                        batchthis = jquery('#batch');
+                    }
+                    batchthis.trigger('click');
+
+                }
+
+                layui.layer.close(colletction.index);
+            })
+        }
+
+    })
+</script>

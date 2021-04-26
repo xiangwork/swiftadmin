@@ -38,19 +38,19 @@ class Department extends AdminController
 				$where[] = ['head','like','%'.$post['head'].'%'];
 			}
 
-			$where[] = ['status','=',$post['status']];
-
 			// 获取总数
+			$where[] = ['status','=',$post['status']];
 			$total = $this->model->count();
 			$list = $this->model->where($where)->order('sort asc')->select()->toArray();
 			foreach ($list as $key => $value) {
 				$list[$key]['title'] = __($value['title']);
+				$list[$key]['datas'] = $this->model->getListTree();
 			}
 
 			// 自定义查询
 			if (count($list) < $total) {
 
-				$parentNode = []; // 查找父节点
+				$parentNode = [];
 				foreach ($list as $key => $value) {
 					if ($value['pid'] !== 0 && !list_search($list,['id'=>$value['pid']])) {
 						$parentNode[] = $this->parentNode($value['pid']);
@@ -60,11 +60,14 @@ class Department extends AdminController
 				foreach ($parentNode as $key => $value) {
 					$list = array_merge($list,$value);
 				}
-
-				return $this->success('查询成功', '', $list, count($list), 0);
 			}
 
-			return $this->success('获取成功', '', $list, count($list), 0);
+			$depart = $this->model->getListTree();
+			return $this->success('获取成功', '',[
+				'item'=> $list,
+				'depart'=> $depart 
+			], 
+			count($list),0);
 		}
 
 		return view();
@@ -128,17 +131,5 @@ class Department extends AdminController
 		}
 		
 		return $this->error('删除失败，请检查您的参数！');
-	}
-
-
-	/**
-	 * 获取部门数据
-	 */
-	public function getListTree() 
-	{
-		if (request()->isAjax()) {
-			$nodes = $this->model->getListTree();
-			return json($nodes);
-		}
 	}
 }

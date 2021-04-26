@@ -6,28 +6,15 @@ use think\facade\Config;
 use think\facade\Request;
 
 // 全局系统常量
-const SYSTEM  = 'system';
+const SYSTEM  	= 'system';
 const ARTICLE 	= 'ARTICLE';
 const IMAGES 	= 'IMAGES';
 const VIDEO 	= 'VIDEO';
 const DOWNLOAD 	= 'DOWNLOAD';
+const PRODUCT 	= 'PRODUCT';
 const SPECIAL   = 'SPECIAL';
 const COMMENT   = 'COMMENT';
-
-// 系统配置信息
-const SITEURL = 'system.site.site_url';
-
-// 系统缓存信息
-const CACHESTATUS = 'system.cache.cache_status';
-const CACHETIME = 'system.cache.cache_time';
-
-// 其他常量
-const REGISTERSTATUS = 'system.user.user_status'; 			// 是否开启注册
-const REGISTERSTYLE = 'system.user.user_register_style'; 	// 注册方式
-const REGISTERSECOND = 'system.user.user_register_second'; 	// 注册上限
-const USERVALITIME = 'system.user.user_valitime'; 			// 验证码有效时间
-
-const USERFORMCHECK = 'system.user.user_form_check';		// 审核评论
+const NAMESPACEMODELSYSTEM = '\\app\\common\\model\\system\\';
 
 // +----------------------------------------------------------------------
 // | 文件操作函数开始
@@ -232,7 +219,7 @@ if (!function_exists('is_really_writable')) {
             return is_writable($file);
         }
         if (is_dir($file)) {
-            $file = rtrim($file, '/') . '/' . md5(mt_rand());
+            $file = rtrim($file, '/') . '/' . hash('sha256',mt_rand());
             if (($fp = @fopen($file, 'ab')) === false) {
                 return false;
             }
@@ -339,15 +326,21 @@ if (!function_exists('url_raw')) {
 if (!function_exists('msubstr')) {
     /**
      * 字符串截取(同时去掉HTML与空白)
-     * @param  string $str 要验证的邮箱地址
-     * @param  string $str 要验证的邮箱地址	 
+     * @param  string $str 
+     * @param  string $str 	 
      * @return string
      */	
-	function msubstr($str, $start=0, $length, $charset="utf-8", $suffix=true)
+	function msubstr($str, $start = 0, $length = 100, $charset="utf-8", $suffix=true)
 	{
 		
 		$str = preg_replace('/<[^>]+>/','',preg_replace("/[\r\n\t ]{1,}/",' ',delNt(strip_tags($str)))); 
-		
+		$str = preg_replace('/&(\w{5});/i','',$str);
+
+		// 直接返回
+		if ($start == -1) {
+			return $str;
+		}
+
 		if(function_exists("mb_substr")){
 			$slice= mb_substr($str, $start, $length, $charset);
 		}elseif(function_exists('iconv_substr')) {
@@ -364,10 +357,39 @@ if (!function_exists('msubstr')) {
 		
 		$fix='';
 		if(strlen($slice) < strlen($str)){
-			// $fix='...';
+			$fix='...';
 		}
 		return $suffix ? $slice.$fix : $slice;
 	}
+}
+
+if (!function_exists('http_images_url')) {
+    /**
+     * 替换文章内容图片地址
+	 * 默认为开启的 upload_http_prefix
+     * @param 		string $content 内容
+     * @return    	string
+     */
+    function http_images_url($content = null, $url = null)
+    {
+        if (!empty($content)) {
+			if (empty($url)) {
+
+				if (saenv('upload_ftp') || saenv('cloud.status')) {
+					$url = saenv('upload_http_prefix');
+				}
+				else {
+
+					// 默认为网站域名
+					$url = request()->domain();
+				}
+			}
+            $pregRule = "/<img(.*?)src(\s*)=(\s*)[\'|\"]\/(.*?(?:[\.jpg|\.jpeg|\.png|\.gif|\.bmp|\.ico|\.webp]))[\'|\"](.*?)[\/]?(\s*)>/i";
+			$content  = preg_replace($pregRule, '<img${1}src="'.$url.'/${4}"${5}/>', $content);
+        }
+
+        return $content;
+    }
 }
 
 if (!function_exists('letter_first')) {
@@ -411,14 +433,28 @@ if (!function_exists('letter_first')) {
 
 if (!function_exists('pinyin')) {
     /**
-     * 判断邮箱
-     * @param string $str 要验证的邮箱地址
+     * 获取拼音
+     * @param string $str  需要转换的汉子
+     * @param bool   $abbr 是否只要首字母
+     * @param bool   $trim 是否清除空格
      * @return bool
      */
-    function pinyin($str)
+    function pinyin($str, $abbr = false, $first = false, $trim = true)
     {
 		$obj = new \Overtrue\Pinyin\Pinyin();
-        return $obj->sentence($str);
+		if (!$abbr) {
+			$string =  $obj->sentence($str);
+		}
+		else {
+			$string =  $obj->abbr($str);
+		}
+
+		if ($first) {
+			return strtoupper(substr($string,0,1));
+		}
+
+		return $trim ? str_replace(' ','',$string) : $string;
+		
     }
 }
 
@@ -455,7 +491,7 @@ if (!function_exists('regname_filter')) {
     function regname_filter($value)
 	{
         // 屏蔽注册的用户名
-		$reg_notallow = config('system.user.user_reg_notallow');
+		$reg_notallow = saenv('user_reg_notallow');
 		$reg_notallow = explode(',',$reg_notallow);
 		foreach ($reg_notallow as $k => $v) {
 			if ($value == $v) { /*不合法返回true*/
@@ -494,7 +530,7 @@ if (!function_exists('create_orderid')) {
 		if (!$short) {
 
 			$gradual = 0;
-			$orderId = date('YmdHis') . rand(10000000,99999999);
+			$orderId = date('YmdHis') . mt_rand(10000000,99999999);
 			$length = strlen($orderId);
 			// 循环处理随机数
 			for($i=0; $i<$length; $i++){
@@ -505,6 +541,34 @@ if (!function_exists('create_orderid')) {
 		}else {
 			return date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
 		}
+	}
+}
+
+if (!function_exists('create_orderUrl')) {
+
+    /**
+     * 生成订单地址
+     * @return string
+     */
+	function create_orderUrl(string $id, string $paytype = 'alipay', string $token = null) {
+
+		$payUrl = saenv('site_http').'/order/index?id='.$id.'&paytype='.$paytype;
+		if ($token) {
+			$payUrl .= '&token='.$token;
+		}
+		return $payUrl;
+	}
+}
+
+if (!function_exists('get_paylogo')) {
+
+    /**
+     * 获取支付logo
+     * @return string
+     */
+	function get_paylogo(string $type = 'alipay') {
+		$file = public_path().'static/images/pay/logo-'.$type.'.png';
+		return is_file($file) ? $file : '/static/images/pay/pay.png';
 	}
 }
 
@@ -758,6 +822,55 @@ if (!function_exists('__')) {
 	}
 }
 
+if (!function_exists('saenv')) {
+	/**
+	 * 获取系统配置信息
+	 * @param mixed|null $name
+	 * @return mixed
+	 */
+	function saenv($name = null)
+	{
+	
+		if (!empty($name)) {
+			$config = config('system');
+			if (!is_array($name)) {
+				$name = explode('.',$name);
+			}
+			foreach ($name as  $val) {
+				if (isset($config[$val])) {
+					$config = $config[$val];
+				} else {
+					// 父类数据
+					$parent = $config;
+					$recursive = function(&$base,&$key) use (&$recursive,&$config) {
+						foreach ($base as $value) {
+							if (is_array($value)) {
+								// 找到KEY
+								if (array_key_exists($key,$value)) {
+									$config = $value[$key];
+								}
+								 // 存在子数组则进行递归
+								else if(count($value) != count($value,1)) {
+									$recursive($value,$key);
+								}
+							}
+						}
+					};
+					
+					$recursive($config, $val);
+					// 数据相等则为空
+					if ($config == $parent) {
+						$config = [];
+					}
+				}
+			}
+			return $config;
+		}
+	
+		return false;
+	}
+}
+
 if (!function_exists('parse_tag')) {
     /**
      * 生成参数列表,以数组形式返回
@@ -878,12 +991,13 @@ if (!function_exists('list_to_tree')) {
 	function list_to_tree($list, $id='id', $pid = 'pid', $child = 'children', $level = 0) 
 	{
 		// 创建Tree
-		$array = $refer = array();
+		$tree = $refer = array();
 		if(is_array($list)) {
 			// 创建基于主键的数组引用
 			foreach ($list as $key => $data) {
 				$refer[$data[$id]] = &$list[$key];
 			}
+
 			foreach ($list as $key => $data) {
 				// 判断是否存在parent
 				$parentId = $data[$pid];
@@ -896,6 +1010,7 @@ if (!function_exists('list_to_tree')) {
 					}
 				}
 			}
+			
 		}
 		
 		return $tree;
@@ -986,6 +1101,22 @@ if (!function_exists('is_empty')) {
             return true;
         }
 
+        return false;
+    }
+}
+
+if (!function_exists('is_notempty')) {
+    /**
+     * 判断变量是否不为空
+     * @param array|string $value 要判断的值
+     * @return bool
+     */
+    function is_notempty($value)
+    {
+		if (isset($value) && $value) {
+			return $value;
+		}
+       
         return false;
     }
 }
@@ -1085,7 +1216,7 @@ if (!function_exists('reply_anti')) {
 	 */
 	function reply_anti($content) 
 	{
-		$words = config('system.user.user_replace');
+		$words = saenv('user_replace');
 		$words = str_replace(array(',','/','|','，'),',',$words);
 		$words = explode(',',$words);
 
@@ -1287,18 +1418,18 @@ if (!function_exists('get_adwords')) {
 	 */
 	function get_adwords($id,$charset = 'utf8')
 	{
-		$data_cache_name = md5($id.'_ADWORDS');
-		$data_cache_content = config(CACHESTATUS) ? cache($data_cache_name) : null;
+		$data_cache_name = hash('sha256',$id.'_ADWORDS');
+		$data_cache_content = saenv('cache_status') ? cache($data_cache_name) : null;
 
 		if (is_empty($data_cache_content)) {
 			$data_cache_content = Db::name('adwords')->where('title',$id)->find();
-			if (config(CACHESTATUS)) {
-				cache($data_cache_name,$data_cache_content,config(CACHETIME));
+			if (saenv('cache_status')) {
+				cache($data_cache_name,$data_cache_content,saenv('cache_time'));
 			}
 		}
 		// 过期则不展现
 		if ($data_cache_content['expirestime'] >= time()) {
-			if (config('rewrite.url_rewrite') == 2) {
+			if (saenv('url_rewrite') == 2) {
 				return '<script type="text/javascript" src="/static/adwords/'.$id.'.js" charset="'.$charset.'"></script>';
 			}else {
 				echo $data_cache_content['content'];
@@ -1392,22 +1523,22 @@ if (!function_exists('ajaxReturn')) {
 // +----------------------------------------------------------------------
 // | 数据加密函数开始
 // +----------------------------------------------------------------------
-if (!function_exists('hasha')) {
+if (!function_exists('hash_pwd')) {
     /**
-     * md5密码加盐
+     * hash - 密码加密
      */
-	function hasha($string)
+	function hash_pwd($string)
 	{
-		$digest = hash_hmac("sha512", $string, '!dJ&S6@GliG3');
-		return md5($digest);
+		return hash_hmac("sha256", $string, '!dJ&S6@GliG3');
 	}
 }
 
 if (!function_exists('cookies_encrypt')) {
 	// COOKIES加密
 	function cookies_encrypt($data, $key='', $char='')
-	{
-		$key  = md5(empty($key) ? '!1@9#8$3' : $key);
+	{	
+		$key = empty($key) ? '!1@9#8$3' : $key;
+		$key  = hash("sha256", $key);
 		$x  = 0;
 		$str = '';
 		$len = strlen($data);
@@ -1430,7 +1561,8 @@ if (!function_exists('cookies_decrypt')) {
 	// COOKIES解密
 	function cookies_decrypt($data, $key='', $char='')
 	{
-		$key  = md5(empty($key) ? '!1@9#8$3' : $key);
+		$key = empty($key) ? '!1@9#8$3' : $key;
+		$key  = hash("sha256", $key);
 		$x = 0; $str = '';
 		$data = base64_decode($data);
 		$len = strlen($data);
@@ -1453,69 +1585,13 @@ if (!function_exists('cookies_decrypt')) {
 	}
 }
 
-if (!function_exists('str_coding')) {
-    /**
-     * 字符串加解密
-     * @param  string  $string    要加解密的原始字符串
-     * @param  string  $operation 加密：ENCODE，解密：DECODE
-     * @param  string  $key       密钥
-     * @param  integer $expiry    有效期
-     * @return string
-     */
-    function str_EDCODE($string, $operation = 'DECODE', $key = '', $expiry = 0)
-    {
-        $ckey_length = 4;
-        $key = md5($key ? $key : config('hs_auth.key'));
-        $keya = md5(substr($key, 0, 16));
-        $keyb = md5(substr($key, 16, 16));
-        $keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : '';
-        $cryptkey = $keya.md5($keya.$keyc);
-        $key_length = strlen($cryptkey);
-        $string = $operation == 'DECODE' ? base64_decode(substr($string, $ckey_length)) : sprintf('%010d', $expiry ? $expiry + time() : 0).substr(md5($string.$keyb), 0, 16).$string;
-        $string_length = strlen($string);
-
-        $result = '';
-        $box = range(0, 255);
-        $rndkey = array();
-        for ($i = 0; $i <= 255; $i++) {
-            $rndkey[$i] = ord($cryptkey[$i % $key_length]);
-        }
-
-        for ($j = $i = 0; $i < 256; $i++) {
-            $j = ($j + $box[$i] + $rndkey[$i]) % 256;
-            $tmp = $box[$i];
-            $box[$i] = $box[$j];
-            $box[$j] = $tmp;
-        }
-
-        for ($a = $j = $i = 0; $i < $string_length; $i++) {
-            $a = ($a + 1) % 256;
-            $j = ($j + $box[$a]) % 256;
-            $tmp = $box[$a];
-            $box[$a] = $box[$j];
-            $box[$j] = $tmp;
-            $result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256]));
-        }
-
-        if ($operation == 'DECODE') {
-            if ((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26).$keyb), 0, 16)) {
-                return substr($result, 26);
-            } else {
-                return '';
-            }
-        } else {
-            return $keyc.str_replace('=', '', base64_encode($result));
-        }
-    }
-}
-
 if (!function_exists('md5short')) {
 	/**
 	 * 返回16位的MD5值
 	 */
 	function md5short(string $str = null) 
 	{
-		return substr(md5($str), 8, 16);
+		return substr(hash('sha256',$str), 8, 16);
 	}
 }
 
@@ -1626,7 +1702,7 @@ function randomDate($begintime, $endtime="", $now = true)
 {
 	$begin = strtotime($begintime);  
 	$end = $endtime == "" ? mktime() : strtotime($endtime);
-	$timestamp = rand($begin, $end);
+	$timestamp = mt_rand($begin, $end);
 	return $now ? date("Y-m-d H:i:s", $timestamp) : $timestamp;          
 }
 
@@ -1689,7 +1765,6 @@ if (!function_exists('safe_field_model')) {
 					unset($data[$key]); 
 					continue;
 				}
-				
 			}
 			
 			// 过滤XSS跨站攻击
@@ -1731,9 +1806,7 @@ if (!function_exists('safe_validate_model')) {
      */	
 	function safe_validate_model($data = [], $valiclass = '', $valiscene='') 
 	{
-
 		if (!is_empty($valiclass)) {
-			
 			if (!preg_match('/app\x{005c}(.*?)\x{005c}/',$valiclass,$macth)) {
 				$valiclass = '\\app\\common\\validate\\'.ucfirst($valiclass);
 				
@@ -1763,8 +1836,8 @@ if (!function_exists('check_auth')) {
 	 */
 	function check_auth($urls, $action = '', $attr = 'lay-url') 
 	{
-
-		$judge = false;$macth = [];
+		$macth = [];
+		$judge = false;
 		$urls = (string)url($urls);
 		$urls = str_replace('.html','',$urls);
 		if (preg_match('/\/\w+.php(\/.*?\/.*?\w+[^\/\?]+)/',$urls, $macth)) {

@@ -1,8 +1,8 @@
 <?php
 declare (strict_types = 1);
 
-
 namespace app\install\controller;
+use think\facade\Cache;
 
 class Index
 {   
@@ -41,7 +41,7 @@ class Index
                 }
             }
 
-            cache('checkenv','success',3600);
+            Cache::set('checkenv','success',3600);
             return json(['code'=>200,'url'=>'/install.php/index/step2']);
         }
 
@@ -56,7 +56,7 @@ class Index
      */
     public function step2() {
 
-        if (!cache('checkenv')) {
+        if (!Cache::get('checkenv')) {
             return redirect('/install.php/index/step1');
         }
  
@@ -91,8 +91,7 @@ class Index
                 }
             }
             
-            
-            cache('mysql',$post,3600);
+            Cache::set('mysql',$post,3600);
             return json(['code'=>200,'url'=>'/install.php/index/step3']);
         }
 
@@ -104,10 +103,15 @@ class Index
      */
     public function step3() {
 
-        $mysql = cache('mysql');
+        $mysql = Cache::get('mysql');
         if (!$mysql) {
             return redirect('/install.php/index/step2');
         }
+
+        // 修改加密KEY
+        $config = config('system');
+        $config['auth']['auth_key'] = create_rand(16);
+        arr2file('../config/system.php',$config);
 
         return view();
     }
@@ -119,7 +123,7 @@ class Index
     {
         if (request()->isAjax()) {
 
-            $mysql = cache('mysql');
+            $mysql = Cache::get('mysql');
             if (is_file('../extend/conf/install.lock') || !$mysql) {
                 return json(['code'=>101,'msg'=>'请勿重复安装本系统']);
             }
@@ -146,7 +150,7 @@ class Index
             $sql = str_replace(" `sa_", " `{$mysql['prefix']}", $sql);
             
             // 缓存任务总数
-            cache('total',count($sql),3600);
+            Cache::set('total',count($sql),3600);
 
             // 链接数据库
             $connect = @mysqli_connect($mysql['hostname'].':'.$mysql['hostport'], $mysql['username'], $mysql['password']);
@@ -159,7 +163,7 @@ class Index
                 // 写入数据库
                 foreach ($sql as $key => $value) {
 
-                    cache('progress',($key+1),3600);
+                    Cache::set('progress',($key+1),3600);
                     $value = trim($value);
                     if (empty($value)) {
                         continue;
@@ -176,7 +180,7 @@ class Index
                                 'msg'=>$msg,
                             ];
                             $nums++;
-                            cache('tasks',$logs,3600);
+                            Cache::set('tasks',$logs,3600);
                         }
                     } else {
                         mysqli_query($connect,$value);
@@ -184,12 +188,12 @@ class Index
                 }
     
             } catch (\Throwable $th) { // 异常信息
-                cache('error',$th->getMessage(),7200);
+                Cache::set('error',$th->getMessage(),7200);
                 exit();
             }
     
             // 修改初始化密码
-            $pwd = hasha($mysql['pwd']);
+            $pwd = hash_pwd($mysql['pwd']);
             mysqli_query($connect,"UPDATE {$mysql['prefix']}admin SET pwd={$pwd} where id = 1");
             write_file(root_path().'extend/conf/install.lock',true);
         }
@@ -203,18 +207,18 @@ class Index
         if (request()->isAjax()) {
 
             // 查询错误
-            $error = cache('error');
+            $error = Cache::get('error');
             if (!empty($error)) {
                 return json(['code'=>101,'msg'=>$error]);
             }
             
             // 获取任务信息
-            $tasks = cache('tasks') ?? [
+            $tasks = Cache::get('tasks') ?? [
                 'id'=>9999,
                 'msg'=>'获取任务信息失败！',
             ];
             
-            $progress = round(cache('progress')/cache('total')*100).'%';
+            $progress = round(Cache::get('progress')/Cache::get('total')*100).'%';
    
             $result = [
                 'code'=> 200,

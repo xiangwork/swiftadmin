@@ -25,7 +25,7 @@
                 </button>
 
                 <!-- // 打开添加页面 -->
-                <button class="layui-btn icon-btn" lay-open="" lay-title="添加栏目" lay-area="800px,497px" lay-url="{:url('/system.category/add')}" >
+                <button class="layui-btn icon-btn" lay-open="" lay-area="100%,100%" lay-offset="0px" lay-maxmin="true" lay-url="{:url('/system.category/add')}" >
                     <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                 </button>
             </div>
@@ -47,7 +47,7 @@
 
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar"> 
-    <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-area="800px,497px" 
+    <a class="layui-table-text" lay-area="100%,100%" lay-offset="0px" lay-maxmin="true"
         lay-url="{:url('/system.category/edit/')}id/{{d.id}}" lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
     <a class="layui-table-text"  lay-url="{:url('/system.category/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
@@ -55,7 +55,7 @@
 <include file="/public/footer" />
 <script>
     layui.use(function () {
-        var jquery = layui.jquery;
+
         var table = layui.table;
         /*
          * 初始化表格

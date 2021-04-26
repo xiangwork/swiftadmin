@@ -98,7 +98,7 @@
 <!-- // 栏目权限列表 -->
 <script type="text/html" id="cateForms">
 <div class="layui-fluid layui-bg-white" >
-    <form action="{:url('/system.admingroup/editcate')}" class="layui-form">
+    <form action="{:url('/system.admingroup/editcates')}" class="layui-form">
     <div class="layui-authtree" style="padding-left: 15px"><div id="cateTree"></div></div>
     <div class="layui-footer layui-form-item layui-center "  >
         <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('取消')}</button>
@@ -112,9 +112,9 @@
 <script type="text/html" id="tableBar">
     <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-area="500px" lay-url="#editforms"  lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text"lay-callback="auth"lay-area="300px" lay-title="{{d.title}}{:__('权限')}" lay-url="#authForms" lay-event="auth">{:__('访问权限')}</a>
+    <a class="layui-table-text" lay-callback="auth" lay-area="300px" lay-title="{:__('访问权限')}" lay-url="#authForms" lay-offset="8%" lay-event="auth">{:__('权限')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-callback="cate" lay-area="300px" lay-title="{:__('栏目权限')}" lay-url="#cateForms"  lay-event="cate" >{:__('栏目权限')}</a>
+    <a class="layui-table-text" lay-callback="cate" lay-area="300px" lay-title="{:__('栏目权限')}" lay-url="#cateForms" lay-offset="8%" lay-event="cate" >{:__('栏目')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
     <a class="layui-table-text" lay-url="{:url('/system.admingroup/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
@@ -144,20 +144,18 @@
                 {field: 'alias', align: 'center', title: "{:__('角色标识')}"},
                 {field: 'content', align: 'center',title: "{:__('角色备注')}"},
                 {field: 'createtime', align: 'center',title: "{:__('添加时间')}"},
-                {align: 'center', toolbar: '#tableBar',width: 330, title: "{:__('操作')}"},
+                {align: 'center', toolbar: '#tableBar',width: 260, title: "{:__('操作')}"},
             ]]
         })
 
 
         /*
          * 角色回调函数
-         * 
-        */
+         */
         admin.callback.auth = function(clickthis,colletction,config) {
 
             // 获取表格对象
             var tableThis = colletction.tableThis,checkKeys = [];
-                
             // 勾选默认权限
             if (typeof (tableThis.data.rules) !== undefined && tableThis.data.rules != null) {
                 checkKeys = tableThis.data.rules.split(',');
@@ -169,10 +167,11 @@
             // 创建实例
             var tree = eleTree({
                 el: '#authTree',
-                data: admin.event.getAjaxData("{:url('/system.admingroup/queryrules')}"),
+                data: _ajax('get_rulecates_tree'),
                 highlightCurrent: true,
                 showCheckbox: true,
                 showLine: false,
+                isDefaultChangePstatus: true,
                 defaultPid: 0,
                 request: {
                     name: "title",
@@ -185,7 +184,7 @@
                 // 获取提交地址
                 var pageThat = jquery(this), _form = pageThat.parents('form'), 
                 rules = [],_pageUrl = _form.attr("action") || pageThat.attr('lay-url');
-                
+                pageThat.attr("disabled",true);
                 if (typeof(_pageUrl) === 'undefined') {
                     layui.iziToast.error({
                         message: "缺少 url 属性",
@@ -216,8 +215,6 @@
                             tableThis.update({
                                 rules: rules
                             });
-
-                            table.reload('lay-tableList');
                             // 关闭当前窗口
                             layer.close(colletction.index);
                         }else{
@@ -239,8 +236,8 @@
             // 获取表格对象
             var tableThis = colletction.tableThis,checkKeys = [];
             // 勾选默认权限
-            if (typeof (tableThis.data.cateids) !== undefined && tableThis.data.cateids != null) {
-                checkKeys = tableThis.data.cateids.split(',');
+            if (typeof (tableThis.data.cates) !== undefined && tableThis.data.cates != null) {
+                checkKeys = tableThis.data.cates.split(',');
                 for(var i in checkKeys) {
                     checkKeys[i] = parseInt(checkKeys[i]);
                 }
@@ -249,9 +246,10 @@
             // 创建实例
             var tree = eleTree({
                 el: '#cateTree',
-                data: admin.event.getAjaxData("{:url('/system.admingroup/querycate')}"),
+                data: _ajax('get_rulecates_tree','cates'),
                 highlightCurrent: true,
                 showCheckbox: true,
+                isDefaultChangePstatus: true,
                 showLine: false,
                 defaultPid: 0,
                 request: {
@@ -264,8 +262,8 @@
             form.on("submit(submitPage)",function(post){
                 // 获取提交地址
                 var pageThat = jquery(this), _form = pageThat.parents('form'), 
-                cateids = [],_pageUrl = _form.attr("action") || pageThat.attr('lay-url');
-                
+                cates = [],_pageUrl = _form.attr("action") || pageThat.attr('lay-url');
+                pageThat.attr("disabled",true);
                 if (typeof(_pageUrl) === 'undefined') {
                     layui.iziToast.error({
                         message: "缺少 url 属性",
@@ -276,13 +274,13 @@
                 // 遍历节点数据
                 var nodes = tree.getChecked(false,true);
                 for (var i in nodes) {
-                    cateids.push(nodes[i].id);
+                    cates.push(nodes[i].id);
                 }
 
                 // 增加角色id
                 post.field.id = tableThis.data.id;
                 // 增加节点数据
-                post.field.cateids = cateids;
+                post.field.cates = cates;
 
                 // 开始POST提交数据
                 jquery.post(_pageUrl, 
@@ -292,12 +290,10 @@
                                 message: res.msg,
                             });
                             // 更新栏目权限
-                            cateids = cateids.join(',');
+                            cates = cates.join(',');
                             tableThis.update({
-                                cateids: cateids
+                                cates: cates
                             });
-
-                            table.reload('lay-tableList');
                             // 关闭当前窗口
                             layer.close(colletction.index);
                         }else{
@@ -309,6 +305,16 @@
 
                 return false;                        
             }) 
+        }
+
+        // 同步加载函数
+        var _ajax = function (action,type,classd) {
+            var func = '{:url("/system.admin/_get_auth_func")}';
+            return admin.event.getAjaxData(func,{ 
+                action : action,
+                type   : type,
+                class  : classd
+            })
         }
 
     });

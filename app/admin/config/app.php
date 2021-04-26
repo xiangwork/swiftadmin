@@ -30,8 +30,8 @@ return [
     ],
 
     // 默认跳转页面
-    'dispatch_error'   => app_path(). 'view/public/tplerror.html',
-    'dispatch_success' => app_path(). 'view/public/tplsuccess.html',
+    'dispatch_error'   => app_path(). 'view/public/jumptpl.html',
+    'dispatch_success' => app_path(). 'view/public/jumptpl.html',
     
     // 异常页面的模板文件
     'exception_tmpl'   => app()->getThinkPath() . 'tpl/think_exception.tpl',

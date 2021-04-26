@@ -17,6 +17,7 @@ use app\common\model\system\UserGroup  as UserGroupModel;
 
 class UserGroup extends AdminController 
 {
+   
     // 初始化函数
     public function initialize() 
 	{
@@ -57,7 +58,7 @@ class UserGroup extends AdminController
 				$list[$key]['title'] = __($value['title']);
 			}
 
-			return $this->success('查询成功', '', $list, $count, 0);
+			return $this->success('查询成功', null, $list, $count, 0);
 		}
 
         return view('system/user/group');

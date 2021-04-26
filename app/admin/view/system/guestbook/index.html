@@ -15,9 +15,9 @@
             <div class="layui-inline">
                 <div class="layui-input-inline">
                     <select name="status">
-                        <option value="1">{:__('按状态查询')}</option>
-                        <option value="1" >{:__('已审核')}</option>                                 
-                        <option value="0" >{:__('未审核')}</option>
+                        <option value="">{:__('按状态查询')}</option>
+                        <option value="2" >{:__('已审核')}</option>
+                        <option value="1" >{:__('未审核')}</option>
                     </select>
                 </div>  
             </div>
@@ -89,8 +89,8 @@
 
 <include file="/public/footer" />
 <script>
-    layui.use(['admin','table'], function () {
-        var jquery = layui.jquery;
+    layui.use(['table'], function () {
+        
         var table = layui.table;
         /*
          * 初始化表格

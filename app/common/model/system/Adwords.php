@@ -21,4 +21,9 @@ class Adwords extends Model
     // 定义时间戳字段名
     protected $createTime = 'createtime';
     protected $updateTime = 'updatetime';
+
+    public function getExpirestimeAttr($expirestime)
+    {
+        return date('Y-m-d H:i:s',$expirestime);
+    }
 }

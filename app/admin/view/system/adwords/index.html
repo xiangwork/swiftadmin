@@ -11,8 +11,8 @@
                 <div class="layui-input-inline ">
                     <select name="status">
                         <option value="">{:__('按状态查看')}</option>
-                        <option value="1">{:__('已审核')}</option>                                 
-                        <option value="2">{:__('未审核')}</option>                             
+                        <option value="2">{:__('已审核')}</option>                                 
+                        <option value="1">{:__('未审核')}</option>                             
                     </select>
                 </div>
             </div>
@@ -59,9 +59,9 @@
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('广告封面')}</label>
         <div class="layui-input-inline" style="width: 322px">
-            <input name="pic" placeholder="{:__('广告封面')}" type="text" class="layui-input pic" />
+            <input name="pic" placeholder="{:__('广告封面')}" type="text" value="sad" class="layui-input picword" />
         </div>
-        <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="pic">{:__('上传图片')}</button>
+        <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="picword">{:__('上传图片')}</button>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('到期时间')}</label>
@@ -98,14 +98,14 @@
 
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar"> 
-<a class="layui-table-text" lay-title="{:__('编辑')} {:__('')} {{d.title}}" lay-area="600px,468px" lay-url="#editforms" lay-event="edit" >{:__('编辑')}</a>
+<a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-area="600px,468px" lay-url="#editforms" lay-event="edit" >{:__('编辑')}</a>
 <div class="layui-divider layui-divider-vertical"></div>
 <a class="layui-table-text" lay-url="{:url('/system.adwords/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 <include file="/public/footer" />
 <script>
-    layui.use(['admin','table'], function () {
-        var jquery = layui.jquery;
+    layui.use(['table'], function () {
+        
         var table = layui.table;
         /*
          * 初始化表格
@@ -119,10 +119,8 @@
                 {field: 'title', align: 'left', title: '{:__("广告名称")}'},
                 {field: 'alias', align: 'left', width:180, title: '{:__("广告标识")}'},
                 {field: 'status', align: 'center',templet: '#columnStatus', width: 135, title: '{:__("状态")}'},
-                {field: 'expirestime', align: 'center',width:180,
-                    templet: '<div>{{ layui.util.toDateString(d.expirestime*1000, "yyyy-MM-dd HH:mm:ss") }}</div>',title: '{:__("到期时间")}'},
-                {field: 'createtime', align: 'center', width:180,
-                    templet: '<div>{{ layui.util.toDateString(d.createtime*1000, "yyyy-MM-dd HH:mm:ss") }}</div>', title: '{:__("添加时间")}'},
+                {field: 'expirestime', align: 'center',width:180, title: '{:__("到期时间")}'},
+                {field: 'createtime', align: 'center', width:180, title: '{:__("添加时间")}'},
                 {align: 'center', toolbar: '#tableBar', width:160, title: '{:__("操作")}'},
             ]]
         })

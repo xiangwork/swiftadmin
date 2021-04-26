@@ -35,7 +35,6 @@ class Systemlog extends AdminController
             $post = input();
             $page = input('page/d') ?? 1;
             $limit = input('limit/d') ?? 10;
-            // $post['status'] = input('status/d') ?? 1;
             
             // 生成查询数据
             $where = array();

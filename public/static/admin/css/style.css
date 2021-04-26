@@ -112,6 +112,20 @@ a {
     left: 238px
 }
 
+.layui-form-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0 -1px 5px rgba(0,0,0,.15);
+    padding: 15px;
+    z-index: 9999;
+    margin-bottom: 0px;
+    margin-top: 10px;
+    text-align: center;
+}
+
 .layui-layer-loading .layui-layer-content {
     height: 30px!important;
 }
@@ -1429,7 +1443,8 @@ a {
     position: absolute;
     right: 0;
     border: 0;
-    overflow: hidden
+    overflow: hidden;
+    z-index: 998;
 }
 
 .layui-layout-admin .layui-body>.layui-tab>.layui-tab-title li {
@@ -1511,7 +1526,8 @@ a {
     cursor: pointer;
     transition: all .3s;
     border-left: 1px solid #eee;
-    background-color: white
+    background-color: white;
+    z-index: 999;
 }
 
 .layui-layout-admin .layui-body .swiftadmin-tabs-control:hover {
@@ -2414,7 +2430,7 @@ a {
 }
 
 .layui-form-item .layui-form-checkbox[lay-skin=primary] {
-    margin-top: 8px;
+    margin-top: 3px;
 }
 
 .layui-form-checked[lay-skin=primary] i {
@@ -2454,8 +2470,8 @@ a {
 
 .layui-form-item .layui-form-checkbox {
     margin-top: 2px;
-    height: 26px;
-    line-height: 26px;
+    height: 24px;
+    line-height: 24px;
 }
 
 .layui-form-checked span, .layui-form-checked:hover span {
@@ -2472,11 +2488,11 @@ a {
 }
 
 .layui-form-checkbox span,.layui-form-checkbox i {
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .layui-form-checkbox i {
-    height: 24px;
+    height: 22px;
 }
 
 .layui-form-checkbox[lay-skin=primary]:hover i {
@@ -2591,6 +2607,10 @@ xm-select > .xm-body .xm-tree-icon:hover {
     position: relative;
     left: -1px;
     top: 2px;
+    color: #1890ff;
+}
+
+.layui-upload-drag .layui-icon {
     color: #1890ff;
 }
 

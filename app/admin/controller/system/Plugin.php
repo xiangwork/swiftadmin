@@ -283,22 +283,4 @@ class Plugin extends AdminController
             }
         }
     }
-
-    /**
-     * 更新插件缓存
-     */
-    public function cache()
-    {
-        try {
-            $list = get_plugin_list();
-            foreach ($list as $key => $value) {
-                cache(sha1($key),null);
-            }
-            $action = true;
-        } catch (\Throwable $th) {
-            $action = false;
-        }
-
-        return $action ? $this->success() : $this->error();
-    }
 }

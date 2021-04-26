@@ -51,7 +51,7 @@ class Ip2Region
     */
     public function __construct($ip2regionFile)
     {
-        $ip2File = root_path().'extend/ip/ip2region.db';
+        $ip2File = root_path().'extend/conf/ip/ip2region.db';
         $ip2regionFile = !empty($ip2regionFile) ? $ip2regionFile : $ip2File;
         $this->dbFile = $ip2regionFile;
     }

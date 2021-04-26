@@ -192,8 +192,7 @@
 <script src="__STATICADMIN__js/common.js"></script>
 <script>
     window.sessionStorage.clear();
-
-    layui.use(['form', 'layer', 'jquery'], function() {
+    layui.use(function() {
         var $ = layui.jquery, 
         layer = layui.layer, 
         form = layui.form,
@@ -206,9 +205,7 @@
                 pwd = $('input[name="pwd"]').val(),
                 captcha = $('input[name="captcha"]').val(),
                 __token__ = $('input[name="__token__"]').val();
-            layui.iziToast.info({
-                message: "{:__('数据提交中...')}",
-            });
+            layui.iziToast.info({message: "{:__('数据提交中...')}"});
             that.prop('disabled', true);
             $_ajax(that,{name: name, pwd: pwd, captcha: captcha,__token__:__token__});
             return false;
@@ -356,7 +353,10 @@
                 data: data,
                 success: function (res) {
 
-                    layui.iziToast.destroy();
+                    layui. iziToast.destroy({
+                        time: 500
+                    });
+
                     if(res.code == 200){
 
                         layui.iziToast.success({
@@ -369,10 +369,7 @@
                     
                     }else {
 
-                        layui.iziToast.error({
-                            message: res.msg,
-                        });                        
-
+                        layui.iziToast.error({message: res.msg});
                         that.prop('disabled', false);
                         $("#captchaImg,#captchaImg2,#captchaImg3").attr('src',captchaUrl+'?rand='+Math.random()).parents('.layui-form-item').show();
                         if (res.data.token) {
