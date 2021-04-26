@@ -266,6 +266,7 @@ class Plugin extends AdminController
             $name = input('id/s');
             $status = input('status/d');
             $plugin = get_plugin_instance($name);
+
             if (!empty($plugin)) {
                 try {
 
