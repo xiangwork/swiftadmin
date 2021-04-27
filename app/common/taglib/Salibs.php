@@ -337,18 +337,12 @@ class Salibs extends TagLib {
 			if ('{$title}' != 'not') {
 				\$where[] = ['title','like','%'.'{$title}'.'%'];
 			}
-
-			\$list = \app\common\model\system\Article::where(\$where)
-														->field('{$field}')
-														->order('{$order}')
-														->limit({$limit})
-														->select()->toArray();
+			\$list = \app\common\model\system\Article::where(\$where)->field('{$field}')->order('{$order}')->limit({$limit})->select()->toArray();
 			foreach (\$list as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
 		Eof;
-
 		return $html;
 
 	}
@@ -371,11 +365,7 @@ class Salibs extends TagLib {
 
 		$html = <<<Eof
 		<?php
-			\$list = \app\common\model\system\Category::getListCate({$pid},{$cid},[
-				'limit'=>{$limit},
-				'field'=>'{$field}',
-				'order'=>'{$order}',
-				]);
+			\$list = \app\common\model\system\Category::getListCate({$pid},{$cid},['limit'=>{$limit},'field'=>'{$field}','order'=>'{$order}']);
 			foreach (\$list as \$key => {$id}):
 		?>
 		$content
