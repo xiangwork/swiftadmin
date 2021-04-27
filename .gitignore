@@ -4,8 +4,8 @@
 /runtime
 /public/index.php
 /public/admin.php
-/extend/conf/install.lock
 /public/error
+/extend/conf/install.lock
 README.TXT
 .gitignore
 *.log
