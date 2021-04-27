@@ -42,7 +42,7 @@ class Content extends AdminController
             
             // 是否存在数据库表
             if (isset($channel['table'])) {
-                $namespace = NAMESPACEMODELSYSTEM.$channel['table'];
+                $namespace = NAMESPACEMODELSYSTEM.ucfirst($channel['table']);
                 if (class_exists($namespace)) {
                     $this->parent = $channel['table'];
                     $this->model = new $namespace;
