@@ -7,7 +7,7 @@
 
 <p align="center">
 	<a href="https://www.swiftadmin.net" target="_blank">官方平台</a> 
-    <a class="ui button star " data-method="post" data-remote="true" href="/meystack/swiftadmin/star" rel="nofollow" sa_evt="clickStar" sa_location="仓库页面" sa_repo_id="13096450" sa_url="">在线演示</a>
+    <a class="ui button star " data-method="post" data-remote="true" href="https://gitee.com/meystack/swiftadmin/star" rel="nofollow" sa_evt="clickStar" sa_location="仓库页面" sa_repo_id="13096450" sa_url="">在线演示</a>
 	<a href="https://www.yuque.com/meystack/swiftadmin"  target="_blank">在线使用手册</a>
 </p>
 
