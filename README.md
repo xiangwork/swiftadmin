@@ -22,7 +22,7 @@
 
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="swiftadmin"></a>
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/ThinkPHP-6.0.8-brightgreen.svg" alt="thinkphp"></a>
-<a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/Layui-2.6.4-red.svg" alt="layui"></a>
+<a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/Layui-2.6.5-red.svg" alt="layui"></a>
 <a href="https://gitee.com/meystack/swiftadmin/stargazers"><img src="https://gitee.com/meystack/swiftadmin/badge/star.svg?theme=gvp" alt="star"></a>
 <a href="https://gitee.com/meystack/swiftadmin/members"><img src="https://gitee.com/meystack/swiftadmin/badge/fork.svg?theme=gvp" alt="fork"></a>
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=Idivrh-log25t0ryx19nWeqUk8oFrI-X&jump_from=webapi"><img src="https://img.shields.io/badge/qq一群-68221484-blue.svg" alt="一群"></a>
