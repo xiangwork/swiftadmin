@@ -310,7 +310,7 @@ a.mtlink {
 		<form class="comment-post" action="/index.php/comment/insert" >
 			<input type="hidden" id="cid" name="cid" value="1" >      <!-- 隐藏域 -->					
 			<input type="hidden" id="sid" name="sid" value="2" >      <!-- 隐藏域 -->
-			<img src="{$user.face|default='/static/images/user_def.jpg'}" class="comment-user-img u_avatar">
+			<img src="{$user.face|default='/static/images/user_default.jpg'}" class="comment-user-img u_avatar">
 		    <div class="comm_post_div">
 		      <textarea class="comm_content_text" name="content" value="我是评论的数据" placeholder="我要评论" style="height: 100px;"></textarea>
 		      <div class="btn-bar clear">
@@ -328,7 +328,7 @@ a.mtlink {
 				</php>
 				<volist name="$list['data']" id="vo">
 				<li class="material_comment clear">
-					<img src="{$vo.avatar|default='/static/images/user_def.jpg'}" class="u_avatar">
+					<img src="{$vo.avatar|default='/static/images/user_default.jpg'}" class="u_avatar">
 					<div class="comment-main">
 						<p class="comment-content-name"> {$vo.name|default='游客'} <span>{$vo.createtime}</span></p>
 						<div class="comment-main-content"><p>{$vo.content|raw}</p></div>

@@ -1,8 +1,8 @@
-/** SwiftAdmin iframe v1.0 date:2020-10-05 License By http://www.swiftadmin.net */
+/** SwiftAdmin iframe v1.0.0 date:2021-5-1 License By http://www.swiftadmin.net */
 
 // 以下代码是配置layui扩展模块的目录，每个页面都需要引入
 layui.config({
-    version: true,
+    version: 'v1.0.1',
     base: getProjectUrl() + 'module/'
 }).extend({
     step: 'step/step',

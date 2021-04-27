@@ -46,10 +46,6 @@ class qq
         header("Location:" . $this->getAuthorizeUrl());
     }
 
-    public static function testd() {
-        echo 'QQ';
-    }
-
     /**
      * 获取登录地址
      */

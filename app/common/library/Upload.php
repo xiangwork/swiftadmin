@@ -14,7 +14,6 @@ namespace app\common\library;
 use think\facade\Event;
 use app\common\library\Ftp;
 use app\common\library\Images as ImagesModel;
-use system\Http;
 
 /**
  * UPLOAD文件上传类
@@ -189,13 +188,8 @@ class Upload
 			return false;
         }
         
-        // 阿里云上传
-        if (!$this->oss()) {
-            return false;
-        }
-
-        // ftp上传
-        if (!$this->ftp()) {
+        // 上传阿里云/FTP空间
+        if (!$this->uploadOss() || !$this->uploadFtp()) {
             return false;
         }
 
@@ -214,44 +208,6 @@ class Upload
 		return $this->success('文件上传成功！','/'.$this->resource);   
     }
 
-
-    /**
-     * 验证文件类型
-     */
-    public function filefilter($file) 
-    {
-        // 查找文件类型	
-        foreach ($this->config['upload_class'] as $key => $value) {
-            if (stripos($value,strtolower($file->extension()))) {
-                $this->fileclass = $key;
-                break;
-            }
-        }
-
-        // 验证一句话木马 /*如果是加密的无法判断*/
-        $tempFile = $file->getPathname();
-        $content = @file_get_contents($tempFile);
-        if (false == $content 
-            || preg_match('#<\?php#i', $content) 
-            || $file->getMime() == 'text/x-php' )  {
-			$this->fileclass = null;
-        }
-
-        if ($this->fileclass == null) {
-            $this->_error = '禁止上传的文件类型';
-            return false;
-        }
-
-        // 文件验证器
-        $validate = new \app\common\validate\system\UploadFile();
-        if (!$validate->check([$this->fileclass => $file])) {
-            $this->fileclass = null;
-            $this->_error = $validate->getError();
-        }
-
-        // 未找到类型或验证文件失败
-        return empty($this->fileclass) ? false : true;
-    }
 
     /**
      * 文件下载函数
@@ -333,17 +289,17 @@ class Upload
                 }
 
                 $images[$url] = '/'.$this->resource;
-
-                // 上传阿里云
-
+                // 上传阿里云/FTP空间
+                if (!$this->uploadOss() || !$this->uploadFtp()) {
+                    return false;
+                }
             }
-
         }
 
         return $images;
     }
 
-    protected function oss()
+    protected function uploadOss()
     {
         if (saenv('cloud.status')) {
 
@@ -368,7 +324,7 @@ class Upload
 
                 }
            } catch (\Throwable $th) {
-               $this->setError($th->getMessage());
+                $this->setError($th->getMessage());
                 return false;
            }
         }
@@ -376,7 +332,7 @@ class Upload
         return true;
     }
 
-    protected function ftp()
+    protected function uploadFtp()
     {
         // 上传FTP空间
 		if ($this->config['upload_ftp']) {
@@ -405,16 +361,56 @@ class Upload
 
         return true;
     }
-    
+
+    /**
+     * 验证文件类型
+     */
+    public function filefilter($file) 
+    {
+        // 查找文件类型	
+        foreach ($this->config['upload_class'] as $key => $value) {
+            if (stripos($value,strtolower($file->extension()))) {
+                $this->fileclass = $key;
+                break;
+            }
+        }
+
+        // 验证一句话木马 /*如果是加密的无法判断*/
+        $tempFile = $file->getPathname();
+        $content = @file_get_contents($tempFile);
+        if (false == $content 
+            || preg_match('#<\?php#i', $content) 
+            || $file->getMime() == 'text/x-php' )  {
+			$this->fileclass = null;
+        }
+
+        if ($this->fileclass == null) {
+            $this->_error = '禁止上传的文件类型';
+            return false;
+        }
+
+        // 文件验证器
+        $validate = new \app\common\validate\system\UploadFile();
+        if (!$validate->check([$this->fileclass => $file])) {
+            $this->fileclass = null;
+            $this->_error = $validate->getError();
+        }
+
+        // 未找到类型或验证文件失败
+        return empty($this->fileclass) ? false : true;
+    }
+
     /**
      * JSON格式化信息
      */
     public function success($msg, $url) 
     {
         try {
-            if (!is_empty($this->ckeditor) &&   ($this->config['upload_ftp'] || saenv('cloud.status'))) {
-                        $url = str_replace('http:','',$this->config['upload_http_prefix']).$url;
-                }
+            // 编辑器上传回显已去除
+            if (!is_empty($this->ckeditor)
+                && ($this->config['upload_ftp'] || saenv('cloud.status'))) {
+                $url = str_replace('http:','',$this->config['upload_http_prefix']).$url;
+            }
         } catch (\Throwable $th) {
             echo $th->getMessage();
         }

@@ -753,7 +753,7 @@ if (!function_exists('mysql_comment')) {
 				->leftJoin('user u','c.uid = u.id')
 				->where('c.status',1)
 				->where('c.createtime','<',$param['time'])
-				->fieldRaw("c.*,ifnull(u.name,'游客') as name,ifnull(u.avatar,'/static/images/user_def.jpg') as avatar")
+				->fieldRaw("c.*,ifnull(u.name,'游客') as name,ifnull(u.avatar,'/static/images/user_default.jpg') as avatar")
 				->where($where)
 				->order($order)
 				->limit($limit)
@@ -769,7 +769,7 @@ if (!function_exists('mysql_comment')) {
 									->leftJoin('user u','c.uid = u.id')
 									->where('c.status',1)
 									->where('pid',$value['id'])
-									->fieldRaw("c.*,ifnull(u.name,'游客') as name,ifnull(u.avatar,'/static/images/user_def.jpg') as avatar")
+									->fieldRaw("c.*,ifnull(u.name,'游客') as name,ifnull(u.avatar,'/static/images/user_default.jpg') as avatar")
 									->order($order)
 									->select()
 									->toArray();

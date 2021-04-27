@@ -135,7 +135,8 @@ class Content extends AdminController
                         // 闭包循环处理数据
                         $lists  = Db::table($unionSql . ' alias')->order('id','desc')
                             ->paginate($limit)->each(function($item){
-                                    $item['readurl'] = '/123';
+                                    $item['readurl'] = '/123'; // 配置内容页访问地址。
+                                    $item['createtime'] = date('Y-m-d H:i:s',$item['createtime']);
                                     return $item;
                             })->toArray();
                         $lists  = $lists['data'] ?? [];

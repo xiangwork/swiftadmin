@@ -17,7 +17,11 @@ require __DIR__ . '/../vendor/autoload.php';
 // 执行HTTP应用并响应
 $http = (new App())->http;
 
-$response = $http->run();
+if (!is_file('../extend/conf/install.lock')){
+    header('Location: /install.php');
+}else {
+    $response = $http->run();
+}
 
 $response->send();
 

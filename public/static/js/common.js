@@ -41,7 +41,7 @@ layui.use(['jquery','layer','element','form'],function(){
                 else {
                     _cookie = {
                         name: '游客',
-                        avatar: '/static/images/user_def.jpg',
+                        avatar: '/static/images/user.jpg',
                     }
                 }
 

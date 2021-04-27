@@ -11,27 +11,11 @@
 	<a href="https://www.yuque.com/meystack/swiftadmin"  target="_blank">在线使用手册</a>
 </p>
 
-### `4.28日之后会有新版本上传，重构了很多代码，代码量更少，逻辑更清晰`
-> 重构版本会有以下改动
-
-* 重写了AUTH类，鉴权更清晰明了，代码更健壮
-* 框架默认自带的模型，后端数据添加修改已编写完毕，你可以直接注重前端开发
-* 摒弃config获取配置信息字符过长，自写saenv函数获取变量更简单
-* 重写回收站操作逻辑，注重主要数据的维护，只在操作界面保留主要模型的数据恢复与销毁
-* 增加了自动图片本地化、自动祛除非本站链接、自动提取缩略图、自动获取对象属性
-* 编写了大量常用标签，增加TAG违禁字检测、网站内链功能，强化SEO效果！！！
-* 修复代码审计后的中危/高危漏洞、提高代码安全质量！
-* 修复了各种已知的BUG。。。。
-
-* 最后说一句，，代码还没上传，，代码还没上传，，还在写中，现在凌晨一点半。我还能codeing。。。
---- 
-
 <b>请注意，本框架只支持PHP8版本，低版本已经不兼容了~ </b><br/>
 <b>请注意，框架安装成功后会自动删除安装脚本文件！！！</b><br/>
-<b>请注意，系统安装后默认账号密码为 admin admin888 </b><br/>
 <b>后台演示 <a href="http://demo.swiftadmin.net/admin.php"  target="_blank">http://demo.swiftadmin.net/admin.php</a> </b><br/>
 <b>管理员账号 admin admin888 </b><br/>
-<b>测试账号  ceshi admin888 </b>注意：auth类在前端也有鉴权操作，所以你可以测试看返回的数据<br/>
+<b>测试账号  ceshi admin888 </b>注意：前端使用JavaScript鉴权！<br/>
 
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="swiftadmin"></a>
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/ThinkPHP-6.0.8-brightgreen.svg" alt="thinkphp"></a>
@@ -42,13 +26,30 @@
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=L_SKDh46TnWDVrudKEON2XAlgm02RNic&jump_from=webapi"><img src="https://img.shields.io/badge/qq二群-68221585-blue.svg" alt="二群"></a>
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=p6N-b7AkWiESpcrZmOKWpm3t05qt4MQ-&jump_from=webapi"><img src="https://img.shields.io/badge/qq三群-68221618-blue.svg" alt="三群"></a>
 
+### `在官网搭建好之前，更新日志都先会发在这里`
+
+## v1.0.1
+> v1.0.1 对代码进行重构和修复，有以下改动
+
+* 重写了AUTH鉴权类，鉴权更清晰明了，代码更健壮
+* 框架默认自带的模型，后端数据添加修改已编写完毕，你可以直接注重前端开发
+* 摒弃config获取配置信息字符过长，自写saenv函数获取变量更简单[默认system]
+* 重写回收站操作逻辑，注重主要数据的维护，只在操作界面保留主要模型的数据恢复与销毁
+* 增加了自动图片本地化、自动祛除非本站链接、自动提取缩略图、自动获取对象属性
+* 编写了大量常用标签，增加TAG违禁字检测、网站内链功能，强化SEO效果！！！
+* 修复代码审计后的中危/高危漏洞、提高代码安全质量！
+* 修复了各种已知的BUG。。。。
+
+- 去掉了默认继承的回收站、还原和销毁方法
+--- 
+
 ## 开发初衷
 
-1.  `swiftadmin` 框架的开发，主要也是为了减少在自己开发过程中的频繁造轮子，并且swiftAdmin框架主张简单就是高效的原则，相信没有比判断0或者1更有效率的算法了吧，所以最简单的东西才是效率最高的，可能你的应用场景很复杂，但是你可以把复杂的事情简单化，复杂的维度无外乎  `n+0 or 1` 
+1.  swiftadmin框架的开发，主要是为了减少在自己开发过程中的频繁造轮子，并且swiftAdmin框架主张简单就是高效的原则，相信没有比判断0或者1更有效率的算法了吧，所以最简单的东西才是效率最高的，可能你的应用场景很复杂，但是你可以把复杂的事情简单化！
 
-2.  在最开始接触互联网的时候，都是用一些开源的CMS系统制作自己的网站，后期因为扩展和二次开发的问题，导致觉得很多东西并不是那么简单易用，比如后台的很多JS代码封装的不是很好，而且界面也操作性很差，所以自己开发这款框架封装了很多常用的特性，足以满足日常后台的开发需要，在使用的过程中你会发现，SA框架里面用的最多的是属性而不是对象，一是为了在书写HTML标签的时候方便。二是为了和layui本身区分开！这样让你更容易在这个上面进行扩展！
+2.  在最开始接触互联网的时候，都是用一些开源的CMS系统制作自己的网站，后期因为扩展和二次开发的问题，导致觉得很多东西并不是那么简单易用，比如后台的很多JS代码封装的不是很好，而且界面也操作性很差，所以自己开发这款框架封装了很多常用的特性，足以满足日常后台的开发需要，在使用的过程中你会发现，SAPHP框架里面用的最多的是属性而不是对象，一是为了在书写HTML标签的时候方便。二是为了和layui本身区分开！这样让你更容易在这个上面进行扩展！
 
-3.  由于我本人不太喜欢一键增删改查，因为一键增删改查的方式并不适合大多数硬性的应用场景和逻辑需求，你可能在后期需要摈弃大多数利用了一键CURD的方法进行重载函数，虽然swiftadmin框架里面也有，但swiftadmin框架的设计初衷是为了在易用性和操作性上折中找一个方案来做，当前基于第一个版本的SA框架在这方面的表现还不是特别好。但随着应用场景和市场的检验和优化，本框架会逐步的进行完善和提高性能！
+3.  系统默认从基础控制器继承了增删改查操作。但这种方式并不适合大多数硬性的应用场景和逻辑需求，你可能在后期需要摈弃大多数利用了一键CURD的方法进行重载函数，虽然swiftadmin框架里面也有，但swiftadmin框架的设计初衷是为了在易用性和操作性上折中找一个方案来做，当前基于第一个版本的SAPHP框架在这方面的表现还不是特别好。但随着应用场景检验和优化，本框架会逐步的进行完善和提高性能！
 
 4.  在市面上目前的开源极速开发框架的学习成本略高，想搞一个学习成本极低，但性能不低的框架！
 
@@ -67,7 +68,7 @@
 
  *  五、本框架会逐渐偏向于社区版开源的方向，主要由社区共同的爱好者免费开发维护插件！！！
 
- 本框架极度适合个人开发者和小型创业公司。当你使用这款框架后，你会喜欢上这款框架。。这就是你一直在找的看框架，你找了很多都不适合自己，那么适合你自己的来了。
+ *  六、本框架特别适合个人开发者和小型创业公司，找一款真正适合自己的框架不容易，所以先来试试swiftadmin吧！
 
 ## `框架优势`
 
@@ -77,7 +78,9 @@
 
 * `界面基于ant design设计 [可操作性强]`
 
-* `访问栏目双鉴权，满足日常大部分需求`
+* `控制器与栏目管理双鉴权，满足日常大部分需求`
+
+* `前端JavaScript鉴权，后端AUTH类鉴权，减少请求`
 
 * `代码安全质量高，修复大部分低危、高危代码漏洞`
 
@@ -98,10 +101,7 @@
 - [x] `广告管理` 运营必选功能，获取广告代码自动校验过期时间
 - [x] `数据字典` 对系统中经常使用的一些较为固定的数据进行维护。
 - [x] `操作日志` 用户后台操作日志，全局异常、SQL注入等记录
-- [x] `代码生成` 生成 API 端的 CURD 操作
 - [x] `TAG过滤`  支持违规词、敏感词配置
-- [x] `附件管理` 可管理上传的文件
-- [x] `定时任务` 可管理定时任务，而不依赖于 Crontab
 - [x] `短信平台` 支持阿里云、腾讯云短信发送
 - [x] `附件上传` 支持FTP、阿里云、腾讯云OSS附件上传
 - [ ] `服务监控` 服务监控：监视当前系统CPU、内存、磁盘、堆栈等相关信息。
@@ -148,6 +148,18 @@ git clone https://gitee.com/meystack/swiftadmin.git ./src && cd src && composer 
         <td><img src="https://images.gitee.com/uploads/images/2021/0412/135451_c75d3ca2_904542.png"/></td>
         <td><img src="https://images.gitee.com/uploads/images/2021/0412/135457_d4429ce5_904542.png"/></td>
     </tr>
+    <tr>
+        <td><img src="https://images.gitee.com/uploads/images/2021/0427/122537_60f07d17_904542.png"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2021/0427/122545_8b8872af_904542.png"/></td>
+    </tr>
+    <tr>
+        <td><img src="https://images.gitee.com/uploads/images/2021/0427/122556_1f07ce34_904542.png"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2021/0427/122603_373375e6_904542.png "/></td>
+    </tr>
+    <tr>
+        <td><img src="https://images.gitee.com/uploads/images/2021/0427/122610_b79d5d77_904542.png"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2021/0427/122618_1f8983ad_904542.png"/></td>
+    </tr>	
 </table>
 
 ## 项目演示
@@ -162,8 +174,6 @@ git clone https://gitee.com/meystack/swiftadmin.git ./src && cd src && composer 
 		<td><img src="https://images.gitee.com/uploads/images/2021/0412/151945_66490698_904542.gif"/></td>
 	</tr>	    
 </table>
-
-
 
 ## 如何使用？
 > 

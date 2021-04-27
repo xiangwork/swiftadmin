@@ -71,9 +71,9 @@ class Category extends AdminController
                         }
                     }
                 }
-
-                return $this->success('查询成功', null, $list, count($list), 0);
             }
+            
+            return $this->success('查询成功', null, $list, count($list), 0);
         }
 
 		return view();

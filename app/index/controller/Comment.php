@@ -25,8 +25,6 @@ class Comment extends HomeController
 	 */
 	protected $facearray = [];
 
-	public $needLogin = true;
-
     public function initialize()
     {
         parent::initialize();

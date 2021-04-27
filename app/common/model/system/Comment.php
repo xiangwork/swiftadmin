@@ -24,6 +24,6 @@ class Comment extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class,'id','uid')->fieldRaw("ifnull(name,'游客') as name,ifnull(avatar,'/static/images/user_def.jpg') as avatar");
+        return $this->hasOne(User::class,'id','uid')->fieldRaw("ifnull(name,'游客') as name,ifnull(avatar,'/static/images/user_default.jpg') as avatar");
     }
 }

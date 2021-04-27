@@ -61,10 +61,10 @@ class Third extends HomeController
         $userInfos = $this->oauth->getUserInfo();
 
          // 注册新用户
-        if (!empty($userInfos) && !$this->isLogin()) {
+        if (!empty($userInfos) && !$this->auth->isLogin()) {
             $this->register($userInfos,$this->type);
         }
-        else if ($this->isLogin()) { // 绑定用户
+        else if ($this->auth->isLogin()) { // 绑定用户
             $this->doBind($userInfos,$this->type);
         }
     }
@@ -74,8 +74,6 @@ class Third extends HomeController
      */
     public function register(array $userInfos = [], string $type = null) 
     {
-
-
         // 查询是否已经注册
         $openid = $userInfos['openid'];
         $nickname = $userInfos['userinfo']['name'] ?? $userInfos['userinfo']['nickname'];
@@ -87,7 +85,7 @@ class Third extends HomeController
             $result['logincount'] = $result['logincount'] + 1;
             $result->save();
             $this->reload();
-            $this->setLoginToken($result->toArray(),604800);
+            $this->auth->loginState($result->toArray());
         }
         else {
 
@@ -120,7 +118,7 @@ class Third extends HomeController
             if (isset($third) && is_array($third)) {
                 if (UserThird::create($third)) {
                     $this->reload();
-                    $this->setLoginToken($result->toArray(),604800);
+                    $this->auth->loginState($result->toArray());
                 }
             }
         }
@@ -131,8 +129,7 @@ class Third extends HomeController
      */
     public function bind() 
     {
-
-        if ($this->isLogin()) {
+        if ($this->auth->isLogin()) {
             // 跳转到登录的地址
             $this->redirect("/third/login?bind=true&type=".$this->type);
         }
@@ -144,9 +141,9 @@ class Third extends HomeController
     public function unbind() 
     {
 
-        if ($this->isLogin()) {
+        if ($this->auth->isLogin()) {
 
-          $result = User::find($this->isLogin());
+          $result = $this->auth->userData;
           if (!empty($result)) {
             
             if (empty($result['email']) || empty($result['pwd'])) {
@@ -154,7 +151,7 @@ class Third extends HomeController
             }
 
             $where['type'] = $this->type;
-            $where['user_id'] = $this->isLogin();
+            $where['user_id'] = cookie('uid');
             if (UserThird::where($where)->delete()) {
                 return $this->success('解除绑定成功！');
             }
@@ -181,7 +178,7 @@ class Third extends HomeController
             // 拼装数据
             $third = [
                 'type'          => $this->type,
-                'user_id'       => $this->isLogin(),
+                'user_id'       => cookie('uid'),
                 'openid'        => $openid,
                 'nickname'      => $nickname,
                 'access_token'  => $userInfos['access_token'],

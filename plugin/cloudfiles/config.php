@@ -6,7 +6,7 @@ return [
   'author' => '官方',
   'website' => 'www.swiftadmin.net',
   'version' => '1.0.0',
-  'status' => 1,
+  'status' => 0,
   'extends' => [
     'title' => '这里是扩展配置信',
   ],
@@ -18,6 +18,4 @@ return [
   ],
   'config' => 0,
   'url' => '/plugin/cloudfiles',
-  'path' => 'D:\\BtSoft\\wwwroot\\demo.swiftadmin.net\\plugin\\cloudfiles\\',
-  'filePath' => 'D:\\BtSoft\\wwwroot\\demo.swiftadmin.net\\plugin\\cloudfiles\\config.php',
 ];
