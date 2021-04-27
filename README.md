@@ -13,8 +13,9 @@
 
 <b>请注意，本框架只支持PHP8版本，低版本已经不兼容了~ </b><br/>
 <b>请注意，框架安装成功后会自动删除安装脚本文件！！！</b><br/>
+<b>开发环境：Windows服务器版 VScode Apache MySQL5.7 PHP8</b><br/>
 <b>后台演示 <a href="http://demo.swiftadmin.net/admin.php"  target="_blank">http://demo.swiftadmin.net/admin.php</a> </b><br/>
-<b>管理员账号 admin admin888 </b><br/>
+<b>管理账号  admin admin888 </b><br/>
 <b>测试账号  ceshi admin888 </b>注意：前端使用JavaScript鉴权！<br/>
 
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="swiftadmin"></a>
