@@ -97,9 +97,6 @@ class AdminController extends BaseController
      */
 	public $noNeedLogin = [
 		'/index/index', // 后台首页
-		'/system.admin/_get_auth_func',
-		'/system.content/edit',
-		'/upload/upload',
 	];
 
     /**
@@ -135,15 +132,17 @@ class AdminController extends BaseController
 			}
 		}
 		
-		// 初始化字段信息
-		// $this->sysfield();
-		// $this->writeLogs();
-		View::assign([
-			'app'=>$app,
-			'controller'=>$this->controller,
-			'action'=>$this->action,
-			'AdminLogin'=>$this->admin
-		]);
+		// 初始化字段信
+		self::sysfield();
+
+		// 系统日志
+		if (saenv('admin_log_status')) {
+			$array = get_system_logs();
+			$array['type'] = 2;
+			Systemlog::write($array);
+		}
+
+		View::assign(['app'=>$app,'controller'=>$this->controller,'action'=>$this->action,'AdminLogin'=>$this->admin]);
 	}
 
 	/**
@@ -360,7 +359,7 @@ class AdminController extends BaseController
 	/**
 	 * 生成字典
 	 */
-	public function sysfield() 
+	public static function sysfield() 
 	{
 		$debug = env('app_debug') || 0;
 		if(!is_file(config_path().'sysfield.php') ||  $debug = 1) {
@@ -387,19 +386,6 @@ class AdminController extends BaseController
 				// 写入到配置信息
 				arr2file('../config/sysfield.php', $field);
 			}			
-		}
-	}
-
-	/**
-	 * 写入系统操作日志
-	 */
-	public function writeLogs() 
-	{
-		if (saenv('admin_log_status')) {
-			$array = get_system_logs();
-			$array['type'] = 2;
-
-			Systemlog::write($array);
 		}
 	}
 
