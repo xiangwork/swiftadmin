@@ -7,10 +7,12 @@
 
 <p align="center">
 	<a href="https://www.swiftadmin.net" target="_blank">官方平台</a> 
-    <a class="ui button star " data-method="post" data-remote="true" href="https://gitee.com/meystack/swiftadmin/star" rel="nofollow" sa_evt="clickStar" sa_location="仓库页面" sa_repo_id="13096450" sa_url="">在线演示</a>
+    <a href="http://demo.swiftadmin.net/admin.php" rel="nofollow" >在线演示</a>
 	<a href="https://www.yuque.com/meystack/swiftadmin"  target="_blank">在线使用手册</a>
 </p>
-
+<p align="center">
+<font size="20" >请先右上角送颗星星，谢谢！</font>
+</p>
 <b>请注意，本框架只支持PHP8版本，低版本已经不兼容了~ </b><br/>
 <b>请注意，框架安装成功后会自动删除安装脚本文件！！！</b><br/>
 <b>开发环境：Windows服务器版 VScode Apache MySQL5.7 PHP8</b><br/>
