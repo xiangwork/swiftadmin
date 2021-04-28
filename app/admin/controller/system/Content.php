@@ -3,11 +3,11 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin 极速开发框架 [基于ThinkPHP6开发]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2019-2020 http://www.swiftadmin.net
+// | Copyright (c) 2020-2030 http://www.swiftadmin.net
 // +----------------------------------------------------------------------
 // | swiftAdmin.net High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>，河北赢图网络科技版权所有
+// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
 // +----------------------------------------------------------------------
 namespace app\admin\controller\system;
 
@@ -139,6 +139,7 @@ class Content extends AdminController
                                     $item['createtime'] = date('Y-m-d H:i:s',$item['createtime']);
                                     return $item;
                             })->toArray();
+                        $count  = $lists['total'];
                         $lists  = $lists['data'] ?? [];
                         
                     }
@@ -157,7 +158,7 @@ class Content extends AdminController
                 return $this->error($th->getMessage());
             }
 
-            return $this->success('查询成功', null, $lists, count($lists), 0);
+            return $this->success('查询成功', null, $lists, $count, 0);
         }
 
         return view();
