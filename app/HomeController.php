@@ -7,12 +7,14 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.NET High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 namespace app;
 
 use app\BaseController;
 use app\common\library\Auth;
+use think\facade\Cache;
+use think\facade\Config;
 
 // 前台全局控制器基类
 class HomeController extends BaseController 
@@ -117,7 +119,7 @@ class HomeController extends BaseController
         // 是否验证登录器
         if($this->auth->isLogin()) {
             $this->userId = $this->auth->userData['id']; 
-            $this->userData = $this->auth->userData; 
+            $this->userData = $this->auth->userData;
             if(in_array($this->action,$this->repeatLogin)) {
                 $this->redirect($this->JumpUrl);
             }
@@ -172,4 +174,7 @@ class HomeController extends BaseController
 	public function refereTonull() {
 		cookie('referer',null);
 	}
+
+
+
 }

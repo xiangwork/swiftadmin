@@ -59,8 +59,8 @@ class Cloudfiles extends plugin
         try {
             if (!class_exists('OSS')) {
                 $loader = new ClassLoader();
-                $loader->addPsr4('OSS\\',PLUGIN_PATH.'cloudfiles\\library\\OSS');
-                $loader->addPsr4('Overtrue\\CosClient\\',PLUGIN_PATH.'cloudfiles\\library\\qcloud');
+                $loader->addPsr4('OSS\\',PLUGIN_PATH.'cloudfiles/library/OSS');
+                $loader->addPsr4('Overtrue\\CosClient\\',PLUGIN_PATH.'cloudfiles/library/qcloud');
                 $loader->register(true);
             }
         } catch (\Throwable $th) {

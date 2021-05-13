@@ -7,7 +7,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.net High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 
 namespace app\index\controller;
@@ -60,15 +60,12 @@ class Comment extends HomeController
 				Config::set(['page'=>1],'comment');
 			}
 
-			if (is_empty($post['time'])) {
-				$post['time'] = time();
-			}
-
+			$post['time'] = empty($post['time']) ? time() : (!is_numeric($post['time']) ? strtotime($post['time']) : $post['time']);
 			$result = mysql_comment('cid:'.$post['cid'].';sid:'.$post['sid'].';time:'.$post['time'].';limit:10;page:true;');
 			if (!empty($result['data'])) {
 				return $this->success('请求成功！',null,$result['data']);
 			}else {
-
+				
 				return $this->error("没有更多评论了",null,101);
 			}
 		}
@@ -123,6 +120,14 @@ class Comment extends HomeController
 				$result['createtime'] = differ_time(time());
 				if(!saenv('user_form_check')) {
 					$result['user'] = $result->user;
+
+					if (empty($result['user'])) {
+						$result['user'] = [
+							'name'=>'游客',
+							'avatar'=> '/static/images/user_default.jpg'
+						];
+					}
+					
 					return $this->success('评论成功！',null,$result);
 				}else {
 					return $this->error('您的评论待管理员审核后显示！');

@@ -7,7 +7,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.NET High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 namespace app;
 use think\App;
@@ -211,9 +211,10 @@ abstract class BaseController
     /**
      * 生成静态HTML
      * @access protected
-     * @param  htmlfile         消息参数
-     * @param  htmlpath         错误代码
-     * @param  templateFile
+     * @param  htmlfile         文件名
+     * @param  htmlpath         生成路径
+     * @param  templateFile     模板地址
+     * @param  suffix           文件后缀
      * @return void
      */
     protected function buildHtml(string $htmlfile = null,string $htmlpath = null, string $templateFile = null,$suffix = 'html') 
@@ -241,4 +242,12 @@ abstract class BaseController
     {
 		abort($code,$msg);
 	}
+
+    /**
+     * 空方法
+     */
+    public function __call($method, $args)
+    {
+        $this->throwError();
+    }
 }

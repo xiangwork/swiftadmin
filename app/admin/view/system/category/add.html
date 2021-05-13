@@ -23,7 +23,7 @@
                             <div class="layui-form-item"> 
                                 <label class="layui-form-label">{:__('栏目模型')}</label>
                                 <div class="layui-input-inline">
-                                    <select name="cid" lay-verType="tips" lay-verify="required" >
+                                    <select name="cid"  lay-verify="required" >
                                         <option value="">{:__('请选择模型')}</option>
                                         <salibs:channel id="vo">
                                             <option value="{$vo.id}" <if condition="$vo['id'] eq $data['cid']"> selected </if> >{$vo.title}</option>
@@ -40,7 +40,7 @@
                             <div class="layui-form-item"> 
                                 <label class="layui-form-label">{:__('栏目名称')}</label>
                                 <div class="layui-input-inline">
-                                    <input name="title"  type="text" class="layui-input" value="{$data.title}" lay-verType="tips" lay-verify="required"
+                                    <input name="title"  type="text" class="layui-input" value="{$data.title}"  lay-verify="required"
                                      placeholder="{:__('请填写栏目名称')}"/>
                                 </div>
                             </div>
@@ -110,39 +110,36 @@
                             <label class="layui-form-label" >{:__('投稿选项')}</label>
                             <div class="layui-input-inline" >
                                  <input type="radio" name="contribute"   
-                                 value="1" title="开启"  <if condition="$data.contribute eq 1 "> checked </if> >
+                                 value="1" title="是"  <if condition="$data.contribute eq 1 "> checked </if> >
                                  <input type="radio" name="contribute"   
-                                 value="0" title="关闭" <if condition="$data.contribute eq 0 "> checked </if> >
+                                 value="0" title="否" <if condition="$data.contribute eq 0 "> checked </if> >
                             </div>   
                             <div class="layui-form-mid layui-word-aux">* {:__('是否开启会员投稿支持！')}</div>                
                         </div> 
 
-                        <div class="layui-form-item"> 
-                            <label class="layui-form-label">{:__('内容页模板')}</label>
-                            <div class="layui-input-inline">
-                                <input name="skin_detail" type="text" class="layui-input"   value="{$data.skin_detail}" placeholder="{:__('默认生成')}"/>
-                            </div>
-                        </div>      
-
-                        <div class="layui-form-item"> 
-                            <label class="layui-form-label">{:__('分类页模板')}</label>
-                            <div class="layui-input-inline">
-                                <input name="skin" type="text" class="layui-input"  value="{$data.skin}"  placeholder="{:__('默认生成')}"/>
-                            </div>
-                        </div>  
-
-                        <div class="layui-form-item"> 
-                            <label class="layui-form-label">{:__('列表页模板')}</label>
-                            <div class="layui-input-inline">
-                                <input name="skin_type" type="text" class="layui-input" value="{$data.skin_type}"  placeholder="{:__('默认生成')}" />
-                            </div>
-                        </div>   
-                        <div class="layui-form-item"> 
-                            <label class="layui-form-label">{:__('子页面模版')}</label>
-                            <div class="layui-input-inline">
-                                <input name="skin_child" type="text" class="layui-input" value="{$data.skin_child}" placeholder="{:__('默认生成')}"/>
-                            </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" >{:__('是否单页面')}</label>
+                            <div class="layui-input-inline" >
+                                 <input type="radio" name="single"   
+                                 value="1" title="是"  <if condition="$data.single eq 1 "> checked </if> >
+                                 <input type="radio" name="single"   
+                                 value="0" title="否" <if condition="$data.single eq 0 "> checked </if> >
+                            </div>   
+                            <div class="layui-form-mid layui-word-aux">* {:__('当前栏目是否为单页面形式')}</div>                
                         </div> 
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{:__('独立模板')}</label>
+                            <div class="layui-input-inline">
+                                <select name="skin">
+                                    <option value=""></option>
+                                    <volist name="skin" id="vo">
+                                        <option value="{$vo}" <if condition="$vo eq $data['skin']"> selected </if> >{$vo}</option>
+                                    </volist>
+                                </select>
+                            </div>
+                            <div class="layui-form-mid layui-word-aux" style="color: red!important;">* {:__('自定义模板请在app/index/view/cagetory编写')}</div> 
+                        </div>  
 
                     </div>
 
@@ -164,8 +161,8 @@
 <script src="__STATICADMIN__module/xmselect/xmselect.js"></script>
 <script src="/static/js/tinymce/tinymce.min.js"></script>
 <script>
-    var group = <salibs:usergroupjson name='group' />;
-    var category = <salibs:categoryjson pid="0" />;   
+    var grouplist = {:get_usergroup_json()};
+    var categorylist = {:get_category_json()};  
 </script>
 <script>
     layui.use(['content'],function () {
@@ -173,7 +170,7 @@
         var content = layui.content;
         // 常规元素渲染
         content.tinymce('content');
-        content.xmselect('access',group,[{$data.access}]);
-        content.xmselect('pid',category,[{$data.pid}],false);
+        content.xmselect('access',grouplist,[{$data.access}]);
+        content.xmselect('pid',categorylist,[{$data.pid}],false);
     });
 </script>

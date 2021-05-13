@@ -7,7 +7,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.net High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 namespace app\admin\controller\system;
 
@@ -30,7 +30,7 @@ class Content extends AdminController
 
     // 初始化函数
     public function initialize() {
-        
+
         parent::initialize();
         try {
 
@@ -53,9 +53,7 @@ class Content extends AdminController
             return $this->error($th->getMessage());
         }
 
-		$this->middleware = [
-			\app\admin\middleware\system\Content::class,
-	    ];        
+		$this->middleware = [\app\admin\middleware\system\Content::class];    
     }
 
 	/**
@@ -102,7 +100,7 @@ class Content extends AdminController
                     // 组合UNION查询
                     $unionSql = [];
                     $where[] = ['delete_time','=',null];
-                    $field = "id,cid,pid,title,status,hits,author,attribute,createtime";
+                    $field = "id,cid,pid,title,hash,status,hits,pinyin,author,gold,attribute,createtime";
                     foreach ($tables as $table => $elems) {
 
                         // 筛选条件
@@ -131,17 +129,16 @@ class Content extends AdminController
                     }
 
                     if (!empty($unionSql)) {
-
+                        
                         // 闭包循环处理数据
                         $lists  = Db::table($unionSql . ' alias')->order('id','desc')
                             ->paginate($limit)->each(function($item){
-                                    $item['readurl'] = '/123'; // 配置内容页访问地址。
+                                    $item['readurl'] = build_request_url($item,'content_page'); 
                                     $item['createtime'] = date('Y-m-d H:i:s',$item['createtime']);
                                     return $item;
                             })->toArray();
                         $count  = $lists['total'];
                         $lists  = $lists['data'] ?? [];
-                        
                     }
                 }
                 else {
@@ -151,7 +148,7 @@ class Content extends AdminController
                                                             ->order('id','desc')
                                                             ->withoutField('content')
                                                             ->limit($limit)
-                                                            ->page($page)->select();
+                                                            ->page($page)->select()->toArray();
                 }
 
             } catch (\Throwable $th) {

@@ -46,7 +46,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('父级角色')}</label>
         <div class="layui-input-block">
-            <select name="pid" lay-verType="tips" lay-verify="required" > <volist name="$group" id="vo" >
+            <select name="pid"  lay-verify="required" > <volist name="$group" id="vo" >
                 <option value="{$vo.id}">{$vo.title}</option>
                 </volist>
             </select>
@@ -55,14 +55,14 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('角色名称')}</label>
         <div class="layui-input-block">
-            <input name="title" placeholder="{:__('请角色名称')}" type="text" class="layui-input" lay-verType="tips"lay-verify="required" />
+            <input name="title" placeholder="{:__('请角色名称')}" type="text" class="layui-input" lay-verify="required" />
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('角色标识')}</label>
         <div class="layui-input-block">
-            <input name="alias" placeholder="{:__('请角色标识')}" type="text" class="layui-input"  lay-verType="tips"lay-verify="required" />
+            <input name="alias" placeholder="{:__('请角色标识')}" type="text" class="layui-input"  lay-verify="required" />
         </div>
     </div>
 
@@ -70,7 +70,7 @@
         <label class="layui-form-label">{:__('角色备注')}</label>
         <div class="layui-input-block">
             <textarea name="content" id="content" cols="30" rows="10" style="min-height: 110px;" placeholder="{:__('请输入角色备注')}" class="layui-textarea" 
-            lay-verType="tips"lay-verify="required"></textarea>
+            lay-verify="required"></textarea>
         </div>
     </div>
 
@@ -143,7 +143,7 @@
                 {field: 'title', align: 'center', title: "{:__('名称')}"},
                 {field: 'alias', align: 'center', title: "{:__('角色标识')}"},
                 {field: 'content', align: 'center',title: "{:__('角色备注')}"},
-                {field: 'createtime', align: 'center',title: "{:__('添加时间')}"},
+                {field: 'createtime', align: 'center',title: "{:__('创建时间')}"},
                 {align: 'center', toolbar: '#tableBar',width: 260, title: "{:__('操作')}"},
             ]]
         })

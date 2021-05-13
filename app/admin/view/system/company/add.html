@@ -15,11 +15,11 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('公司名称')}</label>
         <div class="layui-input-inline">
-            <input name="title" value="{$data.title}" placeholder="{:__('请输入公司名称')}" type="text" class="layui-input" lay-verType="tips" lay-verify="required" />
+            <input name="title" value="{$data.title}" placeholder="{:__('请输入公司名称')}" type="text" class="layui-input"  lay-verify="required" />
         </div>
         <label class="layui-form-label">{:__('公司标识')}</label>
         <div class="layui-input-inline">
-            <input name="alias" value="{$data.alias}" placeholder="{:__('请输入公司标识')}"  type="text" class="layui-input" lay-verType="tips" lay-verify="required" />
+            <input name="alias" value="{$data.alias}" placeholder="{:__('请输入公司标识')}"  type="text" class="layui-input"  lay-verify="required" />
         </div>
     </div>
 
@@ -27,12 +27,12 @@
         <label class="layui-form-label">{:__('联系人')}</label>
         <div class="layui-input-inline">
             <input name="contact" placeholder="{:__('请输入联系人')}" value="{$data.contact}"
-                type="text" class="layui-input"  lay-verType="tips" lay-verify="required" />
+                type="text" class="layui-input"   lay-verify="required" />
         </div>
         <label class="layui-form-label">{:__('手机号码')}</label>
         <div class="layui-input-inline">
             <input name="mobile" placeholder="{:__('请输入手机号码')}" value="{$data.mobile}"
-                type="number" class="layui-input"  lay-verType="tips" lay-verify="phone" />
+                type="number" class="layui-input"   lay-verify="phone" />
         </div>
     </div>
 
@@ -43,7 +43,7 @@
         </div>
         <label class="layui-form-label">{:__('邮箱地址')}</label>
         <div class="layui-input-inline">
-            <input name="email" placeholder="{:__('请输入邮箱地址')}" value="{$data.email}" class="layui-input" lay-verType="tips" lay-verify="email" />
+            <input name="email" placeholder="{:__('请输入邮箱地址')}" value="{$data.email}" class="layui-input"  lay-verify="email" />
         </div>
     </div> 
 

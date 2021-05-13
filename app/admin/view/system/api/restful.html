@@ -59,14 +59,14 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('参数名称')}</label>
         <div class="layui-input-block">
-            <input name="name" placeholder="{:__('请填写参数名称')}" type="text" class="layui-input"  lay-verType="tips" lay-verify="required" />
+            <input name="name" placeholder="{:__('请填写参数名称')}" type="text" class="layui-input"   lay-verify="required" />
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('参数类型')}</label>
         <div class="layui-input-block">
-            <select name="type" lay-verType="tips" lay-verify="required"> 
+            <select name="type"  lay-verify="required"> 
                 <option value="Integer">Integer</option>
                 <option value="String" >String</option>
                 <option value="Array">Array</option>

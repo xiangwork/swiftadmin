@@ -16,12 +16,12 @@
         <label class="layui-form-label"><font color="red">* </font>{:__('会员名称')}</label>
         <div class="layui-input-inline">
             <input id="uid" ts-selected="{$data.uid}" value="{$data.name|default=''}" 
-                    placeholder="{:__('请选择会员名称')}" type="text" class="layui-input" lay-verType="tips" lay-verify="required" />
+                    placeholder="{:__('请选择会员名称')}" type="text" class="layui-input"  lay-verify="required" />
             <input name="uid" type="text" hidden="" value="{$data.uid}">
         </div>
         <label class="layui-form-label">{:__('排序号')}</label>
         <div class="layui-input-inline">
-            <input name="sort" placeholder="{:__('默认自动生成')}" value="{$data.sort}" type="number" class="layui-input"  lay-verType="tips" />
+            <input name="sort" placeholder="{:__('默认自动生成')}" value="{$data.sort}" type="number" class="layui-input"   />
         </div>
     </div>
 
@@ -29,7 +29,7 @@
         <label class="layui-form-label">{:__('接口地址')}</label>
         <div class="layui-input-inline">
             <input id="apiid" placeholder="{:__('请接口地址')}" value="{$data.class|default=''}"
-                type="text" class="layui-input"  lay-verType="tips" lay-verify="required" />
+                type="text" class="layui-input"   lay-verify="required" />
             <input name="api_id" type="text" hidden="" value="{$data.api_id}">
         </div>
         <label class="layui-form-label">{:__('接口状态')}</label>
@@ -42,22 +42,22 @@
     <div class="layui-form-item">
         <label class="layui-form-label"> <i class="layui-icon layui-icon-about" lay-tips="可限制间隔N秒执行一次！"></i> {:__('间隔/秒')}</label>
         <div class="layui-input-inline">
-            <input name="seconds" placeholder="{:__('默认为不限制')}" value="{$data.seconds}" type="number" class="layui-input"  lay-verType="tips" />
+            <input name="seconds" placeholder="{:__('默认为不限制')}" value="{$data.seconds}" type="number" class="layui-input"   />
         </div>
         <label class="layui-form-label">{:__('每日上限')}</label>
         <div class="layui-input-inline">
-            <input name="day" placeholder="{:__('默认为不限制')}" value="{$data.day}" type="number" class="layui-input"  lay-verType="tips" />
+            <input name="day" placeholder="{:__('默认为不限制')}" value="{$data.day}" type="number" class="layui-input"   />
         </div>
     </div> 
 
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('QPS设置')}</label>
         <div class="layui-input-inline">
-            <input name="qps" placeholder="{:__('默认为不限制')}" value="{$data.qps}" type="number" class="layui-input"  lay-verType="tips" />
+            <input name="qps" placeholder="{:__('默认为不限制')}" value="{$data.qps}" type="number" class="layui-input"   />
         </div>
         <label class="layui-form-label">{:__('总调用次数')}</label>
         <div class="layui-input-inline">
-            <input name="ceiling" placeholder="{:__('默认为不限制')}" value="{$data.ceiling}" type="number" class="layui-input"  lay-verType="tips" />
+            <input name="ceiling" placeholder="{:__('默认为不限制')}" value="{$data.ceiling}" type="number" class="layui-input"   />
         </div>
     </div> 
 
@@ -70,10 +70,10 @@
     </div>
 
 
-        <div class="layui-footer" style="text-align: center;">
-            <button class="layui-btn layui-btn-primary" type="button"  sa-event="closeDialog" >取消</button>
-            <button class="layui-btn layui-btn-normal" lay-filter="submitIframe" lay-submit>提交</button>
-        </div>
+    <div class="layui-footer" style="text-align: center;">
+        <button class="layui-btn layui-btn-primary" type="button"  sa-event="closeDialog" >取消</button>
+        <button class="layui-btn layui-btn-normal" lay-filter="submitIframe" lay-submit>提交</button>
+    </div>
     </form>
 </div>
 <include file="/public/footer" />

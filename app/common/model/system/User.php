@@ -2,8 +2,9 @@
 declare (strict_types = 1);
 
 namespace app\common\model\system;
-
 use think\Model;
+use app\common\library\Auth;
+use app\common\library\Content;
 use think\model\concern\SoftDelete;
 
 /**
@@ -28,6 +29,17 @@ class User extends Model
     }
 
     /**
+     * 更新后事件
+     * @param   array  $data
+     * @return string
+     */
+    public static function onAfterUpdate($data)
+    {
+        $data = self::getById($data['id']);
+        Auth::instance()->setloginState($data,true);
+    }
+
+    /**
      * 获取头像
      * @param   string $value
      * @param   array  $data
@@ -35,10 +47,21 @@ class User extends Model
      */
     public function getAvatarAttr($value, $data)
     {
-        if (!$value) {
+        if (empty($value)) {
             $value = letter_avatar($data['name']);
         }
-        return $value;
+        return Content::getImageAttr($value);
+    }
+
+    /**
+     * 设置头像
+     * @param   string $value
+     * @param   array  $data
+     * @return string
+     */
+    public function setAvatarAttr($value, $data)
+    {
+        return Content::setImageAttr($value,$data);
     }
 
     /**

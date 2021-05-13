@@ -7,7 +7,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.net High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 
 namespace app\index\controller;
@@ -29,7 +29,7 @@ class UpDown extends HomeController
 		}
 		
 		// 组合COOKIE
-		$cookies = 'up-'.md5short($param['model'].'-updown-'.$param['id']);
+		$cookies = 'up-'.md5hash($param['model'].'-updown-'.$param['id']);
 		$content = cookie($cookies);
 		if (!empty($content)) {
 			if (stristr($content,$param['type'])) {

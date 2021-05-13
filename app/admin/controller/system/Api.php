@@ -7,7 +7,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.net High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller\system;
@@ -95,7 +95,7 @@ class Api extends AdminController
             $post = input();
             if ($this->model->update($post)) {
                 if (isset($post['class'])) { // 清理接口缓存
-                    cache(md5short($post['class']),null); 
+                    cache(md5hash($post['class']),null); 
                 }
                 $this->_api_router();
                 return $this->success();

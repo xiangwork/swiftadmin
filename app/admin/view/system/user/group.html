@@ -47,21 +47,21 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('会员组名称')}</label>
         <div class="layui-input-block">
-            <input name="title" placeholder="{:__('请输入会员组名称')}" type="text" class="layui-input" lay-verType="tips" lay-verify="required" />
+            <input name="title" placeholder="{:__('请输入会员组名称')}" type="text" class="layui-input"  lay-verify="required" />
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('会员组标识')}</label>
         <div class="layui-input-block">
-            <input name="alias" placeholder="{:__('请输入会员组标识')}" type="text" class="layui-input"  lay-verType="tips" lay-verify="required" />
+            <input name="alias" placeholder="{:__('请输入会员组标识')}" type="text" class="layui-input"   lay-verify="required" />
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('会员组积分')}</label>
         <div class="layui-input-block">
-            <input name="score" placeholder="{:__('请输入会员组积分')}" type="text" class="layui-input"  lay-verType="tips" lay-verify="required" />
+            <input name="score" placeholder="{:__('请输入会员组积分')}" type="text" class="layui-input"   lay-verify="required" />
         </div>
     </div>
 
@@ -69,7 +69,7 @@
         <label class="layui-form-label">{:__('会员组备注')}</label>
         <div class="layui-input-block">
             <textarea name="content" id="content" cols="30" rows="10" 
-            style="min-height: 110px;" placeholder="{:__('请输入会员组备注')}" class="layui-textarea" lay-verType="tips" lay-verify="required"></textarea>
+            style="min-height: 110px;" placeholder="{:__('请输入会员组备注')}" class="layui-textarea"  lay-verify="required"></textarea>
         </div>
     </div>
 
@@ -108,7 +108,7 @@
                 {field: 'alias', align: 'center', title: "{:__('会员组标识')}"},
                 {field: 'content', align: 'center',title: "{:__('会员组备注')}"},
                 {field: 'createtime', align: 'center',templet: '<div>{{ layui.util.toDateString(d.createtime*1000, "yyyy-MM-dd HH:mm:ss") }}</div>',
-                     title: "{:__('添加时间')}"},
+                     title: "{:__('创建时间')}"},
                 {align: 'center', toolbar: '#tableBar',width: 160, title: "{:__('操作')}"},
             ]]
         })

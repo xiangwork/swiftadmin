@@ -7,7 +7,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.net High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
 use app\AdminController;
@@ -18,7 +18,7 @@ use think\cache\driver\memcached;
 class Index extends AdminController
 {
     public function index()
-    {
+    {   
         return view();
     }
 

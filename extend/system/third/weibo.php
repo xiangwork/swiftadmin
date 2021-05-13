@@ -41,7 +41,7 @@ class weibo
      * 用户登录
      */
     public function login() {
-        header("Location:" . $this->getAuthorizeUrl());
+        return redirect($this->getAuthorizeUrl());
     }
 
     /**
@@ -49,7 +49,7 @@ class weibo
      */
     public function getAuthorizeUrl()
     {
-        $state = md5(uniqid((string)rand(), true));
+        $state = hash('sha256',uniqid((string)mt_rand()));
         session('state', $state);
         $queryarr = array(
             "response_type" => "code",
@@ -93,6 +93,7 @@ class weibo
                 $userinfo = $userinfo ? $userinfo : [];
                 $userinfo['nickname'] = isset($userinfo['screen_name']) ? $userinfo['screen_name'] : '';
                 $userinfo['avatar'] = isset($userinfo['profile_image_url']) ? $userinfo['profile_image_url'] : '';
+                $userinfo['avatar'] = str_replace('http://','https://',$userinfo['avatar']);
                 $data = [
                     'access_token'  => $access_token,
                     'refresh_token' => $refresh_token,

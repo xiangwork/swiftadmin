@@ -46,21 +46,21 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('岗位名称')}</label>
         <div class="layui-input-block">
-            <input name="title" placeholder="{:__('请岗位名称')}" type="text" class="layui-input" lay-verType="tips"lay-verify="required" />
+            <input name="title" placeholder="{:__('请岗位名称')}" type="text" class="layui-input" lay-verify="required" />
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('岗位标识')}</label>
         <div class="layui-input-block">
-            <input name="alias" placeholder="{:__('请岗位标识')}" type="text" class="layui-input"  lay-verType="tips"lay-verify="required" />
+            <input name="alias" placeholder="{:__('请岗位标识')}" type="text" class="layui-input"  lay-verify="required" />
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('排序号')}</label>
         <div class="layui-input-block">
-            <input name="sort" placeholder="{:__('默认自动生成')}" type="number" class="layui-input"  lay-verType="tips" />
+            <input name="sort" placeholder="{:__('默认自动生成')}" type="number" class="layui-input"   />
         </div>
     </div>    
 
@@ -76,7 +76,7 @@
         <label class="layui-form-label">{:__('岗位备注')}</label>
         <div class="layui-input-block">
             <textarea name="content" id="content" cols="30" rows="10" style="min-height: 110px;" placeholder="{:__('请输入岗位备注')}" class="layui-textarea" 
-            lay-verType="tips"lay-verify="required"></textarea>
+            lay-verify="required"></textarea>
         </div>
     </div>
 
@@ -114,7 +114,7 @@
                 {field: 'title', align: 'center', title: "{:__('岗位名称')}"},
                 {field: 'alias', align: 'center', title: "{:__('岗位标识')}"},
                 {field: 'content', align: 'center',title: "{:__('岗位备注')}"},
-                {field: 'createtime', align: 'center',title: "{:__('添加时间')}"},
+                {field: 'createtime', align: 'center',title: "{:__('创建时间')}"},
                 {align: 'center', toolbar: '#tableBar',width: 160, title: "{:__('操作')}"},
             ]]
         })

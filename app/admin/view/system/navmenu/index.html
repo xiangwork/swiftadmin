@@ -33,14 +33,14 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('导航名称')}</label>
         <div class="layui-input-block">
-            <input name="title" placeholder="{:__('导航名称')}" type="text" class="layui-input" lay-verType="tips"lay-verify="required" />
+            <input name="title" placeholder="{:__('导航名称')}" type="text" class="layui-input" lay-verify="required" />
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('导航地址')}</label>
         <div class="layui-input-block">
-            <input name="url" placeholder="{:__('导航地址')}" type="text" class="layui-input"  lay-verType="tips"lay-verify="required" />
+            <input name="url" placeholder="{:__('导航地址')}" type="text" class="layui-input"  lay-verify="required" />
         </div>
     </div>
 
@@ -90,7 +90,7 @@
                 }, title: '{:__("名称")}'},
                 {field: 'url', align: 'center',title: '{:__("地址")}'},
                 {field: 'sort', align: 'center',width:80,  title: '{:__("排序")}'},
-                {field: 'createtime', align: 'center', width:180,title: '{:__("添加时间")}'},
+                {field: 'createtime', align: 'center', width:180,title: '{:__("创建时间")}'},
                 {align: 'center', toolbar: '#tableBar', width:160, title: '{:__("操作")}'},
             ]]
         })

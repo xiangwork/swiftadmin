@@ -57,7 +57,13 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('名称')}</label>
         <div class="layui-input-block">
-            <input name="name" placeholder="{:__('请输入标签名称')}" type="text" class="layui-input"  lay-verType="tips" lay-verify="required" />
+            <input name="name" placeholder="{:__('请输入标签名称')}" type="text" class="layui-input"   lay-verify="required" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><font color="red">* </font>{:__('搜索指数')}</label>
+        <div class="layui-input-block">
+            <input name="index" placeholder="{:__('请输入标签搜索指数')}" type="number" class="layui-input"  />
         </div>
     </div>
     <div class="layui-form-item">
@@ -111,11 +117,12 @@
                 {field: 'type', align: 'center', width:180,templet:function(d) {
                     return d.type ? '{:__("优化词")}' : '{:__("敏感词")}';
                 }, title: '{:__("分类")}'},
-                {field: 'total', align: 'center', sort: true, width:180, title: '{:__("内链数量")}'},
-                {field: 'sort', align: 'center', sort: true, width:180, title: '{:__("排序")}'},
+                {field: 'total', align: 'center', sort: true, width:120, title: '{:__("内链数量")}'},
+                {field: 'index', align: 'center', sort: true, width:120, title: '{:__("搜索指数")}'},
+                {field: 'sort', align: 'center', sort: true, width:120, title: '{:__("排序")}'},
                 {field: 'status', align: 'center',templet: '#columnStatus', width: 135, title: '{:__("状态")}'},
                 {field: 'createtime', align: 'center', width:180, title: '{:__("更新时间")}'},
-                {field: 'createtime', align: 'center', width:180, title: '{:__("添加时间")}'},
+                {field: 'createtime', align: 'center', width:180, title: '{:__("创建时间")}'},
                 {align: 'center', toolbar: '#tableBar', width:160, title: '{:__("操作")}'},
             ]]
         })

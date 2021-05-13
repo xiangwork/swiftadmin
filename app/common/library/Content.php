@@ -7,7 +7,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.net High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 namespace app\common\library;
 
@@ -21,7 +21,6 @@ use app\common\model\system\Recyclebin;
  */
 class Content 
 {
-
     /**
      * 数据写入前置操作
      * @access  public
@@ -29,27 +28,7 @@ class Content
      * @return  void
      */
     public static function onBeforeWrite($data)
-    {
-        // 自动获取猥琐图
-        if (!$data->thumb || !$data->image) {
-            $pattern = "/<img.*?src=\"(.*?)\"/i";
-            if (preg_match($pattern,$data->content,$match)) {
-
-                if (!strpos($match[1],'://')) {
-                    $fileinfo = pathinfo($match[1]);
-                    $thumb    = 'thumb_'.$fileinfo['filename'];
-                    $filepath = str_replace($fileinfo['filename'],$thumb,$match[1]);
-                    if (is_file(public_path().$filepath)) {
-                       $thumbimg = $filepath;
-                    }
-                }
-
-                // 存在图片则跳过
-                $data->image = !empty($data->image) ? $data->image : $match[1];
-                $data->thumb = !empty($data->thumb) ? $data->thumb : $thumbimg ?? $match[1];
-            }
-        }
-    }
+    {}
 
     /**
      * 数据删除事件
@@ -60,6 +39,23 @@ class Content
     public static function onAfterDelete($data)
     {
         return Recyclebin::recycleData($data);
+    }
+
+    /**
+     * 数据更新事件
+     * @param   object  $data
+     * @return  string
+     */
+    public static function onAfterUpdate($data)
+    {
+        try {
+            if (saenv('url_model') == STATICS) {
+                $base = new \app\admin\controller\system\Rewrite(app('app'));
+                $base->createhtmlByone($data);
+            }
+        } catch (\Throwable $th) {
+            throw new \Exception($th->getMessage());
+        }
     }
 
     /**
@@ -102,7 +98,7 @@ class Content
     public static function setHashAttr($hash, $data) 
     {
         if (empty($data['hash'])) {
-            return md5short($data['cid'].$data['id']);
+            return md5hash($data['cid'].$data['id']);
         }
 
         return $hash;
@@ -124,13 +120,14 @@ class Content
         } else {
             $attribute = array_diff($attribute,[5]);
         }
+
         if (!empty($data['jumpurl'])) {
             $attribute = array_merge($attribute,[6]);
         } else {
             $attribute = array_diff($attribute,[6]);
         }
         
-        // 清理重复数据
+        // 删除重复数据
         $attribute = array_unique($attribute);
         if (is_array($attribute)) {
             $attribute = implode(',',$attribute);
@@ -180,7 +177,13 @@ class Content
      */
     public static function setContentAttr($content,$data)
     {
-        // 自动本地化
+        // 优先删除远程地址
+        $prefix = saenv('upload_http_prefix');
+        if (!empty($prefix)) {
+            $content = str_replace($prefix,'',$content);
+        }
+
+        // 图片自动本地化
         $pattern = "/<img.*?src=\"(.*?)\"/i";
         $autolocal = saenv('upload_http_auto');
         if ($autolocal && preg_match_all($pattern, $content, $images)) {
@@ -198,7 +201,7 @@ class Content
             $pattern = "/<a.*href=\"(.*)\"[^>]*>(.*)<\/a>/iU";
             preg_match_all($pattern, $content, $match_all);
 
-            // 后期添加相应的扩展
+            // 后期添加锚文本扩展
             foreach ($match_all[1] as $key => $value) {
                 if (strpos($value,'://') && !strpos($value,$domain)) {
                     $content = str_replace($value,'/',$content);
@@ -218,9 +221,85 @@ class Content
     public static function getContentAttr($content,$data)
     {
         if (!empty($content)) {
+
+            // 解码
             $content = htmlspecialchars_decode($content);
+
+            // 是否开启前缀
+            $prefix = saenv('upload_http_prefix');
+            if (!empty($prefix)) {
+                $pattern = "/<img.*?src=\"(.*?)\"/i";
+                if (preg_match_all($pattern, $content, $images)) {
+                    $images = array_unique($images[1]);
+                    foreach ($images as $value) {
+                        $value = urldecode($value);
+                        if (!strpos($value,'://')) {
+                            $content = str_replace($value, $prefix.$value, $content);
+                        }
+                    }
+                }
+            }
         }
+
         return $content;
+    }
+
+    /**
+     * 修改图片链接
+     * @access  public
+     * @param   string      $image
+     * @return  string
+     */
+    public static function setImageAttr($image,$data,$ready = false)
+    {
+        if (empty($image) && !empty($data['content']) && $ready) {
+            $pattern = "/<img.*?src=\"(.*?)\"/i";
+            $prefix = saenv('upload_http_prefix');
+            if (preg_match($pattern, $data['content'], $images)) {
+                return $prefix?str_replace($prefix,'',$images[1]):$images[1];
+            }
+        }
+
+        return self::changeImages($image,false);
+    }
+
+    /**
+     * 获取图片链接
+     * @access  public
+     * @param   string      $image
+     * @return  string
+     */
+    public static function getImageAttr($image)
+    {
+        if (!empty($image)) {
+            $image = urldecode($image);
+        }
+        
+        if ($image && strpos($image,'://')) {
+            return $image;
+        }
+
+        return self::changeImages($image);
+    }
+
+    /**
+     * 处理图片实例
+     * @access  public
+     * @param   string  $image  图片地址
+     * @param   bool    $bool   链接OR替换
+     * @return  string
+     */
+    protected static function changeImages($image, $bool = true)
+    {
+        $prefix = saenv('upload_http_prefix');
+        if (!empty($prefix) && $image) {
+            // 过滤BASE64图片数据
+            if (!strpos($image,'data:image')) { 
+                return $bool?$prefix.$image:str_replace($prefix,'',$image);
+            }
+        }
+
+        return $image;
     }
 
     /**
@@ -236,8 +315,6 @@ class Content
             return $readUrl;
         }
 
-        return (string)url('/article/read/',['id'=>$data['id']])->domain(true)->suffix(true);
+        return build_request_url($data,'content_page');
     }
-
-    
 }

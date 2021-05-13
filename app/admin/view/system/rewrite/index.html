@@ -45,23 +45,104 @@
 
             <div class="layui-tab layui-tab-brief" style="margin: 0px;margin-bottom: 10px;">
               <ul class="layui-tab-title">
-                <li class="layui-this">URL设置</li>
-                <li>静态生成</li>                                     
+                <li class="layui-this">静态生成</li>
+                <li>URL设置</li>                                     
               </ul>
 
                 <div class="layui-tab-content pl30">
-                    <div class="layui-tab-item  layui-show">
-                     <div class="layui-form-item ">
-                     <label class="layui-form-label">URL模式</label>
+                    <div class="layui-tab-item layui-show" >
+                        <div class="layui-form-item ">
+                            <php> $createhref = cache('createhtml'); </php>
+                            <notempty name="createhref">
+                            <label class="layui-form-label">生成提醒</label>
+                            <a href="{$createhref}" style="color: red" >当前存在未完成的生成任务，点击开始...</a>
+                            </notempty>
+                        </div>
+
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">生成首页</label>
+                            <div class="layui-input-inline">
+                                <button type="button" class="layui-btn createindex" value="index">生成首页</button> 
+                            </div>       
+                        </div>
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">最大分页</label>
+                            <div class="layui-input-inline">
+                                <select name="rewrite[max_page]">
+                                    <option value="">不限制</option> 
+                                    <option value="10" <eq name="$rewrite['max_page']" value="10"> selected </eq> >10页</option> 
+                                    <option value="50" <eq name="$rewrite['max_page']" value="50"> selected </eq> >50页</option> 
+                                    <option value="100" <eq name="$rewrite['max_page']" value="100"> selected </eq> >100页</option>             
+                                </select>
+                            </div>           
+                        </div>
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">列表生成</label>
+                            <div class="layui-input-inline">
+                                <div id="pid"></div>
+                            </div>       
+                            <button type="button" class="layui-btn createhtml" value="category">生成</button>         
+                        </div>
+
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">内容生成</label>
+                            <div class="layui-input-inline">
+                                <div id="cid"></div>        
+                            </div>       
+                            <button type="button"  class="layui-btn createhtml" value="content">生成</button>        
+                        </div>            
+
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">地图生成</label>
+                            <div class="layui-input-inline">
+                                <select id="channel">
+                                    <option value="">{:__('请选择模型')}</option>
+                                    <salibs:channel id="vo">
+                                        <option value="{$vo.table}" >{$vo.title}</option>
+                                    </salibs:channel>
+                                </select>
+                            </div>       
+                            <button type="button" class="layui-btn createmap"  value="channel">生成</button>         
+                        </div>
+                    </div>
+
+                    <div class="layui-tab-item">
+
+                      <div class="layui-form-item ">
+                        <label class="layui-form-label">URL模式</label>
                         <div class="layui-input-inline" style="width:300px;">
-                            <input type="radio" name="rewrite[URL_MODEL]"   
-                                value="1" title="伪静态"  <if condition="$rewrite['URL_MODEL'] eq 1 "> checked </if> >
-                            <input type="radio" name="rewrite[URL_MODEL]"   
-                                value="2" title="纯静态"  <if condition="$rewrite['URL_MODEL'] eq 2 "> checked </if> >
-                            <input type="radio" name="rewrite[URL_MODEL]"   
-                                value="0" title="动态URL" <if condition="$rewrite['URL_MODEL'] eq 0 "> checked </if> >
+                            <input type="radio" name="rewrite[url_model]"   
+                                value="1" title="伪静态"  <if condition="$rewrite['url_model'] eq 1 "> checked </if> >
+                            <input type="radio" name="rewrite[url_model]"   
+                                value="2" title="纯静态"  <if condition="$rewrite['url_model'] eq 2 "> checked </if> >
+                            <input type="radio" name="rewrite[url_model]"   
+                                value="0" title="动态URL" <if condition="$rewrite['url_model'] eq 0 "> checked </if> >
                         </div>
                       </div>
+
+                      <div class="layui-form-item ">
+                        <label class="layui-form-label">域名生成</label>
+                        <div class="layui-input-inline">
+                            <select name="rewrite[url_domain]">
+                                <option value="1" <eq name="$rewrite['url_domain']" value="1" > selected="" </eq> >{:__('开启')}</option>
+                                <option value="0" <eq name="$rewrite['url_domain']" value="0" > selected="" </eq> >{:__('关闭')}</option>
+                            </select>
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">* 推荐开启域名生成，更利于SEO优化</div>
+                      </div>
+
+                      <div class="layui-form-item ">
+                        <label class="layui-form-label">栏目页</label>
+                            <div class="layui-input-inline " >
+                                <select name="rewrite[category_page]" >
+                                    <option value="">请选择栏目页模式</option> <volist name="catePage" id="vo">
+                                    <option value="{$vo}" <if condition="$rewrite['category_page'] eq $vo "> selected </if> >{$vo}</option>
+                                    </volist>
+                                </select>
+                            </div>  
+                            <div class="layui-form-mid layui-word-aux">* 栏目页URL格式，推荐/listdir/</div>                    
+                      </div>
+
                       <div class="layui-form-item ">
                         <label class="layui-form-label">列表页</label>
                             <div class="layui-input-inline " >
@@ -71,8 +152,9 @@
                                     </volist>
                                 </select>
                             </div>  
-                            <div class="layui-form-mid layui-word-aux">* 列表页URL格式，推荐{listdir}/{sublist}/list_{page}.html</div>                    
+                            <div class="layui-form-mid layui-word-aux">* 列表页URL格式，推荐/listdir/list_page.html</div>                    
                       </div>
+
                       <div class="layui-form-item ">
                             <label class="layui-form-label">内容页</label>
                             <div class="layui-input-inline">
@@ -82,15 +164,15 @@
                                     </volist>
                                 </select>
                             </div>  
-                          <div class="layui-form-mid layui-word-aux">* 内容页URL格式，推荐{listdir}/{id}.html</div>                    
+                          <div class="layui-form-mid layui-word-aux">* 内容页URL格式，推荐/listdir/id/</div>                    
                       </div>     
 
                       <div class="layui-form-item ">
                         <label class="layui-form-label">筛选页</label>
                           <div class="layui-input-inline">
-                              <input name="rewrite[list_type]" type="text" class="layui-input" lay-verType="tips" lay-verify="required" value="{$rewrite.list_type}"/>
+                              <input name="rewrite[list_type]" type="text" class="layui-input"  lay-verify="required" value="{$rewrite.list_type}"/>
                           </div>  
-                          <div class="layui-form-mid layui-word-aux">* 筛选页URL格式，参数{id}/{pid}/{cid}/{tid}/{hid}...自选</div>                    
+                          <div class="layui-form-mid layui-word-aux">* 筛选页URL格式，参数id/pid/cid/tid/hid...自选</div>                    
                       </div>  
 
                     <fieldset class="layui-elem-field layui-field-title"><legend style="font-size: 16px">sitemap设置</legend></fieldset>  
@@ -190,7 +272,7 @@
                       <label class="layui-form-label">生成XML上限</label>
                         <div class="layui-input-inline">
                             <input name="sitemap[map_xml_max]" type="text" 
-                                class="layui-input" maxlength="5" lay-verType="tips" lay-verify="required" value="{$sitemap.map_xml_max}"/>
+                                class="layui-input" maxlength="5"  lay-verify="required" value="{$sitemap.map_xml_max}"/>
                         </div>  
                         <div class="layui-form-mid layui-word-aux">* 单个XML地图文件地址上限。</div>               
                     </div>
@@ -198,7 +280,7 @@
                       <label class="layui-form-label">地图保存目录</label>
                         <div class="layui-input-inline">
                             <input name="sitemap[map_xml_path]"  type="text" 
-                                class="layui-input" lay-verType="tips" lay-verify="required" value="{$sitemap.map_xml_path}"/>
+                                class="layui-input"  lay-verify="required" value="{$sitemap.map_xml_path}"/>
                         </div>     
                         <div class="layui-form-mid layui-word-aux"><font color="red">* </font>XML文件目录，建议非根目录防止被采集！</div>          
                     </div>   
@@ -206,7 +288,7 @@
                         <label class="layui-form-label">实时推送token</label>
                         <div class="layui-input-inline">
                             <input name="sitemap[map_xml_token]"  type="text" 
-                                class="layui-input" lay-verType="tips" lay-verify="required" value="{$sitemap.map_xml_token}"/>
+                                class="layui-input"  lay-verify="required" value="{$sitemap.map_xml_token}"/>
                         </div>     
                         <div class="layui-form-mid layui-word-aux"><font color="red">* 百度搜索资源平台</font> 的准入密钥,发布文章实时推送！</div>          
                     </div> 
@@ -226,12 +308,60 @@
                         <button class="layui-btn" lay-filter="submitIframe" lay-submit >{:__('提交')}</button>
                     </div>
                   </div>
-                  <div class="layui-tab-item">
-                   TODO...
-                  </div>
+
               </div>
         </form>
         </div>
     </div>
 </div>
 <include file="/public/footer" />
+<script>
+    var categorylist = {:get_category_json()};
+</script>
+<script src="__STATICADMIN__module/xmselect/xmselect.js"></script>
+<script type="text/javascript">
+    layui.use(['content'],function(){
+
+        var jquery = layui.jquery;
+        var contents = layui.content;
+
+        // 生成首页
+        jquery('.createindex').click(function(){
+            self.location.href = "{:url('/system.rewrite/createindex')}";
+            return false;
+        })
+
+        // 常规元素渲染
+        var category = contents.xmselect('pid',categorylist,[],false);
+        var content  = contents.xmselect('cid',categorylist,[],false);
+        // 生栏目页 / 生成内容页
+        jquery('.createhtml').click(function(){
+            try {
+                var url = '',
+                type = jquery(this).attr('value'),
+                elem = eval(type);
+                url  = elem.getValue()[0].id;
+                url  = '&id='+url;
+            }catch(error) {}
+            self.location.href = "{:url('/system.rewrite/createhtml')}?type=" + type + url;
+        })
+
+        // 生成模型地图  
+        jquery('.createmap').click(function(){
+            var model = jquery(this).val();
+
+            // 这里方便你生成自定义的模型
+            if (model != 'zdy' && model != 'zdy') {
+                model = jquery('[id="channel"]').val();
+            }
+            if (!model) {
+                layui.iziToast.error({
+                    message: '请选择模型'
+                })
+                return false;
+            }
+            self.location.href = "{:url('/system.rewrite/createmap')}?model="+model;
+        })
+    })
+
+</script>

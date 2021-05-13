@@ -29,8 +29,8 @@
 
     #tree .eleTree-group .eleTree-node .eleTree-title {
         position: relative;
-        line-height: 28px;
-        height: 28px;
+        line-height: 35px;
+        height: 35px;
     }
 </style>
 <div class="layui-col-md3">
@@ -104,30 +104,30 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('用户名')}</label>
         <div class="layui-input-inline">
-            <input name="name" placeholder="{:__('请输入用户名')}" type="text" class="layui-input" lay-verType="tips" lay-verify="required" />
+            <input name="name" placeholder="{:__('请输入用户名')}" type="text" class="layui-input"  lay-verify="required" />
         </div>
 
         <label class="layui-form-label">{:__('手机号')}</label>
         <div class="layui-input-inline">
-            <input name="mobile" placeholder="{:__('请输入手机号')}" type="text" class="layui-input" lay-verType="tips" lay-verify="required|phone" />
+            <input name="mobile" placeholder="{:__('请输入手机号')}" type="text" class="layui-input"  lay-verify="required|phone" />
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('密码')}</label>
         <div class="layui-input-inline">
-            <input name="pwd" placeholder="{:__('请输入密码')}" type="password" class="layui-input" lay-verType="tips" lay-verify="required" />
+            <input name="pwd" placeholder="{:__('请输入密码')}" type="password" class="layui-input"  lay-verify="required" />
         </div>
         <label class="layui-form-label">{:__('邮箱')}</label>
         <div class="layui-input-inline">
-            <input name="email" placeholder="{:__('请输入邮箱地址')}" type="text" class="layui-input" lay-verType="tips" lay-verify="required|email"/>
+            <input name="email" placeholder="{:__('请输入邮箱地址')}" type="text" class="layui-input"  lay-verify="required|email"/>
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('性别')}</label>
         <div class="layui-input-inline">
-            <select name="sex" lay-verType="tips" lay-verify="required" >
+            <select name="sex"  lay-verify="required" >
                 <option value="">{:__('请选择性别')}</option>
                 <option value="1" >{:__('男')}</option>
                 <option value="0" >{:__('女')}</option>
@@ -142,7 +142,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('角色权限')}</label>
         <div class="layui-input-inline">
-            <div class="organize" name="group_id" lay-verType="tips"></div>
+            <div class="organize" name="group_id" ></div>
         </div>
 
         <label class="layui-form-label">{:__('状态')}</label>
@@ -155,11 +155,11 @@
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('归属部门')}</label>
         <div class="layui-input-inline">
-            <div class="deps" name="dep_id" lay-verType="tips"></div>
+            <div class="deps" name="dep_id" ></div>
         </div>
         <label class="layui-form-label">{:__('岗位分配')}</label>
         <div class="layui-input-inline">
-            <div class="jobs" name="jobs_id" lay-verType="tips"></div>
+            <div class="jobs" name="jobs_id" ></div>
         </div>
     </div>
 

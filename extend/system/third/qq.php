@@ -34,7 +34,6 @@ class qq
             $this->config = array_merge($this->config, $config);
         }
         $this->config = array_merge($this->config, is_array($options) ? $options : []);
-
         $this->http = new Client();
     }
 
@@ -43,7 +42,7 @@ class qq
      * 用户登录
      */
     public function login() {
-        header("Location:" . $this->getAuthorizeUrl());
+        return redirect($this->getAuthorizeUrl());
     }
 
     /**
@@ -51,7 +50,7 @@ class qq
      */
     public function getAuthorizeUrl()
     {
-        $state = md5(uniqid((string)rand(), true));
+        $state = hash('sha256',uniqid((string)mt_rand()));
         session('state', $state);
         $queryarr = array(
             "response_type" => "code",
@@ -97,6 +96,7 @@ class qq
                 }
                 $userinfo = $userinfo ? $userinfo : [];
                 $userinfo['avatar'] = isset($userinfo['figureurl_qq_2']) ? $userinfo['figureurl_qq_2'] : '';
+                $userinfo['avatar'] = str_replace('http://','https://',$userinfo['avatar']);
                 $data = [
                     'access_token'  => $access_token,
                     'refresh_token' => $refresh_token,

@@ -4,7 +4,6 @@ declare (strict_types = 1);
 namespace app\api\controller;
 
 use app\ApiController;
-use app\common\library\ResultCode;
 
 /**
  * API用户登录

@@ -2,18 +2,23 @@
 
 // 全局应用公共文件
 use think\facade\Db;
+use think\facade\Cache;
 use think\facade\Config;
 use think\facade\Request;
+use app\common\model\system\Channel;
+use app\common\model\system\Category;
 
 // 全局系统常量
+const REWRITE   =  1;
+const STATICS   =  2;
 const SYSTEM  	= 'system';
-const ARTICLE 	= 'ARTICLE';
-const IMAGES 	= 'IMAGES';
-const VIDEO 	= 'VIDEO';
-const DOWNLOAD 	= 'DOWNLOAD';
-const PRODUCT 	= 'PRODUCT';
-const SPECIAL   = 'SPECIAL';
-const COMMENT   = 'COMMENT';
+const ARTICLE 	= 'Article';
+const IMAGES 	= 'Image';
+const VIDEO 	= 'Video';
+const DOWNLOAD 	= 'Download';
+const PRODUCT 	= 'Product';
+const SPECIAL   = 'Special';
+const COMMENT   = 'Comment';
 const NAMESPACEMODELSYSTEM = '\\app\\common\\model\\system\\';
 
 // +----------------------------------------------------------------------
@@ -289,7 +294,7 @@ if (!function_exists('delNt')) {
      */		
 	function delNt($str)
 	{
-		$str = str_replace("　",' ',str_replace("&nbsp;",' ',$str));
+		$str = str_replace("　",' ',str_replace("",' ',$str));
 		$str = preg_replace("/[\r\n\t ]{1,}/",' ',$str);
 		return trim($str);
 	}
@@ -539,7 +544,7 @@ if (!function_exists('create_orderid')) {
 
 			return $orderId . str_pad((100 - $gradual % 100) % 100,2,'0',STR_PAD_LEFT);
 		}else {
-			return date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
+			return date('Ymd').substr(implode('', array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
 		}
 	}
 }
@@ -663,9 +668,9 @@ if (!function_exists('create_rand')) {
     /**
      * 生成随机字符串
      * @param  intval $length 字符串长度
-     * @return bool
+     * @return string
      */
-	function create_rand($length,$flag = false)
+	function create_rand($length = 10,$flag = false)
 	{ 
 		$str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';//62个字符 
 		if ($flag) {
@@ -685,7 +690,6 @@ if (!function_exists('create_rand')) {
 // | MYSQL调用函数开始
 // +----------------------------------------------------------------------
 
-
 if (!function_exists('check_user_third')) {
     /**
      * 获取第三方登录
@@ -704,6 +708,235 @@ if (!function_exists('check_user_third')) {
 		}
 		return false;
 
+	}
+}
+
+
+if (!function_exists('mysql_common')) {
+    /**
+     * 公共类查询函数
+     * @param  array $param 查询参数
+     * @param  bool  $admin 调用标记	 
+     * @return array
+     */	
+	function mysql_common($param, $admin = false){
+
+		// 检查参数
+		if (!is_array($param)) { 
+			$param = parse_tag($param);
+		}
+
+        // 获取参数
+		$field = !empty($param['field']) ? $param['field'] : '*';	
+		$limit = !empty($param['limit']) ? $param['limit'] : '10';
+		$table = !empty($param['table']) ? $param['table'] : 'article';
+		$order = !empty($param['order']) ? $param['order'] : 'createtime desc';
+
+		//优先从缓存调用
+		$currentPage = Config::get('current.page') ?? 1;
+		if(saenv('cache_status') && $currentPage < 2) {
+			
+            // 数据缓存
+			$data_cache_name = hash_hmac("sha256",implode(',',$param),saenv('auth_key'));
+			$data_cache_content = Cache::get($data_cache_name);
+
+            // 数据表缓存
+            $model_cache_name = hash_hmac('sha256','MODEL',saenv('auth_key'));
+            $model_cache_content = Cache::get($model_cache_name);
+			if($data_cache_content) {
+				return $data_cache_content;
+			}
+		}
+
+        if (empty($model_cache_content)) {
+            $model_cache_content = Db::name('channel')->column('table');
+        }
+
+        // 过滤掉ADMIN表
+        if ($table == 'admin' 
+            || !in_array($table,$model_cache_content)) {
+           return false;
+        }
+        
+		// 根据参数生成查询条件
+		$where = array();
+		if (!empty($param['status'])) {
+			if($param['status'] == 1){
+				$where[]=['status','=','1'];
+			}elseif($param['status'] == 2){
+				$where[]=['status','=','0'];
+			}		
+		}	
+		
+		if (!empty($param['ids'])) {
+			$ids = explode(',',trim($param['ids']));
+			if (count($ids)>1) {
+				$where[] = ['id','in',$ids];
+			}else{
+				$where[] = ['id','in',$param['ids']];
+			}
+		}
+
+		if (!empty($param['pid'])) {
+			$pids = explode(',',trim($param['pid']));
+			if (count($pids)>1) {
+				$where[] = ['pid','in',$pids];
+			}else{
+				$where[] = ['pid','in',$param['pid']];
+			}
+		}
+		
+		if(!empty($param['desc'])){
+			if($param['desc'] == 1){
+				$where[] = ['seo_description','<>',''];
+			}
+		}		
+
+		if(!empty($param['thumb'])){
+			$where[] = ['thumb','<>',''];
+		}
+			
+		if(!empty($param['banner'])){
+			$where[] = ['banner','<>',''];
+		}   
+
+		if (!empty($param['year'])) {
+			$year = explode(',',$param['year']);
+			if (count($year) > 1) {
+				$where[] = ['year','between',$year[0].','.$year[1]];
+			}else{ 
+				$where[] = ['year','=',$param['year']];
+			}
+		}
+
+		if (!empty($param['class'])) {
+			$where[] = ['class','like','%'.$param['class'].'%'];
+		}	
+		if (!empty($param['marks'])) {
+			$where[] = ['marks','like','%'.$param['marks'].'%'];
+		}
+		if (!empty($param['actor'])) {
+			$where[] = ['actor','like','%'.$param['actor'].'%'];
+		}
+		if (!empty($param['director'])) {
+			$where[] = ['director','like','%'.$param['director'].'%'];
+		}
+		if (!empty($param['play'])) {
+			$where[] = ['play','like','%'.$param['play'].'%'];
+		}
+
+		if (!empty($param['day'])) {
+			$where[] = ['createtime','>=',linux_extime($param['day'])];
+		}
+		if (!empty($param['stars'])) {
+			$where[] = ['stars','=',$param['stars']];
+		}
+
+		if (!empty($param['letter'])) {
+			$where[] = ['letter','=',$param['letter']];
+		}
+
+		if (!empty($param['hits'])) {
+			$hits = explode(',',$param['hits']);
+			if (count($hits) > 1) {
+				$where[] = ['hits','between',$hits[0].','.$hits[1]];
+			}else{
+				$where[] = ['hits','>',$param['hits']];
+			}
+		}
+		if (!empty($param['up'])) {
+			$up = explode(',',$param['up']);
+			if (count($up)>1) {
+				$where[] = ['up','between',$up[0].','.$up[1]];
+			}else{
+				$where[] = ['up','>',$up[0]];
+			}
+		}
+		if (!empty($param['down'])) {
+			$down = explode(',',$param['down']);
+			if (count($down)>1) {
+				$where[] = ['down','between',$down[0].','.$down[1]];
+			}else{
+				$where[] = ['down','>',$down[0]];
+			}
+		}
+		if (!empty($param['gold'])) {
+			$gold = explode(',',$param['gold']);
+			if (count($gold) > 1) {
+				$where[] = ['gold','between',$gold[0].','.$gold[1]];
+			}else{
+				$where[] = ['gold','>',$gold[0]];
+			}
+		}
+		if (!empty($param['golder'])) {
+			$golder = explode(',',$param['golder']);
+			if (count($golder)>1) {
+				$where[] = ['golder','between',$golder[0].','.$golder[1]];
+			}else{
+				$where[] = ['golder','>',$golder[0]];
+			}
+		}
+		if (!empty($param['wd'])) {
+			if ($param['table'] == 'video') {
+				$where[] = ['title|actor','like','%'.$param['wd'].'%'];
+			}else {
+				$where[] = ['title','like','%'.$param['wd'].'%'];
+			}
+		}
+
+		if (!empty($param['author'])) {
+			$where[] = ['author','like','%'.$param['author'].'%'];
+		}
+
+		// 查询总数
+		$Db = NAMESPACEMODELSYSTEM.ucfirst($table);
+		$count = $Db::where($where)->count('id');
+        if ($count < $limit || !$currentPage) {
+
+            // 分配最小页码
+            Config::set(['page'=>$currentPage],'current');
+        }
+
+        // 查询数据
+        $list = $Db::with('category')->where($where)
+									 ->order($order)
+									 ->field($field)
+									 ->limit($limit)
+									 ->page($currentPage)
+									 ->select()->toArray();
+
+        // 分页调用
+        if (isset($param['page']) && !empty($list)) {
+
+			$currentUrl = Config::get('current.url');
+			$maxpages   = saenv('max_page');
+            $totalpages = ceil($count/$limit);
+
+			if (!empty($maxpages) && $totalpages > $maxpages) {
+				$totalpages = $maxpages;
+			}
+
+			// 自定义分页
+			if (!empty($currentUrl)) { 
+				$page = get_page($currentPage,$totalpages,$currentUrl);
+			}
+			else {
+				$page = build_request_url([],'list_page',['page'=>$currentPage,'total'=>$totalpages]);
+			}
+
+			// 分配页码变量
+			$list[0]['page'] = $page;
+			$list[0]['total'] = $currentPage;
+			Config::set(['totalpages'=>$totalpages],'current');
+        }
+
+        // 设置缓存 
+		if(saenv('cache_status') && $currentPage < 2){
+			Cache::set($model_cache_name,$model_cache_content,saenv('cache_time'));
+			Cache::set($data_cache_name,['data'=>$list,'total'=>$count],saenv('cache_time'),ARTICLE);
+		}	
+		
+		return ['data'=>$list,'total'=>$count];
 	}
 }
 
@@ -970,7 +1203,6 @@ if (!function_exists('list_search_value')) {
      */		
 	function list_search_value($list, $condition) 
 	{
-		
 		foreach ($list as $key => $value) {
 			if (stripos($value,$condition)) {
 				return $value;
@@ -978,7 +1210,6 @@ if (!function_exists('list_search_value')) {
 		}
 
 		return false;
-
 	}
 }
 
@@ -1010,7 +1241,6 @@ if (!function_exists('list_to_tree')) {
 					}
 				}
 			}
-			
 		}
 		
 		return $tree;
@@ -1229,42 +1459,203 @@ if (!function_exists('reply_anti')) {
 	}
 }
 
-if (!function_exists('getpage')) {
-	//分页样式
-	function getpage($currentPage,$totalPages,$halfPer=5,$url,$pagego,$linkPage = ''){
-		
-		// 当前页码大于1
-		if ($currentPage > 1) {
-			$linkPage .= '<a href="'.str_replace('page',1,$url).'" class="pagegbk">首页</a>&nbsp;<a href="'.str_replace('page',($currentPage-1),$url).'" class="pagegbk">上一页</a>&nbsp;';
-		}else { 
-			$linkPage .= '<em>首页</em>&nbsp;<em>上一页</em>&nbsp;';
+if (!function_exists('build_request_url')) {
+	/**
+	 * 解析请求地址
+	 * @param array 			$data		栏目|内容数据
+	 * @param mixed|null 		$variable	标识
+	 * @param array 			$param		附加参数
+	 * @return mixed
+	 */
+	function build_request_url($data = [], $variable = null, $param = [])
+	{
+		$readurl = saenv($variable);
+		$domain = saenv('url_domain') ? true : false;
+		if (saenv('url_model') == TRUE) {
+			
+			// 替换规则
+			$search	 = ['listdir','sublist','id','hash'];
+			if ($variable == 'content_page') {
+				foreach (Category::getListCache() as $value) {
+					if ($value['id'] == $data['pid']) {
+						$category = $value;
+					}
+				}
+			}
+			else {
+				$category = !empty($data) ? $data : Config::get('current.detail');
+			}
+
+			// 栏目数据备份
+			$nextcategory = $category;
+			if (strpos($readurl,'sublist') && $category['pid']) {
+
+				// 查询顶级栏目
+				foreach (Category::getListCache() as $value) {
+
+					if (!$value['pid'] && $value['id'] == $category['pid']) {
+						$category = $value;
+						break;
+					}
+				}
+
+			} else if ($nextcategory == $category) {
+				$readurl = str_replace('/sublist/','/',$readurl);
+			}
+
+			$replace = [
+				$category['pinyin']??'',
+				$nextcategory['pinyin']??'',
+				$data['id']??'',
+				$data['hash']??''
+			];
+
+			$readurl = str_replace($search,$replace,$readurl);
+			$readurl = $domain ? saenv('site_http').$readurl : $readurl;
+
+			if ($variable == 'list_page') {
+				$readurl = get_page($param['page'],$param['total'],$readurl);
+			}
+		}
+		else { 
+			// 动态地址生成
+			switch ($variable) {
+				case 'category_page':
+					$readurl = url("/category/index",['dir'=>$data['pinyin']])->domain($domain);
+					break;	
+				case 'list_page':
+					$category = Config::get('current.detail');
+					$readurl = url("/category/index",['dir'=>$category['pinyin'],'p'=>'page'])->domain($domain);
+					$readurl = get_page($param['page'],$param['total'],$readurl);
+					break;	
+				case 'content_page':
+					$type = strpos($readurl,'id') ? 'id' : 'hash';
+					$channel = Channel::get_channel_list($data['cid']);
+					$readurl = url("/{$channel['table']}/read",[$type=>$data[$type]])->domain($domain);
+					break;	
+				default:
+					# TODO..
+					break;
+			}
+
+			$readurl = str_replace(request()->server()['SCRIPT_NAME'],'/index.php',$readurl);
 		}
 		
-		// 中间的页码部分
-		for($i=$currentPage-$halfPer,$i>1||$i=1,$j=$currentPage+$halfPer,$j<$totalPages||$j=$totalPages;$i<$j+1;$i++){
-			$linkPage .= ($i==$currentPage)?'<span>'.$i.'</span>&nbsp;':'<a href="'.str_replace('page',$i,$url).'">'.$i.'</a>&nbsp;'; 
+		return  $readurl;
+	}
+}
+
+if (!function_exists('get_read_url')) {
+	/**
+	 * 获取自定义地址
+	 * @param mixed|null 		$url		路由规则
+	 * @param array 			$param		访问参数
+	 * @param bool 				$rules		是否既定规则
+	 * @param mixed|null 		$readurl	返回访问地址
+	 * @return string
+	 */
+	function get_read_url($url = null,$param = [],$rules = true, $readurl = null)
+	{
+		$char = substr($url,0,1);
+		$readurl = $char != '/' ? '/'.$url : $url;
+		$domain = saenv('url_domain')?true:false;
+
+		if (saenv('url_model') == true) {
+	
+			if ($rules) {
+
+				// 既定规则
+				$url = trim($url,'/');
+				$url = explode('/',$url);
+				$readurl = array_merge([current($url)],$param);
+				$readurl = '/'.implode('/',$readurl).'/';
+			} else {
+
+				// 需要GET的地址
+				$readurl = $readurl.'?'.http_build_query($param);
+			}
+	
+			$readurl = $domain?saenv('site_http').$readurl:$readurl;
+		}
+		else {
+
+			$readurl = (string)url($readurl,$param)->domain($domain);
+			$readurl = str_replace(request()->server()['SCRIPT_NAME'],'/index.php',$readurl);
+		}
+
+		return $readurl;
+	}
+}
+
+if (!function_exists('getpage')) {
+
+	/**
+	 * 获取分页
+	 * @param mixed 		$currentPage	当前页
+	 * @param mixed 		$totalPages		总页码
+	 * @param mixed 		$pageUrl		分页地址
+	 * @param int 			$halfPer		分页侧边长度
+	 * @param mixed|null 	$linkPage		返回分页地址
+	 * @return string
+	 */
+	function get_page($currentPage, $totalPages, $pageUrl, $halfPer = 5, $linkPage = null)
+	{
+		if ($currentPage <= 1) {
+			$linkPage .= '<em>首页</em><em>上一页</em>';
+		}
+		else {
+			$linkPage .= '<a href="'.str_replace('page',1,$pageUrl).'" class="first">首页</a>';
+			$linkPage .= '<a href="'.str_replace('page',($currentPage-1),$pageUrl).'" class="prev">上一页</a>';
+		}
+
+		// 中间页码
+		for($i = $currentPage - $halfPer, $i > 1 || $i=1, 
+			$j = $currentPage + $halfPer, 
+			$j < $totalPages || $j = $totalPages; $i < (int)$j+1; $i++){
+			$linkPage .= ($i == $currentPage)?'<span>'.$i.'</span>':'<a href="'.str_replace('page',$i,$pageUrl).'">'.$i.'</a>'; 
 		}
 
 		// 当前页码小于总数
 		if ($currentPage < $totalPages) {
-			$linkPage .='<a href="'.str_replace('page',($currentPage+1),$url).'" class="pagegbk">下一页</a>&nbsp;<a href="'.str_replace('page',$totalPages,$url).'" class="pagegbk">尾页</a>';
+			$linkPage .= '<a href="'.str_replace('page',($currentPage + 1),$pageUrl).'" class="next">下一页</a>';
+			$linkPage .= '<a href="'.str_replace('page',$totalPages,$pageUrl).'" class="end">尾页</a>';
 		}else {
-			$linkPage .= '<em>下一页</em>&nbsp;<em>尾页</em>';
+			$linkPage .= '<em>下一页</em><em>尾页</em>';
 		}
+		
+		// 祛除首页地址
+		$linkPage = str_replace('list_1.html','',$linkPage);
 		
 		return $linkPage;
-		
-		
-		// 静态模式
-		if(config('url_html') && config('url_html_list')){
-			return str_replace('-1'.config('html_file_suffix'),config('html_file_suffix'),str_replace('index1'.config('html_file_suffix'),'',$linkPage));
-		}else{
-			// 动态伪静态
-			return $linkPage;
-		}
 	}
 }
 
+if (!function_exists('get_usergroup_json')) {
+	/**
+	 * 获取用户组
+	 */
+	function get_usergroup_json()
+	{
+		return json_encode(\app\common\model\system\UserGroup::select()->toArray());
+	}
+}
+if (!function_exists('get_category_json')) {
+
+	/**
+	 * 获取栏目JSON数据
+	 * @param int 		$pid
+	 * @param int 		$cid
+	 * @param int 		$limit
+	 * @param string 	$field
+	 * @param string 	$order
+	 * @return string|false
+	 */
+	function get_category_json($pid = 0,$cid = 0,$field = '*',$limit = 100,$order = 'id asc')
+	{
+		$list = Category::getListCate($pid,$cid,['limit'=>(int)$limit,'field'=>$field,'order'=>$order]);
+		return json_encode(list_to_tree($list));
+	}
+}
 
 if (!function_exists('get_param_url')) {
     /**
@@ -1274,8 +1665,8 @@ if (!function_exists('get_param_url')) {
 	function get_param_url()
 	{
 		$where = array();
-		$where['sid'] = intval(input('sid'));
 		$where['id'] = intval(input('id'));
+		$where['cid'] = intval(input('cid'));
 		$where['year'] = intval(input('year'));
 		$where['type'] = urldecode(trim(input('type')));	
 		$where['area'] = urldecode(trim(input('area')));
@@ -1289,7 +1680,6 @@ if (!function_exists('get_param_url')) {
 		$where['limit'] = !empty(input('limit')) ? intval(input('limit')) : 10;
 		$where['page'] = !empty(input('p')) ? intval(input('p')) : 1;
 		$where['order'] = get_security_order(input('order'));
-		// dump($where);
 		return $where;
 	}
 }
@@ -1302,11 +1692,11 @@ if (!function_exists('get_jump_url')) {
      */	
 	function get_jump_url($where)
 	{
-		if($where['sid']){
-			$jumpurl['sid'] = $where['sid'];
-		}
 		if($where['id']){
 			$jumpurl['id'] = $where['id'];
+		}
+		if($where['cid']){
+			$jumpurl['cid'] = $where['cid'];
 		}
 		if($where['year']){
 			$jumpurl['year'] = $where['year'];
@@ -1332,10 +1722,11 @@ if (!function_exists('get_jump_url')) {
 		if($where['wd']){
 			$jumpurl['wd'] = urlencode($where['wd']);
 		}		
-		if($where['order'] != 'addtime' && $where['order']){
+		if($where['order'] != 'createtime' && $where['order']){
 			$jumpurl['order'] = $where['order'];
 		}
-		$jumpurl['p'] = '';//var_dump($jumpurl);
+
+		$jumpurl['p'] = 'page'; //var_dump($jumpurl);
 		
 		return $jumpurl;
 	}
@@ -1349,25 +1740,24 @@ if (!function_exists('get_security_order')) {
      */
 	function get_security_order($order = 'createtime')
 	{
-		
 		if(empty($order)){
 			return 'createtime';
 		}
 		$array = array();
-		$array['createtime'] = 'createtime';
-		$array['updatetime'] = 'updatetime';	
 		$array['id'] = 'id';
-		$array['hits'] = 'hits';
-		$array['hits_month'] = 'hits_month';
-		$array['hits_week'] = 'hits_week';
-		$array['stars'] = 'stars';
 		$array['up'] = 'up';
 		$array['down'] = 'down';
 		$array['gold'] = 'gold';
 		$array['golder'] = 'golder';
 		$array['year'] = 'year';
+		$array['stars'] = 'stars';
 		$array['letter'] = 'letter';
 		$array['filmtime'] = 'filmtime';
+		$array['hits'] = 'hits';
+		$array['hits_month'] = 'hits_month';
+		$array['hits_week'] = 'hits_week';
+		$array['createtime'] = 'createtime';
+		$array['updatetime'] = 'updatetime';
 		return $array[trim($order)];
 	}
 }
@@ -1421,15 +1811,16 @@ if (!function_exists('get_adwords')) {
 		$data_cache_name = hash('sha256',$id.'_ADWORDS');
 		$data_cache_content = saenv('cache_status') ? cache($data_cache_name) : null;
 
-		if (is_empty($data_cache_content)) {
-			$data_cache_content = Db::name('adwords')->where('title',$id)->find();
+		if (empty($data_cache_content)) {
+			$data_cache_content = Db::name('adwords')->where('alias',$id)->find();
 			if (saenv('cache_status')) {
 				cache($data_cache_name,$data_cache_content,saenv('cache_time'));
 			}
 		}
+		
 		// 过期则不展现
 		if ($data_cache_content['expirestime'] >= time()) {
-			if (saenv('url_rewrite') == 2) {
+			if (saenv('url_model') == 2) {
 				return '<script type="text/javascript" src="/static/adwords/'.$id.'.js" charset="'.$charset.'"></script>';
 			}else {
 				echo $data_cache_content['content'];
@@ -1473,7 +1864,7 @@ if (!function_exists('clear_api_cache')) {
 
 			$token = $token['app_id'].'.'.$token['app_secret'];
 		}
-		cache(md5short($token),null);
+		cache(md5hash($token),null);
 	}
 }
 
@@ -1585,13 +1976,14 @@ if (!function_exists('cookies_decrypt')) {
 	}
 }
 
-if (!function_exists('md5short')) {
+if (!function_exists('md5hash')) {
 	/**
 	 * 返回16位的MD5值
 	 */
-	function md5short(string $str = null) 
+	function md5hash(string $str = null) 
 	{
-		return substr(hash('sha256',$str), 8, 16);
+		$str = $str.saenv('auth_key');
+		return substr(call_user_func('md5',$str), 8, 16);
 	}
 }
 
@@ -1717,7 +2109,7 @@ if (!function_exists('differ_time')) {
 		date_default_timezone_set('PRC');
 
 		if (!is_integer($time)) {
-			$time = strtotime($time);
+			$time = strtotime((string)$time);
 		}
 
 		$differ = time() - $time;

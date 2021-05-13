@@ -7,7 +7,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.net High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 
 namespace app\index\controller;
@@ -34,10 +34,10 @@ class Hits extends HomeController
 				$InstanceModel = explode('.',$param['model']);
 				$InstanceModel = "\\app\\common\\model\\".$InstanceModel[0].'\\'.ucfirst($InstanceModel[1]);
 			}
-
+            
             // 查询数据集
             $InstanceObject = new $InstanceModel;
-            $result = $InstanceObject::where('id',$param[['id']])->find();
+            $result = $InstanceObject::find($param['id']);
             if (!$result) {
                 return $this->error('操作失败！'); 
             }
@@ -48,6 +48,7 @@ class Hits extends HomeController
             $hits['hits_week'] = $result['hits_week'];
             $hits['hits_day'] = $result['hits_day'];
 
+            
             // 获取时间戳
             $new = getdate();
             if ($result['hits_lasttime']) {
@@ -88,7 +89,7 @@ class Hits extends HomeController
             $result->update($hits);
 
         } catch (\Throwable $th) {
-            return $this->error('操作异常！');
+            return $this->error($th->getMessage());
         }
 
         return $this->success('点击成功!');

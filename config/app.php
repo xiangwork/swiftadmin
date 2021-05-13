@@ -35,11 +35,11 @@ return [
     ],
 
     // 默认跳转页面对应的模板文件
-    'dispatch_error'   => app_path(). 'admin/view/public/tplerror.html',
-    'dispatch_success' => app_path(). 'admin/view/public/tplsuccess.html',
+    'dispatch_error'   => app_path(). 'admin/view/public/jumptpl.html',
+    'dispatch_success' => app_path(). 'admin/view/public/jumptpl.html',
     
     // 异常页面的模板文件
-    'exception_tmpl'   => app()->getThinkPath() . 'tpl/think_exception.tpl',
+    'exception_tmpl'   => root_path(). 'extend/system/exception.tpl',
 
     // 错误显示信息,非调试模式有效
     'error_message'    => '页面错误！请稍后再试～',

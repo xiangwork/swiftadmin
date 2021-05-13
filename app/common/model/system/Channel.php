@@ -27,7 +27,7 @@ class Channel extends Model
     { 
 
         $data = cache(\SYSTEM.'channel');
-        // if (empty($data)) {
+        if (empty($data)) {
             $data = self::select()->toArray();
             foreach ($data as $key => $value) {
                 $data[$key]['title'] = __($value['title']);
@@ -36,7 +36,7 @@ class Channel extends Model
             if(saenv('cache_status')) {
                 cache(\SYSTEM.'channel', $data);
             }
-        // }
+        }
 
         // 判断数据
         if (!empty($data) && $data !== 0) {

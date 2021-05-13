@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset>
-{volist name="listmap" id="vo"}
-<url>
-<loc>{:config('system.site.site_http')}{$vo.url}</loc>
-<lastmod>{$vo.addtime|date='Y-m-d'}</lastmod>
+<volist name="listmap" id="vo">
+<php>echo '<'.'url'.'>';</php>
+<loc>{$vo.readurl}</loc>
+<lastmod>{$vo.createtime}</lastmod>
 <changefreq>always</changefreq>
 <priority>1.0</priority>
-</url>
-{/volist}
+<php>echo '</'.'url'.'>';</php>
+</volist>
 </urlset>

@@ -7,7 +7,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.net High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 namespace app\index\controller;
 
@@ -17,8 +17,11 @@ use think\facade\Event;
 use app\common\library\Sms;
 use app\common\library\Email;
 use app\common\library\Upload;
+use app\common\model\system\Comment;
 use app\common\model\system\UserInvitecode;
 use app\common\model\system\User as UserModel;
+
+
 
 class User extends HomeController
 {
@@ -30,7 +33,7 @@ class User extends HomeController
     /**
      * 非登录鉴权方法
      */
-    public $noNeedLogin = ['login','register','forgot','home','check','validation','setpwd'];
+    public $noNeedLogin = ['login','register','forgot','home','check','validation','setpwd','ajax_login'];
 
 	// 初始化函数
 	public function initialize() {
@@ -42,8 +45,16 @@ class User extends HomeController
      * 用户中心
      */
     public function index()
-    {    
-        return view('',['data'=>$this->userData]);
+    {   
+        return view();
+    }
+
+    /**
+     * ajax登录
+     */
+    public function ajax_login()
+    {
+        return view();
     }
 
     /**
@@ -108,8 +119,10 @@ class User extends HomeController
             }
             
             if ($result = $this->model->create($post)) {
-                Event::trigger("register_success",$post['code']);
-                $this->auth->loginState($result, false);
+                if ($registerType == 'regcode') {
+                    Event::trigger("register_success",$post['code']);
+                }
+                $this->auth->setloginState($result, false);
                 return $this->success('注册成功',cookie('referer'));
             }
 
@@ -324,7 +337,6 @@ class User extends HomeController
             $result = $this->model->find($this->userId);
             $result->avatar = $filename['url'].'?'.create_rand(12);
             if ($result->save()) {
-                $this->auth->loginState($result->toArray(),true);
                 return json($filename);
             }
 		}
@@ -365,7 +377,7 @@ class User extends HomeController
 			$difftime = time() - $valicode['time']; 
 			if (($difftime / 60) <= saenv('user_valitime')) {
 				if ($result->save(['valicode'=>'','status'=>1])) {
-					$this->auth->loginState($result);
+					$this->auth->setloginState($result);
 					$this->redirect('/');
                 }
             }

@@ -41,7 +41,7 @@ class weixin
      * 用户登录
      */
     public function login() {
-        header("Location:" . $this->getAuthorizeUrl());
+        return redirect($this->getAuthorizeUrl());
     }
 
     /**
@@ -49,7 +49,7 @@ class weixin
      */
     public function getAuthorizeUrl()
     {
-        $state = md5(uniqid((string)rand(), true));
+        $state = hash('sha256',uniqid((string)mt_rand()));
         session('state', $state);
         $queryarr = array(
             "response_type" => "code",
@@ -98,6 +98,7 @@ class weixin
                     }
                     $userinfo = $userinfo ? $userinfo : [];
                     $userinfo['avatar'] = isset($userinfo['headimgurl']) ? $userinfo['headimgurl'] : '';
+                    $userinfo['avatar'] = str_replace('http://','https://',$userinfo['avatar']);
                 } else {
                     $userinfo = [];
                 }

@@ -164,7 +164,14 @@
 
 		                    <button type="button" class="layui-btn" lay-upload="" lay-input="image" >{:__('上传封面')}</button>
 		                </div> 
- 
+		                <div class="layui-form-item">
+		                    <label class="layui-form-label" >{:__('首页幻灯片')}</label>
+		                    <div class="layui-input-inline wid550" >
+		                        <input type="text" name="banner" lay-image-hover="" 
+		                        placeholder="{:__('请上传幻灯片')}" value="{$data.banner}" class="layui-input banner">
+		                    </div>   
+		                    <button type="button" class="layui-btn" lay-upload="" lay-input="banner" >{:__('上传幻灯片')}</button>
+		                </div>  
 		                <div id="player_list" class="layui-player-list">
 		                <notempty name="data['play']">
 		                    <volist name="data['play']" id="vo" key="key">
@@ -368,8 +375,8 @@
 <script src="__STATICADMIN__module/xmselect/xmselect.js"></script>
 <script src="/static/js/tinymce/tinymce.min.js"></script>
 <script>
-	var group = <salibs:usergroupjson name='group' />;
-	var category = <salibs:categoryjson cid="3" field='id,cid,pid,title' />;   
+	var grouplist = {:get_usergroup_json()};
+	var categorylist = {:get_category_json(0,3,'id,cid,pid,title')};
 </script>
 
 <!-- // 列表工具栏 -->
@@ -396,8 +403,8 @@
 
         // 常规元素渲染
 		content.tinymce('content');
-		content.xmselect('pid',category,[{$data.pid}],false);
-		content.xmselect('access',group,[{$data.access}]);
+		content.xmselect('pid',categorylist,[{$data.pid}],false);
+		content.xmselect('access',grouplist,[{$data.access}]);
 
   		jquery('#layui-add-play').on('click',function(){
   			var player = jquery('*[data-i]');

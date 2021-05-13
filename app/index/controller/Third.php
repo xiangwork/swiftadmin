@@ -7,11 +7,12 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.net High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 
 namespace app\index\controller;
 
+use app\common\library\Auth;
 use app\HomeController;
 use app\common\model\system\User;
 use app\common\model\system\UserThird;
@@ -34,11 +35,12 @@ class Third extends HomeController
      * 构造函数
      */
     public function __construct($type = null) {
-
+        $this->auth = Auth::instance();
         $this->type = input('type/s') ?? null;
+        
         try {
             $class = "\\system\\third\\".$this->type;
-            $this->oauth = new $class;
+            return $this->oauth = new $class;
         } catch (\Throwable $th) {
             exit("暂时还不支持该方式扩展！");
         }
@@ -57,15 +59,14 @@ class Third extends HomeController
      */
     public function callback() 
     {
-  
         $userInfos = $this->oauth->getUserInfo();
 
          // 注册新用户
         if (!empty($userInfos) && !$this->auth->isLogin()) {
-            $this->register($userInfos,$this->type);
+           return $this->register($userInfos,$this->type);
         }
         else if ($this->auth->isLogin()) { // 绑定用户
-            $this->doBind($userInfos,$this->type);
+            return $this->doBind($userInfos,$this->type);
         }
     }
 
@@ -74,18 +75,20 @@ class Third extends HomeController
      */
     public function register(array $userInfos = [], string $type = null) 
     {
+
         // 查询是否已经注册
         $openid = $userInfos['openid'];
         $nickname = $userInfos['userinfo']['name'] ?? $userInfos['userinfo']['nickname'];
         $result = UserThird::alias('th')->view('user','*','user.id=th.user_id')
-                                        ->where(['openid'=>$openid,'type'=>$this->type])->find();
+                                        ->where(['openid'=>$openid,'type'=>$type])->find();
+                                        
         if (!empty($result)) {
             $result['logintime'] = time(); // 更新登录数据
             $result['loginip'] = ip2long(request()->ip());
             $result['logincount'] = $result['logincount'] + 1;
             $result->save();
             $this->reload();
-            $this->auth->loginState($result->toArray());
+            $this->auth->setloginState($result);
         }
         else {
 
@@ -118,7 +121,7 @@ class Third extends HomeController
             if (isset($third) && is_array($third)) {
                 if (UserThird::create($third)) {
                     $this->reload();
-                    $this->auth->loginState($result->toArray());
+                    $this->auth->setloginState($result);
                 }
             }
         }

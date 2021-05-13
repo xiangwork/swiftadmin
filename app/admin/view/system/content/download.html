@@ -304,8 +304,8 @@
 <script src="__STATICADMIN__module/xmselect/xmselect.js"></script>
 <script src="/static/js/tinymce/tinymce.min.js"></script>
 <script>
-	var group = <salibs:usergroupjson name='group' />;
-	var category = <salibs:categoryjson cid="4" field='id,cid,pid,title' />;   
+	var grouplist = {:get_usergroup_json()};
+	var categorylist = {:get_category_json(0,4,'id,cid,pid,title')};
 </script>
 <script>
     layui.use(['admin','content'], function () {
@@ -316,7 +316,7 @@
 
         // 常规元素渲染
 		content.tinymce('content');
-		content.xmselect('pid',category,[{$data.pid}],false);
-		content.xmselect('access',group,[{$data.access}]);
+		content.xmselect('pid',categorylist,[{$data.pid}],false);
+		content.xmselect('access',grouplist,[{$data.access}]);
     });
 </script>

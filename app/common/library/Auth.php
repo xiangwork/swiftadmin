@@ -7,7 +7,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.net High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 namespace app\common\library;
 
@@ -348,7 +348,7 @@ class Auth
                 }
             }
             else {
-                $list = CategoryModel::select()->toArray();
+                $list = CategoryModel::where('status',1)->select()->toArray();
             }
         }
 
@@ -469,8 +469,7 @@ class Auth
             $this->userData['logincount'] = $this->userData['logincount'] + 1;
 
             if ($this->userData->save()) {
-                $this->userData = $this->userData->toArray();
-                $this->loginState($this->userData);
+                $this->setloginState($this->userData);
                 return true;
             }
         }
@@ -598,7 +597,7 @@ class Auth
     protected function dayCeilingSeconds(array $result = []) 
     {
         // 查询规则
-        $access = md5short($this->params['app_id'].$result['class']);
+        $access = md5hash($this->params['app_id'].$result['class']);
         if ($result['day'] || $result['ceiling'] || $result['seconds'] ) {
             $condition = ApiCondition::where('hash',$access)->find();
             if (empty($condition)) {
@@ -670,15 +669,16 @@ class Auth
     public function isLogin() 
     {
         $token = cookie('token') ?? input('token/s');
-
+        
         if (!$token) {
             return false;
         }
 
         $array = $this->checkToken($token);
-
         if (!empty($array)) {
-            $this->token = $token;
+            $this->token = $token; 
+
+            // 只缓存用户uid
             $this->userData = unserialize($array);
             return true;
         }
@@ -688,16 +688,16 @@ class Auth
 
     /**
      * 设置用户登录状态
-     * @param array $array
+     * @param object $array
      * @return bool
      */
-    public function loginState(array $array = [], $token = false)
+    public function setloginState(object $array = null, $token = false)
     {
         $this->token = $token ? cookie('token') : $this->buildToken($array);
         cookie('uid',$array['id'],$this->keeptime);
         cookie('token',$this->token,$this->keeptime);
         cookie('nickname',$array['nickname'] ?? $array['name'],$this->keeptime);
-        $this->cache($array);
+        $this->cache($array->toArray());
     }
 
     /**
@@ -706,7 +706,7 @@ class Auth
      * @return bool
      */
     public function cache(array $array = []) {
-        $tag = md5short((string)$array['id']);
+        $tag = md5hash((string)$array['id']);
         Cache::tag($tag)->clear();
         Cache::tag($tag)->set($this->token,serialize($array),$this->keeptime);
     }
@@ -717,7 +717,7 @@ class Auth
      * @param  array    $array     用户参数
      * @return string   
      */
-    protected function buildToken(array $array = []) 
+    protected function buildToken($array = []) 
     {
         $this->token = md5(create_rand(16));
         return $this->token;
@@ -731,7 +731,7 @@ class Auth
      */
     protected function getToken(int $id = null) 
     {
-        $this->token = Cache::getTagItems(md5short($id))[0];
+        $this->token = Cache::getTagItems(md5hash($id))[0];
         return $this->token;
     }
 

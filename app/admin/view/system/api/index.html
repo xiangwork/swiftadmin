@@ -1,5 +1,4 @@
 <include file="/public/header" />
-<include file="/public/header" />
 <!-- // 重定位Style -->
 <style>
     html, body,.layui-fluid, .layui-card,.layui-card-body,.layui-col-md3,.layui-col-md9 {
@@ -14,6 +13,12 @@
     }
     .eleTree-title {
         cursor: pointer;
+    }
+
+    .eleTree-group .eleTree-node .eleTree-title {
+        position: relative;
+        height: 36px;
+        line-height: 36px;
     }
 </style>
 <div class="layui-col-md3">
@@ -90,14 +95,14 @@
         </div>
         <label class="layui-form-label">{:__('排序号')}</label>
         <div class="layui-input-inline">
-            <input name="sort" placeholder="{:__('默认自动生成')}" type="number" class="layui-input"  lay-verType="tips" />
+            <input name="sort" placeholder="{:__('默认自动生成')}" type="number" class="layui-input"   />
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('接口名称')}</label>
         <div class="layui-input-inline">
-            <input name="name" placeholder="{:__('请输入接口名称')}" type="text" class="layui-input" lay-verType="tips" lay-verify="required" />
+            <input name="name" placeholder="{:__('请输入接口名称')}" type="text" class="layui-input"  lay-verify="required" />
         </div>
         <label class="layui-form-label">{:__('验证类型')}</label>
         <div class="layui-input-inline">
@@ -157,7 +162,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('接口描述')}</label>
         <div class="layui-input-inline" style="width: 500px">
-            <input name="content" placeholder="{:__('请输入接口描述，如不需要请留空')}" type="text" class="layui-input" lay-verType="tips" />
+            <input name="content" placeholder="{:__('请输入接口描述，如不需要请留空')}" type="text" class="layui-input"  />
         </div>
     </div>
 

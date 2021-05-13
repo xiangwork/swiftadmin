@@ -7,13 +7,14 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.net High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 namespace app\common\library;
 
 use think\facade\Event;
 use app\common\library\Ftp;
 use app\common\library\Images as ImagesModel;
+use system\Http;
 
 /**
  * UPLOAD文件上传类
@@ -173,7 +174,7 @@ class Upload
 
         // 拼接文件路径
         if ($avatar) {
-            $this->filename = md5short((string)$id).'_100x100.'.strtolower($file->extension());
+            $this->filename = md5hash((string)$id).'_100x100.'.strtolower($file->extension());
             $this->filepath = $this->config['upload_path'].'/avatar'; 
         }else {
             $this->filename = uniqid().'.'.strtolower($file->extension());
@@ -212,7 +213,7 @@ class Upload
     /**
      * 文件下载函数
      */
-    public function download(string|array $urls = null, bool $hosts = false)
+    public function download($urls = null, bool $hosts = false)
     {
         if (!$urls) {
             return false;
@@ -225,16 +226,10 @@ class Upload
         $images = [];
         foreach ($urls as $key => $url) {
 
-            # code...
-            $file = pathinfo(trim($url));
-            $ext  = $file['extension'];
-            $token = strpos($ext,'?');
-
-            if ($token) {
-                $ext = substr($ext,0,$token);
-            }
-            
-            //  获取地址参数
+            //  解码地址
+            $field  = $url;
+            $url    = urldecode($url);
+            $url    = htmlspecialchars_decode($url);
             $host = parse_url($url, PHP_URL_HOST);
             if ($host) {
                 $host = explode('.',$host);
@@ -244,18 +239,18 @@ class Upload
 
             // 过滤本站链接
             $domain = request()->rootDomain();
-            if (($host && $host !== $domain) ||($host && $hosts)) {
 
-                $filter = $this->config['upload_class']['images'];
-                if (!stripos($filter,strtolower($ext))) {
-                    continue;
-                }
+            // 是否强制下载
+            if (($host && $host !== $domain) || ($host && $hosts)) {
 
                 // 检测请求头
                 $heads = @get_headers($url, true);
                 if (empty($heads)) {
                     continue;
-                } else if (!(stristr($heads[0], "200") && !stristr($heads[0], "304"))) {
+                } else if (!stristr($heads[0], "200") 
+                            && !stristr($heads[0], "301")
+                            && !stristr($heads[0], "302")
+                            && !stristr($heads[0], "304")) {
                     continue;
                 }
 
@@ -266,12 +261,13 @@ class Upload
                         'follow_location' => false
                     ))
                 );
-
                 readfile($url, false, $context);
                 $content = ob_get_contents();
+                if (empty($content)) {
+                    $content = Http::get($url);
+                }
                 ob_end_clean();
-
-                $this->filename = uniqid().'.'.strtolower($ext);
+                $this->filename = uniqid().'.'.strtolower('jpg');
                 $this->filepath = $this->config['upload_path'].'/images/'.date($this->config['upload_style']); 
                 $this->resource = $this->filepath .'/'. $this->filename;
 
@@ -279,19 +275,17 @@ class Upload
                 if (!write_file($this->resource,$content)) {
                     continue;
                 }
-
                 if ($this->config['upload_water']) {
                     $this->Images->watermark($this->resource,$this->config);
                 }
-
                 if ($this->config['upload_thumb'] && $key <= 0){
                     $this->Images->thumb($this->filepath, $this->filename, $this->config);
                 }
 
-                $images[$url] = '/'.$this->resource;
+                $images[$field] = '/'.$this->resource;
                 // 上传阿里云/FTP空间
                 if (!$this->uploadOss() || !$this->uploadFtp()) {
-                    return false;
+                    throw new \Exception('上传云OSS或FTP空间失败');
                 }
             }
         }
@@ -413,6 +407,12 @@ class Upload
             }
         } catch (\Throwable $th) {
             echo $th->getMessage();
+        }
+
+        // 非空自动增加HTTP前缀
+        $prefix = saenv('upload_http_prefix');
+        if (!empty($prefix)) {
+            $url = $prefix.$url;
         }
 
         return ['code'=>200,'msg'=>$msg,'url'=>$url];

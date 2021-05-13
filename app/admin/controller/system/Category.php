@@ -7,13 +7,15 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.net High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 namespace app\admin\controller\system;
 
 use app\AdminController;
 use app\common\model\system\Channel  as ChannelModel;
 use app\common\model\system\Category as CategoryModel;
+use system\Http;
+use think\facade\Db;
 
 class Category extends AdminController
 {
@@ -21,6 +23,14 @@ class Category extends AdminController
     public function initialize() 
     {
 		parent::initialize();
+        $skin = [];
+        // 分配前端模板
+        $skinPath = root_path().'app/index/view/category/';
+        if (is_dir($skinPath)) {
+            $skin = glob($skinPath.'*.html');
+            $skin = str_replace(array($skinPath,'.html'),'',$skin);
+        }
+        $this->app->view->assign('skin',$skin);
         $this->model = new CategoryModel();
     }
 
@@ -34,9 +44,11 @@ class Category extends AdminController
 			// 接收参数
 			$title = input('title');
 			$model = input('model');
+			$status = input('status/d');
+            $status = !empty(input('status/d')) ? input('status/d') : 2;
 
             // 获取数据
-            $list = $this->model->getListCate();
+            $list = $this->model->getListCate(0,0,['status'=>$status]);
             $channel = ChannelModel::get_channel_list();
 
             if (!is_empty($model)) {
@@ -147,5 +159,37 @@ class Category extends AdminController
 		// 渲染模板
 		return view('add',['data'=> $data]);
     }
+
+    /**
+     * 设置状态
+     */
+    public function status()
+    {
+        if (request()->isAjax())
+        {
+            $array['id'] = input('id/d');	
+			$array['status'] = input('status/d');
+			Db::startTrans();
+
+			try {
+                $data = $this->model->find($array['id']);
+                $data->status = $array['status'];
+                $data->save();
+                $model = NAMESPACEMODELSYSTEM.ucfirst($data->channel->table);
+                $this->status = $model::where('pid',$data->id)->update(['status'=>$data->status]);
+                Db::commit();
+            } catch (\PDOException $e) {
+                Db::rollback();
+                return $this->error($e->getMessage());
+            } catch (\Throwable $th) {
+                Db::rollback();
+                return $this->error($th->getMessage());
+            }
+            
+            $this->status && $this->success();	
+		}
+
+		return $this->error();
+	}
 
 }

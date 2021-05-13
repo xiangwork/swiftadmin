@@ -47,26 +47,26 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('广告名称')}</label>
         <div class="layui-input-block">
-            <input name="title" placeholder="{:__('请输入广告名称')}" type="text" class="layui-input"  lay-verType="tips" lay-verify="required" />
+            <input name="title" placeholder="{:__('请输入广告名称')}" type="text" class="layui-input"   lay-verify="required" />
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('广告标识')}</label>
         <div class="layui-input-block">
-            <input name="alias" placeholder="{:__('请输入非中文广告标识')}" type="text" class="layui-input"  lay-verType="tips" lay-verify="required" />
+            <input name="alias" placeholder="{:__('请输入非中文广告标识')}" type="text" class="layui-input"   lay-verify="required" />
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('广告封面')}</label>
         <div class="layui-input-inline" style="width: 322px">
-            <input name="pic" placeholder="{:__('广告封面')}" type="text" value="sad" class="layui-input picword" />
+            <input name="pic" placeholder="{:__('广告封面')}" type="text" class="layui-input picword" />
         </div>
         <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="picword">{:__('上传图片')}</button>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('到期时间')}</label>
         <div class="layui-input-block">
-            <input name="expirestime" placeholder="{:__('到期时间')}" type="text" class="layui-input"  lay-datetime lay-verType="tips" lay-verify="required" />
+            <input name="expirestime" placeholder="{:__('到期时间')}" type="text" class="layui-input"  lay-datetime  lay-verify="required" />
         </div>
     </div>
     <div class="layui-form-item">
@@ -79,7 +79,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('广告代码')}</label>
         <div class="layui-input-block">
-            <textarea name="content" id="content" style="min-height: 110px;" placeholder="{:__('请输入广告代码')}" class="layui-textarea" lay-verType="tips" lay-verify="required" ></textarea>
+            <textarea name="content" id="content" style="min-height: 110px;" placeholder="{:__('请输入广告代码')}" class="layui-textarea"  lay-verify="required" ></textarea>
         </div>
     </div>
     <div class="layui-footer layui-form-item layui-center"  >
@@ -100,13 +100,17 @@
 <script type="text/html" id="tableBar"> 
 <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-area="600px,468px" lay-url="#editforms" lay-event="edit" >{:__('编辑')}</a>
 <div class="layui-divider layui-divider-vertical"></div>
+<a class="layui-table-text lay-copy" title="{:__('获取广告代码')}" >{:__('获取')}</a>
+<div class="layui-divider layui-divider-vertical"></div>
 <a class="layui-table-text" lay-url="{:url('/system.adwords/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 <include file="/public/footer" />
 <script>
-    layui.use(['table'], function () {
+    layui.use(['table','admin'], function () {
         
+        var admin = layui.admin;
         var table = layui.table;
+        var jquery = layui.jquery;
         /*
          * 初始化表格
         */
@@ -120,9 +124,32 @@
                 {field: 'alias', align: 'left', width:180, title: '{:__("广告标识")}'},
                 {field: 'status', align: 'center',templet: '#columnStatus', width: 135, title: '{:__("状态")}'},
                 {field: 'expirestime', align: 'center',width:180, title: '{:__("到期时间")}'},
-                {field: 'createtime', align: 'center', width:180, title: '{:__("添加时间")}'},
-                {align: 'center', toolbar: '#tableBar', width:160, title: '{:__("操作")}'},
+                {field: 'createtime', align: 'center', width:180, title: '{:__("创建时间")}'},
+                {align: 'center', toolbar: '#tableBar', width:190, title: '{:__("操作")}'},
             ]]
         })
+
+        // 复制广告位代码
+        jquery(document).on('click','.lay-copy',function(){
+
+            var index = jquery(this).parents('tr').data('index');
+            var data = table.cache['lay-tableList'][index].alias;
+            var words = '{';words+= ':';words+= 'get_adwords'; words+= '(\'';words+= data;words+= '\')}';
+            var input = document.createElement('input');
+            input.setAttribute('readonly', 'readonly');
+            input.setAttribute('value', words);
+            document.body.appendChild(input);
+            input.select();
+
+            if (document.execCommand('copy')) {
+                layui.iziToast.success({
+                    message:'复制成功',
+                })
+            }
+
+            // 移除元素
+            document.body.removeChild(input);
+        })
+
     })
 </script>

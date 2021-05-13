@@ -6,6 +6,8 @@ namespace app\common\model\system;
 use think\Model;
 use think\model\concern\SoftDelete;
 use app\common\library\Content;
+use think\facade\Cache;
+
 /**
  * @mixin \think\Model
  */
@@ -22,7 +24,7 @@ class Category extends Model
 	
     public function channel()
     {
-        return $this->hasOne(channel::class,'id','cid');
+        return $this->hasOne(Channel::class,'id','cid');
     }
 
    /**
@@ -38,6 +40,7 @@ class Category extends Model
     {
 		// 获取字段
         $field = isset($param['field']) ? $param['field'] : '*';
+        
 
         if (trim($field) != '*') {
             $field = explode(',',$field);
@@ -49,14 +52,16 @@ class Category extends Model
 
         $order = isset($param['order']) ? $param['order'] : 'id asc';
         $limit = isset($param['order']) && $level < 1 ? $param['limit'] : 1000;
+        $status = isset($param['status']) ? $param['status'] : '2';
 
-		$result = self::where(function($query) use ($pid,$cid) {
+		$result = self::where(function($query) use ($pid,$cid,$status) {
     
             if (!empty($cid) && $cid >= 1) {
                 $where['cid'] = $cid;
             }
 
             $where['pid'] = $pid;
+            $where['status'] = ((int)$status-1);
             $query->where($where);
 
         })->field($field)->order($order)->limit($limit)->select()->toArray();
@@ -83,12 +88,51 @@ class Category extends Model
         if (empty($field)) {
             $field = '*';
         }
-        
+
         $array = self::field($field)->select()->toArray();
 		if (is_array($array) && !empty($array)) {
 			return list_to_tree($array);
 		}
 	}
+
+    /**
+     * 获取栏目缓存
+     * @access      public
+     * @return      tree||array
+     */
+
+    public static function getListCache()
+    {
+        $name = hash('sha256','cate_cache');
+        $data = Cache::get($name);
+        if (empty($data)) {
+            $data = self::where('status',1)->select();
+            if (saenv('cache_status')) {
+                Cache::set($name,$data);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * 获取指定模型栏目
+     * @access      public
+     * @param       model        $model      模型类型
+     * @return      array
+     */
+    public static function getspecifiedcate($id)
+    {
+        $name = hash('sha256','specified');
+        $data = Cache::get($name);
+        if (empty($data)) {
+            $data = self::where('cid',$id)->select()->toArray();
+            if (saenv('cache_status')) {
+                Cache::set($name,$data);
+            }
+        }
+        return $data;
+    }
+
 
     /**
      * 栏目统计
@@ -115,6 +159,39 @@ class Category extends Model
     {
         return Content::setPinyinAttr($pinyin,$data);
     }
+
+    /**
+     * 修改图片
+     * @access  public
+     * @param   string  $image
+     * @return  string
+     */
+    public function setImageAttr($image,$data)
+    {
+        return Content::setImageAttr($image,$data);
+    }
+
+    /**
+     * 获取图片
+     * @access  public
+     * @param   string  $content
+     * @return  string
+     */
+    public function getImageAttr($image)
+    {
+        return Content::getImageAttr($image);
+    }
+
+    /**
+     * 获取Banner横图
+     * @access  public
+     * @param   string      $image
+     * @return  string
+     */
+    public function getBannerAttr($image)
+    {
+        return Content::getImageAttr($image);
+    }    
 
     /**
      * 修改内容数据
@@ -150,5 +227,14 @@ class Category extends Model
             return self::count('id')+1;
         }
         return $sort;
+    }
+
+    public function getreadurlattr($readurl,$data)
+    {
+        if ($readurl) {
+            return $readurl;
+        }
+
+        return build_request_url($data,'category_page');
     }
 }

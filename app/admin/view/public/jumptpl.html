@@ -42,7 +42,6 @@ body{font-family: '微软雅黑'; color: #CCC; font-size: 16px;background:#f2f2f
 <script src="__STATICADMIN__js/common.js?v2020"></script>
 <script type="text/javascript">
     layui.use(['jquery','layer'],function(){
-        var $ = layui.jquery;
         var wait = document.getElementById('wait'),
             href = document.getElementById('href').href,
             target = document.getElementById('href').target;
@@ -51,8 +50,15 @@ body{font-family: '微软雅黑'; color: #CCC; font-size: 16px;background:#f2f2f
             if(time <= 0) {
                 if (window.top !== window.self) {
                     var index = parent.layer.getFrameIndex(window.name);
+                    if (typeof index != 'undefined') {
                         parent.layer.close(index);
                         return false;
+                    }
+                    if ('_parent' == target) {
+                        parent.location.href = href;
+                    } else {
+                        location.href = href;
+                    }
                 }
                 else {
                     if ('_parent' == target) {

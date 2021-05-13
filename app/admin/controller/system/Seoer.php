@@ -7,12 +7,14 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.net High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 namespace app\admin\controller\system;
 
 
 use app\AdminController;
+use app\common\model\system\Article;
+use app\common\model\system\Category;
 
 class Seoer extends AdminController 
 {
@@ -29,7 +31,6 @@ class Seoer extends AdminController
     {
         return view();
     }
-
 
     /**
      * 查询站点

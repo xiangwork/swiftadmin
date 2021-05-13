@@ -7,7 +7,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.NET High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 
 namespace app\common\taglib;
@@ -25,14 +25,12 @@ class Salibs extends TagLib {
 		'variable'  	=> ['attr'=>'name','close' => 0], 						// 自定义变量	
 		'company'   	=> ['attr'=>'name,alias','close' => 0], 				// 公司信息	
 		'plugin'    	=> ['attr'=>'name,field','close' => 0], 				// 插件配置信息	
-		'category'		=> ['attr'=>'id,cid,pid,field,limit,order,type'],		// 获取栏目
+		'category'		=> ['attr'=>'id,cid,pid,typeid,field,limit,order,type,single'],// 获取栏目
 		'navlist'		=> ['attr'=>'id'],										// 导航标签
-		'categoryjson'	=> ['attr'=>'cid,pid,field,limit,order','close' => 0], 	// 非闭合标签
 		'channel'		=> ['attr'=>'id'],										// 模型标签
 		'article'		=> ['attr'=>'pid,field,limit,order,title,thumb'],		// 获取文章标签
 		'customtpl'		=> ['attr'=>'id'],										// 自定义模板
-		'usergroup'		=> ['attr'=>'id'],										// 用户组		
-		'usergroupjson' =>  ['attr'=>'name','close' => 0], 						// 用户组json数据							
+		'usergroup'		=> ['attr'=>'id'],										// 用户组			
 		'playlist'		=> ['attr'=>'id'],										// 播放器列表
 		'serverlist'	=> ['attr'=>'id'],										// 服务器列表
 		'arealist'		=> ['attr'=>'id'],										// 地区列表
@@ -42,6 +40,51 @@ class Salibs extends TagLib {
 		'friendlink'	=> ['attr'=>'id,type'],									// 获取友链
 		'friendtype'	=> ['attr'=>'id'],										// 获取友链类型
     ];
+
+	/**
+	 * 获取栏目标签
+     * @access public
+     * @param  string  $tags 值或变量
+     * @return string
+     */
+	public function tagCategory($tags, $content) {
+
+		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
+		$id = $this->autoBuildVar($tags['id']);
+		$pid = isset($tags['pid']) ? $tags['pid'] : '0';
+		$cid = isset($tags['cid']) ? $tags['cid'] : '0';
+		$type = isset($tags['type']) ? $tags['type'] : 'top';
+		$typeid = isset($tags['typeid']) ? $tags['typeid'] : '';
+		$single = isset($tags['single']) ? $tags['single'] : '0';
+		$limit  = isset($tags['limit']) ? $tags['limit'] : '10';
+		$field  = isset($tags['field']) ? $tags['field'] : '*';
+		$order  = isset($tags['order']) ? $tags['order'] : 'id asc';
+		$html = <<<Eof
+		<?php
+			\$where = [];
+			if (!empty('{$typeid}')) {
+				\$where[] = ['id','in','{$typeid}'];
+			}
+			if (!empty('{$cid}')) {
+				\$where[] = ['cid','=','{$cid}'];
+			}
+			\$where[] = ['status','=','1'];
+			\$where[] = ['pid','=','{$pid}'];
+			\$where[] = ['single','=','{$single}'];
+			\$Db = new \app\common\model\system\Category();
+			\$list = \$Db->where(\$where)->field('{$field}')->limit({$limit})->order('{$order}')->select();
+			if ('{$type}' == 'son') {
+				foreach (\$list as \$key => \$child) {
+					\$list[\$key]['child'] = \$Db->where('pid',\$list[\$key]['id'])->field('{$field}')->limit({$limit})->order('{$order}')->select();
+				}
+			}
+			foreach (\$list as \$key => {$id}):
+		?>
+		$content
+		<?php endforeach;?>
+		Eof;
+		return $html;
+	}
 
 	/**
 	 * 获取导航标签
@@ -259,41 +302,6 @@ class Salibs extends TagLib {
      * @param  string  $tags 值
      * @return string
      */
-	public function tagUsergroupJson($tags)
-	{
-		$list = \app\common\model\system\UserGroup::select()->toArray();
-		return json_encode($list);
-	}
-
-	/**
-	 * 获取栏目JSON
-     * @access public
-     * @param  string  $tags 值
-     * @return string
-     */
-	public function tagCategoryJson($tags)
-	{
-		$pid 	= isset($tags['pid']) ? (!empty($tags['pid']) ? $tags['pid'] : '0' ): '0';
-		$cid 	= isset($tags['cid']) ? (!empty($tags['cid']) ? $tags['cid'] : '0' ): '0';
-		$limit 	= isset($tags['limit']) ? (!empty($tags['limit']) ? $tags['limit'] : '10' ): '10';
-		$field 	= isset($tags['field']) ? (!empty($tags['field']) ? $tags['field'] : '*' ): '*';
-		$order 	= isset($tags['order']) ? (!empty($tags['order']) ? $tags['order'] : 'id asc' ): 'id asc';
-
-		$list = \app\common\model\system\Category::getListCate($pid,$cid,[
-			'limit'=>(int)$limit,
-			'field'=>$field,
-			'order'=>$order,
-		]);
-
-		return json_encode(list_to_tree($list));
-	}
-
-	/**
-	 * 获取用户组
-     * @access public
-     * @param  string  $tags 值
-     * @return string
-     */
 	public function tagUsergroup($tags, $content) 
 	{
 		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
@@ -321,7 +329,7 @@ class Salibs extends TagLib {
 		$id = $this->autoBuildVar($tags['id']);
 		$limit 	= isset($tags['limit']) ? (!empty($tags['limit']) ? $tags['limit'] : '10' ): '10';
 		$field 	= isset($tags['field']) ? (!empty($tags['field']) ? $tags['field'] : '*' ): '*';
-		$order 	= isset($tags['order']) ? (!empty($tags['order']) ? $tags['order'] : 'id asc' ): 'id asc';
+		$order 	= isset($tags['order']) ? (!empty($tags['order']) ? $tags['order'] : 'createtime desc' ): 'createtime desc';
 		$thumb  = isset($tags['thumb']) ? (!empty($tags['thumb']) ? $tags['thumb'] : 'not' ): 'not';
 		$title  = isset($tags['title']) ? (!empty($tags['title']) ? $tags['title'] : 'not' ): 'not';
 
@@ -331,9 +339,7 @@ class Salibs extends TagLib {
 			if ('{$thumb}' != 'not') {
 				\$where[] = ['thumb','<>',''];
 			}
-			if (isset({$tags['pid']}) && {$tags['pid']}) {
-				\$where[] = ['pid','=',{$tags['pid']}];
-			}
+
 			if ('{$title}' != 'not') {
 				\$where[] = ['title','like','%'.'{$title}'.'%'];
 			}
@@ -347,33 +353,7 @@ class Salibs extends TagLib {
 
 	}
 
-	/**
-	 * 获取栏目标签
-     * @access public
-     * @param  string  $tags 值或变量
-     * @return string
-     */
-	public function tagCategory($tags, $content) {
 
-		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
-		$id = $this->autoBuildVar($tags['id']);
-		$pid 	= isset($tags['pid']) ? (!empty($tags['pid']) ? $tags['pid'] : '0' ): '0';
-		$cid 	= isset($tags['cid']) ? (!empty($tags['cid']) ? $tags['cid'] : '0' ): '0';
-		$limit 	= isset($tags['limit']) ? (!empty($tags['limit']) ? $tags['limit'] : '10' ): '10';
-		$field 	= isset($tags['field']) ? (!empty($tags['field']) ? $tags['field'] : '*' ): '*';
-		$order 	= isset($tags['order']) ? (!empty($tags['order']) ? $tags['order'] : 'id asc' ): 'id asc';
-
-		$html = <<<Eof
-		<?php
-			\$list = \app\common\model\system\Category::getListCate({$pid},{$cid},['limit'=>{$limit},'field'=>'{$field}','order'=>'{$order}']);
-			foreach (\$list as \$key => {$id}):
-		?>
-		$content
-		<?php endforeach;?>
-		Eof;
-
-		return $html;
-	}
 
 	/**
 	 * 自定义变量标签

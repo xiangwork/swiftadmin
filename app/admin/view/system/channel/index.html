@@ -21,7 +21,7 @@
                 </button>
 
                 <!-- // 添加数据页面 -->
-                <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加模型')}" lay-area="580px,530px" lay-url="#editforms" >
+                <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加模型')}" lay-area="580px,300px" lay-url="#editforms" >
                     <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                 </button>
 
@@ -44,49 +44,23 @@
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('模型名称')}</label>
         <div class="layui-input-block">
-            <input name="title"  type="text" class="layui-input"  lay-verType="tips"/>
+            <input name="title"  type="text" class="layui-input"  />
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('数据表名')}</label>
         <div class="layui-input-block">
-            <input name="table"  type="text" class="layui-input" lay-verType="tips"/>
+            <input name="table"  type="text" class="layui-input" />
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('排&emsp;序')}</label>
         <div class="layui-input-block">
-            <input name="sort"  type="text" class="layui-input" lay-verType="tips"/>
-        </div>
-    </div>   
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">{:__('栏目模板')}</label>
-        <div class="layui-input-block">
-            <input name="skin" type="text" class="layui-input"  lay-verType="tips"/>
-        </div>
-    </div>   
-    <div class="layui-form-item">
-        <label class="layui-form-label">{:__('内容页模板')}</label>
-        <div class="layui-input-block">
-            <input name="skin_detail" type="text" class="layui-input"   lay-verType="tips"/>
+            <input name="sort"  type="text" class="layui-input" />
         </div>
     </div> 
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">{:__('子页面模版')}</label>
-        <div class="layui-input-block">
-            <input name="skin_child" type="text" class="layui-input" lay-verType="tips"/>
-        </div>
-    </div> 
-    <div class="layui-form-item">
-        <label class="layui-form-label">{:__('筛选页模板')}</label>
-        <div class="layui-input-block">
-            <input name="skin_type" type="text" class="layui-input" lay-verType="tips"/>
-        </div>
-    </div>  
 
     <div class="layui-footer layui-form-item layui-center">
         <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('取消')}</button>
@@ -98,7 +72,9 @@
 
 <!-- // 列表编辑框 -->
 <script type="text/html" id="tableBar"> 
-    <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-area="580px,530px" lay-url="#editforms" lay-event="edit" >{:__('编辑')}</a>
+    <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-area="580px,300px" lay-url="#editforms" lay-event="edit" >{:__('编辑')}</a>
+    <div class="layui-divider layui-divider-vertical"></div>
+    <a class="layui-table-text" lay-title="{:__('字段')} {{d.title}}" lay-area="580px,530px" lay-url="#editforms" lay-event="edit" >{:__('字段')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
     <a class="layui-table-text" lay-url="{:url('/system.channel/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
@@ -117,14 +93,10 @@
                 {type: 'checkbox', width:45},
                 {field: 'id', align: 'center',sort: true,width: 80,  title: 'ID'},
                 {field: 'title', align: 'left', title: '{:__("名称")}'},
-                {field: 'table', align: 'center',width:130,title: '{:__("数据库表")}'},
-                {field: 'skin', align: 'center',width:130,  title: '{:__("栏目模版")}'},
-                {field: 'skin_detail', align: 'center',width:160, title: '{:__("内容页模板")}'},
-                {field: 'skin_child', align: 'center', width:160, title: '{:__("子页面模板")}'},
-                {field: 'skin_type', align: 'center', width:160, title: '{:__("筛选页模板")}'},
-                {field: 'lasttime', align: 'center', width:160,templet: '<div>{{ layui.util.toDateString(d.lasttime*1000, "yyyy-MM-dd HH:mm:ss") }}</div>', title: '{:__("修改时间")}'},
-                {field: 'createtime', align: 'center', width:160,templet: '<div>{{ layui.util.toDateString(d.createtime*1000, "yyyy-MM-dd HH:mm:ss") }}</div>', title: '{:__("创建时间")}'},
-                {align: 'center', toolbar: '#tableBar', width:160, title: '{:__("操作")}'},
+                {field: 'table', align: 'center',title: '{:__("数据库表")}'},
+                {field: 'updatetime', align: 'center', title: '{:__("修改时间")}'},
+                {field: 'createtime', align: 'center', title: '{:__("创建时间")}'},
+                {align: 'center', toolbar: '#tableBar', width:250, title: '{:__("操作")}'},
             ]]
         })
 

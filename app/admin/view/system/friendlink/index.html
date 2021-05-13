@@ -37,7 +37,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('友链名称')}</label>
         <div class="layui-input-block">
-            <input name="title" placeholder="{:__('友链名称')}" type="text" class="layui-input" lay-verType="tips" lay-verify="required" />
+            <input name="title" placeholder="{:__('友链名称')}" type="text" class="layui-input"  lay-verify="required" />
         </div>
     </div>
     <div class="layui-form-item">
@@ -50,7 +50,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('友链地址')}</label>
         <div class="layui-input-block">
-            <input name="url" placeholder="http://" type="text" class="layui-input"  lay-verType="tips" lay-verify="required" />
+            <input name="url" placeholder="http://" type="text" class="layui-input"   lay-verify="required" />
         </div>
     </div>
     <div class="layui-footer layui-form-item layui-center "  >
@@ -96,7 +96,7 @@
                 ,title: 'LOGO'},
                 {field: 'url', align: 'center',title: '{:__("地址")}'},
                 {field: 'status', align: 'center',width:120,templet:'#columnStatus',title: '{:__("状态")}'},
-                {field: 'createtime', align: 'center', width:180, title: '{:__("添加时间")}'},
+                {field: 'createtime', align: 'center', width:180, title: '{:__("创建时间")}'},
                 {align: 'center', toolbar: '#tableBar', width:160, title: '{:__("操作")}'},
             ]]
         })

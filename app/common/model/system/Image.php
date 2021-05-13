@@ -54,6 +54,16 @@ class Image extends Model
     }
 
     /**
+     * 更新事件
+     * @param   object  $data
+     * @return  string
+     */
+    public static function onAfterUpdate($data)
+    {
+        return Content::onAfterUpdate($data);
+    }
+
+    /**
      * 数据删除事件
      * @access      public
      * @param       array        $data           当前数组
@@ -137,6 +147,50 @@ class Image extends Model
     }
 
     /**
+     * 修改图片
+     * @access  public
+     * @param   string  $image
+     * @return  string
+     */
+    public function setImageAttr($image,$data)
+    {
+        return Content::setImageAttr($image,$data,true);
+    }
+
+    /**
+     * 获取图片
+     * @access  public
+     * @param   string  $content
+     * @return  string
+     */
+    public function getImageAttr($image)
+    {
+        return Content::getImageAttr($image);
+    }
+
+    /**
+     * 修改缩略图
+     * @access  public
+     * @param   string      $image
+     * @return  string
+     */
+    public function setThumbAttr($image,$data)
+    {
+        return Content::setImageAttr($image,$data);
+    }
+
+    /**
+     * 获取缩略图
+     * @access  public
+     * @param   string      $image
+     * @return  string
+     */
+    public function getThumbAttr($image)
+    {
+        return Content::getImageAttr($image);
+    }
+
+    /**
      * 修改内容数据
      * @access  public
      * @param   string  $content
@@ -179,6 +233,12 @@ class Image extends Model
     public function setalbumAttr($album)
     {
         if ($album) {
+            $prefix = saenv('upload_http_prefix');
+            if (!empty($prefix) && is_array($album)) {
+                foreach ($album as $key => $value) {
+                    $album[$key] = str_replace($prefix,'',$value);
+                }
+            }
             return serialize($album);
         }
         return $album;
@@ -193,8 +253,15 @@ class Image extends Model
     public function getalbumAttr($album)
     {
         if ($album) {
-            return unserialize($album);
+            $album = unserialize($album);
+            $prefix = saenv('upload_http_prefix');
+            if (!empty($prefix) && is_array($album)) {
+                foreach ($album as $key => $value) {
+                    $album[$key]['src'] = $prefix.$value['src'];
+                }
+            }
         }
+
         return $album;
     }
 

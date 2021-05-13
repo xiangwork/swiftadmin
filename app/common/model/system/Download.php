@@ -54,6 +54,16 @@ class Download extends Model
     }
 
     /**
+     * 更新事件
+     * @param   object  $data
+     * @return  string
+     */
+    public static function onAfterUpdate($data)
+    {
+        return Content::onAfterUpdate($data);
+    }
+
+    /**
      * 数据删除事件
      * @access      public
      * @param       array        $data           当前数组
@@ -134,6 +144,50 @@ class Download extends Model
     public function setSeodescriptionAttr($description, $data)
     {
         return Content::setSeodescriptionAttr($description,$data);
+    }
+
+    /**
+     * 修改图片
+     * @access  public
+     * @param   string  $image
+     * @return  string
+     */
+    public function setImageAttr($image,$data)
+    {
+        return Content::setImageAttr($image,$data,true);
+    }
+
+    /**
+     * 获取图片
+     * @access  public
+     * @param   string  $content
+     * @return  string
+     */
+    public function getImageAttr($image)
+    {
+        return Content::getImageAttr($image);
+    }
+
+    /**
+     * 修改缩略图
+     * @access  public
+     * @param   string      $image
+     * @return  string
+     */
+    public function setThumbAttr($image,$data)
+    {
+        return Content::setImageAttr($image,$data);
+    }
+
+    /**
+     * 获取缩略图
+     * @access  public
+     * @param   string      $image
+     * @return  string
+     */
+    public function getThumbAttr($image)
+    {
+        return Content::getImageAttr($image);
     }
 
     /**

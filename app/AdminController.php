@@ -7,7 +7,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.NET High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com>  MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 namespace app;
 use think\facade\Db;
@@ -133,7 +133,7 @@ class AdminController extends BaseController
 		}
 		
 		// 初始化字段信
-		self::sysfield();
+		// self::sysfield();
 
 		// 系统日志
 		if (saenv('admin_log_status')) {
@@ -141,7 +141,10 @@ class AdminController extends BaseController
 			$array['type'] = 2;
 			Systemlog::write($array);
 		}
-
+        // 获取站点数据
+        foreach (saenv('site') as $key => $value) {
+            $this->app->view->assign($key,$value);
+        }
 		View::assign(['app'=>$app,'controller'=>$this->controller,'action'=>$this->action,'AdminLogin'=>$this->admin]);
 	}
 
@@ -289,7 +292,6 @@ class AdminController extends BaseController
 			$array = array();
 			$array['id'] = input('id/d');	
 			$array['status'] = input('status/d');
-
 			Db::startTrans();
 			try {
 				$this->status = $this->model->where('id',$array['id'])->update(['status'=>$array['status']]);

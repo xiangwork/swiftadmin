@@ -437,8 +437,8 @@
                     <div class="layui-form-item ">
                         <label class="layui-form-label">{:__('远程图片地址')}</label>
                         <div class="layui-input-inline" >
-                            <input type="text" name="upload[upload_http_prefix]" autocomplete="off" value="{$config.upload.upload_http_prefix}" class="layui-input">
-
+                            <input type="text" name="upload[upload_http_prefix]" placeholder="{:__('非空则会自动增加远程图片地址')}"
+                            value="{$config.upload.upload_http_prefix}" class="layui-input">
                         </div>
                         <label class="layui-form-label">{:__('自动下载图片')}</label>
                         <div class="layui-input-inline" >
@@ -1451,7 +1451,7 @@
 
                           <volist name="$config['variable']" id="vo">
                           <tr>
-                            <td><input type="text" value="{$key}" class="layui-input layui-variable-key" lay-verType="tips" lay-verify="required" ></td>
+                            <td><input type="text" value="{$key}" class="layui-input layui-variable-key"  lay-verify="required" ></td>
                             <td><input type="text" name="variable[{$key}]" value="{$vo}" class="layui-input layui-variable-value"></td>
                             <td><button type="button" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon layui-icon-delete"></i></button></td>
                           </tr>
@@ -1503,7 +1503,7 @@
         // 增加变量
         jquery('.layui-variable-add').on('click',function(){
             var html = '<tr>';
-                html += '<td><input type="text" class="layui-input layui-variable-key" lay-verType="tips" lay-verify="required" ><\/td>';
+                html += '<td><input type="text" class="layui-input layui-variable-key"  lay-verify="required" ><\/td>';
                 html += '<td><input type="text" class="layui-input layui-variable-value"><\/td>';
                 html += '<td><button type="button" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon layui-icon-delete"><\/i><\/button><\/td>';
                 html += '<\/tr>';

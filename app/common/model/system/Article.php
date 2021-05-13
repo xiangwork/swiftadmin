@@ -3,10 +3,11 @@ declare (strict_types = 1);
 
 namespace app\common\model\system;
 
+use think\App;
 use think\Model;
 use think\model\concern\SoftDelete;
 use app\common\library\Content;
-
+use Exception;
 
 /**
  * @mixin \think\Model
@@ -55,6 +56,16 @@ class Article extends Model
     }
 
     /**
+     * 更新事件
+     * @param   object  $data
+     * @return  string
+     */
+    public static function onAfterUpdate($data)
+    {
+        return Content::onAfterUpdate($data);
+    }
+
+    /**
      * 数据删除事件
      * @access      public
      * @param       array        $data           当前数组
@@ -64,6 +75,7 @@ class Article extends Model
     {
         return Content::onAfterDelete($data);
     }
+
     /**
      * 获取标题拼音
      * @access      public
@@ -134,6 +146,72 @@ class Article extends Model
     public function setSeodescriptionAttr($description, $data)
     {
         return Content::setSeodescriptionAttr($description,$data);
+    }
+
+    /**
+     * 修改图片
+     * @access  public
+     * @param   string  $image
+     * @return  string
+     */
+    public function setImageAttr($image,$data)
+    {
+        return Content::setImageAttr($image,$data,true);
+    }
+
+    /**
+     * 获取图片
+     * @access  public
+     * @param   string  $content
+     * @return  string
+     */
+    public function getImageAttr($image)
+    {
+        return Content::getImageAttr($image);
+    }
+
+    /**
+     * 修改缩略图
+     * @access  public
+     * @param   string      $image
+     * @return  string
+     */
+    public function setThumbAttr($image,$data)
+    {
+        return Content::setImageAttr($image,$data);
+    }
+
+    /**
+     * 获取缩略图
+     * @access  public
+     * @param   string      $image
+     * @return  string
+     */
+    public function getThumbAttr($image)
+    {
+        return Content::getImageAttr($image);
+    }
+
+    /**
+     * 修改Banner横图
+     * @access  public
+     * @param   string      $image
+     * @return  string
+     */ 
+    public function setBannerAttr($image,$data)
+    {
+        return Content::setImageAttr($image,$data);
+    }
+
+    /**
+     * 获取Banner横图
+     * @access  public
+     * @param   string      $image
+     * @return  string
+     */
+    public function getBannerAttr($image)
+    {
+        return Content::getImageAttr($image);
     }
 
     /**
