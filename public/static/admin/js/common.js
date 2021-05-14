@@ -1,8 +1,8 @@
-/** SwiftAdmin iframe v1.0.0 date:2021-5-1 License By http://www.swiftadmin.net */
+/** SwiftAdmin iframe date:2021-5-1 License By http://www.swiftadmin.net */
 
 // 以下代码是配置layui扩展模块的目录，每个页面都需要引入
 layui.config({
-    version: 'v1.0.1',
+    version: true,
     base: getProjectUrl() + 'module/'
 }).extend({
     step: 'step/step',
@@ -17,8 +17,8 @@ layui.config({
     iconHhysFa: 'iconHhys/iconHhysFa',
     notice: 'notice/notice',
 }).use(['admin'], function () {
-    var $ = layui.jquery;  // jquery的
-    var admin = layui.admin; // amdin模块的
+    var $ = layui.jquery;       // jquery的
+    var admin = layui.admin;    // amdin模块的
 });
 
 // 获取当前项目的根路径，通过获取layui.js全路径截取assets之前的地址

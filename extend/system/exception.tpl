@@ -140,17 +140,16 @@ pre.prettyprint .atn{color:#606}
 pre.prettyprint .atv{color:#080}
 pre.prettyprint .dec,pre.prettyprint .var{color:#606}
 pre.prettyprint .fun{color:red}
-.exception-container{border-radius:2px;text-align:center;box-shadow:0 0 30px rgba(99,99,99,0.06);padding:50px;background-color:#fff;width:100%;left:50%;top:50%;max-width:500px;position:absolute;margin-top:-250px;margin-left:-280px}
+.exception-container{border-radius:5px;text-align:center;box-shadow:0 0 30px rgba(99,99,99,0.06);padding:50px;background-color:#fff;width:100%;left:50%;top:50%;max-width:456px;position:absolute;margin-top:-280px;margin-left:-280px}
 .exception-container .head-line{transition:color .2s linear;font-size:40px;line-height:60px;letter-spacing:-1px;color:#777}
-.exception-container .subheader{transition:color .2s linear;font-size:32px;line-height:46px;color:#494949}
-.exception-container .hr{height:1px;background-color:#eee;width:80%;max-width:350px;margin:25px auto}
+.exception-container .subheader{transition:color .2s linear;font-size:26px;line-height:46px;color:#494949}
+.exception-container .hr{height:1px;background-color:#eee;width:80%;max-width:350px;margin:23px auto}
 .exception-container .context{transition:color .2s linear;font-size:16px;line-height:27px;color:#aaa}
 .exception-container .buttons-container{margin-top:35px;overflow:hidden}
-.exception-container .buttons-container a{transition:text-indent .2s ease-out,color .2s linear,background-color .2s linear;text-indent:0px;font-size:14px;text-transform:uppercase;text-decoration:none;color:#fff;background-color:#1890ff;border-radius:10px;padding:10px 10px;text-align:center;display:inline-block;overflow:hidden;position:relative;width:42%;margin:0px 8px 0px 8px}
+.exception-container .buttons-container a{transition:text-indent .2s ease-out,color .2s linear,background-color .2s linear;text-indent:0px;font-size:14px;text-transform:uppercase;text-decoration:none;color:#fff;background-color:#1890ff;border-radius:10px;padding:10px 10px;text-align:center;display:inline-block;overflow:hidden;position:relative;width:40%;margin:0px 8px 0px 8px}
 .status-ico{width:72px;height:72px;line-height:72px;font-size:42px;color:#fff;text-align:center;border-radius:50%;display:inline-block;margin-bottom:24px;background-color:#52c41a!important}
 .status-error{background-color:#ff4d4f!important}
 @media screen and (max-width:580px){padding:30px 5%}
-.exception-container{padding:37px;position:static;left:0;margin-top:0;margin-left:0}
 .head-line{font-size:36px}
 .subheader{font-size:27px;line-height:37px}
 .hr{margin:30px auto;width:215px}

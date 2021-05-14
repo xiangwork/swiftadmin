@@ -81,14 +81,13 @@ class Third extends HomeController
         $nickname = $userInfos['userinfo']['name'] ?? $userInfos['userinfo']['nickname'];
         $result = UserThird::alias('th')->view('user','*','user.id=th.user_id')
                                         ->where(['openid'=>$openid,'type'=>$type])->find();
-                                        
         if (!empty($result)) {
-            $result['logintime'] = time(); // 更新登录数据
-            $result['loginip'] = ip2long(request()->ip());
-            $result['logincount'] = $result['logincount'] + 1;
-            $result->save();
+            $array['id'] = $result['id'];
+            $array['logintime'] = time(); // 更新登录数据
+            $array['loginip'] = ip2long(request()->ip());
+            $array['logincount'] = $result['logincount'] + 1;
+            User::update($array);
             $this->reload();
-            $this->auth->setloginState($result);
         }
         else {
 
@@ -121,7 +120,6 @@ class Third extends HomeController
             if (isset($third) && is_array($third)) {
                 if (UserThird::create($third)) {
                     $this->reload();
-                    $this->auth->setloginState($result);
                 }
             }
         }

@@ -12,7 +12,7 @@
 			<li class="nav-item"><a href="/" class="nav-link">返回</a></li>
 		</div>
 		<div class="fr">
-			<li class="nav-item"><a href="/user/index" class="nav-link"><img src="{$data.avatar}" alt="{$data.name}">{$data.nickname|default=$data.name}</a>
+			<li class="nav-item"><a href="/user/index" class="nav-link"><img src="{$user.avatar}" alt="{$user.name}">{$user.nickname|default=$user.name}</a>
 		</div>
 	</div>
 </div>
@@ -35,13 +35,13 @@
 					<div class="layui-card-header layui-bg-cyan">会员中心</div>
 					<div class="layui-card-body" style="overflow:hidden;">
 						<div class="layui-col-md3">
-							<img src="{$data.avatar}" alt="" width="100" height="100">
+							<img src="{$user.avatar}" alt="" width="100" height="100">
 						</div>
 
 						<div class="layui-user-desc layui-col-md9">
-							<h1>{$data.name}</h1>
-							<p> <span>用户邮箱</span>{$data.email}  <span>登录IP：</span>{$data.loginip} </p>
-							<p> <span>加入时间：</span>{$data.createtime}  <span>上次登录：</span>{$data.logintime} </p>
+							<h1>{$user.name}</h1>
+							<p> <span>用户邮箱</span>{$user.email}  <span>登录IP：</span>{$user.loginip} </p>
+							<p> <span>加入时间：</span>{$user.createtime}  <span>上次登录：</span>{$user.logintime} </p>
 						</div>
 					</div>
 				</div>

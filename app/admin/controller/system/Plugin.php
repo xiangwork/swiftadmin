@@ -37,7 +37,6 @@ class Plugin extends AdminController
      */
     public function index()
     {
-       
         $list = get_plugin_list();
         if (request()->isAjax()) {
 

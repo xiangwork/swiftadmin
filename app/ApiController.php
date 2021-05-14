@@ -90,15 +90,13 @@ class ApiController extends BaseController
      */
 	public $noNeedLogin = ['index','login','logout'];
 
-
-
 	// 初始化函数
     public function initialize() 
     {
         parent::initialize();
-        header("Access-Control-Allow-Origin:*");
-        header("Access-Control-Allow-Methods:GET, POST, OPTIONS, DELETE");
-        header("Access-Control-Allow-Headers:DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type, Accept-Language, Origin, Accept-Encoding");
+        
+        // 检查跨域请求
+        check_referer_origin();
         $this->auth = Auth::instance();
         if ($this->authWorkflow) {
             // 验证API控制器

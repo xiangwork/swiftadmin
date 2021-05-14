@@ -368,10 +368,20 @@ if (!function_exists('msubstr')) {
 	}
 }
 
+if (!function_exists('get_upload_Http_Perfix')) {
+
+    /**
+     * 获取远程图片前缀
+     * @return string
+     */
+	function get_upload_Http_Perfix() {
+		return saenv('upload_http_prefix');
+	}
+}
+
 if (!function_exists('http_images_url')) {
     /**
      * 替换文章内容图片地址
-	 * 默认为开启的 upload_http_prefix
      * @param 		string $content 内容
      * @return    	string
      */
@@ -381,7 +391,7 @@ if (!function_exists('http_images_url')) {
 			if (empty($url)) {
 
 				if (saenv('upload_ftp') || saenv('cloud.status')) {
-					$url = saenv('upload_http_prefix');
+					$url = get_upload_Http_Perfix();
 				}
 				else {
 
@@ -1866,6 +1876,38 @@ if (!function_exists('clear_api_cache')) {
 		}
 		cache(md5hash($token),null);
 	}
+}
+
+if (!function_exists('check_referer_origin')) {
+    /**
+     * 检查跨域请求
+     */
+    function check_referer_origin()
+    {
+        if (isset($_SERVER['HTTP_ORIGIN']) && $_SERVER['HTTP_ORIGIN']) {
+            $request = parse_url($_SERVER['HTTP_ORIGIN']);
+            $domain = array_merge(config('app.cors_domain'),[request()->host(true)]);
+            if (in_array("*", $domain) 
+				|| in_array($_SERVER['HTTP_ORIGIN'], $domain) 
+				|| (isset($request['host']) && in_array($request['host'], $domain))) {
+                header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
+            } else {
+                header('HTTP/1.1 403 Forbidden');
+                exit;
+            }
+            header('Access-Control-Allow-Credentials: true');
+            header('Access-Control-Max-Age: 86400');
+            if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+                if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
+                    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+                }
+                if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
+                    header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+                }
+                exit;
+            }
+        }
+    }
 }
 
 if (!function_exists('ajaxReturn')) {

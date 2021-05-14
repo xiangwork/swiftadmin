@@ -29,14 +29,14 @@ class User extends Model
     }
 
     /**
-     * 更新后事件
+     * 数据写入后
      * @param   array  $data
      * @return string
      */
-    public static function onAfterUpdate($data)
+    public static function onAfterWrite($data)
     {
         $data = self::getById($data['id']);
-        Auth::instance()->setloginState($data,true);
+        Auth::instance()->setloginState($data->toArray(),cookie('token') ?? false);
     }
 
     /**
@@ -47,10 +47,23 @@ class User extends Model
      */
     public function getAvatarAttr($value, $data)
     {
+        
+        if ($value && strpos($value,'://')) {
+            return $value;
+        }
+        
         if (empty($value)) {
             $value = letter_avatar($data['name']);
         }
-        return Content::getImageAttr($value);
+
+        $prefix = get_upload_Http_Perfix();
+        if (!empty($prefix) && $value) {
+            if (!strstr($value,'data:image')) { 
+                return $prefix.$value;
+            }
+        }
+
+        return $value;
     }
 
     /**

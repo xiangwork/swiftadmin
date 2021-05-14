@@ -1,5 +1,5 @@
 /*
- Navicat MySQL Data Transfer
+ Navicat Premium Data Transfer
 
  Source Server         : localhost_3306
  Source Server Type    : MySQL
@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 26/04/2021 22:06:58
+ Date: 14/05/2021 16:22:20
 */
 
 SET NAMES utf8mb4;
@@ -56,8 +56,8 @@ CREATE TABLE `sa_admin`  (
 -- ----------------------------
 -- Records of sa_admin
 -- ----------------------------
-INSERT INTO `sa_admin` VALUES (1, '1', '2', '3', 'admin', '权栈', '94b35cfc5e48ba2e317b880ef8ca14f54ec134f3d2027dd160e7c9c514b88ef9', 1, 'a:3:{i:0;s:21:\"家有傻猫两三只\";i:1;s:15:\"隔壁帅小伙\";i:2;s:9:\"技术宅\";}', '/upload/avatar/f8e34ec67a2a0233_100x100.jpg', '海阔天空，有容乃大', 'admin@swiftadmin.net', '0310', '15100038819', '高级管理人员', 126, '河北省邯郸市', 2130706433, 1619440493, 3232254977, 1, NULL, 1596682835, 1619440493, NULL);
-INSERT INTO `sa_admin` VALUES (2, '2', '1', '5,6', 'ceshi', '白眉大侠', '94b35cfc5e48ba2e317b880ef8ca14f54ec134f3d2027dd160e7c9c514b88ef9', 1, 'a:3:{i:0;s:5:\"Think\";i:1;s:12:\"铁血柔肠\";i:2;s:12:\"道骨仙风\";}', '/upload/avatar/a0b923820dcc509a_100x100.png', '吃我一招乾坤大挪移', 'baimei@your.com', '0310', '15188888888', '刀是什么刀，菜刀~来一记webshell~', 28, '河北省邯郸市廉颇大道110号指挥中心', 2130706433, 1619443158, 3232254977, 1, '违规', 1609836672, 1619443158, NULL);
+INSERT INTO `sa_admin` VALUES (1, '1', '2', '3', 'admin', '权栈', '94b35cfc5e48ba2e317b880ef8ca14f54ec134f3d2027dd160e7c9c514b88ef9', 1, 'a:3:{i:0;s:21:\"家有傻猫两三只\";i:1;s:15:\"隔壁帅小伙\";i:2;s:9:\"技术宅\";}', '/upload/avatar/f8e34ec67a2a0233_100x100.jpg', '海阔天空，有容乃大', 'admin@swiftadmin.net', '0310', '15188888888', '高级管理人员', 133, '河北省邯郸市', 2130706433, 1620923664, 3232254977, 1, NULL, 1596682835, 1620923664, NULL);
+INSERT INTO `sa_admin` VALUES (2, '2', '1', '5,6', 'ceshi', '白眉大侠', '94b35cfc5e48ba2e317b880ef8ca14f54ec134f3d2027dd160e7c9c514b88ef9', 1, 'a:3:{i:0;s:6:\"呵呵\";i:1;s:5:\"Think\";i:2;s:12:\"铁血柔肠\";}', '/upload/avatar/a0b923820dcc509a_100x100.png', '吃我一招乾坤大挪移', 'baimei@your.com', '0310', '15188888888', '刀是什么刀，菜刀~来一记webshell~', 28, '河北省邯郸市廉颇大道110号指挥中心', 2130706433, 1619443158, 3232254977, 1, '违规', 1609836672, 1619456560, NULL);
 
 -- ----------------------------
 -- Table structure for sa_admin_access
@@ -398,7 +398,7 @@ CREATE TABLE `sa_adwords`  (
 -- ----------------------------
 -- Records of sa_adwords
 -- ----------------------------
-INSERT INTO `sa_adwords` VALUES (1, '阿里联盟', 'alimama_300x250', '/upload/images/2021-04-21/607f877516a50.jpeg', '<script>当前未过滤XSS，如不需要请删除该模块！</script>', 1, 1, 1619793011, 1619443241, 1610942227, NULL);
+INSERT INTO `sa_adwords` VALUES (1, '阿里联盟', 'alimama_300x250', '/upload/images/2021-04-21/607f877516a50.jpeg', '<script>当前模块未过滤XSS，如不需要请删除该模块！</script>', 1, 1, 1619793011, 1620927209, 1610942227, NULL);
 
 -- ----------------------------
 -- Table structure for sa_api
@@ -537,12 +537,12 @@ CREATE TABLE `sa_article`  (
   `color` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题颜色',
   `pinyin` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '拼音标识',
   `thumb` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '缩略图',
-  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '文章封面',
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '文章封面',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容字段',
   `attribute` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '当前属性',
   `seo_title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO标题',
   `seo_keywords` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO关键词',
-  `seo_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'SEO描述',
+  `seo_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'SEO描述',
   `hits` mediumint(8) NULL DEFAULT NULL COMMENT '点击量',
   `hits_day` mediumint(8) NULL DEFAULT NULL COMMENT '日点击',
   `hits_week` mediumint(8) NULL DEFAULT NULL COMMENT '周点击',
@@ -551,7 +551,7 @@ CREATE TABLE `sa_article`  (
   `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
   `stars` tinyint(1) NULL DEFAULT NULL COMMENT '星级',
   `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
-  `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态',
+  `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
   `up` mediumint(8) NULL DEFAULT NULL COMMENT '顶一下',
   `down` mediumint(8) NULL DEFAULT NULL COMMENT '踩一下',
   `gold` decimal(3, 1) NULL DEFAULT NULL COMMENT '评分',
@@ -596,12 +596,10 @@ CREATE TABLE `sa_category`  (
   `contribute` int(1) NULL DEFAULT 0 COMMENT '是否支持投稿',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '栏目单页信息',
   `sort` smallint(3) NULL DEFAULT NULL COMMENT '排序id',
-  `skin` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '栏目列表页',
+  `skin` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目列表页',
+  `single` tinyint(1) NULL DEFAULT 0 COMMENT '是否单页面',
   `status` tinyint(1) NULL DEFAULT 1 COMMENT '栏目状态',
   `readurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问地址',
-  `skin_detail` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '栏目内容页',
-  `skin_child` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '栏目子页面',
-  `skin_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '栏目筛选页',
   `jumpurl` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目跳转地址',
   `updatetime` int(11) NULL DEFAULT NULL COMMENT '更新时间',
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
@@ -612,12 +610,12 @@ CREATE TABLE `sa_category`  (
 -- ----------------------------
 -- Records of sa_category
 -- ----------------------------
-INSERT INTO `sa_category` VALUES (1, 0, 1, '默认文章', '', 'mrwz', '', '', NULL, '', 0, '', 1, '', 1, NULL, '', '', '', '', 1619444522, 1619444522, NULL);
-INSERT INTO `sa_category` VALUES (2, 0, 2, '美女图片', '', 'mntp', '', '', NULL, '', 0, '', 2, '', 1, NULL, '', '', '', '', 1619444540, 1619444540, NULL);
-INSERT INTO `sa_category` VALUES (3, 0, 3, '最新电影', '', 'zxdy', '', '', NULL, '', 0, '', 3, '', 1, NULL, '', '', '', '', 1619444553, 1619444553, NULL);
-INSERT INTO `sa_category` VALUES (4, 0, 4, '软件下载', '', 'rjxz', '', '', NULL, '', 0, '', 4, '', 1, NULL, '', '', '', '', 1619444564, 1619444564, NULL);
-INSERT INTO `sa_category` VALUES (5, 0, 5, '手机电脑', '', 'sjdn', '', '', NULL, '', 0, '', 5, '', 1, NULL, '', '', '', '', 1619444587, 1619444587, NULL);
-INSERT INTO `sa_category` VALUES (6, 1, 1, '二级分类', '', 'ejfl', '', '', NULL, '', 0, '', 6, '', 1, NULL, '', '', '', '', 1619444822, 1619444822, NULL);
+INSERT INTO `sa_category` VALUES (1, 0, 1, '默认文章', '', 'mrwz', '', '', NULL, '', 0, '', 1, '', NULL, 1, NULL, '', 1619444522, 1619444522, NULL);
+INSERT INTO `sa_category` VALUES (2, 0, 2, '美女图片', '', 'mntp', '', '', NULL, '', 0, '', 2, '', NULL, 1, NULL, '', 1619444540, 1619444540, NULL);
+INSERT INTO `sa_category` VALUES (3, 0, 3, '最新电影', '', 'zxdy', '', '', NULL, '', 0, '', 3, '', NULL, 1, NULL, '', 1619444553, 1619444553, NULL);
+INSERT INTO `sa_category` VALUES (4, 0, 4, '软件下载', '', 'rjxz', '', '', NULL, '', 0, '', 4, '', NULL, 1, NULL, '', 1619444564, 1619444564, NULL);
+INSERT INTO `sa_category` VALUES (5, 0, 5, '手机电脑', '', 'sjdn', '', '', NULL, '', 0, '', 5, '', NULL, 1, NULL, '', 1619444587, 1619444587, NULL);
+INSERT INTO `sa_category` VALUES (6, 1, 1, '二级分类', '', 'ejfl', '', '', NULL, '', 0, '', 6, '', NULL, 1, NULL, '', 1619444822, 1619444822, NULL);
 
 -- ----------------------------
 -- Table structure for sa_channel
@@ -627,10 +625,7 @@ CREATE TABLE `sa_channel`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '模型名称',
   `table` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '数据库表',
-  `skin` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '列表模板',
-  `skin_detail` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '内容页模板',
-  `skin_child` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '子页面模板',
-  `skin_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '筛选页模板',
+  `status` tinyint(1) NULL DEFAULT 1,
   `sort` tinyint(3) NULL DEFAULT NULL COMMENT '排序字段',
   `updatetime` int(11) NOT NULL COMMENT '更新时间',
   `createtime` int(11) NOT NULL COMMENT '创建时间',
@@ -641,11 +636,11 @@ CREATE TABLE `sa_channel`  (
 -- ----------------------------
 -- Records of sa_channel
 -- ----------------------------
-INSERT INTO `sa_channel` VALUES (1, '文章模型', 'article', 'article', 'article_detail', 'article_child', 'article_type', 1, 1596712387, 1595545811, NULL);
-INSERT INTO `sa_channel` VALUES (2, '图片模型', 'image', 'image', 'image_detail', 'image_child', 'image_type', 2, 1596711899, 1595545853, NULL);
-INSERT INTO `sa_channel` VALUES (3, '视频模型', 'video', 'video', 'video_detail', 'video_child', 'video_type', 3, 1618708753, 1595545827, NULL);
-INSERT INTO `sa_channel` VALUES (4, '下载模型', 'download', 'download', 'download_detail', 'download_child', 'download_type', 4, 1618708738, 1595545858, NULL);
-INSERT INTO `sa_channel` VALUES (5, '产品模型', 'product', 'product', 'produc_detail', 'product_child', 'product_type', 6, 1595061806, 1595061806, NULL);
+INSERT INTO `sa_channel` VALUES (1, '文章模型', 'article', 1, 1, 1596712387, 1595545811, NULL);
+INSERT INTO `sa_channel` VALUES (2, '图片模型', 'image', 1, 2, 1596711899, 1595545853, NULL);
+INSERT INTO `sa_channel` VALUES (3, '视频模型', 'video', 1, 3, 1618708753, 1595545827, NULL);
+INSERT INTO `sa_channel` VALUES (4, '下载模型', 'download', 1, 4, 1618708738, 1595545858, NULL);
+INSERT INTO `sa_channel` VALUES (5, '产品模型', 'product', 1, 6, 1595061806, 1595061806, NULL);
 
 -- ----------------------------
 -- Table structure for sa_collect
@@ -829,12 +824,12 @@ CREATE TABLE `sa_download`  (
   `color` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题颜色',
   `pinyin` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '拼音标识',
   `thumb` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '缩略图',
-  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文章封面',
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '文章封面',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容字段',
   `attribute` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '当前属性',
   `seo_title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO标题',
   `seo_keywords` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO关键词',
-  `seo_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'SEO描述',
+  `seo_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'SEO描述',
   `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '下载地址',
   `file_code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '软件提取码',
   `file_size` int(11) NULL DEFAULT NULL COMMENT '软件大小',
@@ -854,7 +849,7 @@ CREATE TABLE `sa_download`  (
   `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
   `stars` tinyint(1) NULL DEFAULT NULL COMMENT '星级',
   `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
-  `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态',
+  `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
   `up` mediumint(8) NULL DEFAULT NULL COMMENT '顶一下',
   `down` mediumint(8) NULL DEFAULT NULL COMMENT '踩一下',
   `gold` decimal(3, 1) NULL DEFAULT NULL COMMENT '评分',
@@ -952,7 +947,7 @@ CREATE TABLE `sa_image`  (
   `attribute` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '当前属性',
   `seo_title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO标题',
   `seo_keywords` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO关键词',
-  `seo_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'SEO描述',
+  `seo_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'SEO描述',
   `hits` mediumint(8) NULL DEFAULT NULL COMMENT '点击量',
   `hits_day` mediumint(8) NULL DEFAULT NULL COMMENT '日点击',
   `hits_week` mediumint(8) NULL DEFAULT NULL COMMENT '周点击',
@@ -961,7 +956,7 @@ CREATE TABLE `sa_image`  (
   `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
   `stars` tinyint(1) NULL DEFAULT NULL COMMENT '星级',
   `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
-  `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态',
+  `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
   `up` mediumint(8) NULL DEFAULT NULL COMMENT '顶一下',
   `down` mediumint(8) NULL DEFAULT NULL COMMENT '踩一下',
   `gold` decimal(3, 1) NULL DEFAULT NULL COMMENT '评分',
@@ -986,7 +981,7 @@ CREATE TABLE `sa_image`  (
 -- ----------------------------
 -- Records of sa_image
 -- ----------------------------
-INSERT INTO `sa_image` VALUES (1, 2, 2, '2021春天樱花季和服少女写真', '9d4c2f636f067f89', '', 'X', '', 'ctyhjhfsnxz', '', '', '&lt;p&gt;樱花季终于来啦！！做了模特两三年第一次拍到了樱花虽然杭州的天气不是特别给力 但是还是给面子的出来了一点点&lt;/p&gt;\n&lt;p&gt;我们去的是良渚那边的四歌樱花园 应该是全杭州樱花树最多的地方了吧 虽然真的有点远 但是一大片樱花树林在哪里等着你们 而且这里的樱花树非常矮 拍起来很方便&lt;/p&gt;', 'a:3:{i:0;a:2:{s:3:\"src\";s:43:\"/upload/images/2021-04-26/6086c57b85ca2.jpg\";s:5:\"title\";s:0:\"\";}i:1;a:2:{s:3:\"src\";s:43:\"/upload/images/2021-04-26/6086c57ed0e56.jpg\";s:5:\"title\";s:0:\"\";}i:2;a:2:{s:3:\"src\";s:43:\"/upload/images/2021-04-26/6086c581cb02d.jpg\";s:5:\"title\";s:0:\"\";}}', '4', '', '这里,简介', '这里是简介', 0, 0, 0, 0, NULL, 1, 3, 0, 1, 0, 0, 0.0, 0, '', '', NULL, 'admin', 1, NULL, '', 1619445186, 1619107275, NULL);
+INSERT INTO `sa_image` VALUES (1, 2, 2, '2021春天樱花季和服少女写真', '9d4c2f636f067f89', '', 'X', '', 'ctyhjhfsnxz', '', '', '&lt;p&gt;樱花季终于来啦！！做了模特两三年第一次拍到了樱花虽然杭州的天气不是特别给力 但是还是给面子的出来了一点点&lt;/p&gt;\n&lt;p&gt;我们去的是良渚那边的四歌樱花园 应该是全杭州樱花树最多的地方了吧 虽然真的有点远 但是一大片樱花树林在哪里等着你们 而且这里的樱花树非常矮 拍起来很方便&lt;/p&gt;', 'a:3:{i:0;a:2:{s:3:\"src\";s:43:\"/upload/images/2021-04-26/6086c57b85ca2.jpg\";s:5:\"title\";s:0:\"\";}i:1;a:2:{s:3:\"src\";s:43:\"/upload/images/2021-04-26/6086c57ed0e56.jpg\";s:5:\"title\";s:0:\"\";}i:2;a:2:{s:3:\"src\";s:43:\"/upload/images/2021-04-26/6086c581cb02d.jpg\";s:5:\"title\";s:0:\"\";}}', '4', '', '这里,简介', '这里是简介', 0, 0, 0, 0, NULL, 1, 3, 0, 1, 0, 0, 0.0, 0, '', '', NULL, 'admin', 1, NULL, '', 1619494897, 1619107275, NULL);
 
 -- ----------------------------
 -- Table structure for sa_jobs
@@ -1078,7 +1073,7 @@ CREATE TABLE `sa_product`  (
   `color` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题颜色',
   `pinyin` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '拼音标识',
   `thumb` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '缩略图',
-  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文章封面',
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '文章封面',
   `album` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '产品图册',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容字段',
   `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '产品价格',
@@ -1087,7 +1082,7 @@ CREATE TABLE `sa_product`  (
   `attribute` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '当前属性',
   `seo_title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO标题',
   `seo_keywords` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO关键词',
-  `seo_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'SEO描述',
+  `seo_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'SEO描述',
   `hits` mediumint(8) NULL DEFAULT NULL COMMENT '点击量',
   `hits_day` mediumint(8) NULL DEFAULT NULL COMMENT '日点击',
   `hits_week` mediumint(8) NULL DEFAULT NULL COMMENT '周点击',
@@ -1096,7 +1091,7 @@ CREATE TABLE `sa_product`  (
   `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
   `stars` tinyint(1) NULL DEFAULT NULL COMMENT '星级',
   `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
-  `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态',
+  `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
   `up` mediumint(8) NULL DEFAULT NULL COMMENT '顶一下',
   `down` mediumint(8) NULL DEFAULT NULL COMMENT '踩一下',
   `gold` decimal(3, 1) NULL DEFAULT NULL COMMENT '评分',
@@ -1260,7 +1255,7 @@ CREATE TABLE `sa_user`  (
 -- ----------------------------
 -- Records of sa_user
 -- ----------------------------
-INSERT INTO `sa_user` VALUES (1, 1, 'test', '测试用户', '94b35cfc5e48ba2e317b880ef8ca14f54ec134f3d2027dd160e7c9c514b88ef9', '1', '/upload/avatar/a0b923820dcc509a_100x100.png?GS9U8WQvOBhk', 'ceshi@foxmail.com', NULL, 0, 100, '你叫什么？', '不告诉你', 1, 10001, 'qIsSBNpcOuJeyw8mb9KilQFLWX34GEg5', NULL, 2130706433, 1618118998, 96, 2130706433, 1597125391, NULL);
+INSERT INTO `sa_user` VALUES (1, 1, 'test', '测试用户', '94b35cfc5e48ba2e317b880ef8ca14f54ec134f3d2027dd160e7c9c514b88ef9', '1', '/upload/avatar/a0b923820dcc509a_100x100.png?GS9U8WQvOBhk', 'ceshi@foxmail.com', NULL, 0, 100, '你叫什么？', '不告诉你', 1, 10001, 'qIsSBNpcOuJeyw8mb9KilQFLWX34GEg5', NULL, 2130706433, 1620062131, 100, 2130706433, 1597125391, NULL);
 
 -- ----------------------------
 -- Table structure for sa_user_group
@@ -1372,7 +1367,7 @@ CREATE TABLE `sa_video`  (
   `actor` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '演员',
   `attribute` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '当前属性',
   `thumb` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '缩略图',
-  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '文章封面',
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '文章封面',
   `director` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '导演',
   `area` char(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '地区',
   `language` char(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '语言',
@@ -1389,7 +1384,7 @@ CREATE TABLE `sa_video`  (
   `weekday` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '节目周期，周几播出',
   `seo_title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO标题',
   `seo_keywords` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'SEO关键词',
-  `seo_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'SEO描述',
+  `seo_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'SEO描述',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容介绍',
   `hits` mediumint(8) NULL DEFAULT NULL COMMENT '点击量',
   `hits_day` mediumint(8) NULL DEFAULT NULL COMMENT '日点击',
@@ -1424,6 +1419,6 @@ CREATE TABLE `sa_video`  (
 -- ----------------------------
 -- Records of sa_video
 -- ----------------------------
-INSERT INTO `sa_video` VALUES (1, 3, 3, '电视剧版有翡', '电视剧版有匪/有匪', 'asdas', '', 'Y', '#9d3636', NULL, '一句话简述', '台湾是中国的', 'BD高清', '赵丽颖 王一博 张慧雯 陈若轩 周洁琼 孙坚', '1,5', '/upload/images/2021-04-26/thumb_6086c6252853a.jpg', '/upload/images/2021-04-26/6086c6252853a.jpg', '吴锦源', '大陆', '国语', 2021, 13, '36', 'ckplayer', '', '', '第01集$https://d.mhqiyi.com/20210224/LfNO3InW/index.m3u8#第02集$https://mhcdn.mhqiyi.com/20210303/QiLcl2jL/index.m3u8#', 1, 1619712000, 116, '周四', '', '江湖,李徵,年前,祸乱,一代,大侠,南刀', '多年前江湖祸乱，一代大侠南刀李徵奉旨围匪，从此便有了四十八寨。后李徵病逝，江湖名门也相继落败。李徵的女儿李瑾容接任大当家，与周以棠成婚。周家有女初成长，...', '&lt;p&gt;多年前江湖祸乱，一代大侠南刀李徵奉旨围匪，从此便有了四十八寨。后李徵病逝，江湖名门也相继落败。李徵的女儿李瑾容接任大当家，与周以棠成婚。周家有女初成长，周翡所生的朝代却是一个江湖没落的时候，前辈们的光辉与意气风发在南刀李徵逝去后逐渐都销声匿迹了。周翡十三岁那年离家出走，差点命丧洗墨江，被端王谢允救下，冥冥之中结下良缘。三年后，两位头角峥嵘的少年再次在霍家堡相遇，引出了多年前隐匿江湖的各类宗师高手。同时遭到曹贼手下北斗七位高手的追杀，令两位少年陷入了一场暗潮汹涌的阴谋。周翡以&amp;ldquo;破雪刀&amp;rdquo;之招数名震江湖，以浩然之姿，为这江湖名册再添上了浓墨重彩的一笔。&lt;img src=&quot;/upload/images/2021-04-22/60811a355453c.jpeg&quot; alt=&quot;&quot; width=&quot;600&quot; height=&quot;800&quot; /&gt;&lt;/p&gt;\n&lt;p&gt;&lt;img src=&quot;/upload/images/2021-04-26/6086c6252853a.jpg&quot; alt=&quot;&quot; width=&quot;268&quot; height=&quot;375&quot; /&gt;&lt;/p&gt;', 0, 0, 0, 0, NULL, 0, 3, 0, 1, 0, 0, 0.0, 0, '', '', NULL, 'admin', NULL, NULL, '', 1619445842, 1617632959, NULL);
+INSERT INTO `sa_video` VALUES (1, 3, 3, '电视剧版有翡', '电视剧版有匪/有匪', 'asdas', '', 'Y', '#9d3636', NULL, '一句话简述', '台湾是中国的', 'BD高清', '赵丽颖 王一博 张慧雯 陈若轩 周洁琼 孙坚', '1,5', '/upload/images/2021-04-26/thumb_6086c6252853a.jpg', '/upload/images/2021-04-26/6086c6252853a.jpg', '吴锦源', '大陆', '国语', 2021, 13, '36', 'ckplayer', '', '', '第01集$https://d.mhqiyi.com/20210224/LfNO3InW/index.m3u8#第02集$https://mhcdn.mhqiyi.com/20210303/QiLcl2jL/index.m3u8#', 1, 1619712000, 116, '周四', '', '江湖,李徵,年前,祸乱,一代,大侠,南刀', '多年前江湖祸乱，一代大侠南刀李徵奉旨围匪，从此便有了四十八寨。后李徵病逝，江湖名门也相继落败。李徵的女儿李瑾容接任大当家，与周以棠成婚。周家有女初成长，...', '&lt;p&gt;多年前江湖祸乱，一代大侠南刀李徵奉旨围匪，从此便有了四十八寨。后李徵病逝，江湖名门也相继落败。李徵的女儿李瑾容接任大当家，与周以棠成婚。周家有女初成长，周翡所生的朝代却是一个江湖没落的时候，前辈们的光辉与意气风发在南刀李徵逝去后逐渐都销声匿迹了。周翡十三岁那年离家出走，差点命丧洗墨江，被端王谢允救下，冥冥之中结下良缘。三年后，两位头角峥嵘的少年再次在霍家堡相遇，引出了多年前隐匿江湖的各类宗师高手。同时遭到曹贼手下北斗七位高手的追杀，令两位少年陷入了一场暗潮汹涌的阴谋。周翡以&amp;ldquo;破雪刀&amp;rdquo;之招数名震江湖，以浩然之姿，为这江湖名册再添上了浓墨重彩的一笔。&lt;/p&gt;\n&lt;p&gt;&lt;img src=&quot;/upload/images/2021-04-26/6086c6252853a.jpg&quot; alt=&quot;&quot; width=&quot;268&quot; height=&quot;375&quot; /&gt;&lt;/p&gt;', 0, 0, 0, 0, NULL, 0, 3, 0, 1, 0, 0, 0.0, 0, '', '', NULL, 'admin', NULL, NULL, '', 1619450879, 1617632959, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

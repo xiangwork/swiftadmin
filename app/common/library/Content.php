@@ -178,7 +178,7 @@ class Content
     public static function setContentAttr($content,$data)
     {
         // 优先删除远程地址
-        $prefix = saenv('upload_http_prefix');
+        $prefix = get_upload_Http_Perfix();
         if (!empty($prefix)) {
             $content = str_replace($prefix,'',$content);
         }
@@ -226,7 +226,7 @@ class Content
             $content = htmlspecialchars_decode($content);
 
             // 是否开启前缀
-            $prefix = saenv('upload_http_prefix');
+            $prefix = get_upload_Http_Perfix();
             if (!empty($prefix)) {
                 $pattern = "/<img.*?src=\"(.*?)\"/i";
                 if (preg_match_all($pattern, $content, $images)) {
@@ -254,7 +254,7 @@ class Content
     {
         if (empty($image) && !empty($data['content']) && $ready) {
             $pattern = "/<img.*?src=\"(.*?)\"/i";
-            $prefix = saenv('upload_http_prefix');
+            $prefix = get_upload_Http_Perfix();
             if (preg_match($pattern, $data['content'], $images)) {
                 return $prefix?str_replace($prefix,'',$images[1]):$images[1];
             }
@@ -291,10 +291,10 @@ class Content
      */
     protected static function changeImages($image, $bool = true)
     {
-        $prefix = saenv('upload_http_prefix');
+        $prefix = get_upload_Http_Perfix();
         if (!empty($prefix) && $image) {
             // 过滤BASE64图片数据
-            if (!strpos($image,'data:image')) { 
+            if (!strstr($image,'data:image')) { 
                 return $bool?$prefix.$image:str_replace($prefix,'',$image);
             }
         }

@@ -20,10 +20,12 @@ class Images
 	public function watermark($filename,$config) {
 
 		try {
+			
 			// 获取文件信息
 			$ImageInfo = getimagesize($filename);
 			$ImageWaterInfo = getimagesize($config['upload_water_img']);
 			$Image = Image::open($filename);
+
 			// 判断水印类型
 			if ($config['upload_water_type']) { // 文字水印
 				$size = $config['upload_water_size'] ? $config['upload_water_size'] : 15;
@@ -39,23 +41,25 @@ class Images
 				$reswater = $Image->text($config['upload_water_font'],$ttf,$size,$color,$config['upload_water_pos'])->save($filename);
 				
 			}else {
-				/**
-				 * 当水印图片等于被加水印图片的百分之40的时候，图片不增加水印
-				 */
+
 				// 对比图片大小 /*太小了，不压缩了*/
 				if ($ImageWaterInfo[0] >= $ImageInfo[0] || 
 					$ImageWaterInfo[1] >= $ImageInfo[1]) {
 					return false;
-				}		
-				
-				$reswater = $Image->water($config['upload_water_img'],$config['upload_water_pos'],$config['upload_water_pct'])->save($filename);
+				}
+
+				// 检查图片
+				$upload_water_img = public_path($config['upload_water_img']);
+				if (is_file($upload_water_img)) {
+					$reswater = $Image->water($config['upload_water_img'],$config['upload_water_pos'],$config['upload_water_pct'])->save($filename);
+				}
 			}
 			
-			return $reswater;
+			return $reswater ?? false;
 
 		}
 		catch(\Throwable $th){
-			//return $th->getError();
+			throw new \Exception($th->getMessage());
 		}
 	}
 	

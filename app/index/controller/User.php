@@ -17,11 +17,8 @@ use think\facade\Event;
 use app\common\library\Sms;
 use app\common\library\Email;
 use app\common\library\Upload;
-use app\common\model\system\Comment;
 use app\common\model\system\UserInvitecode;
 use app\common\model\system\User as UserModel;
-
-
 
 class User extends HomeController
 {
@@ -118,11 +115,11 @@ class User extends HomeController
                 });
             }
             
-            if ($result = $this->model->create($post)) {
+            if ($this->model->create($post)) {
                 if ($registerType == 'regcode') {
                     Event::trigger("register_success",$post['code']);
                 }
-                $this->auth->setloginState($result, false);
+                
                 return $this->success('注册成功',cookie('referer'));
             }
 
@@ -377,7 +374,6 @@ class User extends HomeController
 			$difftime = time() - $valicode['time']; 
 			if (($difftime / 60) <= saenv('user_valitime')) {
 				if ($result->save(['valicode'=>'','status'=>1])) {
-					$this->auth->setloginState($result);
 					$this->redirect('/');
                 }
             }

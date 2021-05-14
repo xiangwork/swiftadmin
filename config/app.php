@@ -44,8 +44,14 @@ return [
     // 错误显示信息,非调试模式有效
     'error_message'    => '页面错误！请稍后再试～',
 
+    // 框架版本
+    'version'          => 'v1.0.2',
+
+    // 跨域请求域名
+    'cors_domain'      => ['*','127.0.0.1'],
+
     //API接口地址
-    'api_url'          => 'http://api.swiftadmin.net',
+    'api_url'          => 'https://api.swiftadmin.net',
 
     // 显示错误信息
     'show_error_msg'   => false,

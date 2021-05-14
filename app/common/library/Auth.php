@@ -467,9 +467,7 @@ class Auth
             $this->userData['logintime'] = time(); 
             $this->userData['loginip'] = ip2long(request()->ip());
             $this->userData['logincount'] = $this->userData['logincount'] + 1;
-
             if ($this->userData->save()) {
-                $this->setloginState($this->userData);
                 return true;
             }
         }
@@ -688,16 +686,16 @@ class Auth
 
     /**
      * 设置用户登录状态
-     * @param object $array
+     * @param object|array  $array
      * @return bool
      */
-    public function setloginState(object $array = null, $token = false)
+    public function setloginState(object|array $array = null, $token = false)
     {
         $this->token = $token ? cookie('token') : $this->buildToken($array);
         cookie('uid',$array['id'],$this->keeptime);
         cookie('token',$this->token,$this->keeptime);
         cookie('nickname',$array['nickname'] ?? $array['name'],$this->keeptime);
-        $this->cache($array->toArray());
+        $this->cache(is_object($array) ? $array->toArray() : $array);
     }
 
     /**

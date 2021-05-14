@@ -1,8 +1,20 @@
 <?php
 // 这是系统自动生成的公共文件
 
+use think\facade\Cache;
+
 const SUCCESS = 'layui-icon-ok-circle';
 const ERROR = 'layui-icon-close-fill';
+
+if (!function_exists('checkenv')) {
+    /**
+     * 清理脚本缓存
+     */
+    function clearInstall()
+    {
+        Cache::clear();
+    }
+}
 
 if (!function_exists('checkenv')) {
     /**
@@ -118,7 +130,7 @@ if (!function_exists('write_file')) {
      * @return content
      */		
 	function write_file($file, $content='') 
-    {
+  {
 		$dir = dirname($file);
 		if(!is_dir($dir)){
 			mkdirss($dir);

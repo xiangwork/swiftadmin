@@ -29,49 +29,7 @@ class Database extends AdminController
      */
     public function index() 
     {
-        // if (request()->isAjax()) {
-
-        //     $tables = Db::query("SHOW TABLE STATUS");
-        //     $list = [];
-        //     foreach ($tables as $key => $value) {
-        //         $list[$key]['id'] = $value['Name'];
-        //         $list[$key]['name'] = $value['Name'];
-        //         $list[$key]['engine'] = $value['Engine'];
-        //         $list[$key]['data_length'] = format_bytes($value['Data_length']);
-        //         $list[$key]['general'] = $value['Collation'];
-        //         $list[$key]['createtime'] = $value['Create_time'];
-        //         $list[$key]['comment'] = $value['Comment'];
-        //     }
-
-        //     return $this->success('获取成功', null, $list, count($list), 0);
-        // }
-
-        /**
-         * 如果pid为空则pid默认为最小的那个。
-         */
-
-        // $table = input('table/s') ?? 'sa_admin';
-
-        // if (empty($table)) {
-        //     return $this->error();
-        // }
-
-        // $list = [];
-
-
-        // 渲染字典列表
-        // 
-        
-
-        // halt($data);
-        // $data = list_to_tree($data->toArray());
-        // halt($data);
         if (request()->isAjax()) {
-
-            /**
-             * 默认展示一个
-             * 存在表的时候展示
-             */
 
             $list = [];
             $table = input('table/s') ?? env('database.PREFIX').'admin';

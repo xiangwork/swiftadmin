@@ -47,7 +47,7 @@
 				<div class="layui-card layui-fixed">
 					<div class="layui-card-header">
 						<span>3 安装成功</span>
-						<span class="layui-card-version">v1.0.1</span>
+						<span class="layui-card-version">{:config('app.version')}</span>
 					</div>
 					<div class="layui-card-body">
 						<div class="layui-install">
@@ -111,11 +111,13 @@
 
 				// 查找当前元素
 				var logsElem = jquery('.layui-install-logs');
+
 				 // 插入HTML元素
 				if (res.msg !== null) {
 
 					var html = '';
 					if (res.code == 200) {
+
 						// 循环写入表数据
 						for (var i in res.msg ) {
 							var elem = 'layui-table-'+i;
@@ -138,7 +140,7 @@
 					logsElem.scrollTop(scrollTop);
 				}
 
-				if (parseInt(res.progress) == 100) {
+				if (parseInt(res.progress) >= 100) {
 
 					jquery('.layui-install').remove();
 					var admin = jquery('.layui-admin'),
@@ -154,7 +156,7 @@
 				}
 			});
 
-		},500);
+		},200);
 	})
 </script>
 </html>

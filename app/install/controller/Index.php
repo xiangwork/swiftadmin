@@ -4,13 +4,16 @@ declare (strict_types = 1);
 namespace app\install\controller;
 use think\facade\Cache;
 
-class Index
+use app\BaseController;
+
+class Index extends BaseController
 {   
     /**
      * 使用协议
      */
     public function index()
     {
+        Cache::clear();
         return view();
     }
 
@@ -23,13 +26,13 @@ class Index
 
             // 检测生产环境
             foreach (checkenv() as $key => $value) {
-
+                
                 if ($key == 'php' && (float)$value < 8) {
-                    return json(['code'=>101,'msg'=>'PHP版本过低！']);
+                    return $this->error('PHP版本过低！');
                 }
 
                 if ($value == false && $value != 'redis') {
-                    return json(['code'=>101,'msg'=>$key.'扩展未安装！']);
+                    return $this->error($key.'扩展未安装！');
                 }
             }
 
@@ -37,7 +40,7 @@ class Index
             foreach (check_dirfile() as $value) {
                 if ($value[1] == ERROR 
                     || $value[2] == ERROR) {
-                    return json(['code'=>101,'msg'=>$value[3].' 权限读写错误！']);   
+                    return $this->error($value[3].' 权限读写错误！');
                 }
             }
 
@@ -66,13 +69,13 @@ class Index
             $post = input();
             $connect = @mysqli_connect($post['hostname'] . ':' . $post['hostport'], $post['username'], $post['password']);
             if (!$connect) {
-                return json(['code'=>101,'msg'=>'数据库链接失败！']);
+                return $this->error('数据库链接失败');
             }
     
             // 检测MySQL版本
             $mysqlInfo = mysqli_get_server_info($connect);
-            if ((float)$mysqlInfo < 5.6) {
-                return json(['code'=>101,'msg'=>'MySQL版本过低！']);
+            if ((float)$mysqlInfo < 5.5) {
+                return $this->error('MySQL版本过低');
             }
     
             // 查询数据库名
@@ -80,14 +83,14 @@ class Index
             if (!$database) {
                 $query = "CREATE DATABASE IF NOT EXISTS `".$post['database']."` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;";
                 if (!mysqli_query($connect, $query)) {
-                    return json(['code'=>101,'msg'=>'数据库创建失败或已存在，请手动修改！']);
+                    return $this->error('数据库创建失败或已存在，请手动修改');
                 }
             }
             else {
                 $mysql_table = mysqli_query($connect, 'SHOW TABLES FROM'.' '.$post['database']);
                 $mysql_table = mysqli_fetch_array($mysql_table);
                 if (!empty($mysql_table) && is_array($mysql_table)) {
-                    return json(['code'=>101,'msg'=>'数据表已存在，请勿重复安装！']);
+                    return $this->error('数据表已存在，请勿重复安装');
                 }
             }
             
@@ -101,8 +104,8 @@ class Index
     /**
      * 初始化数据库
      */
-    public function step3() {
-
+    public function step3() 
+    {
         $mysql = Cache::get('mysql');
         if (!$mysql) {
             return redirect('/install.php/index/step2');
@@ -125,7 +128,7 @@ class Index
 
             $mysql = Cache::get('mysql');
             if (is_file('../extend/conf/install.lock') || !$mysql) {
-                return json(['code'=>101,'msg'=>'请勿重复安装本系统']);
+                return $this->error('请勿重复安装本系统');
             }
     
             // 获取变量文件
@@ -150,7 +153,13 @@ class Index
             $sql = str_replace(" `sa_", " `{$mysql['prefix']}", $sql);
             
             // 缓存任务总数
-            Cache::set('total',count($sql),3600);
+            $count = count($sql);
+            if ($count >= 1 && is_numeric($count)) {
+                Cache::set('total',count($sql),3600);
+            } else {
+                unlink(root_path().'.env');
+                return $this->error('读取install.sql出错');
+            }
 
             // 链接数据库
             $connect = @mysqli_connect($mysql['hostname'].':'.$mysql['hostport'], $mysql['username'], $mysql['password']);
@@ -160,6 +169,7 @@ class Index
             $logs = [];
             $nums = 0;
             try {
+
                 // 写入数据库
                 foreach ($sql as $key => $value) {
 
@@ -168,20 +178,24 @@ class Index
                     if (empty($value)) {
                         continue;
                     }
-    
+                    
+                    // 创建表数据
                     if (substr($value, 0, 12) == 'CREATE TABLE') {
                         $name = preg_replace("/^CREATE TABLE `(\w+)` .*/s", "\\1", $value);
                         $msg  = "创建数据表 {$name}...";
     
                         if (false !== mysqli_query($connect,$value)) {
+
                             $msg .= '成功！';
                             $logs[$nums] = [
-                                'id'=>$nums,
-                                'msg'=>$msg,
+                                'id'=> $nums,
+                                'msg'=> $msg,
                             ];
+
                             $nums++;
                             Cache::set('tasks',$logs,3600);
                         }
+
                     } else {
                         mysqli_query($connect,$value);
                     }
@@ -218,10 +232,16 @@ class Index
                 'msg'=>'获取任务信息失败！',
             ];
             
-            $progress = round(Cache::get('progress')/Cache::get('total')*100).'%';
-   
+            $code  = 200;
+            $total = Cache::get('total');
+            if (empty($total)) {
+                $code = 101;
+                $total = 1;
+            }
+
+            $progress = round((Cache::get('progress')/$total) * 100 ).'%';
             $result = [
-                'code'=> 200,
+                'code'=> $code,
                 'msg'=> $tasks,  
                 'progress'=> $progress,
             ];
@@ -247,11 +267,12 @@ class Index
                 copy($index,public_path().$admin.'.php');
 
                 // 清理安装包
+                Cache::clear();
                 recursiveDelete(app_path());
                 unlink(public_path().'install.php');
-            } 
+            }
             catch (\Throwable $th) {
-                echo $th->getMessage();
+                return $this->error($th->getMessage());
             }
         }
     }

@@ -410,7 +410,7 @@ class Upload
         }
 
         // 非空自动增加HTTP前缀
-        $prefix = saenv('upload_http_prefix');
+        $prefix = get_upload_Http_Perfix();
         if (!empty($prefix)) {
             $url = $prefix.$url;
         }

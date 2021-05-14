@@ -22,7 +22,7 @@
 
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="swiftadmin"></a>
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/ThinkPHP-6.0.8-brightgreen.svg" alt="thinkphp"></a>
-<a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/Layui-2.6.5-red.svg" alt="layui"></a>
+<a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/Layui-2.6.n-red.svg" alt="layui"></a>
 <a href="https://gitee.com/meystack/swiftadmin/stargazers"><img src="https://gitee.com/meystack/swiftadmin/badge/star.svg?theme=gvp" alt="star"></a>
 <a href="https://gitee.com/meystack/swiftadmin/members"><img src="https://gitee.com/meystack/swiftadmin/badge/fork.svg?theme=gvp" alt="fork"></a>
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=Idivrh-log25t0ryx19nWeqUk8oFrI-X&jump_from=webapi"><img src="https://img.shields.io/badge/qq一群-68221484-blue.svg" alt="一群"></a>
@@ -30,6 +30,30 @@
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=p6N-b7AkWiESpcrZmOKWpm3t05qt4MQ-&jump_from=webapi"><img src="https://img.shields.io/badge/qq三群-68221618-blue.svg" alt="三群"></a>
 
 ### `在官网搭建好之前，更新日志都先会发在这里`
+
+## v1.0.2
+
+> v1.0.2 在修复已知的bug上进行代码优化
+
++ 增加了路由地址生成
++ 增加了纯静态页面生成，再多数据也不怕
++ 增加了广告位代码的复制一键获取
++ 增加了自动远程获取图片地址
++ 增加了友情链接分类分组
++ 增加了异常信息模板隐藏后端信息
+
+*  修复了Linux下某些字符转义问题
+*  修复了插件系统若干bug
+*  修复了安装模块异常的bug
+*  修复了社会化登录在Linux系统下不跳转的问题
+*  优化了栏目标签获取
+*  优化了用户登录获取token的方式
+
+-  去除模型、栏目多余的模板字段
+-  去除数据库表中多余的字段
+
+此次更新的内容包括但不限于上述信息，如您有更好的建议请在群里提出，
+SAPHP现在还处于刚发展期，离不开您的支持，谢谢！
 
 ## v1.0.1
 > v1.0.1 对代码进行重构和修复，有以下改动

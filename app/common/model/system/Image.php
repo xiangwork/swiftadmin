@@ -233,7 +233,7 @@ class Image extends Model
     public function setalbumAttr($album)
     {
         if ($album) {
-            $prefix = saenv('upload_http_prefix');
+            $prefix = get_upload_Http_Perfix();
             if (!empty($prefix) && is_array($album)) {
                 foreach ($album as $key => $value) {
                     $album[$key] = str_replace($prefix,'',$value);
@@ -254,7 +254,7 @@ class Image extends Model
     {
         if ($album) {
             $album = unserialize($album);
-            $prefix = saenv('upload_http_prefix');
+            $prefix = get_upload_Http_Perfix();
             if (!empty($prefix) && is_array($album)) {
                 foreach ($album as $key => $value) {
                     $album[$key]['src'] = $prefix.$value['src'];
