@@ -18,6 +18,4 @@ return [
   ],
   'config' => 0,
   'url' => '/plugin/cloudfiles',
-  'path' => 'D:\\BtSoft\\wwwroot\\demo.swiftadmin.net\\plugin\\cloudfiles\\',
-  'filePath' => 'D:\\BtSoft\\wwwroot\\demo.swiftadmin.net\\plugin\\cloudfiles\\config.php',
 ];

@@ -13,8 +13,6 @@ namespace app;
 
 use app\BaseController;
 use app\common\library\Auth;
-use think\facade\Cache;
-use think\facade\Config;
 
 // 前台全局控制器基类
 class HomeController extends BaseController 

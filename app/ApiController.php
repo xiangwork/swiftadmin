@@ -109,8 +109,7 @@ class ApiController extends BaseController
         }
         else {
             
-            // 普通验证流程
-            // 是否验证登录器
+            // 普通验证流程 ? 是否验证登录器
             if ($this->needLogin) {
                 $this->action = request()->action(true);
                 if($this->auth->isLogin()) {

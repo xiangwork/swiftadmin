@@ -21,5 +21,4 @@ return [
   ],
   'auto' => true,
   'config' => 1,
-  'url' => '/plugin/demo',
 ];

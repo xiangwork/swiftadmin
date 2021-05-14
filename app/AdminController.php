@@ -133,7 +133,7 @@ class AdminController extends BaseController
 		}
 		
 		// 初始化字段信
-		// self::sysfield();
+		self::sysfield();
 
 		// 系统日志
 		if (saenv('admin_log_status')) {
@@ -141,10 +141,12 @@ class AdminController extends BaseController
 			$array['type'] = 2;
 			Systemlog::write($array);
 		}
+
         // 获取站点数据
         foreach (saenv('site') as $key => $value) {
             $this->app->view->assign($key,$value);
         }
+		
 		View::assign(['app'=>$app,'controller'=>$this->controller,'action'=>$this->action,'AdminLogin'=>$this->admin]);
 	}
 
