@@ -16,8 +16,8 @@ class UploadFile extends Validate
 	protected $rule = [
 		'images'=>[
 			'fileSize' => 419430400,
-			'fileExt' => 'jpg,jpeg,png,bmp,gif',
-			'fileMime' => 'image/jpeg,image/png,image/gif'],
+			'fileExt' => 'jpg,jpeg,png,bmp,gif,svg',
+			'fileMime' => 'image/jpeg,image/png,image/gif,image/svg+xml'],
 		'video'=>[
 			'fileSize' => 419430400,
 			'fileExt' => 'flv,swf,mkv,avi,rm,rmvb,mpeg,mpg,ogg,ogv,mov,wmv,mp4,webm,mp3,wav,mid'],

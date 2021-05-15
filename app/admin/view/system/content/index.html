@@ -137,7 +137,7 @@
             ,page: true
             ,cols: [[
                 {type: 'checkbox'},
-                {type:'numbers' ,align: 'center',sort: true,width: 80,  title: 'ID'},
+                {field:'id' ,align: 'center',sort: true,width: 80,  title: 'ID'},
                 {field: 'title', align: 'left', templet(d) {
                     var html = '<a href="' + d.readurl +'" target="_blank" style="margin-right:10px;" >'+d.title+'</a>',
                     templet = ['<span class="layui-badge">头条</span>','<span class="layui-badge layui-bg-orange">推荐</span>',

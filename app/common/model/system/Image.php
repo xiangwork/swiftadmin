@@ -54,13 +54,13 @@ class Image extends Model
     }
 
     /**
-     * 更新事件
+     * 数据写入后
      * @param   object  $data
      * @return  string
      */
-    public static function onAfterUpdate($data)
+    public static function onAfterWrite($data)
     {
-        return Content::onAfterUpdate($data);
+        return Content::onAfterWrite($data);
     }
 
     /**
@@ -107,6 +107,7 @@ class Image extends Model
      */
     public function setHashAttr($hash, $data) 
     {
+        $data['id'] = self::count();
         return Content::setHashAttr($hash,$data);
     }
 

@@ -42,11 +42,11 @@ class Content
     }
 
     /**
-     * 数据更新事件
+     * 数据写入后
      * @param   object  $data
      * @return  string
      */
-    public static function onAfterUpdate($data)
+    public static function onAfterWrite($data)
     {
         try {
             if (saenv('url_model') == STATICS) {

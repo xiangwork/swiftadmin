@@ -22,9 +22,8 @@ class Images
 		try {
 			
 			// 获取文件信息
-			$ImageInfo = getimagesize($filename);
-			$ImageWaterInfo = getimagesize($config['upload_water_img']);
 			$Image = Image::open($filename);
+			$ImageInfo = getimagesize($filename);
 
 			// 判断水印类型
 			if ($config['upload_water_type']) { // 文字水印
@@ -42,6 +41,12 @@ class Images
 				
 			}else {
 
+				if (!file_exists($config['upload_water_img'])) {
+					return false;
+				}
+
+				$ImageWaterInfo = getimagesize($config['upload_water_img']);
+
 				// 对比图片大小 /*太小了，不压缩了*/
 				if ($ImageWaterInfo[0] >= $ImageInfo[0] || 
 					$ImageWaterInfo[1] >= $ImageInfo[1]) {
@@ -49,17 +54,13 @@ class Images
 				}
 
 				// 检查图片
-				$upload_water_img = public_path($config['upload_water_img']);
-				if (is_file($upload_water_img)) {
-					$reswater = $Image->water($config['upload_water_img'],$config['upload_water_pos'],$config['upload_water_pct'])->save($filename);
-				}
+				$reswater = $Image->water($config['upload_water_img'],$config['upload_water_pos'],$config['upload_water_pct'])->save($filename);
 			}
 			
 			return $reswater ?? false;
-
 		}
 		catch(\Throwable $th){
-			throw new \Exception($th->getMessage());
+			return $th->getMessage();
 		}
 	}
 	

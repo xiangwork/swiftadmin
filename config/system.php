@@ -43,7 +43,7 @@ return [
     'upload_path' => 'upload',
     'upload_style' => 'Y-m-d',
     'upload_class' => [
-      'images' => '.bmp.jpg.jpeg.png.gif',
+      'images' => '.bmp.jpg.jpeg.png.gif.svg',
       'video' => '.flv.swf.mkv.avi.rm.rmvb.mpeg.mpg.ogg.ogv.mov.wmv.mp4.webm.mp3.wav.mid',
       'document' => '.txt.doc.xls.ppt.docx.xlsx.pptx',
       'files' => '.exe.dll.sys.so.dmg.iso.zip.rar.7z.sql.pem',
