@@ -229,12 +229,16 @@ class Category extends Model
         return $sort;
     }
 
-    public function getreadurlattr($readurl,$data)
+    public function getreadurlattr($readUrl,$data)
     {
-        if ($readurl) {
-            return $readurl;
+        if ($data['jumpurl']) {
+            return $data['jumpurl'];
         }
-
+        
+        if (!empty($readUrl)) {
+            return $readUrl;
+        }
+        
         return build_request_url($data,'category_page');
     }
 }

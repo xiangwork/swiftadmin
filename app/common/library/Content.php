@@ -311,6 +311,11 @@ class Content
      */
     public static function getReadurlAttr($readUrl,$data)
     {
+        
+        if ($data['jumpurl']) {
+            return $data['jumpurl'];
+        }
+        
         if (!empty($readUrl)) {
             return $readUrl;
         }
