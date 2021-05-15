@@ -1484,7 +1484,7 @@ if (!function_exists('build_request_url')) {
 		if (saenv('url_model') == TRUE) {
 			
 			// 替换规则
-			$search	 = ['listdir','sublist','id','hash'];
+			$search	 = ['listdir','sublist','id','hash','pinyin'];
 			if ($variable == 'content_page') {
 				foreach (Category::getListCache() as $value) {
 					if ($value['id'] == $data['pid']) {
@@ -1517,7 +1517,8 @@ if (!function_exists('build_request_url')) {
 				$category['pinyin']??'',
 				$nextcategory['pinyin']??'',
 				$data['id']??'',
-				$data['hash']??''
+				$data['hash']??'',
+				$data['pinyin']??''
 			];
 
 			$readurl = str_replace($search,$replace,$readurl);
