@@ -30,7 +30,7 @@
         "topthink/think-captcha": "^3.0",
         "phpmailer/phpmailer": "^6.2",
         "overtrue/pinyin": "^4.0",
-        "meystack/plugin": "^1.0"
+        "meystack/plugin": "^1.0.1"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2"
