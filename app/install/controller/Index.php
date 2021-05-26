@@ -44,7 +44,7 @@ class Index extends BaseController
                 }
             }
 
-            Cache::set('checkenv','success',3600);
+            Cache::set('checkenv','success',7200);
             return json(['code'=>200,'url'=>'/install.php/index/step2']);
         }
 
@@ -94,7 +94,7 @@ class Index extends BaseController
                 }
             }
             
-            Cache::set('mysql',$post,3600);
+            Cache::set('mysql',$post,7200);
             return json(['code'=>200,'url'=>'/install.php/index/step3']);
         }
 
@@ -141,7 +141,6 @@ class Index extends BaseController
             $parse['DATABASE']['PASSWORD'] = $mysql['password'];
             $parse['DATABASE']['PREFIX'] = $mysql['prefix'];
             $content = parse_array_ini($parse);
-            write_file(root_path().'.env',$content);
     
             // 读取MySQL数据
             $path = app_path().'install.sql';
@@ -156,7 +155,7 @@ class Index extends BaseController
             $count = count($sql);
 			
             if ($count >= 1 && is_numeric($count)) {
-                Cache::set('total',$count,3600);
+                Cache::set('total',$count,7200);
             } else {
                 unlink(root_path().'.env');
                 Cache::set('error','读取install.sql出错',7200);
@@ -174,8 +173,8 @@ class Index extends BaseController
 
                 // 写入数据库
                 foreach ($sql as $key => $value) {
-
-                    Cache::set('progress',($key+1),3600);
+					
+					Cache::set('progress',$key,7200);
                     $value = trim($value);
                     if (empty($value)) {
                         continue;
@@ -189,13 +188,12 @@ class Index extends BaseController
                         if (false !== mysqli_query($connect,$value)) {
 
                             $msg .= '成功！';
+                            $nums++;
                             $logs[$nums] = [
                                 'id'=> $nums,
                                 'msg'=> $msg,
                             ];
-
-                            $nums++;
-							Cache::set('tasks',$logs,3600);
+							Cache::set('tasks',$logs,7200);
                         }
                     } else {
                         mysqli_query($connect,$value);
@@ -204,12 +202,14 @@ class Index extends BaseController
     
             } catch (\Throwable $th) { // 异常信息
                 Cache::set('error',$th->getMessage() ?? '任务执行失败！',7200);
+				return;
             }
     
             // 修改初始化密码
             $pwd = hash_pwd($mysql['pwd']);
             mysqli_query($connect,"UPDATE {$mysql['prefix']}admin SET pwd='{$pwd}' where id = 1");
-			write_file(root_path().'extend/conf/install.lock',true);
+			write_file(root_path().'.env',$content);
+			write_file(root_path().'extend/conf/install.lock',true);    
         }
     }
 
@@ -230,18 +230,17 @@ class Index extends BaseController
             $total = Cache::get('total');
             $tasks = Cache::get('tasks');
 
-			if (empty($total) || empty($tasks)) {
-                return;
+			if (!empty($total) && !empty($tasks)) {
+				$progress = Cache::get('progress') + 1;
+				$progress = round(($progress/$total) * 100 ).'%';
+				$result = [
+					'code'=> 200,
+					'msg'=> $tasks,  
+					'progress'=> $progress,
+				];
+
+				return json($result);                
             }
-
-            $progress = round((Cache::get('progress')/$total) * 100 ).'%';
-            $result = [
-                'code'=> 200,
-                'msg'=> $tasks,  
-                'progress'=> $progress,
-            ];
-
-            return json($result);
         }
     }
 
