@@ -175,7 +175,7 @@ git clone https://gitee.com/meystack/swiftadmin.git ./src && cd src && composer 
 3. SwiftAdmin框架及相关官方插件，使用这只拥有本框架和插件的使用权，不具备著作权，故任何人不得使用SwiftAdmin软件来申请著作权
 4. 本软件依法享有国家著作权保护，故使用本软件者不得恶意篡改本源码，包括但不限于（植入木马病毒，编写违法应用）进行恶意传播。
 5. 不得对本软件进行二次专收或倒卖，不得对本软件进行二次包装后声称为自己的产品等，请尊重国家著作权法！
-6. 如需去除软件版权，请购买域名授权，授权期间本软件作者有义务对授权者提供技术支持！
+6. 如需去除软件版权，请购买域名授权，授权期间本软件作者有义务对授权者提供技术支持！.
 
 ## 捐助我们
 
@@ -184,6 +184,5 @@ git clone https://gitee.com/meystack/swiftadmin.git ./src && cd src && composer 
 		<td><img src="https://www.swiftadmin.net/static/images/pay/wxfk.jpg" width="300"/></td>
 		<td><img src="https://www.swiftadmin.net/static/images/pay/zfbfk.jpg" width="300" /></td>
 	</tr>	
-    
-    <tr>您的捐助和支持，将是SAPHP开源项目发展最大的动力，感谢年少(209766828) 200元、HeLe(38510621) 200元捐赠，以上排名不分先后！</tr>
 </table>
+<code>您的捐助和支持，将是SAPHP开源项目发展最大的动力，感谢年少(209766828) 200元、HeLe(38510621) 200元捐赠，以上排名不分先后！</code>
