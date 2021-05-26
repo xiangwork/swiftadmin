@@ -159,7 +159,8 @@ class Index extends BaseController
                 Cache::set('total',$count,3600);
             } else {
                 unlink(root_path().'.env');
-                return $this->error('读取install.sql出错');
+                Cache::set('error','读取install.sql出错',7200);
+                return false;
             }
 			
             // 链接数据库
@@ -192,6 +193,7 @@ class Index extends BaseController
                                 'id'=> $nums,
                                 'msg'=> $msg,
                             ];
+
                             $nums++;
 							Cache::set('tasks',$logs,3600);
                         }
@@ -201,7 +203,7 @@ class Index extends BaseController
                 }
     
             } catch (\Throwable $th) { // 异常信息
-                Cache::set('error',$th->getMessage(),7200);
+                Cache::set('error',$th->getMessage() ?? '任务执行失败！',7200);
             }
     
             // 修改初始化密码
@@ -227,13 +229,10 @@ class Index extends BaseController
             // 获取任务信息
 			$code  = 200;
 			$total = Cache::get('total');
-            $tasks = Cache::get('tasks') ?? '获取任务信息失败！';
-            
-            if (empty($total)) {
-                $code = 101;
-                $total = 1;
-            }
-
+            $tasks = Cache::get('tasks') ?? [
+                'id' => 0,
+                'msg' => '等待任务...'
+            ];
             $progress = round((Cache::get('progress')/$total) * 100 ).'%';
             $result = [
                 'code'=> $code,
