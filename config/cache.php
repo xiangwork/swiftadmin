@@ -27,9 +27,9 @@ return [
 		// redis缓存
         'redis'   =>  [
             'type'       => 'redis',
-            'select'     => env('cache.select', '0'),
             'host'       => env('cache.hostname', '127.0.0.1'),
             'port'       => env('cache.hostport', '6379'),
+            'select'     => env('cache.select', '0'),
             'username'   => env('cache.username', ''),
             'password'   => env('cache.password', ''),			
         ],
