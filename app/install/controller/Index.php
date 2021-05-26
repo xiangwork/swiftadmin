@@ -231,7 +231,7 @@ class Index extends BaseController
             $tasks = Cache::get('tasks');
 			if (empty($total) || empty($tasks)) {
                 return;
-            };
+            }
 
             $progress = round((Cache::get('progress')/$total) * 100 ).'%';
             $result = [
