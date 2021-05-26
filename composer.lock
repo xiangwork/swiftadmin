@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "369b87d08f93c53d35784818888c0a8f",
+    "content-hash": "70aa470c94e977ac94ecab5af96450d5",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -479,16 +479,16 @@
         },
         {
             "name": "meystack/plugin",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/meystack/plugin.git",
-                "reference": "2b50b45d637f639383ac2859765057580e86dd06"
+                "reference": "a239a08f717d96a721dd62e93fdbcb1db243d94b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/meystack/plugin/zipball/2b50b45d637f639383ac2859765057580e86dd06",
-                "reference": "2b50b45d637f639383ac2859765057580e86dd06",
+                "url": "https://api.github.com/repos/meystack/plugin/zipball/a239a08f717d96a721dd62e93fdbcb1db243d94b",
+                "reference": "a239a08f717d96a721dd62e93fdbcb1db243d94b",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -534,9 +534,9 @@
             "homepage": "https://github.com/meystack/plugin",
             "support": {
                 "issues": "https://github.com/meystack/plugin/issues",
-                "source": "https://github.com/meystack/plugin/tree/1.0.0"
+                "source": "https://github.com/meystack/plugin/tree/1.0.1"
             },
-            "time": "2021-04-06T11:24:16+00:00"
+            "time": "2021-05-26T01:01:39+00:00"
         },
         {
             "name": "overtrue/pinyin",
