@@ -227,18 +227,14 @@ class Index extends BaseController
             }
             
             // 获取任务信息
-			$code  = 200;
-			if (!$total = Cache::get('total')) {
+			if (!$total = Cache::get('total') 
+                || !$tasks = Cache::get('tasks')) {
                 return false;
             };
-            
-            $tasks = Cache::get('tasks') ?? [
-                'id' => 0,
-                'msg' => '等待任务...'
-            ];
+
             $progress = round((Cache::get('progress')/$total) * 100 ).'%';
             $result = [
-                'code'=> $code,
+                'code'=> 200,
                 'msg'=> $tasks,  
                 'progress'=> $progress,
             ];
