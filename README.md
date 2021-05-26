@@ -1,7 +1,7 @@
 ## 前言
 > 基于ThinkPHP6版本开发， 学习本手册有利于您快速的掌握本框架的开发架构！
 <div align="center">
-<img src="https://images.gitee.com/uploads/images/2021/0412/110400_6a5e130d_904542.png" width="100" height="100"/>
+<img src="https://www.swiftadmin.net/static/images/sademo/110400_6a5e130d_904542.png" width="100" height="100"/>
 </div>
 <p align="center"><strong>价值源自分享</strong></p>
 
@@ -29,72 +29,6 @@
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=L_SKDh46TnWDVrudKEON2XAlgm02RNic&jump_from=webapi"><img src="https://img.shields.io/badge/qq二群-68221585-blue.svg" alt="二群"></a>
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=p6N-b7AkWiESpcrZmOKWpm3t05qt4MQ-&jump_from=webapi"><img src="https://img.shields.io/badge/qq三群-68221618-blue.svg" alt="三群"></a>
 
-### `后续更新日志会直接在开发文档中`
-
-## v1.0.3
-
-> v1.0.3 在修复已知的bug上进行代码优化,因为时间的关系暂时CURD未增加，手动也不慢
-
-1、增加全局缓存函数，redis缓存库选择，优化存取方式避免重复
-
-2、增加get_dictionary_alias 字典别名函数，用于获取数据
-
-3、增加获取内容页地址拼音格式，并优化代码避免重复替换错误
-
-4、增加了content 全局自动转换IP函数
-
-5、增加gitee第三方登录扩展！
-
-6、增加了API文档、分应用分组生成文档。
-
-7、增加了前端访问地址类型判断函数findUrltype，方便查询数据！！
-
-- 优化get_read_url函数，支持统一URL格式
-- 优化getfield 函数，用于清理一些数据字段。
-- 优化用户登录数据、模型数据读取方式
-- 优化哈希值写入处理
-- 暂时去除图片水印，微缩图，gif动画无法水印问题。因PHP支持库问题！
-以及修复各种已知的小bug,更新了composer包，不会报错了，因官网已经搭建好，
-
-## v1.0.2
-
-> v1.0.2 在修复已知的bug上进行代码优化
-
-+ 增加了路由地址生成
-+ 增加了纯静态页面生成，再多数据也不怕
-+ 增加了广告位代码的复制一键获取
-+ 增加了自动远程获取图片地址
-+ 增加了友情链接分类分组
-+ 增加了异常信息模板隐藏后端信息
-
-*  修复了Linux下某些字符转义问题
-*  修复了插件系统若干bug
-*  修复了安装模块异常的bug
-*  修复了社会化登录在Linux系统下不跳转的问题
-*  优化了栏目标签获取
-*  优化了用户登录获取token的方式
-
--  去除模型、栏目多余的模板字段
--  去除数据库表中多余的字段
-
-此次更新的内容包括但不限于上述信息，如您有更好的建议请在群里提出，
-SAPHP现在还处于刚发展期，离不开您的支持，谢谢！
-
-## v1.0.1
-> v1.0.1 对代码进行重构和修复，有以下改动
-
-* 重写了AUTH鉴权类，鉴权更清晰明了，代码更健壮
-* 框架默认自带的模型，后端数据添加修改已编写完毕，你可以直接注重前端开发
-* 摒弃config获取配置信息字符过长，自写saenv函数获取变量更简单[默认system]
-* 重写回收站操作逻辑，注重主要数据的维护，只在操作界面保留主要模型的数据恢复与销毁
-* 增加了自动图片本地化、自动祛除非本站链接、自动提取缩略图、自动获取对象属性
-* 编写了大量常用标签，增加TAG违禁字检测、网站内链功能，强化SEO效果！！！
-* 修复代码审计后的中危/高危漏洞、提高代码安全质量！
-* 修复了各种已知的BUG。。。。
-
-- 去掉了默认继承的回收站、还原和销毁方法
---- 
-
 ## 开发初衷
 
 1.  swiftadmin框架的开发，主要是为了减少在自己开发过程中的频繁造轮子，并且swiftAdmin框架主张简单就是高效的原则，相信没有比判断0或者1更有效率的算法了吧，所以最简单的东西才是效率最高的，可能你的应用场景很复杂，但是你可以把复杂的事情简单化！
@@ -107,20 +41,19 @@ SAPHP现在还处于刚发展期，离不开您的支持，谢谢！
 
 5.  想着开发一款底层设计配置和应用分开的系统，这样对于很多小白用户不会在项目已经上线运行中的时候，误操作系统的配置导致数据丢失，错乱的问题。比如有些字段需要手动在数据库进行修改，
 
-
 ## 侧重点
 
- *  一、swiftAdmin的架构和开发更倾向于内容管理系统[CMS]的方向，当然你也可以当中API系统使用<br/>
+ *  swiftAdmin的架构和开发更倾向于内容管理系统[CMS]的方向，当然你也可以当中API系统使用<br/>
  
- *  二、系统默认的缓存机制为redis缓存，所以请确保安装redis扩展和服务器[摒弃操蛋的file缓存吧]<br/>
+ *  系统默认的缓存机制为redis缓存，所以请确保安装redis扩展和服务器[摒弃操蛋的file缓存吧]<br/>
  
- *  三、如果你只是需要一个极简的API管理系统，那么建议你删除不需要的模块和菜单项！<br/>
+ *  如果你只是需要一个极简的API管理系统，那么建议你删除不需要的模块和菜单项！<br/>
 
- *  四、本框架会侧重于SEO优化、流量管理、蜘蛛池、区块链以及采集方面的应用！！！<br/>
+ *  本框架会侧重于SEO优化、流量管理、蜘蛛池、区块链以及采集方面的应用！！！<br/>
 
- *  五、本框架会逐渐偏向于社区版开源的方向，主要由社区共同的爱好者免费开发维护插件！！！
+ *  本框架会逐渐偏向于社区版开源的方向，主要由社区共同的爱好者免费开发维护插件！！！
 
- *  六、本框架特别适合个人开发者和小型创业公司，找一款真正适合自己的框架不容易，所以先来试试swiftadmin吧！
+ *  本框架特别适合个人开发者和小型创业公司，找一款真正适合自己的框架不容易，所以先来试试swiftadmin吧！
 
 ## `框架优势`
 
@@ -193,46 +126,47 @@ git clone https://gitee.com/meystack/swiftadmin.git ./src && cd src && composer 
 ## 软件截图
 <table>
     <tr>
-        <td><img src="https://images.gitee.com/uploads/images/2021/0412/135434_82477f64_904542.png"/></td>
-        <td><img src="https://images.gitee.com/uploads/images/2021/0412/135446_e5a0fb94_904542.png"/></td>
+        <td><img src="https://www.swiftadmin.net/static/images/sademo/135434_82477f64_904542.png"/></td>
+        <td><img src="https://www.swiftadmin.net/static/images/sademo/135446_e5a0fb94_904542.png"/></td>
     </tr>
     <tr>
-        <td><img src="https://images.gitee.com/uploads/images/2021/0412/135451_c75d3ca2_904542.png"/></td>
-        <td><img src="https://images.gitee.com/uploads/images/2021/0412/135457_d4429ce5_904542.png"/></td>
+        <td><img src="https://www.swiftadmin.net/static/images/sademo/135451_c75d3ca2_904542.png"/></td>
+        <td><img src="https://www.swiftadmin.net/static/images/sademo/135457_d4429ce5_904542.png"/></td>
     </tr>
     <tr>
-        <td><img src="https://images.gitee.com/uploads/images/2021/0427/122537_60f07d17_904542.png"/></td>
-        <td><img src="https://images.gitee.com/uploads/images/2021/0427/122545_8b8872af_904542.png"/></td>
+        <td><img src="https://www.swiftadmin.net/static/images/sademo/122537_60f07d17_904542.png"/></td>
+        <td><img src="https://www.swiftadmin.net/static/images/sademo/122545_8b8872af_904542.png"/></td>
     </tr>
     <tr>
-        <td><img src="https://images.gitee.com/uploads/images/2021/0427/122556_1f07ce34_904542.png"/></td>
-        <td><img src="https://images.gitee.com/uploads/images/2021/0427/122603_373375e6_904542.png "/></td>
+        <td><img src="https://www.swiftadmin.net/static/images/sademo/122556_1f07ce34_904542.png"/></td>
+        <td><img src="https://www.swiftadmin.net/static/images/sademo/122603_373375e6_904542.png "/></td>
     </tr>
     <tr>
-        <td><img src="https://images.gitee.com/uploads/images/2021/0427/122610_b79d5d77_904542.png"/></td>
-        <td><img src="https://images.gitee.com/uploads/images/2021/0427/122618_1f8983ad_904542.png"/></td>
+        <td><img src="https://www.swiftadmin.net/static/images/sademo/122610_b79d5d77_904542.png"/></td>
+        <td><img src="https://www.swiftadmin.net/static/images/sademo/122618_1f8983ad_904542.png"/></td>
     </tr>	
 </table>
 
 ## 项目演示
 <table>
 	<tr>
-		<td><img src="https://images.gitee.com/uploads/images/2021/0412/135519_aa76fdcf_904542.gif"/></td>
+		<td><img src="https://www.swiftadmin.net/static/images/sademo/135519_aa76fdcf_904542.gif"/></td>
 	</tr>
 	<tr>
-		<td><img src="https://images.gitee.com/uploads/images/2021/0412/140708_8baf92f1_904542.gif"/></td>
+		<td><img src="https://www.swiftadmin.net/static/images/sademo/140708_8baf92f1_904542.gif"/></td>
 	</tr>	
 	<tr>
-		<td><img src="https://images.gitee.com/uploads/images/2021/0412/151945_66490698_904542.gif"/></td>
+		<td><img src="https://www.swiftadmin.net/static/images/sademo/151945_66490698_904542.gif"/></td>
 	</tr>	    
 </table>
 
 ## 如何使用？
-> 
 > 推荐你以下两种快速使用SwiftAdmin的方法：<br/>
-> 一、 你可以在此基础上直接进行二次开发，前端已经为你准备了若干个常用的PHP接口文件<br/>
-> 二、 你可以在后台插件管理中安装你所需要的完整应用或者部分插件，注意安装完整应用的话，
->      是会直接覆盖index.php的，但是会生成一个文件冲突TXT以供查阅！<br/>
+
+你可以在此基础上直接进行二次开发，前端已经为你准备了若干个常用的PHP接口文件<br/>
+你可以在后台插件管理中安装你所需要的完整应用或者部分插件，注意安装完整应用的话，
+是会直接覆盖index.php的，但是会生成一个文件冲突TXT以供查阅！<br/>
+
 
 ## 授权协议
 > 
@@ -242,3 +176,13 @@ git clone https://gitee.com/meystack/swiftadmin.git ./src && cd src && composer 
 4. 本软件依法享有国家著作权保护，故使用本软件者不得恶意篡改本源码，包括但不限于（植入木马病毒，编写违法应用）进行恶意传播。
 5. 不得对本软件进行二次专收或倒卖，不得对本软件进行二次包装后声称为自己的产品等，请尊重国家著作权法！
 6. 如需去除软件版权，请购买域名授权，授权期间本软件作者有义务对授权者提供技术支持！
+
+## 捐助我们
+
+<table>
+	<tr>
+		<td><img src="https://www.swiftadmin.net/static/images/pay/wxfk.jpg" width="300"/></td>
+		<td><img src="https://www.swiftadmin.net/static/images/pay/zfbfk.jpg" width="300" /></td>
+	</tr>	
+    <tr>您的捐助和支持，将是SAPHP开源项目发展最大的动力，感谢年少(209766828) 200元、HeLe(38510621) 200元捐赠，以上排名不分先后！</tr>
+</table>
