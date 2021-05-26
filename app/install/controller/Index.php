@@ -160,7 +160,7 @@ class Index extends BaseController
             } else {
                 unlink(root_path().'.env');
                 Cache::set('error','读取install.sql出错',7200);
-                return false;
+                return;
             }
 			
             // 链接数据库
@@ -229,6 +229,7 @@ class Index extends BaseController
             // 获取任务信息
             $total = Cache::get('total');
             $tasks = Cache::get('tasks');
+
 			if (empty($total) || empty($tasks)) {
                 return;
             }
