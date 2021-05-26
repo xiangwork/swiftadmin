@@ -126,7 +126,7 @@
 							}
 						}
 					}
-					else {
+					else if (res.code == 101){
 						// 销毁定时器
 						html = '<li><font color="red">'+res.msg+'</font></li>';
 						clearInterval(tasks);
@@ -135,6 +135,8 @@
 					if (html) {
 						logsElem.append(html);
 					}
+				} else {
+					return false;
 				}
 
 				if (logsElem[0].scrollHeight >= logsElem[0].clientHeight) {

@@ -228,7 +228,10 @@ class Index extends BaseController
             
             // 获取任务信息
 			$code  = 200;
-			$total = Cache::get('total');
+			if (!$total = Cache::get('total')) {
+                return false;
+            };
+            
             $tasks = Cache::get('tasks') ?? [
                 'id' => 0,
                 'msg' => '等待任务...'
