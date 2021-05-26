@@ -144,4 +144,12 @@ class User extends AdminController
         }        
     }
 
+    /**
+     * 删除会员
+     */
+    public function del()
+    {
+        $this->error('不允许删除会员');
+    }
+
 }   

@@ -231,6 +231,50 @@ abstract class BaseController
         }
     }
 
+	/**
+     * 获取初始化字段数组
+     * @access protected
+     * @return array|string|true
+     * @throws ValidateException
+     */	
+	protected function getField($controller = null) 
+	{
+		
+		$controller = $controller ?? \strtolower(request()->Controller());
+		if (($begin = strrchr($controller,'.'))) {
+			$controller = \str_replace('.','',$begin);
+		}
+		
+		if (!preg_match("/^[a-zA-Z0-9]+$/", $controller)) {
+			return false;
+		}
+		
+		$fieldArray = config('sysfield.'.$controller);	
+
+		if (!empty($fieldArray)) {
+			foreach ($fieldArray as $key => $val) {
+				$fieldArray[$key] = '';
+			}
+			
+		}else {
+			return $this->error('未获取到数据,请刷新缓存！');
+		}
+		
+        if (isset($fieldArray['createtime'])) {
+            unset($fieldArray['createtime']);
+        }
+
+        if (isset($fieldArray['updatetime'])) {
+            unset($fieldArray['updatetime']);
+        }
+
+        if (isset($fieldArray['delete_time'])) {
+            unset($fieldArray['delete_time']);
+        }
+
+		return $fieldArray;
+	}
+
     /**
      * 抛出404异常
      * @access public

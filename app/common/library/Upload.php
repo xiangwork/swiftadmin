@@ -180,9 +180,10 @@ class Upload
             $this->filename = uniqid().'.'.strtolower($file->extension());
             $this->filepath = $this->config['upload_path'].'/'.$this->fileclass.'/'.date($this->config['upload_style']); 
         }
+
         
         $this->resource = $this->filepath .'/'. $this->filename;
-
+        
         // 移动上传文件
         if (!$file->move($this->filepath, $this->filename)) {
             $this->setError('请检查服务器读写权限！');
@@ -194,18 +195,25 @@ class Upload
             return false;
         }
 
+    
         // 图形文件类型
         if ($this->fileclass == "images") {
 
             // 设置水印/微缩图
-            if ($this->config['upload_water']) {
+            /**
+             * 暂时注释掉水印和微缩图
+             * 后续优化代码
+             */
+            /*if ($this->config['upload_water']) {
                 $this->Images->watermark($this->resource,$this->config);
             }
+
             if ($this->config['upload_thumb'] || $avatar ){
-				$this->Images->thumb($this->filepath, $this->filename, $this->config, $avatar);
-			}
+                $this->Images->thumb($this->filepath, $this->filename, $this->config, $avatar);
+            } */
         }
         
+
 		return $this->success('文件上传成功！','/'.$this->resource);   
     }
 

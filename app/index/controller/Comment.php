@@ -90,9 +90,9 @@ class Comment extends HomeController
 			}
 
             // 限制发布频率
-            $ip = ip2long(request()->ip());
+            $ip = request()->ip();
 			$second = saenv('user_form_second');
-			if (cache((string)$ip)) {
+			if (system_cache((string)$ip)) {
 				return $this->error('您的评论太快,休息一下！');
 			}
             
@@ -110,13 +110,13 @@ class Comment extends HomeController
 				$post['status'] = 0;
 			}
             
-			$post['ip'] = $ip; // 过滤敏感词组
+			$post['ip'] = request()->ip(); // 过滤敏感词组
 			$post['content'] = reply_anti($post['content']);			
 			$post['content'] = reply_face($this->facearray,$post['content']);
 			$result = CommentModel::create($post);
 
 			if (!empty($result)) {
-				cache((string)$ip,$ip,$second);
+				system_cache((string)$ip,$ip,$second);
 				$result['createtime'] = differ_time(time());
 				if(!saenv('user_form_check')) {
 					$result['user'] = $result->user;

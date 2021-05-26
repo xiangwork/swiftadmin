@@ -250,6 +250,17 @@ class Article extends Model
     }
 
     /**
+     * 设置独立模板
+     * @access  public
+     * @param   int  $skin
+     * @return  int 
+     */
+    public function setSkinAttr($skin) 
+    {
+        return Content::setSkinAttr($skin);
+    }    
+
+    /**
      * 字段排序
      * @access  public
      * @param   int  $sort

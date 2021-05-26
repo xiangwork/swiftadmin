@@ -26,16 +26,13 @@ class Channel extends Model
     public static function get_channel_list($id = null) 
     { 
 
-        $data = cache(\SYSTEM.'channel');
+        $data = system_cache('channel');
         if (empty($data)) {
             $data = self::select()->toArray();
             foreach ($data as $key => $value) {
                 $data[$key]['title'] = __($value['title']);
             }
-
-            if(saenv('cache_status')) {
-                cache(\SYSTEM.'channel', $data);
-            }
+            system_cache('channel', $data);
         }
 
         // 判断数据

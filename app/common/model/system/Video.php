@@ -425,5 +425,16 @@ class Video extends Model
         return $filmtime;
     }
 
+    /**
+     * 设置独立模板
+     * @access  public
+     * @param   int  $skin
+     * @return  int 
+     */
+    public function setSkinAttr($skin) 
+    {
+        return Content::setSkinAttr($skin);
+    }    
+
 }
 

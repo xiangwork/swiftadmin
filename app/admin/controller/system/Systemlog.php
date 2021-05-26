@@ -60,10 +60,6 @@ class Systemlog extends AdminController
             $list = $this->model->where($where)->order('id', 'desc')
                                 ->limit($limit)->page($page)->select()->toArray();
 
-            foreach ($list as $key => $value) {
-                $list[$key]['ip'] = long2ip($value['ip']);
-            }   
-
             return $this->success('查询成功', "", $list, $count, 0);
 
         }

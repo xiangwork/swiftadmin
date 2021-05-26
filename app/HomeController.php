@@ -13,11 +13,12 @@ namespace app;
 
 use app\BaseController;
 use app\common\library\Auth;
+use think\facade\Cache;
+use think\facade\Config;
 
 // 前台全局控制器基类
 class HomeController extends BaseController 
 {
-
     /**
      * 数据库实例
      * @var object
@@ -74,9 +75,9 @@ class HomeController extends BaseController
 
     /**
      * 用户数据
-     * @var array
+     * @var object|array
      */
-    public $userData = null;
+    public $userInfo = null;
 
     /**
      * 控制器登录鉴权
@@ -95,6 +96,12 @@ class HomeController extends BaseController
      * @var array
      */
 	public $noNeedLogin = ['index','home'];
+
+    /**
+     * 获取地址类型
+     * @var string
+     */
+	public $Urltype = null;
 
     /**
      * 跳转URL地址
@@ -116,8 +123,9 @@ class HomeController extends BaseController
 
         // 是否验证登录器
         if($this->auth->isLogin()) {
-            $this->userId = $this->auth->userData['id']; 
-            $this->userData = $this->auth->userData;
+            $this->userId = $this->auth->userInfo['id']; 
+            $this->userInfo = $this->auth->userInfo;
+ 
             if(in_array($this->action,$this->repeatLogin)) {
                 $this->redirect($this->JumpUrl);
             }
@@ -128,12 +136,32 @@ class HomeController extends BaseController
             }
         }
 
+        // 获取地址类型
+        $this->Urltype = $this->findUrltype();
+
         // 获取站点数据
         foreach (saenv('site') as $key => $value) {
             $this->app->view->assign($key,$value);
         }
 
-        $this->app->view->assign('user',$this->auth->userData);
+        $this->app->view->assign('user',$this->auth->userInfo);
+    }
+
+    /**
+     * 获取内容页类型
+     * @access public
+     * @return void        
+     */
+    public function findUrltype()
+    {
+        $types = ['id','hash','pinyin'];
+        $urls = saenv('content_page');
+        foreach ($types as $value) {
+            if (strstr($urls,$value)) {
+                return $value;
+            }   
+        }
+        return $types[0];
     }
 
     /**

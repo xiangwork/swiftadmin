@@ -23,5 +23,31 @@ class Friendlink extends AdminController
 		parent::initialize();
         $this->model = new FriendlinkModel();
     }
+
+    /**
+     * 获取资源列表
+     */
+    public function index()
+    {
+        if (request()->isAjax()) {
+
+            // 生成查询条件
+            $post  = input();
+            $status = !empty($post['status']) ? $post['status']-1:1;
+
+            $where = array();
+            if (!empty($post['name'])) {
+                $where[] = ['name','like','%'.$post['name'].'%'];
+            }
+            
+            $where[]=['status','=',$status];
+
+            // 生成查询数据
+            $list = $this->model->where($where)->order("id asc")->select()->toArray();
+            return $this->success('查询成功', "", $list, count($list), 0);
+        }
+
+		return view();
+    }    
     
 }

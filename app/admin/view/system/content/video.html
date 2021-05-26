@@ -143,7 +143,7 @@
 		                    </div> 
 		                    <label class="layui-form-label" >{:__('更新日期')}</label>
 		                    <div class="layui-input-inline">
-		                        <input type="text" value="{$data.updatetime}" class="layui-input">
+		                        <input type="text" value="{$data.updatetime|default=''}" class="layui-input">
 		                    </div>                                        
 		                </div>	                
 		                <div class="layui-form-item">
@@ -168,7 +168,7 @@
 		                    <label class="layui-form-label" >{:__('首页幻灯片')}</label>
 		                    <div class="layui-input-inline wid550" >
 		                        <input type="text" name="banner" lay-image-hover="" 
-		                        placeholder="{:__('请上传幻灯片')}" value="{$data.banner}" class="layui-input banner">
+		                        placeholder="{:__('请上传幻灯片')}" value="{$data.banner|default=''}" class="layui-input banner">
 		                    </div>   
 		                    <button type="button" class="layui-btn" lay-upload="" lay-input="banner" >{:__('上传幻灯片')}</button>
 		                </div>  

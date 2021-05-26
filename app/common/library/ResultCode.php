@@ -132,4 +132,10 @@ class ResultCode
         'msg'=>'禁止修改系统属性',
     ];
 
+    CONST LACKPARAME = [
+        'code'=> -996,
+        'status'=>'LACKPARAME',
+        'msg'=>'缺少请求参数',
+    ];
+
 }

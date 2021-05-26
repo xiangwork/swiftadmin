@@ -16,12 +16,12 @@
         <div class="layui-card-header layuiadmin-card-header-auto ">
             <div class="layui-inline" >
                 <!-- // 打开添加页面 -->
-                <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加应用')}" lay-area="610px,500px" lay-url="{:url('/system.project/add')}" >
+                <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加应用')}" lay-area="630px,500px" lay-url="{:url('/system.project/add')}" >
                     <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                 </button>
             </div>
         </div>
-        <div class="layui-card-body" ><volist name="list" id="vo">
+        <div class="layui-card-body layui-col-space15" ><volist name="list" id="vo">
                 
             <div class="layui-col-md3" >
                 <div class="layui-app" >
@@ -36,7 +36,7 @@
                     </div>
                     <div class="layui-app-footer">
                         <span class="layui-app-action" lay-open lay-title="编辑应用" 
-                                lay-url="{:url('/system.project/edit/')}id/{$vo.id}"  lay-area="610px,500px" >[编辑应用]</span>
+                                lay-url="{:url('/system.project/edit/')}id/{$vo.id}"  lay-area="630px,500px" >[编辑应用]</span>
                         <span class="layui-app-action" style="color: red" lay-ajax lay-url="{:url('/system.project/del/')}id/{$vo.id}" >[删除应用]</span>
                     </div>
                 </div>

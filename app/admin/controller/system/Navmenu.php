@@ -32,14 +32,9 @@ class Navmenu extends AdminController
 
         if (request()->isAjax()) {
 
-			// 接收参数
-			$title = input('title');
-			$model = input('model');
-
             // 获取数据
             $list = $this->model->getListNav();
             return $this->success('查询成功', "", $list, count($list), 0);
-            
         }
 
 		return view('',[

@@ -11,9 +11,9 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 namespace app\common\model\system;
 
+use app\common\library\Content;
 use think\Model;
-use think\facade\Db;
-use think\facade\Request;
+
 /**
  * @mixin \think\Model
  */
@@ -63,6 +63,36 @@ class Admin extends Model
 		return Admin::where($where)->find();
 	}
 
+    /**
+     * 设置创建IP
+     */
+    public function setCreateipAttr($ip)
+    {
+        return Content::setIPAttr($ip);
+    }
 
+    /**
+     * 获取创建IP
+     */
+    public function getCreateipAttr($ip)
+    {
+        return Content::getIPAttr($ip);
+    }
+
+    /**
+     * 设置登录IP
+     */
+    public function setLoginipAttr($ip)
+    {
+        return Content::setIPAttr($ip);
+    }
+
+    /**
+     * 获取登录IP
+     */
+    public function getLoginipAttr($ip)
+    {
+        return Content::getIPAttr($ip);
+    }
 	
 }

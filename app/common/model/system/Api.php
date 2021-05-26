@@ -21,6 +21,18 @@ class Api extends Model
     protected $createTime = 'createtime';
     protected $updateTime = 'updatetime';
 
+    // 定义请求参数
+    public function params()
+    {
+        return $this->hasMany(ApiParams::class,'pid');
+    }
+
+    // 定义请求参数
+    public function restfuls()
+    {
+        return $this->hasMany(ApiRestful::class,'pid');
+    }
+
     // 字段修改器
     public function setSortAttr($value) 
     {

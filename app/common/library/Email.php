@@ -184,11 +184,7 @@ class Email
      */
     public function captcha(string $email, string $code = null, string $event ="default") 
     {
-
-        $ip = ip2long(request()->ip());
         $code = $code ?? create_rand(4,true);
-
-        $array['ip'] = $ip;
         $array['code'] = $code;
         $array['event'] = $event;
         $array['email'] = $email;

@@ -14,8 +14,9 @@ namespace app\admin\controller\system;
 
 
 use app\AdminController;
-use think\facade\Db;
 use think\facade\request;
+use app\common\model\system\Jobs;
+use app\common\model\system\Department;
 use app\common\model\system\Admin as AdminModel;
 use app\common\model\system\AdminGroup as AdminGroupModel;
 use app\common\model\system\AdminAccess as AdminAccessModel;
@@ -31,10 +32,13 @@ class Admin extends AdminController
     {
 		parent::initialize();
         $this->model = new AdminModel();
+        $this->jobs = Jobs::select()->toArray();
         $this->group = AdminGroupModel::select()->toArray();
+        $this->department = Department::getListTree();
         foreach ($this->group as $k => $v) {
             $this->group[$k]['title'] = __($v['title']);
         }
+
 		$this->middleware = [
 			\app\admin\middleware\system\Admin::class,
 	    ];
@@ -76,11 +80,8 @@ class Admin extends AdminController
             $list = $this->model->where($where)->order("id asc")->limit($limit)->page($page)->select()->toArray();
         
             // 循环处理数据
-            $jobsArray = \app\common\model\system\Jobs::select()->toArray();
-            $depsArray = \app\common\model\system\Department::getListTree();
             foreach ($list as $key => $value) {
 
-                // 组别
                 $group_ids = explode(',',$value['group_id']);
                 foreach ($group_ids as $field => $id) {
                     // 查找组
@@ -93,44 +94,20 @@ class Admin extends AdminController
                     $list[$key]['group'] = list_sort_by($list[$key]['group'],'id');
                 }
 
-                // 筛选组别
-                foreach ($this->group as $field => $elem) {
-                    $list[$key]['organize'][$field]['name'] = $elem['title'];
-                    $list[$key]['organize'][$field]['value'] = $elem['id'];
-                    if (in_array($elem['id'],$group_ids)) {
-                        $list[$key]['organize'][$field]['selected'] = true;
-                    }
-                }
-
-                // 筛选职位
-                foreach ($jobsArray as $field => $elem) {
-                    $list[$key]['jobs'][$field]['name'] = $elem['title'];
-                    $list[$key]['jobs'][$field]['value'] = $elem['id'];
-                    if (in_array($elem['id'],explode(',',$value['jobs_id']))) {
-                        $list[$key]['jobs'][$field]['selected'] = true;
-                    }
-                }
-
-                $list[$key]['dep'] = $depsArray;
                 $authnodes = $this->auth->_get_auth_nodes($value['id']);
                 $list[$key]['rules'] = $authnodes[$this->auth->authPrivate];
 
                 $authnodes = $this->auth->_get_auth_nodes($value['id'],'cates');
                 $list[$key]['cates'] = $authnodes[$this->auth->authPrivate];
-
-                $list[$key]['loginip'] = long2ip($value['createip']);
             }
             
             return $this->success('查询成功', null, $list, $count, 0);
         }
 
-        $treedata = Db::name('Department')->select()->toArray();
-        $treedata = list_to_tree($treedata);
-        // halt($treedata);
-
 		return view('',[
+            'jobs'=> $this->jobs,
             'group'=> $this->group,
-            'treedata'=> json_encode($treedata),
+            'department'=> json_encode($this->department),
         ]);
     }
 
@@ -156,7 +133,7 @@ class Admin extends AdminController
 
             // 管理员加密
             $post['pwd'] = hash_pwd($post['pwd']);
-            $post['createip'] = ip2long(request()->ip());
+            $post['createip'] = request()->ip();
             $data = $this->model->create($post);
             if (!is_empty($data->id)) {
                 $access['uid'] = $data->id;
@@ -239,7 +216,7 @@ class Admin extends AdminController
 
             $uid  = input('uid/d');
             $rules = input($type) ?? [];
-      
+            
             if (!empty($uid) && $uid > 0) {
 
                 $access = $this->auth->_get_auth_nodes($uid,$type);

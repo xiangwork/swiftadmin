@@ -224,7 +224,6 @@ class Content
 
             // 解码
             $content = htmlspecialchars_decode($content);
-
             // 是否开启前缀
             $prefix = get_upload_Http_Perfix();
             if (!empty($prefix)) {
@@ -303,6 +302,50 @@ class Content
     }
 
     /**
+     * 获取IP转换
+     * @access  public
+     * @param   int     $ip  整型
+     * @return  string
+     */
+    public static function getIPAttr($ip)
+    {
+        if ($ip) {
+            $ip = long2ip($ip);
+        }
+        return $ip;
+    }
+
+    /**
+     * 设置IP转换
+     * @access  public
+     * @param   string     $ip  IP地址
+     * @return  string
+     */
+    public static function setIPAttr($ip)
+    {
+        if ($ip) {
+            $ip = ip2long($ip);
+        }
+
+        return $ip;
+    }
+
+    /**
+     * 设置独立模板
+     * @access  public
+     * @param   string     $skin  模板名称
+     * @return  string
+     */
+    public static function setSkinAttr($skin)
+    {
+        if ($skin) {
+            $skin = str_replace(['.html','.htm'],'',$skin);
+        }
+
+        return $skin;
+    }    
+
+    /**
      * 获取内容页地址
      * @access  public
      * @param   mixed $readUrl
@@ -311,7 +354,7 @@ class Content
      */
     public static function getReadurlAttr($readUrl,$data)
     {
-        
+
         if ($data['jumpurl']) {
             return $data['jumpurl'];
         }

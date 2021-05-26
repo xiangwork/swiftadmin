@@ -72,8 +72,6 @@ class Sms
 
         // 验证类回调操作 1、单手机号 2、自动获取验证码
         Event::listen("sendsms_success",function($params) {
-            $ip = ip2long(request()->ip());
-            $array['ip'] = $ip;
             $array['event'] = $this->event;
             $array['code'] = $params['code'];
             $array['mobile'] = $params['mobile'];

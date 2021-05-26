@@ -21,4 +21,7 @@ return [
   ],
   'auto' => true,
   'config' => 1,
+  'url' => '/plugin/demo',
+  'path' => 'D:\\BtSoft\\wwwroot\\demo.swiftadmin.net\\plugin\\demo\\',
+  'filePath' => 'D:\\BtSoft\\wwwroot\\demo.swiftadmin.net\\plugin\\demo\\config.php',
 ];

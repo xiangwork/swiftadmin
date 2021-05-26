@@ -41,7 +41,6 @@ class Project extends AdminController
      */
     public function add() 
     {
-        $this->error('没有权限');
         if (request()->isPost()) {
 
             $post = input();

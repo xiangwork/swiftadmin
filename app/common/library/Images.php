@@ -24,7 +24,7 @@ class Images
 			// 获取文件信息
 			$Image = Image::open($filename);
 			$ImageInfo = getimagesize($filename);
-
+			
 			// 判断水印类型
 			if ($config['upload_water_type']) { // 文字水印
 				$size = $config['upload_water_size'] ? $config['upload_water_size'] : 15;
@@ -60,7 +60,7 @@ class Images
 			return $reswater ?? false;
 		}
 		catch(\Throwable $th){
-			return $th->getMessage();
+			throw new \Exception($th->getMessage());
 		}
 	}
 	

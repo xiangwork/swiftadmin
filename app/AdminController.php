@@ -133,7 +133,7 @@ class AdminController extends BaseController
 		}
 		
 		// 初始化字段信
-		self::sysfield();
+		// self::sysfield();
 
 		// 系统日志
 		if (saenv('admin_log_status')) {
@@ -141,12 +141,10 @@ class AdminController extends BaseController
 			$array['type'] = 2;
 			Systemlog::write($array);
 		}
-
         // 获取站点数据
         foreach (saenv('site') as $key => $value) {
             $this->app->view->assign($key,$value);
         }
-		
 		View::assign(['app'=>$app,'controller'=>$this->controller,'action'=>$this->action,'AdminLogin'=>$this->admin]);
 	}
 
@@ -391,42 +389,6 @@ class AdminController extends BaseController
 				arr2file('../config/sysfield.php', $field);
 			}			
 		}
-	}
-
-	/**
-     * 获取初始化字段数组
-     * @access protected
-     * @return array|string|true
-     * @throws ValidateException
-     */	
-	protected function getField($controller = null) 
-	{
-		
-		$controller = $controller ?? \strtolower(request()->Controller());
-		if (($begin = strrchr($controller,'.'))) {
-			$controller = \str_replace('.','',$begin);
-		}
-		
-		if (!preg_match("/^[a-zA-Z0-9]+$/", $controller)) {
-			return false;
-		}
-		
-		$fieldArray = config('sysfield.'.$controller);	
-
-		if (!empty($fieldArray)) {
-			foreach ($fieldArray as $key => $val) {
-				$fieldArray[$key] = '';
-			}
-
-			$fieldArray['status'] = 1;
-			$fieldArray['addtime'] = time();
-			$fieldArray['lasttime'] = time();
-			
-		}else {
-			return $this->error('未获取到数据,请刷新缓存！');
-		}
-		
-		return $fieldArray;
 	}
 
 }

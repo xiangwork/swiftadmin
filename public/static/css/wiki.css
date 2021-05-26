@@ -1,0 +1,251 @@
+
+body {
+	height: 100%;
+	background: #fff;
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+#header {
+	display: flex;
+	box-shadow: none;
+	border-bottom: 1px solid #eee;
+}
+
+#header .logo {
+	margin-left: 15px;
+
+}
+
+#header .logo h2 {
+	display: inline-block;
+}
+
+#header .logo h2 img {
+	width: 30px;
+    position: relative;
+    margin-bottom: 4px;
+
+}
+
+#header .title {
+    font-size: 14px;
+    line-height: 1;
+    margin: 4px 0 3px 8px;
+    padding-left: 8px;
+    border-left: 1px solid #ddd;
+}
+
+#content {
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	margin-top: 60px;
+	background: none;
+}
+
+#content .layui-col-md10 {
+	left: 16%;
+}
+
+#content #sidebar {
+	height: 100%;
+	width: 16.6666%;
+	overflow: auto;
+    background: #fff;
+    position: fixed;
+    padding: 15px;
+    z-index: 999;
+	transition: all .3s;
+    -webkit-transition: all .3s;
+	border-right: 1px solid #ddd;
+}
+
+#content #section {
+	width: auto;
+    line-height: 26px;
+    padding: 20px 40px;
+    overflow: auto;
+    position: relative;
+    bottom: 28px;
+}
+
+#content #section .apiItem {
+	padding: 15px 30px;
+	padding-bottom: 30px;
+	box-shadow: none;
+}
+
+#content #section .title {
+    font-size: 26px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 24px;
+    padding: 10px 0;
+}
+
+#content #section .route {
+	margin: 15px auto;
+	overflow: hidden;
+	background-color: #f4f5f7;
+}
+
+#content #section .route div {
+	display: inline-block;
+}
+
+#content #section .route .method {
+    border-radius: 4px;
+    margin-right: 10px;
+    padding: 9px;
+    font-size: 14px;
+    display: inline-block;
+}
+
+#content #section .route .type_get,.type_GET {
+    background-color: rgba(115, 216, 151, 0.1);
+    color: #73d897;
+}
+
+#content #section .route .type_put,.type_PUT,.type_ALL {
+    background-color: rgba(246, 198, 89, 0.1);
+    color: rgb(246, 198, 89);
+}
+
+#content #section .route .type_post,
+#content #section .route .type_patch,.type_POST {
+    background-color: rgba(52, 143, 228, 0.1);
+    color: #348fe4;
+}
+
+#content #section .route .type_delete,
+#content #section .route .type_del,.type_DEL,.type_DELETE {
+    background-color: rgba(255, 117, 117, 0.1);
+    color: #ff7575;
+}
+
+#content #section .route .apiurl  {
+    white-space: nowrap;
+    padding: 9px 12px;
+    border-radius: 4px;
+    background-color: #f4f5f7;
+}
+
+#content #section .mintitle {
+	font-size: 20px;
+    padding: 10px 0;
+}
+
+#content #section .mintitle span {
+	cursor: pointer;
+	font-size: 14px;
+	display: none;
+}
+
+#content #section .mintitle span:hover {
+	color: #fff;
+	border-radius: 3px;
+	background: #FF5722;
+}
+
+#content #section .response,#content #section .response_headers {
+	padding: 15px!important;
+	display: none;
+}
+
+#content #section .layui-form {
+	padding: 10px;
+	overflow: hidden;
+}
+
+#content #section .layui-form-item .layui-input-inline {
+	width: 260px;
+}
+
+#content #section .layui-form-item .layui-input-inline .layui-btn-fluid {
+	margin-left: 110px;
+}
+
+#content #section .layui-input, .layui-textarea {
+	height: 33px;
+	line-height: 33px;
+}
+
+.layui-form-label {
+	padding: 7px 15px;
+}
+
+@media screen and (max-width: 1024px) {
+
+}
+
+@media screen and (max-width: 768px) {
+
+	#content #sidebar {
+		transform: translate3d(-300px,0,0);
+		-webkit-transform: translate3d(-300px,0,0);
+	}
+
+	#layui-side #content #sidebar {
+		width: 160px;
+		transform: translate3d(0,0,0);
+		-webkit-transform: translate3d(0,0,0);
+	}
+
+	#content #section .layui-btn-fluid {
+		margin-left: 0px!important;
+	}
+
+	#content #section {
+		padding: 5px;
+	}
+
+	#content #section .route .apiurl {
+		white-space: nowrap;
+		width: 60%;
+	}
+
+	#content .layui-col-md10 {
+		left: 0;
+	}
+}
+
+#footer {
+	position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 99999;
+    background: #fff;
+    padding: 5px 0px 0px 0px;
+}
+
+::-webkit-scrollbar {
+    width: 3px;
+    height: 10px;
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #c1c1c1;
+}
+
+/*// 修复样式*/
+.eleTree-group .eleTree-node .eleTree-title {
+	height: 35px;
+	cursor: pointer;
+	line-height: 35px!important;
+}
+
+.eleTree-group .eleTree-node .eleTree-title .eleTree-dropdown.eleTree-dropdown-code:not(.eleTree-dropdown-hide)::before, .eleTree-group .eleTree-node .eleTree-title .eleTree-dropdown.eleTree-dropdown-code:not(.eleTree-dropdown-hide)::after {
+	height: 1px!important;
+	margin-right: 3px;
+}
+
+.eleTree-group .eleTree-node .eleTree-title .eleTree-dropdown {
+	margin-right: 3px;
+}
+
+pre[class*="language-"] {
+	padding: 0!important;
+	padding-left: 1em!important;
+}

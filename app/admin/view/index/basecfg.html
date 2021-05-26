@@ -252,7 +252,7 @@
                             <input type="radio" name="site[site_notlink]"   
                             value="0" title="关闭"  <if condition="$config['site']['site_notlink'] eq 0 "> checked </if>>
                         </div>    
-                        <div class="layui-form-mid layui-word-aux"><font color="red">** </font>{:__('开启后发送内容自动清理非本站链接')}</div>           
+                        <div class="layui-form-mid layui-word-aux"><font color="red">* </font>{:__('开启后发送内容自动清理非本站链接')}</div>           
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">{:__('插件冲突缓存')}</label>
@@ -264,70 +264,80 @@
                         </div>    
                         <div class="layui-form-mid layui-word-aux"><font color="red">* </font>{:__('安装插件的时候是否缓存冲突文件')}</div>           
                     </div>
+
                     <div class="layui-form-item">
                         <label class="layui-form-label">{:__('缓存开关')}</label>
                         <div class="layui-input-inline">
-                            <input type="radio" name="cache[cache_status]"   
+                            <input type="radio" name="cache[cache_status]" lay-display="cache_status" lay-filter="radioStatus"
                             value="1" title="开启"  <if condition="$config['cache']['cache_status'] eq 1 "> checked </if> >
-                            <input type="radio" name="cache[cache_status]"   
+                            <input type="radio" name="cache[cache_status]" lay-display="cache_status" lay-filter="radioStatus"
                             value="0" title="关闭"  <if condition="$config['cache']['cache_status'] eq 0 "> checked </if>>
                         </div>    
                         <div class="layui-form-mid layui-word-aux">* {:__('开启数据库缓存会提高网站性能！')}</div>           
                     </div>
-     
-                     <div class="layui-form-item">
-                        <label class="layui-form-label">{:__('缓存方式')}</label>
-                        <div class="layui-input-inline" > 
-                           <select name="cache[cache_type]" lay-display="cache_type" lay-disable="file" lay-filter="selectStatus" class="ctype" >                
-                             <option value="file" <if condition="$config['cache']['cache_type'] eq 'file'">selected</if>  >file</option>
-                             <option value="redis" <if condition="$config['cache']['cache_type'] eq 'redis'">selected</if>   >redis</option>
-                             <option value="memcached" <if condition="$config['cache']['cache_type'] eq 'memcached'">selected</if> >memcached</option>
-                           </select>
+                    
+                    <div class="cache_status" <eq name="$config['cache']['cache_status']" value="0" > style="display:none;" </eq> >
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{:__('缓存方式')}</label>
+                            <div class="layui-input-inline" > 
+                               <select name="cache[cache_type]" lay-display="cache_type" lay-disable="file" lay-filter="selectStatus" class="ctype" >                
+                                 <option value="file" <if condition="$config['cache']['cache_type'] eq 'file'">selected</if>  >file</option>
+                                 <option value="redis" <if condition="$config['cache']['cache_type'] eq 'redis'">selected</if>   >redis</option>
+                                 <option value="memcached" <if condition="$config['cache']['cache_type'] eq 'memcached'">selected</if> >memcached</option>
+                               </select>
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">
+                            <i class="layui-icon layui-icon-about" lay-tips="{:__('使用Redis缓存方式,出错会抛出Connection refused！')}"></i></div>
                         </div>
-                        <div class="layui-form-mid layui-word-aux">
-                        <i class="layui-icon layui-icon-about" lay-tips="{:__('使用Redis缓存方式,出错会抛出Connection refused！')}"></i></div>
-                    </div>
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">{:__('缓存时间')}</label>
-                        <div class="layui-input-inline" >
-                             <input type="text" name="cache[cache_time]" autocomplete="off" value="{$config.cache.cache_time}" class="layui-input">
-                        </div>
-                        <div class="layui-form-mid layui-word-aux">* {:__('单位 /秒')}</div>                                       
-                    </div> 
-                     
-                    <div class="cache_type" <if condition="$config['cache']['cache_type'] eq 'file' or $config['cache']['cache_type'] eq ''">style="display:none;" </if> >
                         <div class="layui-form-item">
-                            <label class="layui-form-label">{:__('服务器IP')}</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="cache[cache_host]" placeholder="{:__('缓存服务器IP')}" value="{$config['cache']['cache_host']}" 
-                                class="layui-input chost" >
+                            <label class="layui-form-label">{:__('缓存时间')}</label>
+                            <div class="layui-input-inline" >
+                                 <input type="text" name="cache[cache_time]" autocomplete="off" value="{$config.cache.cache_time}" class="layui-input">
                             </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">{:__('端  口')}</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="cache[cache_port]" placeholder="{:__('缓存服务器端口')}" value="{$config['cache']['cache_port']}" 
-                                class="layui-input cport" >
+                            <div class="layui-form-mid layui-word-aux">* {:__('单位 /秒')}</div>                                       
+                        </div> 
+                         
+                        <div class="cache_type" <if condition="$config['cache']['cache_type'] eq 'file' or $config['cache']['cache_type'] eq ''">style="display:none;" </if> >
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{:__('服务器IP')}</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="cache[cache_host]" placeholder="{:__('缓存服务器IP')}" value="{$config['cache']['cache_host']}" 
+                                    class="layui-input chost" >
+                                </div>
                             </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">{:__('账  号')}</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="cache[cache_user]" placeholder="{:__('缓存服务账号,没有请留空')}" value="{$config['cache']['cache_user']}" 
-                                class="layui-input cuser" >
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{:__('端  口')}</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="cache[cache_port]" placeholder="{:__('缓存服务器端口')}" value="{$config['cache']['cache_port']}" 
+                                    class="layui-input cport" >
+                                </div>
                             </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">{:__('密  码')}</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="cache[cache_pass]" placeholder="{:__('缓存服务密码,没有请留空')}" value="{$config['cache']['cache_pass']}" 
-                                class="layui-input cpass" >
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{:__('数据库')}</label>
+                                <div class="layui-input-inline">
+                                    <input type="number" min="1" max="16" maxlength="1" name="cache[cache_select]" placeholder="{:__('缓存服务redis库 1- 16')}" value="{$config['cache']['cache_select']}" 
+                                    class="layui-input cuser" >
+                                </div>
                             </div>
-                            <button type="button" class="layui-btn layui-btn-primary" 
-                            lay-ajax="" 
-                            lay-url="{:url('/index/testcache')}" 
-                            lay-object="type:ctype,host:chost,port:cport,user:cuser,pass:cpass" >{:__('测试连接')}</button>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{:__('账  号')}</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="cache[cache_user]" placeholder="{:__('缓存服务账号,没有请留空')}" value="{$config['cache']['cache_user']}" 
+                                    class="layui-input cuser" >
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{:__('密  码')}</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="cache[cache_pass]" placeholder="{:__('缓存服务密码,没有请留空')}" value="{$config['cache']['cache_pass']}" 
+                                    class="layui-input cpass" >
+                                </div>
+                                <button type="button" class="layui-btn layui-btn-primary" 
+                                lay-ajax="" 
+                                lay-url="{:url('/index/testcache')}" 
+                                lay-object="type:ctype,host:chost,port:cport,user:cuser,pass:cpass" >{:__('测试连接')}</button>
+                            </div>
                         </div>
                     </div>
 
@@ -947,6 +957,31 @@
                                     </div>       
                                     <div class="layui-form-mid layui-word-aux">* {:__('申请微信扫码登录填写的回调地址')}</div>       
                                 </div>
+                                <!-- // Gitee配置 -->
+                                <div class="layui-card-header"  style="margin-bottom:20px;" ><i class="layui-icon">
+                                    <img src="/static/images/interface/gitee.jpg" width="16" height="16" alt="{:__('微博登录')}">
+                                </i>{:__('Gitee码云')}</div> 
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">APP_ID</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="social[gitee][app_id]" autocomplete="off"  value="{$config['social']['gitee']['app_id']}" class="layui-input"  >
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">* {:__('我的应用/应用详情 申请的Client ID')}</div>
+                                </div> 
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">APP_KEY</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="social[gitee][app_key]" autocomplete="off" value="{$config['social']['gitee']['app_key']}" class="layui-input">
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">* {:__('我的应用/应用详情 申请的Client Secret')}</div>
+                                </div>   
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{:__('callback地址')}</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="social[gitee][callback]" autocomplete="off" value="{$config['social']['gitee']['callback']}" class="layui-input">
+                                    </div>        
+                                    <div class="layui-form-mid layui-word-aux">* {:__('申请Gitee码云登录填写的回调地址')}</div>  
+                                </div>    
 
                                 <!-- // 新浪微博登录 -->
                                 <div class="layui-card-header"  style="margin-bottom:20px;" ><i class="layui-icon">

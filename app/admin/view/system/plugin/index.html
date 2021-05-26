@@ -123,8 +123,8 @@
                 	}
                 }, width: 80,  title: '前台'},
                 {field: 'title', align: 'left',width:200,templet:function(d){
-                    var html = '<a target="_blank" href="'+d.url+'">'+d.title+'</a>';
-                    if (d.screenshots) {
+                    var html = '<a target="_blank" href="'+d.readurl+'">'+d.title+'</a>';
+                    if (d.album) {
                         html += '<i class="layui-icon layui-icon-picture"></i>';
                     }
                     return html;

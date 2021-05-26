@@ -25,8 +25,9 @@
     <div class="layui-fluid">
         <div class="layui-card">
             <div class="layui-card-header layuiadmin-card-header-auto">
-            <button class="layui-btn " >{:__('请选择项目')}</button>
+            <button class="layui-btn" >{:__('请选择项目')}</button>
             <button class="layui-btn layui-btn-danger" >{:__('重载项目')}</button>
+            <button id="apigroup" class="layui-btn" >{:__('查看分组')}</button>
         	</div>
             <div class="layui-card-body">
                 <div id="tree"></div>
@@ -61,11 +62,15 @@
                     <!-- // 默认搜索 -->
                     <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit><i class="layui-icon layui-icon-search"></i>{:__('搜索')}</button>
                     <!-- // 打开添加页面 -->
-                    <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加接口')}" lay-area="690px" lay-url="#editforms" >
+                    <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加接口')}" lay-area="690px" lay-url="#editforms"  lay-callback="edits" >
                         <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                     </button>
                     <!-- // 打开接口文档页面 -->
-                    <a class="layui-btn icon-btn" href="/wiki"  target="_blank"  title="{:__('接口文档')}" >
+                    <php>
+                        $urls = url('/wiki',[],false,'api'); 
+                        $wikiUrl = str_replace($_SERVER['SCRIPT_NAME'],'',$urls);
+                    </php>
+                    <a class="layui-btn icon-btn" href="{$wikiUrl}"  target="_blank"  title="{:__('接口文档')}" >
                         <i class="layui-icon layui-icon-survey"></i>{:__('接口文档')}
                     </a>
                 </div>
@@ -88,14 +93,14 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('项目分类')}</label>
         <div class="layui-input-inline">
-            <select name="app_id" id="">
+            <select name="app_id" lay-filter="appid" >
             	<option value="">{:__('请选择项目')}</option>
             	<volist name="apps" id="vo"><option value="{$vo.id}">{$vo.name}</option></volist>
             </select>            
         </div>
-        <label class="layui-form-label">{:__('排序号')}</label>
+        <label class="layui-form-label">{:__('项目分组')}</label>
         <div class="layui-input-inline">
-            <input name="sort" placeholder="{:__('默认自动生成')}" type="number" class="layui-input"   />
+            <div class="pid" name="pid" ></div>
         </div>
     </div>
 
@@ -188,17 +193,20 @@
 </script>
 
 <include file="/public/footer" />
+<script src="__STATICADMIN__module/xmselect/xmselect.js"></script>
 <script>
     layui.use(['admin','eleTree'], function () {
 
         var admin = layui.admin;
-        var table = layui.table;        // 表格
+        var table = layui.table; 
         var eleTree = layui.eleTree;    
+        var form = layui.form;    
+        var jquery = layui.jquery;    
         var dropdown = layui.dropdown;   
 
         // 定义表格URL
         var tableURL = "{:url('/system.api/index')}",
-            project = {$project|raw};
+            project = {$project|raw}; 
 
         // 基础表格
         var isTable = table.render({
@@ -222,6 +230,22 @@
                 {field: 'createtime', align: 'center', width: 160,title: '{:__("创建时间")}'},
                 {align: 'center', toolbar: '#tableBar',width: 180, title: '{:__("操作")}'},
             ]]
+            ,parseData: function(res){
+
+                // 缓存其他数据
+                for (let name in res.data) {
+                   if (name != 'item') {
+                        table.cache[name] = res.data[name];
+                   }
+                }
+
+                return {
+                  "code": res.code, 
+                  "msg": res.msg, 
+                  "count": res.count,
+                  "data": res.data.item 
+                };
+            }
             ,done:function(res) {
 
                 dropdown.render({
@@ -287,8 +311,8 @@
             }
         });
 
-        // 创建部门实例
-        var depTree = eleTree({
+        // 创建APP实例
+        var appTree = eleTree({
             el: '#tree',
             data: project,
             highlightCurrent: true,
@@ -301,12 +325,126 @@
         })
 
         // 重载表格数据
-        depTree.on('click',function(event) {
+        var app_id = undefined;
+        appTree.on('click',function(event) {
+            app_id = event.data.id;
             var url = tableURL + '?app=' + event.data.id;
             table.reload('lay-tableList', {
                 url: url
             });
         })
 
+        // 查看API分组
+        layui.jquery('#apigroup').click(function(e) {
+            if (app_id == undefined) {
+                layui.iziToast.error({
+                    message: '请选择项目',
+                })
+                return false;
+            }
+            layui.layer.open({
+                type: 2,
+                title: '编辑分组',
+                area: ['800px','600px'],
+                content: "{:url('/system.api/group/')}app_id/"+app_id,
+                success: function(r) {}
+            })
+        })
+
+        // 编辑函数重载
+        admin.callback.edits = function(clickthis,colletction,config) {
+
+            var tableThis = colletction.tableThis;
+            var data = undefined,checkedId = [];
+            if (typeof(tableThis) !== "undefined") {
+                if (tableThis.data.pid !== 0) {
+                    checkedId.push(tableThis.data.pid);
+                }
+                data = table.cache.group[tableThis.data.app_id];
+            } else {
+                for (let name in table.cache.group) {
+                    data = table.cache.group[name];
+                    break;
+                }
+            }
+
+            // 初始化组件
+            var buildXmSelect = function(data) {
+                    xmSelect.render({
+                    el: '.pid',
+                    tips: '请选择分组',
+                    name: 'pid',
+                    data: data,
+                    radio: true,
+                    clickClose: true,
+                    initValue: checkedId,
+                    prop: {
+                        value: 'id',
+                        name:'name'
+                    },
+                    tree: {
+                        show: true,
+                        strict: false,
+                        showLine: false,
+                        clickExpand: false,
+                    },
+                    model: { 
+                        icon: 'hidden',
+                        label: { 
+                            type: 'text' 
+                        } 
+                    },
+                    theme: {
+                        color: '#1890FF'
+                    }
+                });
+            }
+
+            buildXmSelect(data);
+            form.on('select(appid)', function(elem){
+                if (elem.value) {
+                    data = table.cache.group[elem.value];
+                    buildXmSelect(data);
+                }
+            });
+
+            // 监听提交
+            form.on("submit(submitPage)",function(post) {
+
+                var pageThat = jquery(this);
+                pageThat.attr("disabled",true);
+                 // 获取提交地址
+                if (typeof(tableThis) !== 'undefined') {
+                    _pageUrl = tableThis.event === 'edit' ? pageThat.attr('lay-edit') : pageThat.attr('lay-add');
+                }else {
+                     _pageUrl = pageThat.attr('lay-add');
+                }
+                
+                if (typeof(_pageUrl) === 'undefined') {
+                    layui.iziToast.info({
+                        message: '按钮缺少 url 属性',
+                    });   
+                    return false;
+                }
+                
+                // 开始POST提交数据
+                jquery.post(_pageUrl, 
+                    post.field, function(res){
+                        if (res.code == 200) {
+                            layui.iziToast.success({
+                                message: res.msg,
+                            });
+                            isTable.reload();
+                            layer.close(colletction.index);
+                        }
+                        else {
+                            layui.iziToast.error({
+                                message: res.msg,
+                            });                               
+                        }
+                }, 'json');
+                return false;                        
+            })
+        }
     });
 </script>

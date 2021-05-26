@@ -15,6 +15,7 @@ namespace app\admin\controller\system;
 use app\AdminController;
 use app\common\model\system\Project;
 use app\common\model\system\Api as ApiModel;
+use app\common\model\system\ApiGroup as ApiGroupModel;
 use app\common\model\system\ApiParams as ApiParamsModel;
 use app\common\model\system\ApiRestful as ApiRestfulModel;
 
@@ -33,11 +34,13 @@ class Api extends AdminController
      */
     public function index()
     {
+        $project = Project::select()->toArray();
         if (request()->isAjax()) {
 
            // 获取数据
            $post = input();
            $page = input('page/d') ?? 1;
+           $app_id = input('app/d') ?? 1;
            $limit = input('limit/d') ?? 10;
            $status = !empty($post['status']) ? $post['status']-1:1;
 
@@ -48,15 +51,25 @@ class Api extends AdminController
            }
 
            // 生成查询数据
-           $where[]=['status','=',$status];
+           $where[] = ['status','=',$status];
+           $where[] = ['app_id','=',$app_id];
            $count = $this->model->where($where)->count();
            $page = ($count <= $limit) ? 1 : $page;
            $list = $this->model->where($where)->order("id asc")->limit($limit)->page($page)->select()->toArray();
-           return $this->success('查询成功', "", $list, $count, 0);
 
+            // 获取项目分组
+            $group = [];
+            foreach ($project as $value) {
+                $group[$value['id']] = ApiGroupModel::getListTree(['app_id'=>$value['id']]) ?? [];
+            }
+
+           return $this->success('查询成功', "", [
+               'item' => $list,
+               'group' => $group,
+           ], $count, 0);
         }
 
-        $project = Project::select()->toArray();
+
         return view('',[
             'apps' => $project,
             'project' => json_encode($project, JSON_UNESCAPED_UNICODE)
@@ -95,7 +108,7 @@ class Api extends AdminController
             $post = input();
             if ($this->model->update($post)) {
                 if (isset($post['class'])) { // 清理接口缓存
-                    cache(md5hash($post['class']),null); 
+                    system_cache(md5hash($post['class']),null); 
                 }
                 $this->_api_router();
                 return $this->success();
@@ -121,6 +134,77 @@ class Api extends AdminController
         arr2router($path,$router);
     }
 
+    /**
+     * API分组
+     */
+    public function group()
+    {
+        $app_id = input('app_id');
+        if (request()->isAjax()) {
+            $where[] = ['app_id','=',$app_id];
+            $list = ApiGroupModel::where($where)->select()->toArray();
+            $group = ApiGroupModel::getListTree($where) ?? [];
+			return $this->success('获取成功', '',[
+				'item'=> $list,
+				'group'=> $group 
+			], 
+			count($list),0);
+        }
+        return view('',['app_id'=>$app_id]);
+    }   
+
+    /**
+     * 添加分组
+     */
+    public function groupAdd() 
+    {
+        if (request()->isPost()) {
+            $post = input();
+
+            if (ApiGroupModel::create($post)) {
+                return $this->success();
+            }
+
+            return $this->error();
+        }
+    }
+    
+    /**
+     * 编辑分组
+     */
+    public function groupEdit() 
+    {
+        if (request()->isPost()) {
+            $post = input();
+            if (ApiGroupModel::update($post)) {
+                return $this->success();
+            }
+            return $this->error();
+        }        
+    }
+
+    /**
+     *  删除分组
+     */
+    public function groupDel() 
+    {
+        $id = input('id/d');
+        $app_id = input('app_id/d');
+
+        if (!empty($id) && is_numeric($id)) {
+            if ($this->model->where([
+                'app_id' => $app_id,
+                'group_id' => $id,
+            ])->find()) {
+                return $this->error('当前分组存在API数据');
+            }
+            if (ApiGroupModel::destroy($id)) {
+                return $this->success();
+            }
+
+            return $this->error();
+        }
+    }
 
     /**
      * 请求参数

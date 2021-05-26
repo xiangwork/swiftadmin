@@ -17,6 +17,8 @@ use app\HomeController;
 use app\common\model\system\User;
 use app\common\model\system\UserThird;
 
+use function PHPSTORM_META\type;
+
 class Third extends HomeController
 {
     /**
@@ -60,8 +62,7 @@ class Third extends HomeController
     public function callback() 
     {
         $userInfos = $this->oauth->getUserInfo();
-
-         // 注册新用户
+        // 注册新用户
         if (!empty($userInfos) && !$this->auth->isLogin()) {
            return $this->register($userInfos,$this->type);
         }
@@ -77,17 +78,19 @@ class Third extends HomeController
     {
 
         // 查询是否已经注册
-        $openid = $userInfos['openid'];
+        $openid = $userInfos['openid'] ?? $userInfos['id'];
         $nickname = $userInfos['userinfo']['name'] ?? $userInfos['userinfo']['nickname'];
         $result = UserThird::alias('th')->view('user','*','user.id=th.user_id')
                                         ->where(['openid'=>$openid,'type'=>$type])->find();
         if (!empty($result)) {
             $array['id'] = $result['id'];
             $array['logintime'] = time(); // 更新登录数据
-            $array['loginip'] = ip2long(request()->ip());
+            $array['loginip'] = request()->ip();
             $array['logincount'] = $result['logincount'] + 1;
             User::update($array);
+
             $this->reload();
+            
         }
         else {
 
@@ -98,7 +101,7 @@ class Third extends HomeController
                 $local['name'] .= create_rand(6);
             }
 
-            $local['createip'] = ip2long(request()->ip());
+            $local['createip'] = request()->ip();
             $result = User::create($local);
 
             // 封装第三方数据
@@ -141,10 +144,9 @@ class Third extends HomeController
      */
     public function unbind() 
     {
-
         if ($this->auth->isLogin()) {
 
-          $result = $this->auth->userData;
+          $result = $this->auth->userInfo;
           if (!empty($result)) {
             
             if (empty($result['email']) || empty($result['pwd'])) {
@@ -156,6 +158,7 @@ class Third extends HomeController
             if (UserThird::where($where)->delete()) {
                 return $this->success('解除绑定成功！');
             }
+
           }
         }
 
@@ -168,7 +171,7 @@ class Third extends HomeController
     protected function doBind(array $userInfos = [], string $type = null) 
     {
         
-        $openid = $userInfos['openid'];
+        $openid = $userInfos['openid'] ?? $userInfos['id'];
         $nickname = $userInfos['userinfo']['name'] ?? $userInfos['userinfo']['nickname'];
 
         // 查询是否被注册
@@ -178,7 +181,7 @@ class Third extends HomeController
 
             // 拼装数据
             $third = [
-                'type'          => $this->type,
+                'type'          => $type,
                 'user_id'       => cookie('uid'),
                 'openid'        => $openid,
                 'nickname'      => $nickname,
@@ -202,14 +205,16 @@ class Third extends HomeController
     }
 
 	/**
-     * 刷新页面登录
+     * 页面登录JS刷新
+     * window.thridreload = function(e) 
+     * { top.location.reload();}
      */
 	protected function reload () 
     {
 		$script = '<script>';
-		$script .= 'parent.location.reload();';
-		$script .= 'window.close();';
-		$script .= '</script>';		
+		$script .= 'window.opener.thridreload();';
+		$script .= 'window.close();';	
+		$script .= '</script>';	
 		echo $script;
 	}
 }

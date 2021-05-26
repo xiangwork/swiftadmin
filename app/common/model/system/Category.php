@@ -6,7 +6,6 @@ namespace app\common\model\system;
 use think\Model;
 use think\model\concern\SoftDelete;
 use app\common\library\Content;
-use think\facade\Cache;
 
 /**
  * @mixin \think\Model
@@ -104,12 +103,10 @@ class Category extends Model
     public static function getListCache()
     {
         $name = hash('sha256','cate_cache');
-        $data = Cache::get($name);
+        $data = system_cache($name);
         if (empty($data)) {
             $data = self::where('status',1)->select();
-            if (saenv('cache_status')) {
-                Cache::set($name,$data);
-            }
+            system_cache($name,$data);
         }
         return $data;
     }
@@ -123,12 +120,11 @@ class Category extends Model
     public static function getspecifiedcate($id)
     {
         $name = hash('sha256','specified');
-        $data = Cache::get($name);
+        $data = system_cache($name);
         if (empty($data)) {
             $data = self::where('cid',$id)->select()->toArray();
-            if (saenv('cache_status')) {
-                Cache::set($name,$data);
-            }
+            system_cache($name,$data);
+      
         }
         return $data;
     }
@@ -234,11 +230,11 @@ class Category extends Model
         if ($data['jumpurl']) {
             return $data['jumpurl'];
         }
-        
-        if (!empty($readUrl)) {
+
+        if ($readUrl) {
             return $readUrl;
         }
-        
+
         return build_request_url($data,'category_page');
     }
 }

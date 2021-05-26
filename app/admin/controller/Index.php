@@ -122,6 +122,7 @@ class Index extends AdminController
             $parse['CACHE']['DRIVER'] = $config['cache']['cache_type'];
             $parse['CACHE']['HOSTNAME'] = $config['cache']['cache_host'];
             $parse['CACHE']['HOSTPORT'] = $config['cache']['cache_port'];
+            $parse['CACHE']['SELECT']   = $config['cache']['cache_select'] >= 1 ? $config['cache']['cache_select']  : 1;
             $parse['CACHE']['USERNAME'] = $config['cache']['cache_user'];
             $parse['CACHE']['PASSWORD'] = $config['cache']['cache_pass'];
     

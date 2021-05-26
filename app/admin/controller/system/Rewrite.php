@@ -39,29 +39,29 @@ class Rewrite extends AdminController
     {
         parent::initialize();
         $this->category_page = [
-            '/listdir/',
-            '/listdir/sublist/'
+            '/[listdir]/',
+            '/[listdir]/[sublist]/'
         ];
 
         $this->list_page = [
-            '/listdir/list_page.html',
-            '/listdir/sublist/list_page.html'
+            '/[listdir]/list_page.html',
+            '/[listdir]/[sublist]/list_page.html'
         ];
 
         $this->content_page = [
-            '/listdir/id/',
-            '/listdir/id.html',
-            '/listdir/sublist/id.html',
-            '/listdir/pinyin/',
-            '/listdir/pinyin.html',
-            '/listdir/sublist/pinyin.html',
-            '/listdir/hash/',
-            '/listdir/hash.html',
-            '/listdir/sublist/hash.html',
+            '/[listdir]/[id]/',
+            '/[listdir]/[id].html',
+            '/[listdir]/[sublist]/[id].html',
+            '/[listdir]/[pinyin]/',
+            '/[listdir]/[pinyin].html',
+            '/[listdir]/[sublist]/[pinyin].html',
+            '/[listdir]/[hash]/',
+            '/[listdir]/[hash].html',
+            '/[listdir]/[sublist]/[hash].html',
         ];
 
         if (saenv('url_model') != STATICS 
-            && !in_array($this->action,['index','basecfg','createmap'])) {
+            && !in_array($this->action,['index','basecfg','createindex','createmap'])) {
                 return $this->error('请开启静态生成再操作');
         }
 
@@ -173,7 +173,7 @@ class Rewrite extends AdminController
 
             // 重置列表缓存
             if ($page == 1) {
-                Cache::set('pagesNode', []);
+                system_cache('pagesNode', []);
             }
 
             // 获取数据实例
@@ -221,26 +221,26 @@ class Rewrite extends AdminController
                         ];
                     }
 
-                    $pagesNode = Cache::get('pagesNode');
+                    $pagesNode = system_cache('pagesNode');
                     $pagesNode = array_merge($pagesNode,$nextnodes);
-                    Cache::set('pagesNode', $pagesNode);
+                    system_cache('pagesNode', $pagesNode);
                 }
             }
 
             // 创建跳转地址
             $query = array_merge(input(),['page'=>$page+1]);
             $this->JumpUrl = (string)url('/system.rewrite/createhtml',$query);
-            Cache::set('createhtml',$this->JumpUrl);
+            system_cache('createhtml',$this->JumpUrl);
             $this->success('正在生成第 '.$page.' 页'.'，共 '.count($list).' 页待生成',$this->JumpUrl);
         }
         else {
 
-            if (Cache::get('pagesNode')) {
+            if (system_cache('pagesNode')) {
                 $this->JumpUrl = (string)url('/system.rewrite/createhtml',['type'=>'list']);
                 return $this->success('正在生成列表页',$this->JumpUrl);
             }
 
-            Cache::delete('createhtml');
+            system_cache('createhtml',null);
             return $this->success('全部生成完毕',$this->jumpIndex);
         }
     }
@@ -251,7 +251,7 @@ class Rewrite extends AdminController
     protected function createlist()
     {
         $page = input('page/d') ?? 1;
-        $pagesNode = Cache::get('pagesNode');
+        $pagesNode = system_cache('pagesNode');
         $pagescount = count($pagesNode);
 
         if ($page <= $pagescount) {
@@ -278,11 +278,11 @@ class Rewrite extends AdminController
             // 跳转地址
             $query = array_merge(input(),['page'=>$page]);
             $this->JumpUrl = (string)url('/system.rewrite/createhtml',$query);
-            Cache::set('createhtml',$this->JumpUrl);
+            system_cache('createhtml',$this->JumpUrl);
             $this->success('正在生成第 '.$current.' - '.($page-1).' 页'.'，共 '.$pagescount.' 页待生成',$this->JumpUrl);
         }
         else {
-            Cache::delete('createhtml'); 
+            system_cache('createhtml',null); 
             return $this->success('全部生成完毕',$this->jumpIndex);
         }
     }
@@ -294,7 +294,7 @@ class Rewrite extends AdminController
     {
         $where = [];
         $where['status'] = 1;
-        $list = Cache::get('content_page');
+        $list = system_cache('content_page');
         if (empty($list) || !is_array($list)) {
 
             $id = input('id/d');
@@ -325,7 +325,7 @@ class Rewrite extends AdminController
                 }
             }
 
-            Cache::set('content_page',$list);
+            system_cache('content_page',$list);
         }
 
         $key = input('key/d') ?? 0;
@@ -365,12 +365,12 @@ class Rewrite extends AdminController
                 'progress'=>$progress+1,
             ]);
             
-            Cache::set('createhtml',$this->JumpUrl);
+            system_cache('createhtml',$this->JumpUrl);
             $this->success('正在生成第 '.$progress.' 页'.'，共 '.$totalpages.' 页待生成',$this->JumpUrl);
         }
         else {
             
-            Cache::delete('createhtml'); 
+            system_cache('createhtml',null); 
             return $this->success('全部生成完毕',$this->jumpIndex);
         }
     }
@@ -438,12 +438,12 @@ class Rewrite extends AdminController
             $this->app->view->assign('listmap',$listmap);
             $this->buildHtml($filename,public_path().saenv('map_xml_path').'/',$xmlpath,'xml');
             $this->JumpUrl = (string)url('/system.rewrite/createmap',$query);
-            Cache::set('createhtml',$this->JumpUrl);
+            system_cache('createhtml',$this->JumpUrl);
             $this->success('正在生成第 '.$page.' 页'.'，共 '.$total.' 页待生成',$this->JumpUrl);
         }
         else {
             // 生成完毕
-            Cache::set('createhtml',null);
+            system_cache('createhtml',null);
             $this->success('生成完毕',$this->jumpIndex);  
         }
     }

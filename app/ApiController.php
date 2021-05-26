@@ -62,9 +62,9 @@ class ApiController extends BaseController
 
     /**
      * 用户数据
-     * @var array
+     * @var object|array
      */
-    public $userData = null;
+    public $userInfo = null;
 
     /**
      * 控制器登录鉴权
@@ -109,18 +109,18 @@ class ApiController extends BaseController
         }
         else {
             
-            // 普通验证流程 ? 是否验证登录器
+            // 普通验证流程
+            // 是否验证登录器
             if ($this->needLogin) {
                 $this->action = request()->action(true);
                 if($this->auth->isLogin()) {
-                    $this->userId = $this->auth->userData['id']; 
-                    $this->userData = $this->auth->userData; 
+                    $this->userId = $this->auth->userInfo['id']; 
+                    $this->userInfo = $this->auth->userInfo; 
                     if(in_array($this->action,$this->repeatLogin)) {
                         return $this->error(ResultCode::INVALID['msg']);
                     }
                 }
                 else { // 非鉴权方法
-                    
                     if (!in_array($this->action,$this->noNeedLogin)) {
                         return $this->error(ResultCode::ACCESS_TOKEN_TIMEOUT['msg'],null,null,-101);
                     }

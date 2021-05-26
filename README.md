@@ -29,7 +29,32 @@
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=L_SKDh46TnWDVrudKEON2XAlgm02RNic&jump_from=webapi"><img src="https://img.shields.io/badge/qq二群-68221585-blue.svg" alt="二群"></a>
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=p6N-b7AkWiESpcrZmOKWpm3t05qt4MQ-&jump_from=webapi"><img src="https://img.shields.io/badge/qq三群-68221618-blue.svg" alt="三群"></a>
 
-### `在官网搭建好之前，更新日志都先会发在这里`
+### `后续更新日志会直接在开发文档中`
+
+## v1.0.3
+
+> v1.0.3 在修复已知的bug上进行代码优化,因为时间的关系暂时CURD未增加，手动也不慢
+
+1、增加全局缓存函数，redis缓存库选择，优化存取方式避免重复
+
+2、增加get_dictionary_alias 字典别名函数，用于获取数据
+
+3、增加获取内容页地址拼音格式，并优化代码避免重复替换错误
+
+4、增加了content 全局自动转换IP函数
+
+5、增加gitee第三方登录扩展！
+
+6、增加了API文档、分应用分组生成文档。
+
+7、增加了前端访问地址类型判断函数findUrltype，方便查询数据！！
+
+- 优化get_read_url函数，支持统一URL格式
+- 优化getfield 函数，用于清理一些数据字段。
+- 优化用户登录数据、模型数据读取方式
+- 优化哈希值写入处理
+- 暂时去除图片水印，微缩图，gif动画无法水印问题。因PHP支持库问题！
+以及修复各种已知的小bug,更新了composer包，不会报错了，因官网已经搭建好，
 
 ## v1.0.2
 

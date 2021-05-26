@@ -28,6 +28,24 @@ class User extends Model
         return $this->hasMany(UserThird::class,'user_id');
     }
 
+    // 定义插件关联
+    public function plugin()
+    {
+        return $this->hasMany(Plugin::class,'user_id')->withoutField('filepath');
+    }
+
+    // 定义issues
+    public function issues()
+    {
+        return $this->hasMany(Issues::class,'user_id');
+    }
+
+    // 获取用户点赞数
+    public function issuesup($id = 0)
+    {
+        return Issues::where('user_id',$id)->sum('up');
+    }
+
     /**
      * 数据写入后
      * @param   array  $data
@@ -36,7 +54,7 @@ class User extends Model
     public static function onAfterWrite($data)
     {
         $data = self::getById($data['id']);
-        Auth::instance()->setloginState($data->toArray(),cookie('token') ?? false);
+        Auth::instance()->setloginState($data,cookie('token') ?? false);
     }
 
     /**
@@ -90,15 +108,57 @@ class User extends Model
     }
 
     /**
-     * 登录IP
+     * 设置创建IP
      */
-    public function getLoginipAttr($value)
+    public function setCreateipAttr($ip)
     {
-        if (!empty($value)) {
-            $value = long2ip($value);
-        }
+        return Content::setIPAttr($ip);
+    }
 
-        return $value;
+    /**
+     * 获取创建IP
+     */
+    public function getCreateipAttr($ip)
+    {
+        return Content::getIPAttr($ip);
+    }
+
+    /**
+     * 设置登录IP
+     */
+    public function setLoginipAttr($ip)
+    {
+        return Content::setIPAttr($ip);
+    }
+
+    /**
+     * 获取登录IP
+     */
+    public function getLoginipAttr($ip)
+    {
+        return Content::getIPAttr($ip);
+    }
+
+    /**
+     * 设置IP转换
+     * @access  public
+     * @param   string     $ip  IP地址
+     * @return  string
+     */
+    public function setIPAttr($ip)
+    {
+        return Content::setIPAttr($ip);
+    }
+
+    /**
+     * 获取IP转换
+     * @access  public
+     * @param   int     $ip  整型
+     * @return  string
+     */
+    public function getIPAttr($ip)
+    {
+        return Content::getIPAttr($ip);
     }
 
     /**

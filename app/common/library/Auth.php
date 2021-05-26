@@ -12,7 +12,6 @@ declare (strict_types = 1);
 namespace app\common\library;
 
 use think\facade\Db;
-use think\facade\Cache;
 use app\common\library\ResultCode;
 use app\common\model\system\AdminAccess;
 use app\common\model\system\ApiCondition;
@@ -51,9 +50,9 @@ class Auth
 
     /**
      * 用户数据
-     * @var array
+     * @var object|array
      */
-    public $userData = null;
+    public $userInfo = null;
 
     /**
      * API类接口
@@ -165,7 +164,7 @@ class Auth
                 $name = [$name];
             }
         }
-
+        
         $authList = [];
         if ('url' == $mode) { // 解析URL参数
             $REQUEST = unserialize(strtolower(serialize($this->request->param())));
@@ -207,7 +206,7 @@ class Auth
                 }
             }
         }
-        
+
         $authList = array_unique($authList);
         if ('or' == $relation && !empty($authList)) {
             return true;
@@ -417,6 +416,7 @@ class Auth
                 }
             }
         }
+        
         return true;
     }
 
@@ -456,18 +456,18 @@ class Auth
         }
 
         $where[] = ['pwd','=',hash_pwd($pwd)];
-        $this->userData = UserModel::where($where)->find();
-        if (!empty($this->userData)) {
-            if($this->userData['status'] != 1) { 
+        $this->userInfo = UserModel::where($where)->find();
+        if (!empty($this->userInfo)) {
+            if($this->userInfo['status'] != 1) { 
                 $this->setError('用户异常或未审核，请联系管理员');
                 return false;
             }
 
             // 更新登录数据
-            $this->userData['logintime'] = time(); 
-            $this->userData['loginip'] = ip2long(request()->ip());
-            $this->userData['logincount'] = $this->userData['logincount'] + 1;
-            if ($this->userData->save()) {
+            $this->userInfo['logintime'] = time(); 
+            $this->userInfo['loginip'] = request()->ip();
+            $this->userInfo['logincount'] = $this->userInfo['logincount'] + 1;
+            if ($this->userInfo->save()) {
                 return true;
             }
         }
@@ -495,10 +495,10 @@ class Auth
 
         // 优先缓存读取
         $this->classHash = sha1($class);
-        $restful = Cache::get($this->classHash);
+        $restful = system_cache($this->classHash);
         if (empty($restful)) {
             $restful = Db::name('api')->where('class',$class)->find();
-            Cache::set($this->classHash, $restful,saenv('cache_time'));
+            system_cache($this->classHash, $restful,saenv('cache_time'));
         }
 
         // 校验请求方式
@@ -517,10 +517,15 @@ class Auth
                     $this->setError(ResultCode::TOKEN_INVALID);
                     return false;
                 }
-
-                $this->params = unserialize((string)$data);
+                $this->params = $data;
             }
             
+            if (!$this->params['app_id'] 
+                || !$this->params['app_secret']) {
+                $this->setError(ResultCode::LACKPARAME);
+                return false;
+            }
+
             // 默认走普通流程
             $list = $this->getAPIAuthList();
             if (!$nodes = list_search($list,['class'=>$class])) {
@@ -569,7 +574,7 @@ class Auth
         $where['app_id'] = $this->params['app_id'];
         $where['app_secret'] = $this->params['app_secret'];
         $this->nodeHash = sha1(implode('.',$where));
-        $list = Cache::get($this->nodeHash);
+        $list = system_cache($this->nodeHash);
 
         if (empty($list)) { 
             $list = Db::view('user','id')
@@ -580,10 +585,12 @@ class Auth
                           'user.app_secret'=>$this->params['app_secret'],
                         ])->select()->toArray();
             // 修改后请清理缓存
-            Cache::set($this->nodeHash, $list, saenv('cache_time'));
+            if ($list) {
+                system_cache($this->nodeHash, $list, saenv('cache_time'));
+            }
         }
 
-        return $list ?? [];
+        return $list ?? [1];
     }
 
    /**
@@ -677,7 +684,7 @@ class Auth
             $this->token = $token; 
 
             // 只缓存用户uid
-            $this->userData = unserialize($array);
+            $this->userInfo = $array;
             return true;
         }
 
@@ -695,18 +702,18 @@ class Auth
         cookie('uid',$array['id'],$this->keeptime);
         cookie('token',$this->token,$this->keeptime);
         cookie('nickname',$array['nickname'] ?? $array['name'],$this->keeptime);
-        $this->cache(is_object($array) ? $array->toArray() : $array);
+        $this->setactiveState(is_object($array) ? $array : $array);
     }
 
     /**
-     * 缓存数据
-     * @param array $array
-     * @return bool
+     * 设置状态
+     * @param   array $array
+     * @return  bool
      */
-    public function cache(array $array = []) {
+    public function setactiveState(object|array $array = []) {
         $tag = md5hash((string)$array['id']);
-        Cache::tag($tag)->clear();
-        Cache::tag($tag)->set($this->token,serialize($array),$this->keeptime);
+        \think\facade\Cache::tag($tag)->clear();
+        \think\facade\Cache::tag($tag)->set($this->token,$array,$this->keeptime);
     }
 
     /**
@@ -722,18 +729,6 @@ class Auth
     }
 
     /**
-     * 获取token
-     * @access protected
-     * @param  int          $id          用户app_id
-     * @return string   
-     */
-    protected function getToken(int $id = null) 
-    {
-        $this->token = Cache::getTagItems(md5hash($id))[0];
-        return $this->token;
-    }
-
-    /**
      * 校验token
      * @access protected
      * @param  string       $token       用户token
@@ -742,7 +737,7 @@ class Auth
     public function checkToken(string $token = null) 
     {
         $token = ($token ?? input('token/s')) ?? '';
-        return Cache::get($token) ?? false;
+        return \think\facade\Cache::get($token) ?? false;
     }
 
     /**

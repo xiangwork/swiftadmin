@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 14/05/2021 16:22:20
+ Date: 26/05/2021 09:35:54
 */
 
 SET NAMES utf8mb4;
@@ -56,8 +56,8 @@ CREATE TABLE `sa_admin`  (
 -- ----------------------------
 -- Records of sa_admin
 -- ----------------------------
-INSERT INTO `sa_admin` VALUES (1, '1', '2', '3', 'admin', '权栈', '94b35cfc5e48ba2e317b880ef8ca14f54ec134f3d2027dd160e7c9c514b88ef9', 1, 'a:3:{i:0;s:21:\"家有傻猫两三只\";i:1;s:15:\"隔壁帅小伙\";i:2;s:9:\"技术宅\";}', '/upload/avatar/f8e34ec67a2a0233_100x100.jpg', '海阔天空，有容乃大', 'admin@swiftadmin.net', '0310', '15188888888', '高级管理人员', 133, '河北省邯郸市', 2130706433, 1620923664, 3232254977, 1, NULL, 1596682835, 1620923664, NULL);
-INSERT INTO `sa_admin` VALUES (2, '2', '1', '5,6', 'ceshi', '白眉大侠', '94b35cfc5e48ba2e317b880ef8ca14f54ec134f3d2027dd160e7c9c514b88ef9', 1, 'a:3:{i:0;s:6:\"呵呵\";i:1;s:5:\"Think\";i:2;s:12:\"铁血柔肠\";}', '/upload/avatar/a0b923820dcc509a_100x100.png', '吃我一招乾坤大挪移', 'baimei@your.com', '0310', '15188888888', '刀是什么刀，菜刀~来一记webshell~', 28, '河北省邯郸市廉颇大道110号指挥中心', 2130706433, 1619443158, 3232254977, 1, '违规', 1609836672, 1619456560, NULL);
+INSERT INTO `sa_admin` VALUES (1, '1', '2', '3', 'admin', '权栈', '94b35cfc5e48ba2e317b880ef8ca14f54ec134f3d2027dd160e7c9c514b88ef9', 1, 'a:3:{i:0;s:21:\"家有傻猫两三只\";i:1;s:15:\"隔壁帅小伙\";i:2;s:9:\"技术宅\";}', '/upload/avatar/f8e34ec67a2a0233_100x100.jpg', '海阔天空，有容乃大', 'admin@swiftadmin.net', '0310', '15188888888', '高级管理人员', 137, '河北省邯郸市', 2130706433, 1621913977, 3232254977, 1, NULL, 1596682835, 1621992481, NULL);
+INSERT INTO `sa_admin` VALUES (2, '2', '1', '5,6', 'ceshi', '白眉大侠', '94b35cfc5e48ba2e317b880ef8ca14f54ec134f3d2027dd160e7c9c514b88ef9', 1, 'a:3:{i:0;s:6:\"呵呵\";i:1;s:5:\"Think\";i:2;s:12:\"铁血柔肠\";}', '/upload/avatar/a0b923820dcc509a_100x100.png', '吃我一招乾坤大挪移', 'baimei@your.com', '0310', '15188888888', '刀是什么刀，菜刀~来一记webshell~', 29, '河北省邯郸市廉颇大道110号指挥中心', 2130706433, 1621992824, 3232254977, 1, '违规', 1609836672, 1621992824, NULL);
 
 -- ----------------------------
 -- Table structure for sa_admin_access
@@ -76,8 +76,8 @@ CREATE TABLE `sa_admin_access`  (
 -- ----------------------------
 -- Records of sa_admin_access
 -- ----------------------------
-INSERT INTO `sa_admin_access` VALUES (1, '1', '4,18,69,70,71,72,19,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,20,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,21,103,104,105,106,107,108,109,22,110,111,112,113,114,23,115', '3');
-INSERT INTO `sa_admin_access` VALUES (2, '2', '', '3');
+INSERT INTO `sa_admin_access` VALUES (1, '1', NULL, NULL);
+INSERT INTO `sa_admin_access` VALUES (2, '2', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sa_admin_group
@@ -103,8 +103,8 @@ CREATE TABLE `sa_admin_group`  (
 -- ----------------------------
 -- Records of sa_admin_group
 -- ----------------------------
-INSERT INTO `sa_admin_group` VALUES (1, 0, NULL, '超级管理员', 'admin', 1, 1, '网站超级管理员组的', NULL, NULL, 'layui-bg-blue', 1607832158, NULL);
-INSERT INTO `sa_admin_group` VALUES (2, 1, 2, '网站编辑', 'editor', 1, 1, '负责公司软文的编写', '2,14,49,50,51,52,53,15,54,55,56,57,58,16,59,60,61,62,63,3,17,64,65,66,67,68,4,18,69,70,71,72,19,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,20,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,21,103,104,105,106,107,108,109,22,110,111,112,113,114,23,115', '', 'layui-bg-cyan', 1607832158, NULL);
+INSERT INTO `sa_admin_group` VALUES (1, 0, 1, '超级管理员', 'admin', 1, 1, '网站超级管理员组的', NULL, NULL, 'layui-bg-blue', 1607832158, NULL);
+INSERT INTO `sa_admin_group` VALUES (2, 1, 2, '网站编辑', 'editor', 1, 1, '负责公司软文的编写', NULL, '', 'layui-bg-cyan', 1607832158, NULL);
 
 -- ----------------------------
 -- Table structure for sa_admin_rules
@@ -130,251 +130,255 @@ CREATE TABLE `sa_admin_rules`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
   INDEX `sort`(`sort`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 241 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单权限表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 245 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单权限表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_admin_rules
 -- ----------------------------
-INSERT INTO `sa_admin_rules` VALUES (1, 0, 'Dashboard', '#', '#', 0, NULL, '', 1, 'layui-icon-home', 0, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (2, 0, '内容管理', '#', '#', 0, NULL, '', 2, 'layui-icon-app', 1, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (3, 0, '运营管理', '#', '#', 0, NULL, '', 3, 'layui-icon-rmb', 1, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (4, 0, '系统管理', '#', '#', 0, NULL, '', 4, 'layui-icon-set-fill', 1, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (5, 0, 'SEO设置', '#', '#', 0, NULL, '', 5, 'layui-icon-util', 1, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (6, 0, '接口管理', '#', '#', 0, NULL, '', 6, 'layui-icon-release', 1, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (7, 0, '高级管理', '#', '#', 0, NULL, '', 7, 'layui-icon-engine', 1, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (8, 0, '插件应用', '#', '#', 0, NULL, '', 8, 'layui-icon-component', 1, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (9, 0, '会员管理', '#', '#', 0, NULL, '', 9, 'layui-icon-user', 1, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (10, 0, '其他设置', '#', '#', 0, NULL, '', 10, 'layui-icon-about', 1, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (11, 1, '控制台', '/index/console', 'index:console', 0, NULL, '', 11, '', 0, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (12, 1, '分析页', '/index/analysis', 'index:analysis', 0, NULL, '', 12, '', 0, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (13, 1, '监控页', '/index/monitor', 'index:monitor', 0, NULL, '', 13, '', 0, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (14, 2, '栏目管理', '/system.category/index', 'system.category:index', 0, NULL, '', 13, '', 1, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (15, 2, '内容管理', '/system.content/index', 'system.content:index', 0, NULL, '', 14, '', 1, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (16, 2, '导航管理', '/system.navmenu/index', 'system.navmenu:index', 0, NULL, '', 15, '', 1, 'normal', 0, 0, 1619437744, NULL);
-INSERT INTO `sa_admin_rules` VALUES (17, 3, '广告管理', '/system.adwords/index', 'system.adwords:index', 0, NULL, '', 16, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (18, 4, '基本设置', '/index/basecfg', 'index:basecfg', 0, NULL, '', 17, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (19, 4, '用户管理', '/system.admin/index', 'system.admin:index', 0, NULL, '', 18, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (20, 4, '用户中心', '/system.admin/center', 'system.admin:center', 0, NULL, '', 19, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (21, 4, '角色管理', '/system.admingroup/index', 'system.admingroup:index', 0, NULL, '', 20, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (22, 4, '菜单管理', '/system.adminrules/index', 'system.adminrules:index', 0, NULL, '', 21, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (23, 4, '操作日志', '/system.systemlog/index', 'system.systemlog:index', 0, NULL, '', 22, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (24, 5, 'URL生成', '/system.rewrite/index', 'system.rewrite:index', 0, NULL, '', 23, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (25, 5, 'SEO优化', '/system.seoer/index', 'system.seoer:index', 0, NULL, '', 24, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (26, 5, '标签管理', '/system.tags/index', 'system.tags:index', 0, NULL, '', 25, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (27, 5, '采集接口', '/system.collect/index', 'system.collect:index', 0, NULL, '', 26, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (28, 5, '友情链接', '/system.friendlink/index', 'system.friendlink:index', 0, NULL, '', 30, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (29, 6, '项目管理', '/system.project/index', 'system.project:index', 0, NULL, '', 27, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (30, 6, '接口配置', '/system.api/index', 'system.api:index', 0, NULL, '', 28, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (31, 6, '接口鉴权', '/system.apiaccess/index', 'system.apiaccess:index', 0, NULL, '', 29, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (32, 7, '公司管理', '/system.company/index', 'system.company:index', 0, NULL, '', 30, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (33, 7, '部门管理', '/system.department/index', 'system.department:index', 0, NULL, '', 31, '', 1, 'normal', 0, 0, 1619437745, NULL);
-INSERT INTO `sa_admin_rules` VALUES (34, 7, '岗位管理', '/system.jobs/index', 'system.jobs:index', 0, NULL, '', 32, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (35, 7, '字典设置', '/system.dictionary/index', 'system.dictionary:index', 0, NULL, '', 33, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (36, 7, '附件管理', '/system.adminfile/index', 'system.adminfile:index', 0, NULL, '', 34, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (37, 7, '模型管理', '/system.channel/index', 'system.channel:index', 0, NULL, '', 35, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (38, 8, '插件管理', '/system.plugin/index', 'system.plugin:index', 0, NULL, '', 35, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (39, 8, '插件钩子', '/system.pluginhook/index', 'system.pluginhook:index', 0, NULL, '', 36, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (40, 8, '占位菜单', '#', '#', 0, NULL, '', 37, '', 1, 'hidden', 1, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (41, 9, '会员管理', '/system.user/index', 'system.user:index', 0, NULL, '', 38, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (42, 9, '评论管理', '/system.comment/index', 'system.comment:index', 0, NULL, '', 39, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (43, 9, '留言板管理', '/system.guestbook/index', 'system.guestbook:index', 0, NULL, '', 40, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (44, 9, '会员组管理', '/system.usergroup/index', 'system.usergroup:index', 0, NULL, '', 41, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (45, 10, '回收站', '/system.recyclebin/index', 'system.recyclebin:index', 0, NULL, '', 41, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (46, 10, '数据库', '/system.database/index', 'system.database:index', 0, NULL, '', 42, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (47, 10, '限权标志', '###', '###', 3, NULL, '', 224, '', 0, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (48, 10, '模板权限', '/index.tpl/index', 'index.tpl:index', 2, NULL, '', 225, '', 0, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (49, 14, '查看', '/system.category/index', 'system.category:index', 1, NULL, '', 45, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (50, 14, '添加', '/system.category/add', 'system.category:add', 1, NULL, '', 46, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (51, 14, '编辑', '/system.category/edit', 'system.category:edit', 1, NULL, '', 47, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (52, 14, '删除', '/system.category/del', 'system.category:del', 1, NULL, '', 48, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (53, 14, '状态', '/system.category/status', 'system.category:status', 2, NULL, '', 49, '', 1, 'normal', 0, 0, 1619437746, NULL);
-INSERT INTO `sa_admin_rules` VALUES (54, 15, '查看', '/system.content/index', 'system.content:index', 1, NULL, '', 228, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (55, 15, '添加', '/system.content/add', 'system.content:add', 1, NULL, '', 229, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (56, 15, '编辑', '/system.content/edit', 'system.content:edit', 1, NULL, '', 230, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (57, 15, '删除', '/system.content/del', 'system.content:del', 1, NULL, '', 255, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (58, 15, '状态', '/system.content/status', 'system.content:status', 1, NULL, '', 256, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (59, 16, '查看', '/system.navmenu/index', 'system.navmenu:index', 1, NULL, '', 53, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (60, 16, '添加', '/system.navmenu/add', 'system.navmenu:add', 1, NULL, '', 54, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (61, 16, '编辑', '/system.navmenu/edit', 'system.navmenu:edit', 1, NULL, '', 55, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (62, 16, '删除', '/system.navmenu/del', 'system.navmenu:del', 1, NULL, '', 56, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (63, 16, '状态', '/system.navmenu/status', 'system.navmenu:status', 2, NULL, '', 57, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (64, 17, '查看', '/system.adwords/index', 'system.adwords:index', 1, NULL, '', 61, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (65, 17, '添加', '/system.adwords/add', 'system.adwords:add', 1, NULL, '', 62, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (66, 17, '编辑', '/system.adwords/edit', 'system.adwords:edit', 1, NULL, '', 63, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (67, 17, '删除', '/system.adwords/del', 'system.adwords:del', 1, NULL, '', 64, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (68, 17, '状态', '/system.adwords/status', 'system.adwords:status', 2, NULL, '', 65, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (69, 18, '修改配置', '/index/baseset', 'index:baseset', 2, NULL, '', 69, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (70, 18, 'FTP接口', '/index/testftp', 'index:testftp', 2, NULL, '', 70, '', 0, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (71, 18, '邮件接口', '/index/testemail', 'index:testemail', 2, NULL, '', 71, '', 0, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (72, 18, '缓存接口', '/index/testcache', 'index:testcache', 2, NULL, '', 72, '', 0, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (73, 19, '查看', '/system.admin/index', 'system.admin:index', 1, NULL, '', 73, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (74, 19, '添加', '/system.admin/add', 'system.admin:add', 1, NULL, '', 74, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (75, 19, '编辑', '/system.admin/edit', 'system.admin:edit', 1, NULL, '', 75, '', 1, 'normal', 0, 0, 1619437747, NULL);
-INSERT INTO `sa_admin_rules` VALUES (76, 19, '删除', '/system.admin/del', 'system.admin:del', 1, NULL, '', 76, '', 1, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (77, 19, '状态', '/system.admin/status', 'system.admin:status', 2, NULL, '', 77, '', 1, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (78, 19, '编辑权限', '/system.admin/editrules', 'system.admin:editrules', 2, NULL, '', 84, '', 1, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (79, 19, '编辑栏目', '/system.admin/editcates', 'system.admin:editcates', 2, NULL, '', 87, '', 1, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (80, 19, '系统模板', '/system.admin/theme', 'system.admin:theme', 2, NULL, '', 89, '', 0, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (81, 19, '短消息', '/system.admin/message', 'system.admin:message', 2, NULL, '', 90, '', 0, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (82, 19, '个人中心', '/system.admin/center', 'system.admin:center', 2, NULL, '', 91, '', 0, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (83, 19, '修改资料', '/system.admin/modify', 'system.admin:modify', 2, NULL, '', 92, '', 0, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (84, 19, '修改密码', '/system.admin/pwd', 'system.admin:pwd', 2, NULL, '', 93, '', 0, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (85, 19, '系统语言', '/system.admin/language', 'system.admin:language', 2, NULL, '', 94, '', 0, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (86, 19, '清理缓存', '/system.admin/clear', 'system.admin:clear', 2, NULL, '', 95, '', 0, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (87, 19, '数据接口', '/system.admin/_get_auth_func', 'system.admin:_get_auth_func', 3, NULL, '', 220, '', 1, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (88, 20, '查看', '/system.admin/index', 'system.admin:index', 1, NULL, '', 73, '', 1, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (89, 20, '添加', '/system.admin/add', 'system.admin:add', 1, NULL, '', 74, '', 1, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (90, 20, '编辑', '/system.admin/edit', 'system.admin:edit', 1, NULL, '', 75, '', 1, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (91, 20, '删除', '/system.admin/del', 'system.admin:del', 1, NULL, '', 76, '', 1, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (92, 20, '状态', '/system.admin/status', 'system.admin:status', 2, NULL, '', 77, '', 1, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (93, 20, '编辑权限', '/system.admin/editrules', 'system.admin:editrules', 2, NULL, '', 84, '', 1, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (94, 20, '编辑栏目', '/system.admin/editcates', 'system.admin:editcates', 2, NULL, '', 87, '', 1, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (95, 20, '系统模板', '/system.admin/theme', 'system.admin:theme', 2, NULL, '', 89, '', 0, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (96, 20, '短消息', '/system.admin/message', 'system.admin:message', 2, NULL, '', 90, '', 0, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (97, 20, '个人中心', '/system.admin/center', 'system.admin:center', 2, NULL, '', 91, '', 0, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (98, 20, '修改资料', '/system.admin/modify', 'system.admin:modify', 2, NULL, '', 92, '', 0, 'normal', 0, 0, 1619437748, NULL);
-INSERT INTO `sa_admin_rules` VALUES (99, 20, '修改密码', '/system.admin/pwd', 'system.admin:pwd', 2, NULL, '', 93, '', 0, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (100, 20, '系统语言', '/system.admin/language', 'system.admin:language', 2, NULL, '', 94, '', 0, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (101, 20, '清理缓存', '/system.admin/clear', 'system.admin:clear', 2, NULL, '', 95, '', 0, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (102, 20, '数据接口', '/system.admin/_get_auth_func', 'system.admin:_get_auth_func', 3, NULL, '', 220, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (103, 21, '查看', '/system.admingroup/index', 'system.admingroup:index', 1, NULL, '', 96, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (104, 21, '添加', '/system.admingroup/add', 'system.admingroup:add', 1, NULL, '', 97, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (105, 21, '编辑', '/system.admingroup/edit', 'system.admingroup:edit', 1, NULL, '', 98, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (106, 21, '删除', '/system.admingroup/del', 'system.admingroup:del', 1, NULL, '', 99, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (107, 21, '状态', '/system.admingroup/status', 'system.admingroup:status', 2, NULL, '', 100, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (108, 21, '编辑权限', '/system.admingroup/editrules', 'system.admingroup:editrules', 2, NULL, '', 105, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (109, 21, '编辑栏目', '/system.admingroup/editcates', 'system.admingroup:editcates', 2, NULL, '', 107, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (110, 22, '查询', '/system.adminrules/index', 'system.adminrules:index', 1, NULL, '', 108, NULL, 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (111, 22, '添加', '/system.adminrules/add', 'system.adminrules:add', 1, NULL, '', 109, NULL, 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (112, 22, '编辑', '/system.adminrules/edit', 'system.adminrules:edit', 1, NULL, '', 110, NULL, 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (113, 22, '删除', '/system.adminrules/del', 'system.adminrules:del', 1, NULL, '', 111, NULL, 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (114, 22, '状态', '/system.adminrules/status', 'system.adminrules:status', 2, NULL, '', 112, NULL, 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (115, 23, '查询', '/system.systemlog/index', 'system.systemlog:index', 1, NULL, '', 117, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (116, 24, '查看', '/system.rewrite/index', 'system.rewrite:index', 1, NULL, '', 118, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (117, 24, '编辑', '/system.rewrite/basecfg', 'system.rewrite:basecfg', 1, NULL, '', 119, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (118, 24, '生成首页', '/system.rewrite/createindex', 'system.rewrite:createindex', 2, NULL, '', 220, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (119, 24, '生成内容', '/system.rewrite/createhtml', 'system.rewrite:createhtml', 2, NULL, '', 221, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (120, 24, '网站地图', '/system.rewrite/createmap', 'system.rewrite:createmap', 2, NULL, '', 222, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (121, 25, '查看流量', '/system.seoer/index', 'system.seoer:index', 1, NULL, '', 120, '', 1, 'normal', 0, 0, 1619437749, NULL);
-INSERT INTO `sa_admin_rules` VALUES (122, 25, '站点列表', '/system.seoer/getsitelist', 'system.seoer:getsitelist', 2, NULL, '', 121, '', 0, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (123, 25, '目录列表', '/system.seoer/getsitedir', 'system.seoer:getsitedir', 2, NULL, '', 122, '', 0, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (124, 25, '数据接口', '/system.seoer/getdata', 'system.seoer:getdata', 2, NULL, '', 123, '', 0, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (125, 26, '查看', '/system.tags/index', 'system.tags:index', 1, NULL, '', 213, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (126, 26, '添加', '/system.tags/add', 'system.tags:add', 1, NULL, '', 213, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (127, 26, '编辑', '/system.tags/edit', 'system.tags:edit', 1, NULL, '', 213, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (128, 26, '删除', '/system.tags/del', 'system.tags:del', 1, NULL, '', 213, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (129, 26, '状态', '/system.tags/status', 'system.tags:status', 1, NULL, '', 213, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (130, 27, '查看', '/system.collect/index', 'system.collect:index', 1, NULL, '', 132, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (131, 27, '添加', '/system.collect/add', 'system.collect:add', 1, NULL, '', 133, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (132, 27, '编辑', '/system.collect/edit', 'system.collect:edit', 1, NULL, '', 134, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (133, 27, '删除', '/system.collect/del', 'system.collect:del', 1, NULL, '', 135, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (134, 27, '状态', '/system.collect/status', 'system.collect:status', 2, NULL, '', 136, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (135, 28, '查看', '/system.friendlink/index', 'system.friendlink:index', 1, NULL, '', 124, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (136, 28, '添加', '/system.friendlink/add', 'system.friendlink:add', 1, NULL, '', 125, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (137, 28, '编辑', '/system.friendlink/edit', 'system.friendlink:edit', 1, NULL, '', 126, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (138, 28, '删除', '/system.friendlink/del', 'system.friendlink:del', 1, NULL, '', 127, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (139, 28, '状态', '/system.friendlink/status', 'system.friendlink:status', 2, NULL, '', 128, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (140, 29, '查看', '/system.project/index', 'system.project:index', 1, NULL, '', 140, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (141, 29, '添加', '/system.project/add', 'system.project:add', 1, NULL, '', 141, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (142, 29, '编辑', '/system.project/edit', 'system.project:edit', 1, NULL, '', 142, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (143, 29, '删除', '/system.project/del', 'system.project:del', 1, NULL, '', 143, '', 1, 'normal', 0, 0, 1619437750, NULL);
-INSERT INTO `sa_admin_rules` VALUES (144, 29, '状态', '/system.project/status', 'system.project:status', 2, NULL, '', 144, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (145, 30, '查看', '/system.api/index', 'system.api:index', 1, NULL, '', 148, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (146, 30, '添加', '/system.api/add', 'system.api:add', 1, NULL, '', 149, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (147, 30, '编辑', '/system.api/edit', 'system.api:edit', 1, NULL, '', 150, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (148, 30, '删除', '/system.api/del', 'system.api:del', 1, NULL, '', 151, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (149, 30, '状态', '/system.api/status', 'system.api:status', 2, NULL, '', 152, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (150, 30, '请求参数', '/system.api/params', 'system.api:params', 2, NULL, '', 156, '', 0, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (151, 30, '添加参数', '/system.api/paramsadd', 'system.api:paramsadd', 1, NULL, '', 157, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (152, 30, '编辑参数', '/system.api/paramsedit', 'system.api:paramsedit', 1, NULL, '', 158, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (153, 30, '删除参数', '/system.api/paramsdel', 'system.api:paramsdel', 2, NULL, '', 159, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (154, 30, '返回参数', '/system.api/restful', 'system.api:restful', 2, NULL, '', 160, '', 0, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (155, 30, '添加返参', '/system.api/restfuladd', 'system.api:restfuladd', 1, NULL, '', 161, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (156, 30, '编辑返参', '/system.api/restfuledit', 'system.api:restfuledit', 1, NULL, '', 162, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (157, 30, '删除返参', '/system.api/restfuldel', 'system.api:restfuldel', 2, NULL, '', 163, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (158, 31, '查看', '/system.apiaccess/index', 'system.apiaccess:index', 1, NULL, '', 164, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (159, 31, '添加', '/system.apiaccess/add', 'system.apiaccess:add', 1, NULL, '', 165, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (160, 31, '编辑', '/system.apiaccess/edit', 'system.apiaccess:edit', 1, NULL, '', 166, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (161, 31, '删除', '/system.apiaccess/del', 'system.apiaccess:del', 1, NULL, '', 167, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (162, 31, '状态', '/system.apiaccess/status', 'system.apiaccess:status', 2, NULL, '', 168, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (163, 32, '查看', '/system.company/index', 'system.company:index', 1, NULL, '', 172, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (164, 32, '添加', '/system.company/add', 'system.company:add', 1, NULL, '', 173, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (165, 32, '编辑', '/system.company/edit', 'system.company:edit', 1, NULL, '', 174, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (166, 32, '删除', '/system.company/del', 'system.company:del', 1, NULL, '', 175, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (167, 32, '状态', '/system.company/status', 'system.company:status', 2, NULL, '', 176, '', 1, 'normal', 0, 0, 1619437751, NULL);
-INSERT INTO `sa_admin_rules` VALUES (168, 33, '查看', '/system.department/index', 'system.department:index', 1, NULL, '', 180, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (169, 33, '添加', '/system.department/add', 'system.department:add', 1, NULL, '', 181, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (170, 33, '编辑', '/system.department/edit', 'system.department:edit', 1, NULL, '', 182, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (171, 33, '删除', '/system.department/del', 'system.department:del', 1, NULL, '', 183, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (172, 33, '状态', '/system.department/status', 'system.department:status', 2, NULL, '', 184, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (173, 34, '查看', '/system.jobs/index', 'system.jobs:index', 1, NULL, '', 189, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (174, 34, '添加', '/system.jobs/add', 'system.jobs:add', 1, NULL, '', 190, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (175, 34, '编辑', '/system.jobs/edit', 'system.jobs:edit', 1, NULL, '', 191, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (176, 34, '删除', '/system.jobs/del', 'system.jobs:del', 1, NULL, '', 192, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (177, 34, '状态', '/system.jobs/status', 'system.jobs:status', 2, NULL, '', 193, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (178, 35, '查看', '/system.dictionary/index', 'system.dictionary:index', 1, NULL, '', 266, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (179, 35, '添加', '/system.dictionary/add', 'system.dictionary:add', 1, NULL, '', 267, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (180, 35, '编辑', '/system.dictionary/edit', 'system.dictionary:edit', 1, NULL, '', 268, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (181, 35, '删除', '/system.dictionary/del', 'system.dictionary:del', 1, NULL, '', 269, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (182, 35, '状态', '/system.dictionary/status', 'system.dictionary:status', 2, NULL, '', 270, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (183, 36, '查看', '/system.adminfile/index', 'system.adminfile:index', 1, NULL, '', 197, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (184, 36, '编辑', '/system.adminfile/edit', 'system.adminfile:edit', 1, NULL, '', 198, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (185, 36, '删除', '/system.adminfile/del', 'system.adminfile:del', 1, NULL, '', 199, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (186, 36, '附件上传', '/upload/upload', 'upload:upload', 2, NULL, '', 276, '', 0, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (187, 36, '头像上传', '/upload/avatar', 'upload:avatar', 2, NULL, '', 285, '', 0, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (188, 37, '查看', '/system.channel/index', 'system.channel:index', 1, NULL, '', 200, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (189, 37, '添加', '/system.channel/add', 'system.channel:add', 1, NULL, '', 201, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (190, 37, '编辑', '/system.channel/edit', 'system.channel:edit', 1, NULL, '', 202, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (191, 37, '删除', '/system.channel/del', 'system.channel:del', 1, NULL, '', 203, '', 1, 'normal', 0, 0, 1619437752, NULL);
-INSERT INTO `sa_admin_rules` VALUES (192, 38, '查看', '/system.plugin/index', 'system.plugin:index', 1, NULL, '', 207, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (193, 38, '安装', '/system.plugin/install', 'system.plugin:install', 1, NULL, '', 208, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (194, 38, '卸载', '/system.plugin/uninstall', 'system.plugin:uninstall', 1, NULL, '', 209, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (195, 38, '配置', '/system.plugin/config', 'system.plugin:config', 1, NULL, '', 210, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (196, 38, '状态', '/system.plugin/status', 'system.plugin:status', 2, NULL, '', 211, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (197, 38, '升级', '/system.plugin/upgrade', 'system.plugin:upgrade', 2, NULL, '', 212, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (198, 38, '数据表', '/system.plugin/tables', 'system.plugin:tables', 2, NULL, '', 213, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (199, 39, '查看', '/system.pluginhook/index', 'system.pluginhook:index', 1, NULL, '', 215, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (200, 39, '添加', '/system.pluginhook/add', 'system.pluginhook:add', 1, NULL, '', 216, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (201, 39, '编辑', '/system.pluginhook/edit', 'system.pluginhook:edit', 1, NULL, '', 217, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (202, 39, '删除', '/system.pluginhook/del', 'system.pluginhook:del', 1, NULL, '', 218, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (203, 39, '状态', '/system.pluginhook/status', 'system.pluginhook:status', 2, NULL, '', 219, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (204, 40, '查看', '#', '#', 1, NULL, '', 223, '', 1, 'hidden', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (205, 40, '安装', '#', '#', 1, NULL, '', 224, '', 1, 'hidden', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (206, 40, '卸载', '#', '#', 1, NULL, '', 225, '', 1, 'hidden', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (207, 40, '预留1', '#', '#', 1, NULL, '', 226, '', 1, 'hidden', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (208, 40, '预留2', '#', '#', 2, NULL, '', 227, '', 1, 'hidden', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (209, 41, '查看', '/system.user/index', 'system.user:index', 1, NULL, '', 228, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (210, 41, '添加', '/system.user/add', 'system.user:add', 1, NULL, '', 229, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (211, 41, '编辑', '/system.user/edit', 'system.user:edit', 1, NULL, '', 230, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (212, 41, '删除', '/system.user/del', 'system.user:del', 1, NULL, '', 231, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (213, 41, '状态', '/system.user/status', 'system.user:status', 2, NULL, '', 232, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (214, 42, '查看', '/system.comment/index', 'system.comment:index', 1, NULL, '', 236, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (215, 42, '回复', '/system.comment/view', 'system.comment:view', 1, NULL, '', 237, '', 1, 'normal', 0, 0, 1619437753, NULL);
-INSERT INTO `sa_admin_rules` VALUES (216, 42, '添加', '/system.comment/add', 'system.comment:add', 1, NULL, '', 238, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (217, 42, '编辑', '/system.comment/edit', 'system.comment:edit', 1, NULL, '', 239, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (218, 42, '删除', '/system.comment/del', 'system.comment:del', 1, NULL, '', 240, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (219, 42, '状态', '/system.comment/status', 'system.comment:status', 2, NULL, '', 241, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (220, 43, '查看', '/system.guestbook/index', 'system.guestbook:index', 1, NULL, '', 245, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (221, 43, '回复', '/system.guestbook/reply', 'system.guestbook:reply', 1, NULL, '', 246, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (222, 43, '删除', '/system.guestbook/del', 'system.guestbook:del', 1, NULL, '', 247, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (223, 43, '状态', '/system.guestbook/status', 'system.guestbook:status', 2, NULL, '', 248, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (224, 44, '查看', '/system.usergroup/index', 'system.usergroup:index', 1, NULL, '', 252, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (225, 44, '添加', '/system.usergroup/add', 'system.usergroup:add', 1, NULL, '', 253, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (226, 44, '编辑', '/system.usergroup/edit', 'system.usergroup:edit', 1, NULL, '', 254, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (227, 44, '删除', '/system.usergroup/del', 'system.usergroup:del', 1, NULL, '', 255, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (228, 44, '状态', '/system.usergroup/status', 'system.usergroup:status', 2, NULL, '', 256, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (229, 45, '还原', '/system.recyclebin/restore', 'system.recyclebin:restore', 1, NULL, '', 222, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (230, 45, '销毁', '/system.recyclebin/destroy', 'system.recyclebin:destroy', 1, NULL, '', 223, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (231, 45, '查看', '/system.recyclebin/index', 'system.recyclebin:index', 1, NULL, '', 265, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (232, 46, '查看', '/system.database/index', 'system.database:index', 1, NULL, '', 260, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (233, 46, '优化', '/system.database/optimize', 'system.database:optimize', 1, NULL, '', 261, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (234, 46, '修复', '/system.database/repair', 'system.database:repair', 1, NULL, '', 262, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (235, 46, '配置', '/system.database/config', 'system.database:config', 1, NULL, '', 263, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (236, 46, '备份', '/system.database/export', 'system.database:export', 1, NULL, '', 264, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (237, 47, '栏目限权', 'everycate', 'everycate', 3, '是否限制栏目权限！', '', 274, '', 1, 'normal', 1, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (238, 47, '编辑限权', 'privateauth', 'privateauth', 3, '只可编辑自己发布的数据！请勿删除！', '', 275, '', 1, 'normal', 1, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (239, 48, '查看模板', '/index.tpl/showtpl', 'index.tpl:showtpl', 2, NULL, '', 277, '', 1, 'normal', 0, 0, 1619437754, NULL);
-INSERT INTO `sa_admin_rules` VALUES (240, 48, '编辑模板', '/index.tpl/edittpl', 'index.tpl:edittpl', 2, NULL, '', 278, '', 1, 'normal', 0, 0, 1619437755, NULL);
+INSERT INTO `sa_admin_rules` VALUES (1, 0, 'Dashboard', '#', '#', 0, NULL, '', 0, 'layui-icon-home', 0, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (2, 1, '控制台', '/index/console', 'index:console', 0, NULL, '', 1, '', 0, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (3, 1, '分析页', '/index/analysis', 'index:analysis', 0, NULL, '', 2, '', 0, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (4, 1, '监控页', '/index/monitor', 'index:monitor', 0, NULL, '', 3, '', 0, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (5, 0, '内容管理', '#', '#', 0, NULL, '', 4, 'layui-icon-app', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (6, 5, '栏目管理', '/system.category/index', 'system.category:index', 0, NULL, '', 5, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (7, 6, '查看', '/system.category/index', 'system.category:index', 1, NULL, '', 6, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (8, 6, '添加', '/system.category/add', 'system.category:add', 1, NULL, '', 7, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (9, 6, '编辑', '/system.category/edit', 'system.category:edit', 1, NULL, '', 8, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (10, 6, '删除', '/system.category/del', 'system.category:del', 1, NULL, '', 9, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (11, 6, '状态', '/system.category/status', 'system.category:status', 2, NULL, '', 10, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (12, 5, '内容管理', '/system.content/index', 'system.content:index', 0, NULL, '', 11, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (13, 12, '查看', '/system.content/index', 'system.content:index', 1, NULL, '', 12, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (14, 12, '添加', '/system.content/add', 'system.content:add', 1, NULL, '', 13, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (15, 12, '编辑', '/system.content/edit', 'system.content:edit', 1, NULL, '', 14, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (16, 12, '删除', '/system.content/del', 'system.content:del', 1, NULL, '', 15, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (17, 12, '状态', '/system.content/status', 'system.content:status', 1, NULL, '', 16, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (18, 5, '导航管理', '/system.navmenu/index', 'system.navmenu:index', 0, NULL, '', 17, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (19, 18, '查看', '/system.navmenu/index', 'system.navmenu:index', 1, NULL, '', 18, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (20, 18, '添加', '/system.navmenu/add', 'system.navmenu:add', 1, NULL, '', 19, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (21, 18, '编辑', '/system.navmenu/edit', 'system.navmenu:edit', 1, NULL, '', 20, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (22, 18, '删除', '/system.navmenu/del', 'system.navmenu:del', 1, NULL, '', 21, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (23, 18, '状态', '/system.navmenu/status', 'system.navmenu:status', 2, NULL, '', 22, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
+INSERT INTO `sa_admin_rules` VALUES (24, 0, '运营管理', '#', '#', 0, NULL, '', 23, 'layui-icon-rmb', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (25, 24, '广告管理', '/system.adwords/index', 'system.adwords:index', 0, NULL, '', 24, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (26, 25, '查看', '/system.adwords/index', 'system.adwords:index', 1, NULL, '', 25, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (27, 25, '添加', '/system.adwords/add', 'system.adwords:add', 1, NULL, '', 26, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (28, 25, '编辑', '/system.adwords/edit', 'system.adwords:edit', 1, NULL, '', 27, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (29, 25, '删除', '/system.adwords/del', 'system.adwords:del', 1, NULL, '', 28, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (30, 25, '状态', '/system.adwords/status', 'system.adwords:status', 2, NULL, '', 29, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (31, 0, '系统管理', '#', '#', 0, NULL, '', 30, 'layui-icon-set-fill', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (32, 31, '基本设置', '/index/basecfg', 'index:basecfg', 0, NULL, '', 31, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (33, 32, '修改配置', '/index/baseset', 'index:baseset', 2, NULL, '', 32, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (34, 32, 'FTP接口', '/index/testftp', 'index:testftp', 2, NULL, '', 33, '', 0, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (35, 32, '邮件接口', '/index/testemail', 'index:testemail', 2, NULL, '', 34, '', 0, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (36, 32, '缓存接口', '/index/testcache', 'index:testcache', 2, NULL, '', 35, '', 0, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (37, 31, '用户管理', '/system.admin/index', 'system.admin:index', 0, NULL, '', 36, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (38, 37, '查看', '/system.admin/index', 'system.admin:index', 1, NULL, '', 37, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (39, 37, '添加', '/system.admin/add', 'system.admin:add', 1, NULL, '', 38, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (40, 37, '编辑', '/system.admin/edit', 'system.admin:edit', 1, NULL, '', 39, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (41, 37, '删除', '/system.admin/del', 'system.admin:del', 1, NULL, '', 40, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (42, 37, '状态', '/system.admin/status', 'system.admin:status', 2, NULL, '', 41, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (43, 37, '编辑权限', '/system.admin/editrules', 'system.admin:editrules', 2, NULL, '', 42, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (44, 37, '编辑栏目', '/system.admin/editcates', 'system.admin:editcates', 2, NULL, '', 43, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (45, 37, '系统模板', '/system.admin/theme', 'system.admin:theme', 2, NULL, '', 44, '', 0, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (46, 37, '短消息', '/system.admin/message', 'system.admin:message', 2, NULL, '', 45, '', 0, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (47, 37, '个人中心', '/system.admin/center', 'system.admin:center', 2, NULL, '', 46, '', 0, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (48, 37, '修改资料', '/system.admin/modify', 'system.admin:modify', 2, NULL, '', 47, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (49, 37, '修改密码', '/system.admin/pwd', 'system.admin:pwd', 2, NULL, '', 48, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (50, 37, '系统语言', '/system.admin/language', 'system.admin:language', 2, NULL, '', 49, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (51, 37, '清理缓存', '/system.admin/clear', 'system.admin:clear', 2, NULL, '', 50, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (52, 37, '数据接口', '/system.admin/_get_auth_func', 'system.admin:_get_auth_func', 3, NULL, '', 51, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (53, 31, '用户中心', '/system.admin/center', 'system.admin:center', 0, NULL, '', 52, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (54, 53, '查看', '/system.admin/index', 'system.admin:index', 1, NULL, '', 53, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (55, 53, '添加', '/system.admin/add', 'system.admin:add', 1, NULL, '', 54, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (56, 53, '编辑', '/system.admin/edit', 'system.admin:edit', 1, NULL, '', 55, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (57, 53, '删除', '/system.admin/del', 'system.admin:del', 1, NULL, '', 56, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (58, 53, '状态', '/system.admin/status', 'system.admin:status', 2, NULL, '', 57, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (59, 53, '编辑权限', '/system.admin/editrules', 'system.admin:editrules', 2, NULL, '', 58, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (60, 53, '编辑栏目', '/system.admin/editcates', 'system.admin:editcates', 2, NULL, '', 59, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (61, 53, '系统模板', '/system.admin/theme', 'system.admin:theme', 2, NULL, '', 60, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (62, 53, '短消息', '/system.admin/message', 'system.admin:message', 2, NULL, '', 61, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (63, 53, '个人中心', '/system.admin/center', 'system.admin:center', 2, NULL, '', 62, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (64, 53, '修改资料', '/system.admin/modify', 'system.admin:modify', 2, NULL, '', 63, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (65, 53, '修改密码', '/system.admin/pwd', 'system.admin:pwd', 2, NULL, '', 64, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (66, 53, '系统语言', '/system.admin/language', 'system.admin:language', 2, NULL, '', 65, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (67, 53, '清理缓存', '/system.admin/clear', 'system.admin:clear', 2, NULL, '', 66, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (68, 53, '数据接口', '/system.admin/_get_auth_func', 'system.admin:_get_auth_func', 3, NULL, '', 67, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (69, 31, '角色管理', '/system.admingroup/index', 'system.admingroup:index', 0, NULL, '', 68, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (70, 69, '查看', '/system.admingroup/index', 'system.admingroup:index', 1, NULL, '', 69, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (71, 69, '添加', '/system.admingroup/add', 'system.admingroup:add', 1, NULL, '', 70, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (72, 69, '编辑', '/system.admingroup/edit', 'system.admingroup:edit', 1, NULL, '', 71, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (73, 69, '删除', '/system.admingroup/del', 'system.admingroup:del', 1, NULL, '', 72, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (74, 69, '状态', '/system.admingroup/status', 'system.admingroup:status', 2, NULL, '', 73, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (75, 69, '编辑权限', '/system.admingroup/editrules', 'system.admingroup:editrules', 2, NULL, '', 74, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (76, 69, '编辑栏目', '/system.admingroup/editcates', 'system.admingroup:editcates', 2, NULL, '', 75, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (77, 31, '菜单管理', '/system.adminrules/index', 'system.adminrules:index', 0, NULL, '', 76, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (78, 77, '查询', '/system.adminrules/index', 'system.adminrules:index', 1, NULL, '', 77, NULL, 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (79, 77, '添加', '/system.adminrules/add', 'system.adminrules:add', 1, NULL, '', 78, NULL, 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (80, 77, '编辑', '/system.adminrules/edit', 'system.adminrules:edit', 1, NULL, '', 79, NULL, 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (81, 77, '删除', '/system.adminrules/del', 'system.adminrules:del', 1, NULL, '', 80, NULL, 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (82, 77, '状态', '/system.adminrules/status', 'system.adminrules:status', 2, NULL, '', 81, NULL, 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (83, 31, '操作日志', '/system.systemlog/index', 'system.systemlog:index', 0, NULL, '', 82, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (84, 83, '查询', '/system.systemlog/index', 'system.systemlog:index', 1, NULL, '', 83, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (85, 0, 'SEO设置', '#', '#', 0, NULL, '', 84, 'layui-icon-util', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (86, 85, 'URL生成', '/system.rewrite/index', 'system.rewrite:index', 0, NULL, '', 85, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (87, 86, '查看', '/system.rewrite/index', 'system.rewrite:index', 1, NULL, '', 86, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (88, 86, '编辑', '/system.rewrite/basecfg', 'system.rewrite:basecfg', 1, NULL, '', 87, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (89, 86, '生成首页', '/system.rewrite/createindex', 'system.rewrite:createindex', 2, NULL, '', 88, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (90, 86, '生成内容', '/system.rewrite/createhtml', 'system.rewrite:createhtml', 2, NULL, '', 89, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (91, 86, '网站地图', '/system.rewrite/createmap', 'system.rewrite:createmap', 2, NULL, '', 90, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (92, 85, 'SEO优化', '/system.seoer/index', 'system.seoer:index', 0, NULL, '', 91, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (93, 92, '查看流量', '/system.seoer/index', 'system.seoer:index', 1, NULL, '', 92, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (94, 92, '站点列表', '/system.seoer/getsitelist', 'system.seoer:getsitelist', 2, NULL, '', 93, '', 0, 'normal', 0, 1621989905, 1621989905, NULL);
+INSERT INTO `sa_admin_rules` VALUES (95, 92, '目录列表', '/system.seoer/getsitedir', 'system.seoer:getsitedir', 2, NULL, '', 94, '', 0, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (96, 92, '数据接口', '/system.seoer/getdata', 'system.seoer:getdata', 2, NULL, '', 95, '', 0, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (97, 85, '标签管理', '/system.tags/index', 'system.tags:index', 0, NULL, '', 96, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (98, 97, '查看', '/system.tags/index', 'system.tags:index', 1, NULL, '', 97, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (99, 97, '添加', '/system.tags/add', 'system.tags:add', 1, NULL, '', 98, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (100, 97, '编辑', '/system.tags/edit', 'system.tags:edit', 1, NULL, '', 99, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (101, 97, '删除', '/system.tags/del', 'system.tags:del', 1, NULL, '', 100, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (102, 97, '状态', '/system.tags/status', 'system.tags:status', 1, NULL, '', 101, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (103, 85, '采集接口', '/system.collect/index', 'system.collect:index', 0, NULL, '', 102, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (104, 103, '查看', '/system.collect/index', 'system.collect:index', 1, NULL, '', 103, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (105, 103, '添加', '/system.collect/add', 'system.collect:add', 1, NULL, '', 104, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (106, 103, '编辑', '/system.collect/edit', 'system.collect:edit', 1, NULL, '', 105, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (107, 103, '删除', '/system.collect/del', 'system.collect:del', 1, NULL, '', 106, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (108, 103, '状态', '/system.collect/status', 'system.collect:status', 2, NULL, '', 107, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (109, 85, '友情链接', '/system.friendlink/index', 'system.friendlink:index', 0, NULL, '', 108, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (110, 109, '查看', '/system.friendlink/index', 'system.friendlink:index', 1, NULL, '', 109, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (111, 109, '添加', '/system.friendlink/add', 'system.friendlink:add', 1, NULL, '', 110, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (112, 109, '编辑', '/system.friendlink/edit', 'system.friendlink:edit', 1, NULL, '', 111, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (113, 109, '删除', '/system.friendlink/del', 'system.friendlink:del', 1, NULL, '', 112, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (114, 109, '状态', '/system.friendlink/status', 'system.friendlink:status', 2, NULL, '', 113, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (115, 0, '接口管理', '#', '#', 0, NULL, '', 114, 'layui-icon-release', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (116, 115, '项目管理', '/system.project/index', 'system.project:index', 0, NULL, '', 115, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
+INSERT INTO `sa_admin_rules` VALUES (117, 116, '查看', '/system.project/index', 'system.project:index', 1, NULL, '', 116, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (118, 116, '添加', '/system.project/add', 'system.project:add', 1, NULL, '', 117, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (119, 116, '编辑', '/system.project/edit', 'system.project:edit', 1, NULL, '', 118, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (120, 116, '删除', '/system.project/del', 'system.project:del', 1, NULL, '', 119, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (121, 116, '状态', '/system.project/status', 'system.project:status', 2, NULL, '', 120, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (122, 115, '接口配置', '/system.api/index', 'system.api:index', 0, NULL, '', 121, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (123, 122, '查看', '/system.api/index', 'system.api:index', 1, NULL, '', 122, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (124, 122, '添加', '/system.api/add', 'system.api:add', 1, NULL, '', 123, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (125, 122, '编辑', '/system.api/edit', 'system.api:edit', 1, NULL, '', 124, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (126, 122, '删除', '/system.api/del', 'system.api:del', 1, NULL, '', 125, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (127, 122, '状态', '/system.api/status', 'system.api:status', 2, NULL, '', 126, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (128, 122, '请求参数', '/system.api/params', 'system.api:params', 2, NULL, '', 127, '', 0, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (129, 122, '添加参数', '/system.api/paramsadd', 'system.api:paramsadd', 1, NULL, '', 128, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (130, 122, '编辑参数', '/system.api/paramsedit', 'system.api:paramsedit', 1, NULL, '', 129, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (131, 122, '删除参数', '/system.api/paramsdel', 'system.api:paramsdel', 2, NULL, '', 130, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (132, 122, '返回参数', '/system.api/restful', 'system.api:restful', 2, NULL, '', 131, '', 0, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (133, 122, '添加返参', '/system.api/restfuladd', 'system.api:restfuladd', 1, NULL, '', 132, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (134, 122, '编辑返参', '/system.api/restfuledit', 'system.api:restfuledit', 1, NULL, '', 133, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (135, 122, '删除返参', '/system.api/restfuldel', 'system.api:restfuldel', 2, NULL, '', 134, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (136, 122, '请求分组', '/system.api/group', 'system.api:group', 2, NULL, '', 135, '', 0, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (137, 122, '添加分组', '/system.api/groupadd', 'system.api:groupadd', 1, NULL, '', 136, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (138, 122, '编辑分组', '/system.api/groupedit', 'system.api:groupedit', 1, NULL, '', 137, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (139, 122, '删除分组', '/system.api/groupdel', 'system.api:groupdel', 2, NULL, '', 138, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (140, 115, '接口鉴权', '/system.apiaccess/index', 'system.apiaccess:index', 0, NULL, '', 139, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
+INSERT INTO `sa_admin_rules` VALUES (141, 140, '查看', '/system.apiaccess/index', 'system.apiaccess:index', 1, NULL, '', 140, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (142, 140, '添加', '/system.apiaccess/add', 'system.apiaccess:add', 1, NULL, '', 141, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (143, 140, '编辑', '/system.apiaccess/edit', 'system.apiaccess:edit', 1, NULL, '', 142, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (144, 140, '删除', '/system.apiaccess/del', 'system.apiaccess:del', 1, NULL, '', 143, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (145, 140, '状态', '/system.apiaccess/status', 'system.apiaccess:status', 2, NULL, '', 144, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (146, 0, '高级管理', '#', '#', 0, NULL, '', 145, 'layui-icon-engine', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (147, 146, '公司管理', '/system.company/index', 'system.company:index', 0, NULL, '', 146, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (148, 147, '查看', '/system.company/index', 'system.company:index', 1, NULL, '', 147, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (149, 147, '添加', '/system.company/add', 'system.company:add', 1, NULL, '', 148, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (150, 147, '编辑', '/system.company/edit', 'system.company:edit', 1, NULL, '', 149, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (151, 147, '删除', '/system.company/del', 'system.company:del', 1, NULL, '', 150, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (152, 147, '状态', '/system.company/status', 'system.company:status', 2, NULL, '', 151, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (153, 146, '部门管理', '/system.department/index', 'system.department:index', 0, NULL, '', 152, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (154, 153, '查看', '/system.department/index', 'system.department:index', 1, NULL, '', 153, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (155, 153, '添加', '/system.department/add', 'system.department:add', 1, NULL, '', 154, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (156, 153, '编辑', '/system.department/edit', 'system.department:edit', 1, NULL, '', 155, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (157, 153, '删除', '/system.department/del', 'system.department:del', 1, NULL, '', 156, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (158, 153, '状态', '/system.department/status', 'system.department:status', 2, NULL, '', 157, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (159, 146, '岗位管理', '/system.jobs/index', 'system.jobs:index', 0, NULL, '', 158, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (160, 159, '查看', '/system.jobs/index', 'system.jobs:index', 1, NULL, '', 159, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (161, 159, '添加', '/system.jobs/add', 'system.jobs:add', 1, NULL, '', 160, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (162, 159, '编辑', '/system.jobs/edit', 'system.jobs:edit', 1, NULL, '', 161, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (163, 159, '删除', '/system.jobs/del', 'system.jobs:del', 1, NULL, '', 162, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (164, 159, '状态', '/system.jobs/status', 'system.jobs:status', 2, NULL, '', 163, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (165, 146, '字典设置', '/system.dictionary/index', 'system.dictionary:index', 0, NULL, '', 164, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (166, 165, '查看', '/system.dictionary/index', 'system.dictionary:index', 1, NULL, '', 165, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (167, 165, '添加', '/system.dictionary/add', 'system.dictionary:add', 1, NULL, '', 166, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (168, 165, '编辑', '/system.dictionary/edit', 'system.dictionary:edit', 1, NULL, '', 167, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (169, 165, '删除', '/system.dictionary/del', 'system.dictionary:del', 1, NULL, '', 168, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
+INSERT INTO `sa_admin_rules` VALUES (170, 165, '状态', '/system.dictionary/status', 'system.dictionary:status', 2, NULL, '', 169, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (171, 146, '附件管理', '/system.adminfile/index', 'system.adminfile:index', 0, NULL, '', 170, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (172, 171, '查看', '/system.adminfile/index', 'system.adminfile:index', 1, NULL, '', 171, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (173, 171, '编辑', '/system.adminfile/edit', 'system.adminfile:edit', 1, NULL, '', 172, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (174, 171, '删除', '/system.adminfile/del', 'system.adminfile:del', 1, NULL, '', 173, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (175, 171, '附件上传', '/upload/upload', 'upload:upload', 2, NULL, '', 174, '', 0, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (176, 171, '头像上传', '/upload/avatar', 'upload:avatar', 2, NULL, '', 175, '', 0, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (177, 146, '模型管理', '/system.channel/index', 'system.channel:index', 0, NULL, '', 176, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (178, 177, '查看', '/system.channel/index', 'system.channel:index', 1, NULL, '', 177, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (179, 177, '添加', '/system.channel/add', 'system.channel:add', 1, NULL, '', 178, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (180, 177, '编辑', '/system.channel/edit', 'system.channel:edit', 1, NULL, '', 179, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (181, 177, '删除', '/system.channel/del', 'system.channel:del', 1, NULL, '', 180, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (182, 0, '插件应用', '#', '#', 0, NULL, '', 181, 'layui-icon-component', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (183, 182, '插件管理', '/system.plugin/index', 'system.plugin:index', 0, NULL, '', 182, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (184, 183, '查看', '/system.plugin/index', 'system.plugin:index', 1, NULL, '', 183, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (185, 183, '安装', '/system.plugin/install', 'system.plugin:install', 1, NULL, '', 184, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (186, 183, '卸载', '/system.plugin/uninstall', 'system.plugin:uninstall', 1, NULL, '', 185, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (187, 183, '配置', '/system.plugin/config', 'system.plugin:config', 1, NULL, '', 186, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (188, 183, '状态', '/system.plugin/status', 'system.plugin:status', 2, NULL, '', 187, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (189, 183, '升级', '/system.plugin/upgrade', 'system.plugin:upgrade', 2, NULL, '', 188, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (190, 183, '数据表', '/system.plugin/tables', 'system.plugin:tables', 2, NULL, '', 189, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (191, 182, '插件钩子', '/system.pluginhook/index', 'system.pluginhook:index', 0, NULL, '', 190, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (192, 191, '查看', '/system.pluginhook/index', 'system.pluginhook:index', 1, NULL, '', 191, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (193, 191, '添加', '/system.pluginhook/add', 'system.pluginhook:add', 1, NULL, '', 192, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (194, 191, '编辑', '/system.pluginhook/edit', 'system.pluginhook:edit', 1, NULL, '', 193, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (195, 191, '删除', '/system.pluginhook/del', 'system.pluginhook:del', 1, NULL, '', 194, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (196, 191, '状态', '/system.pluginhook/status', 'system.pluginhook:status', 2, NULL, '', 195, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (197, 182, '占位菜单', '#', '#', 0, NULL, '', 196, '', 1, 'hidden', 1, 1621989909, 1621989909, NULL);
+INSERT INTO `sa_admin_rules` VALUES (198, 197, '查看', '#', '#', 1, NULL, '', 197, '', 1, 'hidden', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (199, 197, '安装', '#', '#', 1, NULL, '', 198, '', 1, 'hidden', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (200, 197, '卸载', '#', '#', 1, NULL, '', 199, '', 1, 'hidden', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (201, 197, '预留1', '#', '#', 1, NULL, '', 200, '', 1, 'hidden', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (202, 197, '预留2', '#', '#', 2, NULL, '', 201, '', 1, 'hidden', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (203, 0, '会员管理', '#', '#', 0, NULL, '', 202, 'layui-icon-user', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (204, 203, '会员管理', '/system.user/index', 'system.user:index', 0, NULL, '', 203, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (205, 204, '查看', '/system.user/index', 'system.user:index', 1, NULL, '', 204, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (206, 204, '添加', '/system.user/add', 'system.user:add', 1, NULL, '', 205, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (207, 204, '编辑', '/system.user/edit', 'system.user:edit', 1, NULL, '', 206, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (208, 204, '删除', '/system.user/del', 'system.user:del', 1, NULL, '', 207, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (209, 204, '状态', '/system.user/status', 'system.user:status', 2, NULL, '', 208, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (210, 203, '评论管理', '/system.comment/index', 'system.comment:index', 0, NULL, '', 209, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (211, 210, '查看', '/system.comment/index', 'system.comment:index', 1, NULL, '', 210, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (212, 210, '回复', '/system.comment/view', 'system.comment:view', 1, NULL, '', 211, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (213, 210, '添加', '/system.comment/add', 'system.comment:add', 1, NULL, '', 212, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (214, 210, '编辑', '/system.comment/edit', 'system.comment:edit', 1, NULL, '', 213, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (215, 210, '删除', '/system.comment/del', 'system.comment:del', 1, NULL, '', 214, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (216, 210, '状态', '/system.comment/status', 'system.comment:status', 2, NULL, '', 215, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (217, 203, '留言板管理', '/system.guestbook/index', 'system.guestbook:index', 0, NULL, '', 216, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (218, 217, '查看', '/system.guestbook/index', 'system.guestbook:index', 1, NULL, '', 217, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (219, 217, '回复', '/system.guestbook/reply', 'system.guestbook:reply', 1, NULL, '', 218, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (220, 217, '删除', '/system.guestbook/del', 'system.guestbook:del', 1, NULL, '', 219, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (221, 217, '状态', '/system.guestbook/status', 'system.guestbook:status', 2, NULL, '', 220, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (222, 203, '会员组管理', '/system.usergroup/index', 'system.usergroup:index', 0, NULL, '', 221, '', 1, 'normal', 0, 1621989910, 1621989910, NULL);
+INSERT INTO `sa_admin_rules` VALUES (223, 222, '查看', '/system.usergroup/index', 'system.usergroup:index', 1, NULL, '', 222, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (224, 222, '添加', '/system.usergroup/add', 'system.usergroup:add', 1, NULL, '', 223, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (225, 222, '编辑', '/system.usergroup/edit', 'system.usergroup:edit', 1, NULL, '', 224, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (226, 222, '删除', '/system.usergroup/del', 'system.usergroup:del', 1, NULL, '', 225, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (227, 222, '状态', '/system.usergroup/status', 'system.usergroup:status', 2, NULL, '', 226, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (228, 0, '其他设置', '#', '#', 0, NULL, '', 227, 'layui-icon-about', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (229, 228, '回收站', '/system.recyclebin/index', 'system.recyclebin:index', 0, NULL, '', 228, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (230, 229, '还原', '/system.recyclebin/restore', 'system.recyclebin:restore', 1, NULL, '', 229, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (231, 229, '销毁', '/system.recyclebin/destroy', 'system.recyclebin:destroy', 1, NULL, '', 230, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (232, 229, '查看', '/system.recyclebin/index', 'system.recyclebin:index', 1, NULL, '', 231, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (233, 228, '数据库', '/system.database/index', 'system.database:index', 0, NULL, '', 232, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (234, 233, '查看', '/system.database/index', 'system.database:index', 1, NULL, '', 233, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (235, 233, '优化', '/system.database/optimize', 'system.database:optimize', 1, NULL, '', 234, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (236, 233, '修复', '/system.database/repair', 'system.database:repair', 1, NULL, '', 235, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (237, 233, '配置', '/system.database/config', 'system.database:config', 1, NULL, '', 236, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (238, 233, '备份', '/system.database/export', 'system.database:export', 1, NULL, '', 237, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (239, 228, '限权标志', '###', '###', 3, NULL, '', 238, '', 0, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (240, 239, '栏目限权', 'everycate', 'everycate', 3, '是否限制栏目权限！', '', 239, '', 1, 'normal', 1, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (241, 239, '编辑限权', 'privateauth', 'privateauth', 3, '只可编辑自己发布的数据！请勿删除！', '', 240, '', 1, 'normal', 1, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (242, 228, '模板权限', '/index.tpl/index', 'index.tpl:index', 2, NULL, '', 241, '', 0, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (243, 242, '查看模板', '/index.tpl/showtpl', 'index.tpl:showtpl', 2, NULL, '', 242, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
+INSERT INTO `sa_admin_rules` VALUES (244, 242, '编辑模板', '/index.tpl/edittpl', 'index.tpl:edittpl', 2, NULL, '', 243, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
 
 -- ----------------------------
 -- Table structure for sa_adwords
@@ -407,6 +411,7 @@ DROP TABLE IF EXISTS `sa_api`;
 CREATE TABLE `sa_api`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `app_id` int(11) NOT NULL COMMENT 'appid',
+  `pid` int(11) NOT NULL COMMENT '分组ID',
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '接口名称',
   `class` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '接口类/方法名',
   `hash` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '路由映射',
@@ -427,9 +432,9 @@ CREATE TABLE `sa_api`  (
 -- ----------------------------
 -- Records of sa_api
 -- ----------------------------
-INSERT INTO `sa_api` VALUES (1, 1, '接口示例', 'index/index', 'b5mxzuc2ea', 1, 1, 1, 0, 1, 'v1', '', 'http://www.swiftadmin.net/api/b5mxzuc2ea?id=2&cid=1', '{\"error_code\":\"20000\",\"error_msg\":\"search word not found\"}', 1612082386, NULL);
-INSERT INTO `sa_api` VALUES (2, 1, '获取分类', 'index/list', 'hdxtwfcd42', 1, 1, 1, 1, 2, 'v1.1.3', '', NULL, NULL, 1612083114, NULL);
-INSERT INTO `sa_api` VALUES (3, 1, '获取节点', 'index/nodes', 'tc4fdkaghq', 1, 1, 1, 2, 3, 'v1', '', NULL, NULL, 1612083147, NULL);
+INSERT INTO `sa_api` VALUES (1, 1, 0, '接口示例', 'index/index', 'b5mxzuc2ea', 1, 1, 1, 0, 1, 'v1', '', 'http://www.swiftadmin.net/api/b5mxzuc2ea?id=2&cid=1', '{\"error_code\":\"20000\",\"error_msg\":\"search word not found\"}', 1612082386, NULL);
+INSERT INTO `sa_api` VALUES (2, 1, 0, '获取分类', 'index/list', 'hdxtwfcd42', 1, 1, 1, 1, 2, 'v1.1.3', '', NULL, NULL, 1612083114, NULL);
+INSERT INTO `sa_api` VALUES (3, 1, 0, '获取节点', 'index/nodes', 'tc4fdkaghq', 1, 1, 1, 2, 3, 'v1', '', NULL, NULL, 1612083147, NULL);
 
 -- ----------------------------
 -- Table structure for sa_api_access
@@ -474,6 +479,30 @@ CREATE TABLE `sa_api_condition`  (
 -- Records of sa_api_condition
 -- ----------------------------
 INSERT INTO `sa_api_condition` VALUES ('72225c90a6430113', 1, NULL, 10, 1617199269, 1617199237);
+
+-- ----------------------------
+-- Table structure for sa_api_group
+-- ----------------------------
+DROP TABLE IF EXISTS `sa_api_group`;
+CREATE TABLE `sa_api_group`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `pid` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '上级分类',
+  `app_id` int(11) NOT NULL COMMENT '应用类型',
+  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '分组名称',
+  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组说明',
+  `sort` int(11) NULL DEFAULT NULL COMMENT '分组排序',
+  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api请求参数表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sa_api_group
+-- ----------------------------
+INSERT INTO `sa_api_group` VALUES (1, 0, 1, '概述', 'API开始', 1, 1621843822, NULL);
+INSERT INTO `sa_api_group` VALUES (2, 0, 1, '获取分类', '分类接口', 2, 1621843876, NULL);
+INSERT INTO `sa_api_group` VALUES (3, 0, 1, '接口验证', '会员分类', 3, 1621843892, NULL);
+INSERT INTO `sa_api_group` VALUES (4, 1, 1, '基础接口', 'base', 4, 1621846765, NULL);
 
 -- ----------------------------
 -- Table structure for sa_api_params
@@ -549,7 +578,7 @@ CREATE TABLE `sa_article`  (
   `hits_month` mediumint(8) NULL DEFAULT NULL COMMENT '月点击',
   `hits_lasttime` int(11) NULL DEFAULT NULL COMMENT '点击时间',
   `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
-  `stars` tinyint(1) NULL DEFAULT NULL COMMENT '星级',
+  `stars` tinyint(1) UNSIGNED NULL DEFAULT 1 COMMENT '星级',
   `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
   `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
   `up` mediumint(8) NULL DEFAULT NULL COMMENT '顶一下',
@@ -847,7 +876,7 @@ CREATE TABLE `sa_download`  (
   `hits_month` mediumint(8) NULL DEFAULT NULL COMMENT '月点击',
   `hits_lasttime` int(11) NULL DEFAULT NULL COMMENT '点击时间',
   `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
-  `stars` tinyint(1) NULL DEFAULT NULL COMMENT '星级',
+  `stars` tinyint(1) UNSIGNED NULL DEFAULT 1 COMMENT '星级',
   `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
   `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
   `up` mediumint(8) NULL DEFAULT NULL COMMENT '顶一下',
@@ -883,6 +912,7 @@ DROP TABLE IF EXISTS `sa_friendlink`;
 CREATE TABLE `sa_friendlink`  (
   `id` tinyint(4) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `title` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '友链名称',
+  `desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '友链简介',
   `logo` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '友链logo',
   `url` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '友链地址',
   `type` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '友链类型',
@@ -896,8 +926,8 @@ CREATE TABLE `sa_friendlink`  (
 -- ----------------------------
 -- Records of sa_friendlink
 -- ----------------------------
-INSERT INTO `sa_friendlink` VALUES (1, '百度', '/upload/images/2021-04-23/6082688028cc5.png', 'http://www.baidu.com/', '社区', 0, 1, 1602040473, NULL);
-INSERT INTO `sa_friendlink` VALUES (2, 'swiftadmin', '', 'http://www.swiftadmin.net', '合作伙伴', NULL, 1, 1619159727, NULL);
+INSERT INTO `sa_friendlink` VALUES (1, '百度', NULL, '/upload/images/2021-04-23/6082688028cc5.png', 'http://www.baidu.com/', '社区', 0, 1, 1602040473, NULL);
+INSERT INTO `sa_friendlink` VALUES (2, 'swiftadmin', NULL, '', 'http://www.swiftadmin.net', '合作伙伴', NULL, 1, 1619159727, NULL);
 
 -- ----------------------------
 -- Table structure for sa_guestbook
@@ -954,7 +984,7 @@ CREATE TABLE `sa_image`  (
   `hits_month` mediumint(8) NULL DEFAULT NULL COMMENT '月点击',
   `hits_lasttime` int(11) NULL DEFAULT NULL COMMENT '点击时间',
   `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
-  `stars` tinyint(1) NULL DEFAULT NULL COMMENT '星级',
+  `stars` tinyint(1) UNSIGNED NULL DEFAULT 1 COMMENT '星级',
   `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
   `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
   `up` mediumint(8) NULL DEFAULT NULL COMMENT '顶一下',
@@ -1089,7 +1119,7 @@ CREATE TABLE `sa_product`  (
   `hits_month` mediumint(8) NULL DEFAULT NULL COMMENT '月点击',
   `hits_lasttime` int(11) NULL DEFAULT NULL COMMENT '点击时间',
   `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
-  `stars` tinyint(1) NULL DEFAULT NULL COMMENT '星级',
+  `stars` tinyint(1) UNSIGNED NULL DEFAULT 1 COMMENT '星级',
   `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
   `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
   `up` mediumint(8) NULL DEFAULT NULL COMMENT '顶一下',
@@ -1124,7 +1154,7 @@ INSERT INTO `sa_product` VALUES (1, 5, 5, 'vivo S9 5G手机 8GB+256GB 印象拾�
 DROP TABLE IF EXISTS `sa_project`;
 CREATE TABLE `sa_project`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `pid` int(1) NULL DEFAULT NULL,
+  `pid` int(1) UNSIGNED NULL DEFAULT 0,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `app_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
@@ -1231,6 +1261,7 @@ CREATE TABLE `sa_user`  (
   `pwd` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '密码',
   `qq` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'QQ',
   `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '头像',
+  `heart` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户心情',
   `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'emain',
   `mobile` bigint(11) NULL DEFAULT NULL COMMENT '手机号',
   `modify_name` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '修改次数',
@@ -1240,6 +1271,11 @@ CREATE TABLE `sa_user`  (
   `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态',
   `app_id` int(11) NULL DEFAULT NULL COMMENT '用户appid',
   `app_secret` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户appsecret',
+  `hits` mediumint(8) NULL DEFAULT NULL COMMENT '点击量',
+  `hits_day` mediumint(8) NULL DEFAULT NULL COMMENT '日点击',
+  `hits_week` mediumint(8) NULL DEFAULT NULL COMMENT '周点击',
+  `hits_month` mediumint(8) NULL DEFAULT NULL COMMENT '月点击',
+  `hits_lasttime` int(11) NULL DEFAULT NULL COMMENT '点击时间',
   `valicode` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '激活码',
   `loginip` bigint(12) NULL DEFAULT NULL COMMENT '登录ip',
   `logintime` int(10) NULL DEFAULT NULL COMMENT '登录时间',
@@ -1255,7 +1291,7 @@ CREATE TABLE `sa_user`  (
 -- ----------------------------
 -- Records of sa_user
 -- ----------------------------
-INSERT INTO `sa_user` VALUES (1, 1, 'test', '测试用户', '94b35cfc5e48ba2e317b880ef8ca14f54ec134f3d2027dd160e7c9c514b88ef9', '1', '/upload/avatar/a0b923820dcc509a_100x100.png?GS9U8WQvOBhk', 'ceshi@foxmail.com', NULL, 0, 100, '你叫什么？', '不告诉你', 1, 10001, 'qIsSBNpcOuJeyw8mb9KilQFLWX34GEg5', NULL, 2130706433, 1620062131, 100, 2130706433, 1597125391, NULL);
+INSERT INTO `sa_user` VALUES (1, 1, 'test', '测试用户', '4c281ff694f1b7f9ac95c5fc7e205d388fdad53d9d617ad4a124242b11557a1e', '1', '/upload/avatar/a0b923820dcc509a_100x100.png?GS9U8WQvOBhk', NULL, 'ceshi@foxmail.com', NULL, 0, 100, '你叫什么？', '不告诉你', 1, 10001, 'qIsSBNpcOuJeyw8mb9KilQFLWX34GEg5', NULL, NULL, NULL, NULL, NULL, NULL, 2130706433, 1620062131, 100, 2130706433, 1597125391, NULL);
 
 -- ----------------------------
 -- Table structure for sa_user_group
@@ -1392,7 +1428,7 @@ CREATE TABLE `sa_video`  (
   `hits_month` mediumint(8) NULL DEFAULT NULL COMMENT '月点击',
   `hits_lasttime` int(11) NULL DEFAULT NULL COMMENT '点击时间',
   `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
-  `stars` tinyint(1) NULL DEFAULT NULL COMMENT '星级',
+  `stars` tinyint(1) UNSIGNED NULL DEFAULT 1 COMMENT '星级',
   `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
   `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
   `up` mediumint(8) NULL DEFAULT NULL COMMENT '顶一下',
@@ -1419,6 +1455,6 @@ CREATE TABLE `sa_video`  (
 -- ----------------------------
 -- Records of sa_video
 -- ----------------------------
-INSERT INTO `sa_video` VALUES (1, 3, 3, '电视剧版有翡', '电视剧版有匪/有匪', 'asdas', '', 'Y', '#9d3636', NULL, '一句话简述', '台湾是中国的', 'BD高清', '赵丽颖 王一博 张慧雯 陈若轩 周洁琼 孙坚', '1,5', '/upload/images/2021-04-26/thumb_6086c6252853a.jpg', '/upload/images/2021-04-26/6086c6252853a.jpg', '吴锦源', '大陆', '国语', 2021, 13, '36', 'ckplayer', '', '', '第01集$https://d.mhqiyi.com/20210224/LfNO3InW/index.m3u8#第02集$https://mhcdn.mhqiyi.com/20210303/QiLcl2jL/index.m3u8#', 1, 1619712000, 116, '周四', '', '江湖,李徵,年前,祸乱,一代,大侠,南刀', '多年前江湖祸乱，一代大侠南刀李徵奉旨围匪，从此便有了四十八寨。后李徵病逝，江湖名门也相继落败。李徵的女儿李瑾容接任大当家，与周以棠成婚。周家有女初成长，...', '&lt;p&gt;多年前江湖祸乱，一代大侠南刀李徵奉旨围匪，从此便有了四十八寨。后李徵病逝，江湖名门也相继落败。李徵的女儿李瑾容接任大当家，与周以棠成婚。周家有女初成长，周翡所生的朝代却是一个江湖没落的时候，前辈们的光辉与意气风发在南刀李徵逝去后逐渐都销声匿迹了。周翡十三岁那年离家出走，差点命丧洗墨江，被端王谢允救下，冥冥之中结下良缘。三年后，两位头角峥嵘的少年再次在霍家堡相遇，引出了多年前隐匿江湖的各类宗师高手。同时遭到曹贼手下北斗七位高手的追杀，令两位少年陷入了一场暗潮汹涌的阴谋。周翡以&amp;ldquo;破雪刀&amp;rdquo;之招数名震江湖，以浩然之姿，为这江湖名册再添上了浓墨重彩的一笔。&lt;/p&gt;\n&lt;p&gt;&lt;img src=&quot;/upload/images/2021-04-26/6086c6252853a.jpg&quot; alt=&quot;&quot; width=&quot;268&quot; height=&quot;375&quot; /&gt;&lt;/p&gt;', 0, 0, 0, 0, NULL, 0, 3, 0, 1, 0, 0, 0.0, 0, '', '', NULL, 'admin', NULL, NULL, '', 1619450879, 1617632959, NULL);
+INSERT INTO `sa_video` VALUES (1, 3, 3, '电视剧版有翡', '电视剧版有匪/有匪', 'asdas', '', 'Y', '#9d3636', 'new', '一句话简述', '台湾是中国的', 'BD高清', '赵丽颖 王一博 张慧雯 陈若轩 周洁琼 孙坚', '1,5', '/upload/images/2021-04-26/thumb_6086c6252853a.jpg', '/upload/images/2021-04-26/6086c6252853a.jpg', '吴锦源', '大陆', '国语', 2021, 13, '36', 'ckplayer', '', '', '第01集$https://d.mhqiyi.com/20210224/LfNO3InW/index.m3u8#第02集$https://mhcdn.mhqiyi.com/20210303/QiLcl2jL/index.m3u8#', 1, 1619712000, 116, '周四', '', '江湖,李徵,年前,祸乱,一代,大侠,南刀', '多年前江湖祸乱，一代大侠南刀李徵奉旨围匪，从此便有了四十八寨。后李徵病逝，江湖名门也相继落败。李徵的女儿李瑾容接任大当家，与周以棠成婚。周家有女初成长，...', '&lt;p&gt;多年前江湖祸乱，一代大侠南刀李徵奉旨围匪，从此便有了四十八寨。后李徵病逝，江湖名门也相继落败。李徵的女儿李瑾容接任大当家，与周以棠成婚。周家有女初成长，周翡所生的朝代却是一个江湖没落的时候，前辈们的光辉与意气风发在南刀李徵逝去后逐渐都销声匿迹了。周翡十三岁那年离家出走，差点命丧洗墨江，被端王谢允救下，冥冥之中结下良缘。三年后，两位头角峥嵘的少年再次在霍家堡相遇，引出了多年前隐匿江湖的各类宗师高手。同时遭到曹贼手下北斗七位高手的追杀，令两位少年陷入了一场暗潮汹涌的阴谋。周翡以&amp;ldquo;破雪刀&amp;rdquo;之招数名震江湖，以浩然之姿，为这江湖名册再添上了浓墨重彩的一笔。&lt;/p&gt;\n&lt;p&gt;&lt;img src=&quot;/upload/images/2021-04-26/6086c6252853a.jpg&quot; alt=&quot;&quot; width=&quot;268&quot; height=&quot;375&quot; /&gt;&lt;/p&gt;', 0, 0, 0, 0, NULL, 0, 3, 0, 1, 0, 0, 0.0, 0, '', '', NULL, 'admin', NULL, NULL, '', 1621990231, 1617632959, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

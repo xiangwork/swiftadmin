@@ -11,8 +11,9 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 
 namespace app\index\controller;
-use app\HomeController;
 
+
+use app\HomeController;
 class Hits extends HomeController
 {
 	// JS点击调用函数

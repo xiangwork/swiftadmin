@@ -7,6 +7,7 @@ use think\facade\Config;
 use think\facade\Request;
 use app\common\model\system\Channel;
 use app\common\model\system\Category;
+use app\common\model\system\Dictionary;
 
 // 全局系统常量
 const REWRITE   =  1;
@@ -744,15 +745,15 @@ if (!function_exists('mysql_common')) {
 
 		//优先从缓存调用
 		$currentPage = Config::get('current.page') ?? 1;
-		if(saenv('cache_status') && $currentPage < 2) {
+		if($currentPage < 2) {
 			
             // 数据缓存
 			$data_cache_name = hash_hmac("sha256",implode(',',$param),saenv('auth_key'));
-			$data_cache_content = Cache::get($data_cache_name);
+			$data_cache_content = system_cache($data_cache_name);
 
             // 数据表缓存
             $model_cache_name = hash_hmac('sha256','MODEL',saenv('auth_key'));
-            $model_cache_content = Cache::get($model_cache_name);
+            $model_cache_content = system_cache($model_cache_name);
 			if($data_cache_content) {
 				return $data_cache_content;
 			}
@@ -941,10 +942,10 @@ if (!function_exists('mysql_common')) {
         }
 
         // 设置缓存 
-		if(saenv('cache_status') && $currentPage < 2){
-			Cache::set($model_cache_name,$model_cache_content,saenv('cache_time'));
-			Cache::set($data_cache_name,['data'=>$list,'total'=>$count],saenv('cache_time'),ARTICLE);
-		}	
+		if($currentPage < 2){
+			system_cache($model_cache_name,$model_cache_content,saenv('cache_time'));
+			system_cache($data_cache_name,['data'=>$list,'total'=>$count],saenv('cache_time'),ARTICLE);
+		}
 		
 		return ['data'=>$list,'total'=>$count];
 	}
@@ -1073,12 +1074,13 @@ if (!function_exists('saenv')) {
 	 */
 	function saenv($name = null)
 	{
-	
 		if (!empty($name)) {
+
 			$config = config('system');
 			if (!is_array($name)) {
 				$name = explode('.',$name);
 			}
+
 			foreach ($name as  $val) {
 				if (isset($config[$val])) {
 					$config = $config[$val];
@@ -1113,6 +1115,47 @@ if (!function_exists('saenv')) {
 		return false;
 	}
 }
+
+if (!function_exists('system_cache')) {
+    /**
+     * 全局缓存控制函数
+     * @param  string ...cache
+     * @return object||array
+     */	
+	function system_cache(string $name = null, $value = '', $options = null, $tag = null)
+	{
+		if (!saenv('cache_status')) {
+			return false;
+		}
+
+		if (is_null($name)) {
+			return app('cache');
+		}
+
+		$name = request()->rootDomain().'/'.$name;
+		if ('' === $value) {
+			// 获取缓存
+			return 0 === strpos($name, '?') ? Cache::has(substr($name, 1)) : Cache::get($name);
+		} elseif (is_null($value)) {
+			// 删除缓存
+			return Cache::delete($name);
+		}
+
+		// 缓存数据
+		if (is_array($options)) {
+			$expire = $options['expire'] ?? null;
+		} else {
+			$expire = $options;
+		}
+
+		if (is_null($tag)) {
+			return Cache::set($name, $value, $expire);
+		} else {
+			return Cache::tag($tag)->set($name, $value, $expire);
+		}
+	}
+}
+
 
 if (!function_exists('parse_tag')) {
     /**
@@ -1483,8 +1526,9 @@ if (!function_exists('build_request_url')) {
 		$domain = saenv('url_domain') ? true : false;
 		if (saenv('url_model') == TRUE) {
 			
+			
 			// 替换规则
-			$search	 = ['listdir','sublist','id','hash','pinyin'];
+			$search	 = ['[listdir]','[sublist]','[id]','[hash]','[pinyin]'];
 			if ($variable == 'content_page') {
 				foreach (Category::getListCache() as $value) {
 					if ($value['id'] == $data['pid']) {
@@ -1495,7 +1539,7 @@ if (!function_exists('build_request_url')) {
 			else {
 				$category = !empty($data) ? $data : Config::get('current.detail');
 			}
-
+			
 			// 栏目数据备份
 			$nextcategory = $category;
 			if (strpos($readurl,'sublist') && $category['pid']) {
@@ -1523,7 +1567,6 @@ if (!function_exists('build_request_url')) {
 
 			$readurl = str_replace($search,$replace,$readurl);
 			$readurl = $domain ? saenv('site_http').$readurl : $readurl;
-
 			if ($variable == 'list_page') {
 				$readurl = get_page($param['page'],$param['total'],$readurl);
 			}
@@ -1565,7 +1608,7 @@ if (!function_exists('get_read_url')) {
 	 * @param mixed|null 		$readurl	返回访问地址
 	 * @return string
 	 */
-	function get_read_url($url = null,$param = [],$rules = true, $readurl = null)
+	function get_read_url($url = null,$param = [], $rules = true, $readurl = null)
 	{
 		$char = substr($url,0,1);
 		$readurl = $char != '/' ? '/'.$url : $url;
@@ -1579,7 +1622,14 @@ if (!function_exists('get_read_url')) {
 				$url = trim($url,'/');
 				$url = explode('/',$url);
 				$readurl = array_merge([current($url)],$param);
-				$readurl = '/'.implode('/',$readurl).'/';
+				$replace = str_replace('/sublist/','/',saenv('content_page'));
+
+				// 在这里读取地址信息
+				$listdir = current($readurl);
+				$param   = end($readurl);
+				$readurl = str_replace('[listdir]',$listdir,$replace);
+				$readurl = str_replace(['[id]','[hash]','[pinyin]'],$param,$readurl);
+				
 			} else {
 
 				// 需要GET的地址
@@ -1665,6 +1715,43 @@ if (!function_exists('get_category_json')) {
 	{
 		$list = Category::getListCate($pid,$cid,['limit'=>(int)$limit,'field'=>$field,'order'=>$order]);
 		return json_encode(list_to_tree($list));
+	}
+}
+
+if (!function_exists('get_dictionary_alias')) {
+    /**
+     * 获取字典别名
+     * @param  string $name 字符串
+     * @return string|array
+     */	
+	function get_dictionary_alias(string $name = null) 
+	{
+		if (!$name) {
+			return false;
+		}
+
+		$list = system_cache('dictionary');
+		if (empty($list)) {
+			$list = Dictionary::select()->toArray();
+			system_cache('dictionary',$list);
+		}
+
+		if ($find = list_search($list,['name'=>$name])) {
+			return $find['alias'];
+		}
+	}
+}
+
+if (!function_exists('get_dictionary_jump')) {
+    /**
+     * 生成字典跳转地址
+     * @param  string $name 字符串
+     * @return string
+     */	
+	function get_dictionary_jump(string $name)
+	{
+		$domain = saenv('url_domain') ? true : false;
+		return (string)url('/jump/'.$name)->domain($domain);
 	}
 }
 
@@ -1820,13 +1907,11 @@ if (!function_exists('get_adwords')) {
 	function get_adwords($id,$charset = 'utf8')
 	{
 		$data_cache_name = hash('sha256',$id.'_ADWORDS');
-		$data_cache_content = saenv('cache_status') ? cache($data_cache_name) : null;
+		$data_cache_content = system_cache($data_cache_name);
 
 		if (empty($data_cache_content)) {
 			$data_cache_content = Db::name('adwords')->where('alias',$id)->find();
-			if (saenv('cache_status')) {
-				cache($data_cache_name,$data_cache_content,saenv('cache_time'));
-			}
+			system_cache($data_cache_name,$data_cache_content,saenv('cache_time'));
 		}
 		
 		// 过期则不展现
@@ -1852,7 +1937,7 @@ if (!function_exists('get_system_logs')) {
 		$array['params'] = serialize(Request::param());
 		$array['method'] = Request::method(); 
 		$array['url'] = Request::baseUrl(); 
-		$array['ip'] = ip2long(Request::ip());
+		$array['ip'] = Request::ip();
 		$array['name'] = session('AdminLogin.name');
 
 		if (empty($array['name'])) {
@@ -1875,7 +1960,7 @@ if (!function_exists('clear_api_cache')) {
 
 			$token = $token['app_id'].'.'.$token['app_secret'];
 		}
-		cache(md5hash($token),null);
+		system_cache(md5hash($token),null);
 	}
 }
 

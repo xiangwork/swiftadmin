@@ -265,7 +265,7 @@ class Salibs extends TagLib {
 		<?php
 			\$path = root_path().'app/index/view/custom/';
 			\$list = glob(\$path.'*.html');
-			\$list = str_replace(\$path,'',\$list);
+			\$list = str_replace(array(\$path,'.html'),'',\$list);
 			foreach (\$list as \$key => {$id}):
 		?>
 		$content
@@ -411,8 +411,9 @@ class Salibs extends TagLib {
 		<?php
 			\$where = [];
 			if ('{$tags['type']}' != 'null') {
-				\$where = ['type'=>'{$tags['type']}'];
+				\$where[] = ['type','=','{$tags['type']}'];
 			} 
+			\$where[] = ['status','=',1];
 			\$list = \app\common\model\system\Friendlink::where(\$where)->select()->toArray();
 			foreach (\$list as \$key => {$tags['id']}):
 		?>
@@ -436,7 +437,7 @@ class Salibs extends TagLib {
 		
 		$html = <<<Eof
 		<?php
-			\$list = explode(',','资源,社区,合作伙伴,关于我们');
+			\$list = explode(',','资源,社区,帮助,合作伙伴');
 			foreach (\$list as \$key => {$id}):
 		?>
 		$content

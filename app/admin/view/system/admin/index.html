@@ -142,7 +142,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('角色权限')}</label>
         <div class="layui-input-inline">
-            <div class="organize" name="group_id" ></div>
+            <div class="group" name="group_id" ></div>
         </div>
 
         <label class="layui-form-label">{:__('状态')}</label>
@@ -194,26 +194,15 @@
 </div>
 </script>
 
-<!-- // 编辑栏目权限列表 -->
-<script type="text/html" id="cateForms">
-<div class="layui-fluid layui-bg-white" >
-    <form class="layui-form" action="{:url('/system.admin/index')}">
-    <div class="layui-authtree"><div id="cateTree"></div></div>
-    <div class="layui-footer layui-form-item layui-center "  >
-        <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('取消')}</button>
-        <button class="layui-btn" lay-filter="submitPage" lay-submit>{:__('提交')}</button>
-    </div>
-    </form>
-</div>
-</script>
-
 <!-- // 列表编辑框 -->
 <script type="text/html" id="tableBar"> 
     <a class="layui-table-text" lay-title="{:__('编辑')} {{d.name}}" lay-callback="edits" lay-url="#adminforms" lay-area="690px" lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-title="{:__('访问授权')}"  lay-callback="auths" lay-url="#authForms" lay-area="300px" lay-offset="8%" lay-event="edit" >{:__('权限')}</a>
+    <a class="layui-table-text" lay-title="{:__('访问授权')}" 
+        lay-callback="rulecates" lay-url="#authForms" lay-area="300px" lay-offset="8%" lay-event="rules" >{:__('权限')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-title="{:__('栏目授权')}"  lay-callback="cates" lay-url="#cateForms" lay-area="300px" lay-offset="8%" lay-event="auth" >{:__('栏目')}</a>
+    <a class="layui-table-text" lay-title="{:__('栏目授权')}" 
+        lay-callback="rulecates" lay-url="#authForms" lay-area="300px" lay-offset="8%" lay-event="cates" >{:__('栏目')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
     <a class="layui-table-text" lay-url="{:url('/system.admin/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
@@ -243,8 +232,7 @@
         var form = layui.form;
 
         // 定义表格URL
-        var tableURL = "{:url('/system.admin/index')}",
-            treedata = {$treedata|raw};
+        var tableURL = "{:url('/system.admin/index')}";
 
         // 基础表格
         var isTable = table.render({
@@ -264,9 +252,9 @@
         })
 
         // 创建部门实例
-        var depTree = eleTree({
+        var publicTree = eleTree({
             el: '#tree',
-            data: treedata,
+            data: {$department|raw},
             highlightCurrent: true,
             showLine: false,
             defaultPid: 0,
@@ -277,7 +265,7 @@
         })
 
         // 重载表格数据
-        depTree.on('click',function(event) {
+        publicTree.on('click',function(event) {
             var url = tableURL + '?dep=' + event.data.id;
             table.reload('lay-tableList', {
                 url: url
@@ -293,13 +281,18 @@
 
             // 渲染用户组
             xmSelect.render({
-                el: '.organize', 
+                el: '.group', 
                 name: 'group_id',
                 size: 'small',
-                theme: {
+                prop: {
+                    value: 'id',
+                    name:'title'
+                }
+                ,theme: {
                     color: '#0081ff', 
-                },
-                data: tableThis.data.organize
+                }
+                ,data: {:json_encode($group)}
+                ,initValue: !status ? tableThis.data.group_id.split(',') : []
             })
 
             // 渲染岗位
@@ -307,29 +300,26 @@
                 el: '.jobs', 
                 name: 'jobs_id',
                 size: 'small',
-                theme: {
-                    color: '#0081ff', 
-                },
-                data: tableThis.data.jobs
-            })
-
-            // 初始选择
-            var checkedId = [];
-            if (typeof(tableThis) !== "undefined") {
-                if (tableThis.data.dep_id !== null) {
-                    checkedId.push(tableThis.data.dep_id);
+                prop: {
+                    value: 'id',
+                    name:'title'
                 }
-            }
+                ,theme: {
+                    color: '#0081ff', 
+                }
+                ,data: {:json_encode($jobs)}
+                ,initValue: !status ? tableThis.data.jobs_id.split(',') : []
+            })
 
             // 渲染部门
             var select = xmSelect.render({
                 el: '.deps',
                 tips: '请选择部门',
                 name: 'dep_id',
-                data: tableThis.data.dep,
+                data: department,
                 radio: true,
                 clickClose: true,
-                initValue: checkedId,
+                initValue: !status ? tableThis.data.dep_id.split(',') : [],
                 prop: {
                     value: 'id',
                     name:'title'
@@ -350,7 +340,6 @@
                     color: '#1890FF'
                 }
             })
-
 
             // 监听权限提交
             form.on("submit(submitPage)",function(post){
@@ -380,26 +369,19 @@
 
                 return false;
             })
-
         }
 
-        
 
-        // 编辑用户权限回调函数 
-        admin.callback.auths = function(clickthis,colletction,config) {
+        // 编辑用户权限/栏目权限回调函数
+        admin.callback.rulecates = function(clickthis,colletction,config) {
 
-            var tableThis = colletction.tableThis,checkKeys = [];
-            // 勾选默认权限
-            if (typeof (tableThis.data.rules) !== undefined && tableThis.data.rules != null) {
-                for(var i in tableThis.data.rules) {
-                    checkKeys[i] = parseInt(tableThis.data.rules[i]);
-                }
-            }
+            var tableThis = colletction.tableThis,
+                event = tableThis.event;
 
             // 创建实例
             var tree = eleTree({
                 el: '#authTree',
-                data: _ajax('get_rulecates_tree','rules','private'),
+                data: _ajax('get_rulecates_tree',event,'private'),
                 highlightCurrent: true,
                 showCheckbox: true,
                 showLine: false,
@@ -408,7 +390,7 @@
                 request: {
                     name: "title",
                 },
-                defaultCheckedKeys: checkKeys,
+                defaultCheckedKeys: tableThis.data[event].map(Number),
             })
 
             // 监听权限提交
@@ -416,7 +398,7 @@
 
                 // 获取用户id
                 post.field.uid = tableThis.data.id;
-                
+
                 // 遍历节点数据
                 var rules = [], nodes = tree.getChecked(false,true);
                 for (var i in nodes) {
@@ -424,10 +406,11 @@
                 }
 
                 // 增加节点数据
-                post.field.rules = rules;
+                post.field[event] = rules;
+
                 // 开始POST提交数据
                 clickthis.attr("disabled",true);
-                layui.$.post("{:url('/system.admin/editrules')}", 
+                layui.$.post("{:url('/system.admin/edit"+event+"')}", 
                     post.field, function(res){
                         if (res.code == 200) {
                             layui.iziToast.success({
@@ -436,7 +419,7 @@
                             
                             // 更新本地规则
                             tableThis.update({
-                                rules: rules
+                                [event]: rules
                             });
 
                             // 关闭当前窗口
@@ -449,77 +432,9 @@
                 }, 'json');
 
                 return false;
-            })
+            })  
         }
-
-        // 编辑用户栏目权限
-        admin.callback.cates = function(clickthis,colletction,config) {
-
-            var tableThis = colletction.tableThis,checkKeys = [];
-            // 勾选默认权限
-            if (typeof (tableThis.data.cates) !== undefined && tableThis.data.cates != null) {
-                checkKeys = tableThis.data.cates;
-                for(var i in checkKeys) {
-                    checkKeys[i] = parseInt(checkKeys[i]);
-                }
-            }
-            
-            // 创建实例
-            var tree = eleTree({
-                el: '#cateTree',
-                data: _ajax('get_rulecates_tree','cates','private'),
-                highlightCurrent: true,
-                isDefaultChangePstatus: true,
-                showCheckbox: true,
-                showLine: false,
-                defaultPid: 0,
-                request: {
-                    name: "title",
-                },
-                defaultCheckedKeys: checkKeys,
-            })
-
-            // 监听权限提交
-            form.on("submit(submitPage)",function(post){
-
-                // 获取用户id
-                post.field.uid = tableThis.data.id;
-                
-                // 遍历节点数据
-                var cates = [], nodes = tree.getChecked(false,true);
-                for (var i in nodes) {
-                    cates.push(nodes[i].id);
-                }
-
-                // 增加节点数据
-                post.field.cates = cates;
-                clickthis.attr("disabled",true);
-                // 开始POST提交数据
-                layui.$.post("{:url('/system.admin/editcates')}", 
-                    post.field, function(res){
-                       if (res.code == 200) {
-                            layui.iziToast.success({
-                                message: res.msg,
-                            });
-
-                            // 更新本地规则
-                            tableThis.update({
-                                cates: cates
-                            });
-
-                            // 关闭当前窗口
-                            layer.close(colletction.index);
-                        }else {
-                            layui.iziToast.error({
-                                message: res.msg,
-                            });                            
-                        }
-                }, 'json');
-
-                return false;
-            })          
-        }
-
+        
         // 同步加载函数
         var _ajax = function (action,type,classd) {
             var func = '{:url("/system.admin/_get_auth_func")}';

@@ -207,9 +207,8 @@ class User extends HomeController
         }
 
         
-        return view('',[
-            'data'=> $this->userData
-        ]);
+        return view();
+
     }
     
     /**
@@ -234,9 +233,8 @@ class User extends HomeController
             return $this->error();
         }
 
-        return view('',[
-            'data'=> $this->userData
-        ]);
+        return view();
+
     }
 
     /**
