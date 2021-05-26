@@ -154,13 +154,14 @@ class Index extends BaseController
             
             // 缓存任务总数
             $count = count($sql);
+			
             if ($count >= 1 && is_numeric($count)) {
-                Cache::set('total',count($sql),3600);
+                Cache::set('total',$count,3600);
             } else {
                 unlink(root_path().'.env');
                 return $this->error('读取install.sql出错');
             }
-
+			
             // 链接数据库
             $connect = @mysqli_connect($mysql['hostname'].':'.$mysql['hostport'], $mysql['username'], $mysql['password']);
             mysqli_select_db($connect, $mysql['database']);
@@ -183,7 +184,7 @@ class Index extends BaseController
                     if (substr($value, 0, 12) == 'CREATE TABLE') {
                         $name = preg_replace("/^CREATE TABLE `(\w+)` .*/s", "\\1", $value);
                         $msg  = "创建数据表 {$name}...";
-    
+						
                         if (false !== mysqli_query($connect,$value)) {
 
                             $msg .= '成功！';
@@ -191,11 +192,9 @@ class Index extends BaseController
                                 'id'=> $nums,
                                 'msg'=> $msg,
                             ];
-
                             $nums++;
-                            Cache::set('tasks',$logs,3600);
+							Cache::set('tasks',$logs,3600);
                         }
-
                     } else {
                         mysqli_query($connect,$value);
                     }
@@ -203,13 +202,12 @@ class Index extends BaseController
     
             } catch (\Throwable $th) { // 异常信息
                 Cache::set('error',$th->getMessage(),7200);
-                exit();
             }
     
             // 修改初始化密码
             $pwd = hash_pwd($mysql['pwd']);
-            mysqli_query($connect,"UPDATE {$mysql['prefix']}admin SET pwd={$pwd} where id = 1");
-            write_file(root_path().'extend/conf/install.lock',true);
+            mysqli_query($connect,"UPDATE {$mysql['prefix']}admin SET pwd='{$pwd}' where id = 1");
+			write_file(root_path().'extend/conf/install.lock',true);
         }
     }
 
@@ -227,13 +225,10 @@ class Index extends BaseController
             }
             
             // 获取任务信息
-            $tasks = Cache::get('tasks') ?? [
-                'id'=>9999,
-                'msg'=>'获取任务信息失败！',
-            ];
+			$code  = 200;
+			$total = Cache::get('total');
+            $tasks = Cache::get('tasks') ?? '获取任务信息失败！';
             
-            $code  = 200;
-            $total = Cache::get('total');
             if (empty($total)) {
                 $code = 101;
                 $total = 1;
@@ -263,7 +258,7 @@ class Index extends BaseController
                 $admin = input('admin/s') ?? 'admin';
                 $index   = '../extend/conf/index.tpl';
                 copy($index,public_path().'index.php');
-                $index   = '../extend/conf/admin.tpl';
+				$index   = '../extend/conf/admin.tpl';
                 copy($index,public_path().$admin.'.php');
 
                 // 清理安装包

@@ -119,7 +119,7 @@
 					if (res.code == 200) {
 
 						// 循环写入表数据
-						for (var i in res.msg ) {
+						for (var i in res.msg) {
 							var elem = 'layui-table-'+i;
 							if (jquery('.'+elem).length === 0) {
 								html += '<li class="'+ elem +'">'+res.msg[i].msg+'</li>';
@@ -131,8 +131,10 @@
 						html = '<li><font color="red">'+res.msg+'</font></li>';
 						clearInterval(tasks);
 					}
-
-					logsElem.append(html);
+					
+					if (html) {
+						logsElem.append(html);
+					}
 				}
 
 				if (logsElem[0].scrollHeight >= logsElem[0].clientHeight) {
@@ -156,7 +158,7 @@
 				}
 			});
 
-		},200);
+		},300);
 	})
 </script>
 </html>
