@@ -55,7 +55,7 @@ class User extends Model
         if (Auth::instance()->isLogin()) {
             $data = self::getById($data['id']);
             if (Auth::instance()->userInfo->id == $data['id']) {
-                Auth::instance()->setloginState($data,cookie('token'));
+                Auth::instance()->setactiveState($data);
             }
         }
     }

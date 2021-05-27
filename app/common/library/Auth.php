@@ -442,42 +442,6 @@ class Auth
     }
 
     /**
-     * 用户检测登录
-     * @param string $name
-     * @param string $pwd
-     * @return bool
-     */
-    public function login(string $name, string $pwd) {
-
-        if(filter_var($name, FILTER_VALIDATE_EMAIL)){
-            $where[] = ['email','=',htmlspecialchars(trim($name))];
-        }else{
-            $where[] = ['name','=',htmlspecialchars(trim($name))];
-        }
-
-        $where[] = ['pwd','=',hash_pwd($pwd)];
-        $this->userInfo = UserModel::where($where)->find();
-        if (!empty($this->userInfo)) {
-            if($this->userInfo['status'] != 1) { 
-                $this->setError('用户异常或未审核，请联系管理员');
-                return false;
-            }
-
-            // 更新登录数据
-            $this->userInfo['logintime'] = time(); 
-            $this->userInfo['loginip'] = request()->ip();
-            $this->userInfo['logincount'] = $this->userInfo['logincount'] + 1;
-            if ($this->userInfo->save()) {
-                return true;
-            }
-        }
-        else {
-            $this->setError('用户名或密码错误');
-            return false;
-        }
-    }
-
-    /**
      * API权限验证
      * @param string|null $class
      * @return bool
@@ -664,6 +628,43 @@ class Auth
         }
         
         return true;
+    }
+
+    /**
+     * 用户检测登录
+     * @param string $name
+     * @param string $pwd
+     * @return bool
+     */
+    public function login(string $name, string $pwd) {
+
+        if(filter_var($name, FILTER_VALIDATE_EMAIL)){
+            $where[] = ['email','=',htmlspecialchars(trim($name))];
+        }else{
+            $where[] = ['name','=',htmlspecialchars(trim($name))];
+        }
+
+        $where[] = ['pwd','=',hash_pwd($pwd)];
+        $this->userInfo = UserModel::where($where)->find();
+        if (!empty($this->userInfo)) {
+            if($this->userInfo['status'] != 1) { 
+                $this->setError('用户异常或未审核，请联系管理员');
+                return false;
+            }
+
+            // 更新登录数据
+            $this->userInfo['logintime'] = time(); 
+            $this->userInfo['loginip'] = request()->ip();
+            $this->userInfo['logincount'] = $this->userInfo['logincount'] + 1;
+            if ($this->userInfo->save()) {
+                $this->setloginState($this->userInfo,false);
+                return true;
+            }
+        }
+        else {
+            $this->setError('用户名或密码错误');
+            return false;
+        }
     }
 
     /**

@@ -87,10 +87,10 @@ class Third extends HomeController
             $array['logintime'] = time(); // 更新登录数据
             $array['loginip'] = request()->ip();
             $array['logincount'] = $result['logincount'] + 1;
-            User::update($array);
-
-            $this->reload();
-            
+            if (User::update($array)) {
+                $this->auth->setloginState($array,false);
+                $this->reload();
+            }
         }
         else {
 

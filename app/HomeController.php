@@ -129,6 +129,8 @@ class HomeController extends BaseController
             if(in_array($this->action,$this->repeatLogin)) {
                 $this->redirect($this->JumpUrl);
             }
+
+            $this->app->view->assign('user',$this->auth->userInfo);
         }
         else { // 非鉴权方法
             if ($this->needLogin && !in_array($this->action,$this->noNeedLogin)) {
@@ -143,8 +145,6 @@ class HomeController extends BaseController
         foreach (saenv('site') as $key => $value) {
             $this->app->view->assign($key,$value);
         }
-
-        $this->app->view->assign('user',$this->auth->userInfo);
     }
 
     /**
