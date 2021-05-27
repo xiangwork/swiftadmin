@@ -34,27 +34,30 @@ class User extends Model
         return $this->hasMany(Plugin::class,'user_id')->withoutField('filepath');
     }
 
-    // 定义issues
-    public function issues()
-    {
-        return $this->hasMany(Issues::class,'user_id');
-    }
-
-    // 获取用户点赞数
-    public function issuesup($id = 0)
-    {
-        return Issues::where('user_id',$id)->sum('up');
-    }
-
     /**
-     * 数据写入后
+     * 注册会员
      * @param   array  $data
      * @return string
      */
-    public static function onAfterWrite($data)
+    public static function onAfterInsert($data)
     {
         $data = self::getById($data['id']);
-        Auth::instance()->setloginState($data,cookie('token') ?? false);
+        Auth::instance()->setloginState($data,false);
+    }
+
+    /**
+     * 更新会员数据
+     * @param   array  $data
+     * @return string
+     */
+    public static function onAfterUpdate($data)
+    {
+        if (Auth::instance()->isLogin()) {
+            $data = self::getById($data['id']);
+            if (Auth::instance()->userInfo->id == $data['id']) {
+                Auth::instance()->setloginState($data,cookie('token'));
+            }
+        }
     }
 
     /**
