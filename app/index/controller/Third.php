@@ -88,7 +88,7 @@ class Third extends HomeController
             $array['loginip'] = request()->ip();
             $array['logincount'] = $result['logincount'] + 1;
             if (User::update($array)) {
-                $this->auth->setloginState($array,false);
+                $this->auth->setloginState($result,false);
                 $this->reload();
             }
         }
