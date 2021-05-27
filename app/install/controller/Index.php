@@ -2,8 +2,8 @@
 declare (strict_types = 1);
 
 namespace app\install\controller;
+ini_set('max_execution_time', '600');
 use think\facade\Cache;
-
 use app\BaseController;
 
 class Index extends BaseController
@@ -153,7 +153,6 @@ class Index extends BaseController
             
             // 缓存任务总数
             $count = count($sql);
-			
             if ($count >= 1 && is_numeric($count)) {
                 Cache::set('total',$count,7200);
             } else {
@@ -174,7 +173,7 @@ class Index extends BaseController
                 // 写入数据库
                 foreach ($sql as $key => $value) {
 					
-					Cache::set('progress',$key,7200);
+					Cache::set('progress',($key+1),7200);
                     $value = trim($value);
                     if (empty($value)) {
                         continue;
@@ -193,6 +192,8 @@ class Index extends BaseController
                                 'id'=> $nums,
                                 'msg'=> $msg,
                             ];
+
+                            write_file('tasks/'.$nums.'-'.rand(10000,99999).'.txt','');
 							Cache::set('tasks',$logs,7200);
                         }
                     } else {
@@ -229,16 +230,15 @@ class Index extends BaseController
             // 获取任务信息
             $total = Cache::get('total');
             $tasks = Cache::get('tasks');
+            $progress = Cache::get('progress');
 
-			if (!empty($total) && !empty($tasks)) {
-				$progress = Cache::get('progress') + 1;
+			if (!empty($total) && !empty($tasks) && !empty($progress)) {
 				$progress = round(($progress/$total) * 100 ).'%';
 				$result = [
 					'code'=> 200,
-					'msg'=> $tasks,  
+					'msg'=> $tasks, 
 					'progress'=> $progress,
 				];
-
 				return json($result);                
             }
         }

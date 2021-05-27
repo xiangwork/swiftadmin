@@ -26,7 +26,7 @@ return [
     ],
     // 禁止URL访问的应用列表（自动多应用模式有效）
     'deny_app_list'    => ['common'],
-    
+
 	// 自定义页面abort抛出异常
 	'http_exception_template'    =>  [
 		404 =>  public_path() . '404.html',
