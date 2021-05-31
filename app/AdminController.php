@@ -145,6 +145,7 @@ class AdminController extends BaseController
         foreach (saenv('site') as $key => $value) {
             $this->app->view->assign($key,$value);
         }
+		
 		View::assign(['app'=>$app,'controller'=>$this->controller,'action'=>$this->action,'AdminLogin'=>$this->admin]);
 	}
 

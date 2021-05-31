@@ -13,6 +13,13 @@
 <p align="center">
 <font size="20" >开源不易，求送颗星星，谢谢！</font>
 </p>
+
+<b> 关于反馈说composer install报错问题：</b><br/>
+
+<b>当前框架的安装环境为PHP8下使用composer进行安装，也就是说，如果你之前使用PHP7安装了composer的话，因为版本太低是无法安装本框架的，需要卸载composer，安装PHP8之后，重新安装composer，另外需要取消掉禁用的PHP putenv/proc_open 函数</b><br/>
+<b>使用php -v 查看PHP版本，8.0以上即可！ </b><br/>
+
+
 <b>请注意，本框架只支持PHP8版本，低版本已经不兼容了~ </b><br/>
 <b>请注意，框架安装成功后会自动删除安装脚本文件！！！</b><br/>
 <b>开发环境：Windows服务器版 VScode Apache MySQL5.7 PHP8</b><br/>
