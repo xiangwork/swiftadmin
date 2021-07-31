@@ -99,7 +99,7 @@ class Category extends AdminController
 		if (request()->isPost()) {
 
 			$post = input('post.');
-            $post = safe_validate_model($post,$this->model::class);
+            $post = safe_validate_model($post,get_class($this->model));
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
             }
@@ -127,7 +127,7 @@ class Category extends AdminController
             $post = input('post.'); 
             $post['pid'] = input('post.pid'); 
             $post['cid'] = input('post.cid'); 
-            $post = safe_validate_model($post,$this->model::class);
+            $post = safe_validate_model($post,get_class($this->model));
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
             }

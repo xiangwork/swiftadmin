@@ -69,7 +69,7 @@ class User extends HomeController
             // 验证数据
             $post = input('post.');
             $post['createip'] = ip2long(request()->ip());
-			$post  = safe_field_model($post,$this->model::class);
+			$post  = safe_field_model($post,get_class($this->model));
 			if (!is_array($post)) {
 				return $this->error($post);
 			}

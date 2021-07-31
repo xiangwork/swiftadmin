@@ -192,7 +192,7 @@ class AdminController extends BaseController
 		if (request()->isPost()) {
 
 			$post = input();
-			$validate = $this->isValidate ? $this->model::class : $this->isValidate;
+			$validate = $this->isValidate ? get_class($this->model) : $this->isValidate;
             $post = safe_field_model($post,$validate,$this->scene);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
@@ -224,7 +224,7 @@ class AdminController extends BaseController
 
         if (request()->isPost()) {
 			$post = input();
-			$validate = $this->isValidate ? $this->model::class : $this->isValidate;
+			$validate = $this->isValidate ? get_class($this->model) : $this->isValidate;
             $post = safe_field_model($post,$validate,$this->scene);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);

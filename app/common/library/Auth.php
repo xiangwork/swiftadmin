@@ -697,7 +697,7 @@ class Auth
      * @param object|array  $array
      * @return bool
      */
-    public function setloginState(object|array $array = null, $token = false)
+    public function setloginState($array = null, $token = false)
     {
         $this->token = $token ? cookie('token') : $this->buildToken($array);
         cookie('uid',$array['id'],$this->keeptime);
@@ -711,7 +711,7 @@ class Auth
      * @param   array $array
      * @return  bool
      */
-    public function setactiveState(object|array $array = []) {
+    public function setactiveState($array = []) {
         $tag = md5hash((string)$array['id']);
         \think\facade\Cache::tag($tag)->clear();
         \think\facade\Cache::tag($tag)->set($this->token,$array,$this->keeptime);
