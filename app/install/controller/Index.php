@@ -27,7 +27,7 @@ class Index extends BaseController
             // 检测生产环境
             foreach (checkenv() as $key => $value) {
                 
-                if ($key == 'php' && (float)$value < 8) {
+                if ($key == 'php' && (float)$value < 7) {
                     return $this->error('PHP版本过低！');
                 }
 
