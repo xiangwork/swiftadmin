@@ -2005,7 +2005,7 @@ if (!function_exists('clear_api_cache')) {
 
 			$token = $token['app_id'].'.'.$token['app_secret'];
 		}
-		system_cache(md5_hash($token),null);
+		system_cache(md5($token),null);
 	}
 }
 
