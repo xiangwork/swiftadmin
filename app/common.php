@@ -1629,9 +1629,9 @@ if (!function_exists('build_request_url')) {
 					$readurl = get_page($param['page'],$param['total'],$readurl);
 					break;	
 				case 'content_style':
-					// $type = strpos($readurl,'id') ? 'id' : 'hash';
+					$type = strpos($readurl,'id') ? 'id' : 'hash';
 					$channel = ChannelModel::getChannelList($data['cid']);
-					$readurl = url("/{$channel['template']}/read",['id'=>$data['id']])->domain($domain);
+					$readurl = url("/{$channel['template']}/read",[$type=>$data[$type]])->domain($domain);
 					break;	
 				default:
 					# TODO..
