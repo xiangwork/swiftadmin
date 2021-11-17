@@ -45,7 +45,7 @@ return [
     'error_message'    => '页面错误！请稍后再试～',
 
     // 框架版本
-    'version'          => 'v1.0.3',
+    'version'          => 'v1.0.4',
 
     // 跨域请求域名
     'cors_domain'      => ['*','127.0.0.1'],
