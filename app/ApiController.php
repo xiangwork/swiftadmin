@@ -103,8 +103,8 @@ class ApiController extends BaseController
             $this->controller = request()->controller(true);
             $this->action = request()->action(true);
             $this->class = $this->controller.'/'.$this->action;
-            if (!$this->auth->checkapi($this->class)) {
-                return ajaxReturn($this->auth->getError());
+            if (!$this->auth->checkAPI($this->class)) {
+                return ajax_return($this->auth->getError());
             }
         }
         else {

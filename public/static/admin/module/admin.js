@@ -1551,7 +1551,9 @@ layui.define(["contextMenu","iziToast"], function (exports) {
 
                     // 调整overflow属性
                     var overvisi = jquery(layero).children(layercontent);
+                    // 页面层的这个属性，需要解决下，如果是页面层的话，咱弹起来的时候，需要自己可以设置才行
                     pageType && overvisi.css("overflow", "visible");
+                    // layero.find('body').css('overflow', 'visible');
                     
                     // 默认编辑TABLE表
                     (!disableForm && pageType && tableEdit) && (form.val(config.id,tableThis.data));
@@ -2416,5 +2418,6 @@ layui.define(["contextMenu","iziToast"], function (exports) {
         element.render("nav");
     }
 
+    console.log("\n %c SWIFTADMIN %c https://www.swiftadmin.net QQ群:68221618 \n", "color: #fadfa3; background: #030307; padding:5px 0;", "background: #fadfa3; padding:5px 0;");
     exports('admin', admin);
 });

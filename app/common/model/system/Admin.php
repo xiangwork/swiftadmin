@@ -50,7 +50,7 @@ class Admin extends Model
      * @param string $user
      * @param string $code
      */
-	public static function checkforget($user,$code) 
+	public static function checkForget($user,$code) 
 	{
 		// 校验格式
 		if(filter_var($user, FILTER_VALIDATE_EMAIL)){

@@ -49,18 +49,18 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">{:__('数据表名')}</label>
+        <label class="layui-form-label">{:__('属性表名')}</label>
         <div class="layui-input-block">
-            <input name="table"  type="text" class="layui-input" />
+            <input name="attr"  type="text" class="layui-input" />
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">{:__('排&emsp;序')}</label>
+        <label class="layui-form-label">{:__('模板名')}</label>
         <div class="layui-input-block">
-            <input name="sort"  type="text" class="layui-input" />
+            <input name="template"  type="text" class="layui-input" />
         </div>
-    </div> 
+    </div>
 
     <div class="layui-footer layui-form-item layui-center">
         <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('取消')}</button>
@@ -93,7 +93,8 @@
                 {type: 'checkbox', width:45},
                 {field: 'id', align: 'center',sort: true,width: 80,  title: 'ID'},
                 {field: 'title', align: 'left', title: '{:__("名称")}'},
-                {field: 'table', align: 'center',title: '{:__("数据库表")}'},
+                {field: 'template', align: 'center',title: '{:__("模板名")}'},
+                {field: 'attr', align: 'center',title: '{:__("模型属性")}'},
                 {field: 'updatetime', align: 'center', title: '{:__("修改时间")}'},
                 {field: 'createtime', align: 'center', title: '{:__("创建时间")}'},
                 {align: 'center', toolbar: '#tableBar', width:250, title: '{:__("操作")}'},

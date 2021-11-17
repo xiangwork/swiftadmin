@@ -13,8 +13,8 @@ namespace app\admin\controller\system;
 
 use app\AdminController;
 use think\facade\Db;
+use app\common\model\system\Content;
 use app\common\model\system\Channel;
-use app\common\model\system\Recyclebin as RecyclebinModel;
 
 class Recyclebin extends AdminController
 {
@@ -22,7 +22,7 @@ class Recyclebin extends AdminController
     public function initialize() 
     {
 		parent::initialize();
-        $this->model = new RecyclebinModel();
+        $this->model = new Content();
     }
 
     /**
@@ -40,7 +40,9 @@ class Recyclebin extends AdminController
             }
 
             // 生成查询数据
-            $list = $this->model->where($where)->order("id asc")->select()->toArray();
+            $list = $this->model->onlyTrashed()->with([
+                'channel','category'
+            ])->where($where)->order("id asc")->select()->toArray();
             return $this->success('查询成功', NULL, $list, count($list), 0);
         }
         
@@ -55,24 +57,16 @@ class Recyclebin extends AdminController
      */	
 	public function restore()
 	{
-
         if (request()->isAjax()) {
             
 			Db::startTrans();
 			try {
-
-                $list = $this->model->where($this->_before_where())->select();
-                foreach ($list as $item) {
-                    $index = Channel::get_channel_list($item['cid']);
-                    if (!empty($index)) {
-
-                        Db::name($index['table'])
-                            ->where('id',$item['oid'])
-                            ->update(['delete_time'=>null]);
-                        $this->status += $item->delete();
-                    }
+                $list = $this->model->onlyTrashed()->where(
+                    $this->beforeWhere()
+                    )->select();
+                foreach ($list as $key => $item) {
+                    $this->status += $item->restore();
                 }
-
                 Db::commit();
             } catch (\PDOException $e) {
                 Db::rollback();
@@ -101,16 +95,21 @@ class Recyclebin extends AdminController
             Db::startTrans();
 			try {
 
-                $list = $this->model->where($this->_before_where())->select();
-                foreach ($list as $item) {
-                    $index = Channel::get_channel_list($item['cid']);
-                    if (!empty($index)) {
+                $list = $this->model->onlyTrashed()->where(
+                    $this->beforeWhere()
+                    )->select();
+                foreach ($list as $key => $item) {
 
-                        Db::name($index['table'])
-                            ->where('id',$item['oid'])
-                            ->delete();
-                        $this->status += $item->delete();
+                    $item->attr; $attrs[] = 'attr';
+                    $channel = Channel::getChannelList($item['cid']);
+                    if ($channel['attr'] !== 'none') {
+                        $property = $channel['attr'];
+                        $item->$property;
+                        $attrs[] = $channel['attr'];
                     }
+                    // 删除时间
+                    $item['delete_force'] = time();
+                    $this->status += $item->together($attrs)->force()->delete();
                 }
     
                 Db::commit();

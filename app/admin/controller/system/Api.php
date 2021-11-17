@@ -90,7 +90,7 @@ class Api extends AdminController
             }
 
             if ($this->model->create($post)) {
-                $this->_api_router();
+                $this->api_Router();
                 return $this->success();
             }
 
@@ -108,9 +108,9 @@ class Api extends AdminController
             $post = input();
             if ($this->model->update($post)) {
                 if (isset($post['class'])) { // 清理接口缓存
-                    system_cache(md5hash($post['class']),null); 
+                    system_cache(md5_hash($post['class']),null); 
                 }
-                $this->_api_router();
+                $this->api_Router();
                 return $this->success();
             }
 
@@ -121,7 +121,7 @@ class Api extends AdminController
     /**
      * 写路由路径
      */
-    private function _api_router($router = '') 
+    private function api_Router($router = '') 
     {
         $path = root_path().'app\api\route\api.php';
         $list = $this->model->where('model','1')->select();

@@ -52,7 +52,7 @@
                 <div class="layui-tab-content pl30">
                     <div class="layui-tab-item layui-show" >
                         <div class="layui-form-item ">
-                            <php> $createhref = cache('createhtml'); </php>
+                            <php> $createhref = cache('createHtml'); </php>
                             <notempty name="createhref">
                             <label class="layui-form-label">生成提醒</label>
                             <a href="{$createhref}" style="color: red" >当前存在未完成的生成任务，点击开始...</a>
@@ -98,7 +98,7 @@
                                 <select id="channel">
                                     <option value="">{:__('请选择模型')}</option>
                                     <salibs:channel id="vo">
-                                        <option value="{$vo.table}" >{$vo.title}</option>
+                                        <option value="{$vo.id}" >{$vo.title}</option>
                                     </salibs:channel>
                                 </select>
                             </div>       
@@ -134,9 +134,9 @@
                       <div class="layui-form-item ">
                         <label class="layui-form-label">栏目页</label>
                             <div class="layui-input-inline " >
-                                <select name="rewrite[category_page]" >
+                                <select name="rewrite[category_style]" >
                                     <option value="">请选择栏目页模式</option> <volist name="catePage" id="vo">
-                                    <option value="{$vo}" <if condition="$rewrite['category_page'] eq $vo "> selected </if> >{$vo}</option>
+                                    <option value="{$vo}" <if condition="$rewrite['category_style'] eq $vo "> selected </if> >{$vo}</option>
                                     </volist>
                                 </select>
                             </div>  
@@ -146,21 +146,21 @@
                       <div class="layui-form-item ">
                         <label class="layui-form-label">列表页</label>
                             <div class="layui-input-inline " >
-                                <select name="rewrite[list_page]" >
-                                    <option value="">请选择分类页模式</option> <volist name="listPage" id="vo">
-                                    <option value="{$vo}" <if condition="$rewrite['list_page'] eq $vo "> selected </if> >{$vo}</option>
+                                <select name="rewrite[list_style]" >
+                                    <option value="">请选择分类页模式</option> <volist name="list_style" id="vo">
+                                    <option value="{$vo}" <if condition="$rewrite['list_style'] eq $vo "> selected </if> >{$vo}</option>
                                     </volist>
                                 </select>
                             </div>  
-                            <div class="layui-form-mid layui-word-aux">* 列表页URL格式，推荐/listdir/list_page.html</div>                    
+                            <div class="layui-form-mid layui-word-aux">* 列表页URL格式，推荐/listdir/listPage.html</div>                    
                       </div>
 
                       <div class="layui-form-item ">
                             <label class="layui-form-label">内容页</label>
                             <div class="layui-input-inline">
-                                <select name="rewrite[content_page]" >
-                                    <option value="">请选择内容页模式</option> <volist name="contentPage" id="vo">
-                                    <option value="{$vo}" <if condition="$rewrite['content_page'] eq $vo "> selected </if> >{$vo}</option>
+                                <select name="rewrite[content_style]" >
+                                    <option value="">请选择内容页模式</option> <volist name="content_style" id="vo">
+                                    <option value="{$vo}" <if condition="$rewrite['content_style'] eq $vo "> selected </if> >{$vo}</option>
                                     </volist>
                                 </select>
                             </div>  
@@ -170,7 +170,7 @@
                       <div class="layui-form-item ">
                         <label class="layui-form-label">筛选页</label>
                           <div class="layui-input-inline">
-                              <input name="rewrite[list_type]" type="text" class="layui-input"  lay-verify="required" value="{$rewrite.list_type}"/>
+                              <input name="rewrite[search_style]" type="text" class="layui-input"  lay-verify="required" value="{$rewrite.search_style}"/>
                           </div>  
                           <div class="layui-form-mid layui-word-aux">* 筛选页URL格式，参数id/pid/cid/tid/hid...自选</div>                    
                       </div>  
@@ -179,17 +179,17 @@
                     <div class="layui-form-item ">
                       <label class="layui-form-label">自动生成</label>
                         <div class="layui-input-inline">
-                            <input type="radio" name="sitemap[status]"   
-                            value="1" title="开启"  <if condition="$sitemap['status'] eq 1 "> checked </if>>
-                            <input type="radio" name="sitemap[status]"   
-                            value="0" title="关闭"  <if condition="$sitemap['status'] eq 0 "> checked </if>>                            
+                            <input type="radio" name="sitemap[map_status]"   
+                            value="1" title="开启"  <if condition="$sitemap['map_status'] eq 1 "> checked </if>>
+                            <input type="radio" name="sitemap[map_status]"   
+                            value="0" title="关闭"  <if condition="$sitemap['map_status'] eq 0 "> checked </if>>                            
                         </div>  
                         <div class="layui-form-mid layui-word-aux">* 更新内容时候自动更新网站地图</div> 
                     </div>
                     <div class="layui-form-item ">
                         <label class="layui-form-label">更新频率</label>
                         <div class="layui-input-inline layui-short-select">
-                            <select name="sitemap[index_freq]" >
+                            <select name="sitemap[map_index_freq]" >
                                 <option value="">首页</option>
                                 <option value="always" selected="true">实时</option>
                                 <option value="hourly">每小时</option>
@@ -199,7 +199,7 @@
                                 <option value="yearly">每年</option>
                                 <option value="never">从不</option>
                             </select>   
-                            <select name="sitemap[list_freq]" >
+                            <select name="sitemap[map_list_freq]" >
                                 <option value="">列表页</option>
                                 <option value="always">实时</option>
                                 <option value="hourly" selected="true">每小时</option>
@@ -209,7 +209,7 @@
                                 <option value="yearly">每年</option>
                                 <option value="never">从不</option>
                             </select> 
-                            <select name="sitemap[content_freq]">
+                            <select name="sitemap[map_content_freq]">
                                 <option value="">内容页</option>
                                 <option value="always">实时</option>
                                 <option value="hourly">每小时</option>
@@ -226,7 +226,7 @@
                     <div class="layui-form-item ">
                       <label class="layui-form-label">priority优先级</label>
                        <div class="layui-input-inline layui-short-select">
-                            <select name="sitemap[index_priority]" >
+                            <select name="sitemap[map_index_priority]" >
                                 <option value="">首页</option>
                                 <option value="0.1">0.1</option>
                                 <option value="0.2">0.2</option>
@@ -239,7 +239,7 @@
                                 <option value="0.9">0.9</option>
                                 <option value="1.0" selected >1.0</option>
                             </select>   
-                            <select name="sitemap[list_priority]" >
+                            <select name="sitemap[map_list_priority]" >
                                 <option value="">列表页</option>
                                 <option value="0.1">0.1</option>
                                 <option value="0.2">0.2</option>
@@ -252,7 +252,7 @@
                                 <option value="0.9">0.9</option>
                                 <option value="1.0">1.0</option>
                             </select> 
-                            <select name="sitemap[content_priority]" >
+                            <select name="sitemap[map_content_priority]" >
                                 <option value="">内容页</option>
                                 <option value="0.1">0.1</option>
                                 <option value="0.2">0.2</option>
@@ -327,40 +327,32 @@
 
         // 生成首页
         jquery('.createindex').click(function(){
-            self.location.href = "{:url('/system.rewrite/createindex')}";
+            self.location.href = "{:url('/system.rewrite/createIndex')}";
             return false;
         })
 
         // 常规元素渲染
-        var category = contents.xmselect('pid',categorylist,[],false);
-        var content  = contents.xmselect('cid',categorylist,[],false);
-        // 生栏目页 / 生成内容页
+        contents.xmselect('pid',categorylist,[],false);
+        contents.xmselect('cid',categorylist,[],false);
+
+        // 生成栏目页/列表页/内容页
         jquery('.createhtml').click(function(){
             try {
                 var url = '',
                 type = jquery(this).attr('value'),
                 elem = eval(type);
+                console.log(elem);
+                return;
                 url  = elem.getValue()[0].id;
                 url  = '&id='+url;
             }catch(error) {}
-            self.location.href = "{:url('/system.rewrite/createhtml')}?type=" + type + url;
+            self.location.href = "{:url('/system.rewrite/createHtml')}?type=" + type + url;
         })
 
         // 生成模型地图  
         jquery('.createmap').click(function(){
-            var model = jquery(this).val();
-
-            // 这里方便你生成自定义的模型
-            if (model != 'zdy' && model != 'zdy') {
-                model = jquery('[id="channel"]').val();
-            }
-            if (!model) {
-                layui.iziToast.error({
-                    message: '请选择模型'
-                })
-                return false;
-            }
-            self.location.href = "{:url('/system.rewrite/createmap')}?model="+model;
+            var model = jquery('#channel').val();
+            self.location.href = "{:url('/system.rewrite/createMap')}?model="+model;
         })
     })
 

@@ -1,25 +1,20 @@
 <?php
 
 // 全局应用公共文件
+use app\common\library\Auth;
 use think\facade\Db;
 use think\facade\Cache;
 use think\facade\Config;
 use think\facade\Request;
-use app\common\model\system\Channel;
-use app\common\model\system\Category;
-use app\common\model\system\Dictionary;
+use app\common\model\system\Channel as ChannelModel;
+use app\common\model\system\Category as CategoryModel;
+use app\common\model\system\Content as ContentModel;
+use app\common\model\system\Dictionary as DictionaryModel;
 
 // 全局系统常量
 const REWRITE   =  1;
 const STATICS   =  2;
-const SYSTEM  	= 'system';
-const ARTICLE 	= 'Article';
-const IMAGES 	= 'Image';
-const VIDEO 	= 'Video';
-const DOWNLOAD 	= 'Download';
-const PRODUCT 	= 'Product';
-const SPECIAL   = 'Special';
-const COMMENT   = 'Comment';
+const NAMESPACELIBRARY = '\\app\\common\\library\\';
 const NAMESPACEMODELSYSTEM = '\\app\\common\\model\\system\\';
 
 // +----------------------------------------------------------------------
@@ -47,7 +42,7 @@ if (!function_exists('arr2file')) {
 	function arr2file($file, $array='') 
 	{
 		if(is_array($array)){
-			$cont = varexport($array,true);
+			$cont = var_exports($array,true);
 		} else{
 			$cont = $array;
 		}
@@ -66,7 +61,7 @@ if (!function_exists('arr2router')) {
 	function arr2router($file, $array='') 
 	{
 		if(is_array($array)){
-			$cont = varexport($array,true);
+			$cont = var_exports($array,true);
 		} else{
 			$cont = $array;
 		}
@@ -74,14 +69,14 @@ if (!function_exists('arr2router')) {
 		write_file($file, $cont);
 	}
 }
-if (!function_exists('varexport')) {
+if (!function_exists('var_exports')) {
 	/**
      * 数组语法(方括号)
      * @param  array $expression  	数组
      * @param  bool  $return 		返回类型 
      * @return array
      */	
-	function varexport($expression, $return = true) {
+	function var_exports($expression, $return = true) {
 		$export = var_export($expression, true);
 		$patterns = [
 			"/array \(/" => '[',
@@ -184,11 +179,11 @@ if (!function_exists('traverse_opendir')) {
 	}
 }
 
-if (!function_exists('recursiveDelete')) {
+if (!function_exists('recursive_delete')) {
     /**
      * 递归删除目录
      */
-    function recursiveDelete($dir) 
+    function recursive_delete($dir) 
 	{
 
         // 打开指定目录
@@ -199,7 +194,7 @@ if (!function_exists('recursiveDelete')) {
               continue;
             }
             if (is_dir($dir . '/' . $file)){ // 递归
-              recursiveDelete($dir . '/' . $file);
+              recursive_delete($dir . '/' . $file);
             }
             else{
               unlink($dir . '/' . $file); // 删除文件
@@ -339,8 +334,7 @@ if (!function_exists('msubstr')) {
 	function msubstr($str, $start = 0, $length = 100, $charset="utf-8", $suffix=true)
 	{
 		
-		$str = preg_replace('/<[^>]+>/','',preg_replace("/[\r\n\t ]{1,}/",' ',delNt(strip_tags($str)))); 
-		$str = preg_replace('/&(\w{5});/i','',$str);
+		$str = strip_tags_clear($str);
 
 		// 直接返回
 		if ($start == -1) {
@@ -366,6 +360,18 @@ if (!function_exists('msubstr')) {
 			$fix='...';
 		}
 		return $suffix ? $slice.$fix : $slice;
+	}
+}
+
+if (!function_exists('strip_tags_clear')) {
+    /**
+     * 格式化HTML标签
+     * @return string
+     */
+	function strip_tags_clear(string $str = null) {
+		$str = preg_replace('/<[^>]+>/','',preg_replace("/[\r\n\t ]{1,}/",' ',delNt(strip_tags($str)))); 
+		$str = preg_replace('/&(\w{4});/i','',$str);
+		return $str;
 	}
 }
 
@@ -535,13 +541,13 @@ if (!function_exists('format_bytes')) {
         return round($size, 2) . $delimiter . $units[$i];
     }
 }
-if (!function_exists('create_orderid')) {
+if (!function_exists('create_order_id')) {
 
     /**
      * 生成订单号
      * @return string
      */
-	function create_orderid(bool $short = false) {
+	function create_order_id(bool $short = false) {
 
 		if (!$short) {
 
@@ -560,13 +566,13 @@ if (!function_exists('create_orderid')) {
 	}
 }
 
-if (!function_exists('create_orderUrl')) {
+if (!function_exists('create_order_url')) {
 
     /**
      * 生成订单地址
      * @return string
      */
-	function create_orderUrl(string $id, string $paytype = 'alipay', string $token = null) {
+	function create_order_url(string $id, string $paytype = 'alipay', string $token = null) {
 
 		$payUrl = saenv('site_http').'/order/index?id='.$id.'&paytype='.$paytype;
 		if ($token) {
@@ -576,13 +582,13 @@ if (!function_exists('create_orderUrl')) {
 	}
 }
 
-if (!function_exists('get_paylogo')) {
+if (!function_exists('get_pay_logo')) {
 
     /**
      * 获取支付logo
      * @return string
      */
-	function get_paylogo(string $type = 'alipay') {
+	function get_pay_logo(string $type = 'alipay') {
 		$file = public_path().'static/images/pay/logo-'.$type.'.png';
 		return is_file($file) ? $file : '/static/images/pay/pay.png';
 	}
@@ -598,6 +604,37 @@ if (!function_exists('check_nav_active')) {
         $url = str_replace('.','/',ltrim($url, '/'));
 		$requestUrl = str_replace('.','/',$requestUrl);
         return $requestUrl === $url ? $classname : '';
+    }
+}
+
+
+if (!function_exists('check_menu_active')) {
+    /**
+     * 检测前台菜单导航是否高亮
+     */
+    function check_menu_active($vo,$detail ,$classname = 'active')
+    {
+		if (empty($vo) || empty($detail)) {
+			return false;
+		}
+
+		// 如果存拼音则判断
+		if (isset($vo['pinyin']) && isset($detail['pinyin']) ) {
+			if ($vo['pinyin'] == $detail['pinyin']) {
+				return $classname;
+			}
+			else {
+
+				// 如果是内容页
+				if (isset($detail['category'])) {
+					if ($vo['pinyin'] == $detail['category']['pinyin']) {
+						return $classname;
+					}
+				}
+			}
+		}
+
+		return false;
     }
 }
 
@@ -723,51 +760,44 @@ if (!function_exists('check_user_third')) {
 }
 
 
-if (!function_exists('mysql_common')) {
+if (!function_exists('mysql_content')) {
     /**
      * 公共类查询函数
      * @param  array $param 查询参数
      * @param  bool  $admin 调用标记	 
      * @return array
      */	
-	function mysql_common($param, $admin = false){
+	function mysql_content($param, $admin = false){
 
 		// 检查参数
 		if (!is_array($param)) { 
 			$param = parse_tag($param);
 		}
-
+		
         // 获取参数
 		$field = !empty($param['field']) ? $param['field'] : '*';	
 		$limit = !empty($param['limit']) ? $param['limit'] : '10';
-		$table = !empty($param['table']) ? $param['table'] : 'article';
-		$order = !empty($param['order']) ? $param['order'] : 'createtime desc';
+		$model = !empty($param['model']) ? $param['model'] : 'article';
+		$order = !empty($param['order']) ? $param['order'] : 'id desc';
 
-		//优先从缓存调用
-		$currentPage = Config::get('current.page') ?? 1;
-		if($currentPage < 2) {
+		
+		$model = ChannelModel::getChannelList(null,$model);
+		if (empty($model)) {
+			throw new \Exception('There is no model');
+		}
+
+		// 优先从缓存调用
+		$param['cid'] = $model['id'];
+		$page = Config::get('current.page') ?? 1;
+		if(is_numeric($page) && $page <= 2 && saenv('url_model') !== STATICS) {
 			
             // 数据缓存
 			$data_cache_name = hash_hmac("sha256",implode(',',$param),saenv('auth_key'));
 			$data_cache_content = system_cache($data_cache_name);
-
-            // 数据表缓存
-            $model_cache_name = hash_hmac('sha256','MODEL',saenv('auth_key'));
-            $model_cache_content = system_cache($model_cache_name);
 			if($data_cache_content) {
 				return $data_cache_content;
 			}
 		}
-
-        if (empty($model_cache_content)) {
-            $model_cache_content = Db::name('channel')->column('table');
-        }
-
-        // 过滤掉ADMIN表
-        if ($table == 'admin' 
-            || !in_array($table,$model_cache_content)) {
-           return false;
-        }
         
 		// 根据参数生成查询条件
 		$where = array();
@@ -888,8 +918,9 @@ if (!function_exists('mysql_common')) {
 			}
 		}
 		if (!empty($param['wd'])) {
-			if ($param['table'] == 'video') {
-				$where[] = ['title|actor','like','%'.$param['wd'].'%'];
+			if ($model['attr'] == 'video') {
+				// actor
+				$where[] = ['title','like','%'.$param['wd'].'%'];
 			}else {
 				$where[] = ['title','like','%'.$param['wd'].'%'];
 			}
@@ -900,53 +931,49 @@ if (!function_exists('mysql_common')) {
 		}
 
 		// 查询总数
-		$Db = NAMESPACEMODELSYSTEM.ucfirst($table);
-		$count = $Db::where($where)->count('id');
-        if ($count < $limit || !$currentPage) {
-
-            // 分配最小页码
-            Config::set(['page'=>$currentPage],'current');
+		$count = ContentModel::where($where)->count('id');
+        if ($count < $limit || !$page) {
+            Config::set(['page'=>$page], 'current');
         }
 
         // 查询数据
-        $list = $Db::with('category')->where($where)
-									 ->order($order)
-									 ->field($field)
-									 ->limit($limit)
-									 ->page($currentPage)
-									 ->select()->toArray();
+		$with = ['attr'];
+		if ($model['attr'] !== 'none') {
+			$with[] = $model['attr'];
+		}
+
+        $list = ContentModel::with($with)->where($where)->order($order)->field($field)->limit($limit)->page($page)->select()->toArray();
 
         // 分页调用
         if (isset($param['page']) && !empty($list)) {
 
 			$currentUrl = Config::get('current.url');
-			$maxpages   = saenv('max_page');
-            $totalpages = ceil($count/$limit);
+			$maxPages   = saenv('max_page');
+            $totalPages = ceil($count/$limit);
 
-			if (!empty($maxpages) && $totalpages > $maxpages) {
-				$totalpages = $maxpages;
+			if (!empty($maxPages) && $totalPages > $maxPages) {
+				$totalPages = $maxPages;
 			}
 
 			// 自定义分页
 			if (!empty($currentUrl)) { 
-				$page = get_page($currentPage,$totalpages,$currentUrl);
+				$page = get_page($page,$totalPages,$currentUrl);
 			}
 			else {
-				$page = build_request_url([],'list_page',['page'=>$currentPage,'total'=>$totalpages]);
+				$page = build_request_url([],'list_style',['page'=>$page,'total'=>$totalPages]);
 			}
 
 			// 分配页码变量
 			$list[0]['page'] = $page;
-			$list[0]['total'] = $currentPage;
-			Config::set(['totalpages'=>$totalpages],'current');
+			$list[0]['total'] = $count;
+			Config::set(['totalPages'=>$totalPages],'current');
         }
 
         // 设置缓存 
-		if($currentPage < 2){
-			system_cache($model_cache_name,$model_cache_content,saenv('cache_time'));
-			system_cache($data_cache_name,['data'=>$list,'total'=>$count],saenv('cache_time'),ARTICLE);
+		if(is_numeric($page) && $page <= 2) {
+			system_cache($data_cache_name,['data'=>$list,'total'=>$count],saenv('cache_time'));
 		}
-		
+	
 		return ['data'=>$list,'total'=>$count];
 	}
 }
@@ -1076,7 +1103,13 @@ if (!function_exists('saenv')) {
 	{
 		if (!empty($name)) {
 
-			$config = config('system');
+			// 修改后需清空缓存
+			$config = Cache::get('redis-system');
+			if (empty($config)) {
+				$config = config('system');
+				Cache::set('redis-system',$config);
+			}
+			
 			if (!is_array($name)) {
 				$name = explode('.',$name);
 			}
@@ -1085,15 +1118,18 @@ if (!function_exists('saenv')) {
 				if (isset($config[$val])) {
 					$config = $config[$val];
 				} else {
+
 					// 父类数据
 					$parent = $config;
 					$recursive = function(&$base,&$key) use (&$recursive,&$config) {
 						foreach ($base as $value) {
 							if (is_array($value)) {
+								
 								// 找到KEY
 								if (array_key_exists($key,$value)) {
 									$config = $value[$key];
 								}
+
 								 // 存在子数组则进行递归
 								else if(count($value) != count($value,1)) {
 									$recursive($value,$key);
@@ -1109,6 +1145,7 @@ if (!function_exists('saenv')) {
 					}
 				}
 			}
+			
 			return $config;
 		}
 	
@@ -1132,7 +1169,6 @@ if (!function_exists('system_cache')) {
 			return app('cache');
 		}
 
-		$name = request()->rootDomain().'/'.$name;
 		if ('' === $value) {
 			// 获取缓存
 			return 0 === strpos($name, '?') ? Cache::has(substr($name, 1)) : Cache::get($name);
@@ -1156,6 +1192,18 @@ if (!function_exists('system_cache')) {
 	}
 }
 
+if (!function_exists('search_model')) {
+    /**
+     * 获取搜索模式
+     *
+     * @return mixed
+     */
+    function search_model(string $searchmodel = null)
+    {
+		$searchmodel = $searchmodel ?? saenv('search_model');
+        return NAMESPACELIBRARY . $searchmodel;
+    }
+}
 
 if (!function_exists('parse_tag')) {
     /**
@@ -1528,9 +1576,9 @@ if (!function_exists('build_request_url')) {
 			
 			
 			// 替换规则
-			$search	 = ['[listdir]','[sublist]','[id]','[hash]','[pinyin]'];
-			if ($variable == 'content_page') {
-				foreach (Category::getListCache() as $value) {
+			$search	 = ['[listdir]','[sublist]','[id]'];
+			if ($variable == 'content_style') {
+				foreach (CategoryModel::getListCache() as $value) {
 					if ($value['id'] == $data['pid']) {
 						$category = $value;
 					}
@@ -1545,7 +1593,7 @@ if (!function_exists('build_request_url')) {
 			if (strpos($readurl,'sublist') && $category['pid']) {
 
 				// 查询顶级栏目
-				foreach (Category::getListCache() as $value) {
+				foreach (CategoryModel::getListCache() as $value) {
 
 					if (!$value['pid'] && $value['id'] == $category['pid']) {
 						$category = $value;
@@ -1560,32 +1608,30 @@ if (!function_exists('build_request_url')) {
 			$replace = [
 				$category['pinyin']??'',
 				$nextcategory['pinyin']??'',
-				$data['id']??'',
-				$data['hash']??'',
-				$data['pinyin']??''
+				$data['id']??''
 			];
 
 			$readurl = str_replace($search,$replace,$readurl);
 			$readurl = $domain ? saenv('site_http').$readurl : $readurl;
-			if ($variable == 'list_page') {
+			if ($variable == 'list_style') {
 				$readurl = get_page($param['page'],$param['total'],$readurl);
 			}
 		}
 		else { 
 			// 动态地址生成
 			switch ($variable) {
-				case 'category_page':
+				case 'category_style':
 					$readurl = url("/category/index",['dir'=>$data['pinyin']])->domain($domain);
 					break;	
-				case 'list_page':
+				case 'list_style':
 					$category = Config::get('current.detail');
 					$readurl = url("/category/index",['dir'=>$category['pinyin'],'p'=>'page'])->domain($domain);
 					$readurl = get_page($param['page'],$param['total'],$readurl);
 					break;	
-				case 'content_page':
-					$type = strpos($readurl,'id') ? 'id' : 'hash';
-					$channel = Channel::get_channel_list($data['cid']);
-					$readurl = url("/{$channel['table']}/read",[$type=>$data[$type]])->domain($domain);
+				case 'content_style':
+					// $type = strpos($readurl,'id') ? 'id' : 'hash';
+					$channel = ChannelModel::getChannelList($data['cid']);
+					$readurl = url("/{$channel['template']}/read",['id'=>$data['id']])->domain($domain);
 					break;	
 				default:
 					# TODO..
@@ -1601,7 +1647,7 @@ if (!function_exists('build_request_url')) {
 
 if (!function_exists('get_read_url')) {
 	/**
-	 * 获取自定义地址
+	 * 获取内容自定义地址
 	 * @param mixed|null 		$url		路由规则
 	 * @param array 			$param		访问参数
 	 * @param bool 				$rules		是否既定规则
@@ -1622,7 +1668,7 @@ if (!function_exists('get_read_url')) {
 				$url = trim($url,'/');
 				$url = explode('/',$url);
 				$readurl = array_merge([current($url)],$param);
-				$replace = str_replace('/sublist/','/',saenv('content_page'));
+				$replace = str_replace('/sublist/','/',saenv('content_style'));
 
 				// 在这里读取地址信息
 				$listdir = current($readurl);
@@ -1648,7 +1694,7 @@ if (!function_exists('get_read_url')) {
 	}
 }
 
-if (!function_exists('getpage')) {
+if (!function_exists('get_page')) {
 
 	/**
 	 * 获取分页
@@ -1659,7 +1705,7 @@ if (!function_exists('getpage')) {
 	 * @param mixed|null 	$linkPage		返回分页地址
 	 * @return string
 	 */
-	function get_page($currentPage, $totalPages, $pageUrl, $halfPer = 5, $linkPage = null)
+	function get_page($currentPage, $totalPages, $pageUrl, $halfPer = 3, $linkPage = null)
 	{
 		if ($currentPage <= 1) {
 			$linkPage .= '<em>首页</em><em>上一页</em>';
@@ -1713,8 +1759,7 @@ if (!function_exists('get_category_json')) {
 	 */
 	function get_category_json($pid = 0,$cid = 0,$field = '*',$limit = 100,$order = 'id asc')
 	{
-		$list = Category::getListCate($pid,$cid,['limit'=>(int)$limit,'field'=>$field,'order'=>$order]);
-		return json_encode(list_to_tree($list));
+		return Auth::instance()->getrulecatestree('cates','private');
 	}
 }
 
@@ -1732,7 +1777,7 @@ if (!function_exists('get_dictionary_alias')) {
 
 		$list = system_cache('dictionary');
 		if (empty($list)) {
-			$list = Dictionary::select()->toArray();
+			$list = DictionaryModel::select()->toArray();
 			system_cache('dictionary',$list);
 		}
 
@@ -1960,7 +2005,7 @@ if (!function_exists('clear_api_cache')) {
 
 			$token = $token['app_id'].'.'.$token['app_secret'];
 		}
-		system_cache(md5hash($token),null);
+		system_cache(md5_hash($token),null);
 	}
 }
 
@@ -1996,7 +2041,7 @@ if (!function_exists('check_referer_origin')) {
     }
 }
 
-if (!function_exists('ajaxReturn')) {
+if (!function_exists('ajax_return')) {
     /**
     * Ajax方式返回数据到客户端
      * @access protected
@@ -2010,7 +2055,7 @@ if (!function_exists('ajaxReturn')) {
 	 * ['list'=>$list,'count'=>$count] = 'data'=>['list','count'...]
 	 * ['data'=>$list,'count'=>$count] = ['data'=>$list], ['count'=$count]
 	 */
-    function ajaxReturn($msg = null, $data = [], int $code = 200) 
+    function ajax_return($msg = null, $data = [], int $code = 200) 
     {
 		if (is_array($msg)) {
 			$result = $msg;
@@ -2101,17 +2146,6 @@ if (!function_exists('cookies_decrypt')) {
 				}
 		}
 		return $str;
-	}
-}
-
-if (!function_exists('md5hash')) {
-	/**
-	 * 返回16位的MD5值
-	 */
-	function md5hash(string $str = null) 
-	{
-		$str = $str.saenv('auth_key');
-		return substr(call_user_func('md5',$str), 8, 16);
 	}
 }
 
@@ -2218,7 +2252,7 @@ if (!function_exists('is_today')) {
 }
 
 // 生成随机函数
-function randomDate($begintime, $endtime="", $now = true) 
+function random_date($begintime, $endtime="", $now = true) 
 {
 	$begin = strtotime($begintime);  
 	$end = $endtime == "" ? mktime() : strtotime($endtime);
@@ -2361,7 +2395,7 @@ if (!function_exists('check_auth')) {
 		$urls = (string)url($urls);
 		$urls = str_replace('.html','',$urls);
 		if (preg_match('/\/\w+.php(\/.*?\/.*?\w+[^\/\?]+)/',$urls, $macth)) {
-			$judge = app\common\library\auth::instance()->checkAuth($macth[1]);
+			$judge = app\common\library\auth::instance()->checkAuths($macth[1]);
 		}
 		
 		echo !$judge ? 'lay-noauth' : $attr .'="'.$urls.'"' . $action;

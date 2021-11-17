@@ -93,10 +93,10 @@ class Plugin extends AdminController
                 $data = Service::install($name,$force,$extends) ?? [];
             } 
             catch (\think\plugin\PluginException $p) {
-                return ajaxReturn($p->getMessage(),$p->getData(),$p->getCode());
+                return ajax_return($p->getMessage(),$p->getData(),$p->getCode());
             }
             catch (\Throwable $th) {
-                return ajaxReturn($th->getMessage(),null,$th->getCode());
+                return ajax_return($th->getMessage(),null,$th->getCode());
             }
 
             return $this->success('插件安装成功',null, $data);
@@ -130,10 +130,10 @@ class Plugin extends AdminController
                 $data = Service::upgrade($name,$extends) ?? [];
             }
             catch (\think\plugin\PluginException $p) {
-                return ajaxReturn($p->getMessage(),$p->getData(),$p->getCode());
+                return ajax_return($p->getMessage(),$p->getData(),$p->getCode());
             }
             catch (\Throwable $th) {
-                return ajaxReturn($th->getMessage(),null,$th->getCode());
+                return ajax_return($th->getMessage(),null,$th->getCode());
             }
 
             return $this->success('插件更新成功',null, $data);

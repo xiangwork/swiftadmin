@@ -131,7 +131,8 @@ class Database extends AdminController
             if (arr2file('../config/system.php', $config) === false) {
                 return $this->error('配置失败，请重试!');
             }
-
+            
+            \think\facade\Cache::set('redis-system',$config);
             return $this->success('配置成功!');
 
         }

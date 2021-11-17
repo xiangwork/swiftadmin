@@ -69,7 +69,7 @@ class Jobs extends AdminController
 	{
 		if (request()->isPost()) {
 			$post = input('post.');
-			$post = safe_field_model($post, get_class($this->model));
+			$post = safe_field_model($post, $this->model::class);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
 			}
@@ -88,7 +88,7 @@ class Jobs extends AdminController
 	{
 		if (request()->isPost()) {
 			$post = input('post.');
-			$post = safe_field_model($post, get_class($this->model));
+			$post = safe_field_model($post, $this->model::class);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
 			}

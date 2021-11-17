@@ -55,7 +55,7 @@ class User extends AdminController
             $count = $this->model->where($where)->count();
             $page = ($count <= $limit) ? 1 : $page;
             $list = $this->model->where($where)->order("id asc")->limit($limit)->page($page)->select()->toArray();
-        
+
             // 循环处理数据
             foreach ($list as $key => $value) {
                 $list[$key]['region'] = query_client_ip( $list[$key]['loginip']); 
@@ -69,7 +69,6 @@ class User extends AdminController
 			return $this->success('查询成功', "", $list, $count, 0);
 		}
 
-        
 		return view('',[
             'userGroup'=> $this->userGroup,
         ]);
@@ -83,7 +82,7 @@ class User extends AdminController
 
         if (request()->isPost()) {
 			$post = input('post.');
-            $post = safe_field_model($post,get_class($this->model));
+            $post = safe_field_model($post,$this->model::class);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
             }
@@ -111,7 +110,7 @@ class User extends AdminController
 
         if (request()->isPost()) {
 			$post = input();
-            $post = safe_field_model($post,get_class($this->model));
+            $post = safe_field_model($post,$this->model::class);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
             }

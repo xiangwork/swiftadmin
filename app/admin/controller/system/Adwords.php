@@ -63,7 +63,7 @@ class Adwords extends AdminController
             }
 
             // 单独验证场景
-            $post = safe_validate_model($post,get_class($this->model));
+            $post = safe_validate_model($post,$this->model::class);
             if (empty($post) || !is_array($post)) {
                 $this->error($post);
             }
@@ -95,14 +95,14 @@ class Adwords extends AdminController
             }
 
             // 单独验证场景
-            $post = safe_validate_model($post,get_class($this->model));
+            $post = safe_validate_model($post,$this->model::class);
             if (empty($post) || !is_array($post)) {
                 $this->error($post);
             }
 
             $post['expirestime'] = strtotime($post['expirestime']);
             if ($this->model->update($post)){
-                $this->_after_data($post);
+                $this->after_Data($post);
                 return $this->success();
             }
             return $this->error();
@@ -118,7 +118,7 @@ class Adwords extends AdminController
     /**
      * 写入广告文件
      */
-	private function _after_data($array,$mark = false) 
+	private function after_Data($array,$mark = false) 
     {
 		write_file($this->path.$array['alias'].'.js',strtoJs(stripslashes(trim($array['content']))));
 	}

@@ -17,7 +17,7 @@ class Images
      * @param  array   $config     配置数组 
      * @return object
      */
-	public function watermark($filename,$config) {
+	public function waterMark($filename,$config) {
 
 		try {
 			

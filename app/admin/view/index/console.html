@@ -127,13 +127,20 @@
           <div class="layui-card-body" style="padding: 20px;">
             <div style="height: 78px">
                 <ul>
-                    <a href="javascript:;" class="workplace-action" title="派单">派单</a>
-                    <a href="javascript:;" class="workplace-action" title="出库单">出库单</a>
-                    <a href="javascript:;" class="workplace-action" title="审核数据">审核数据</a>
-                    <a href="javascript:;" class="workplace-action" title="申请假期">申请假期</a>
-                    <a href="javascript:;" class="workplace-action" title="友情链接">友情链接 <span class="layui-badge-dot"></span></a>
-                    <a href="javascript:;" class="workplace-action" title="客户记录">客户记录</a>
-                    <a href="javascript:;" class="workplace-action" title="已完成任务">已完成任务</a>
+                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.navmenu/index',[],false)}"
+                    title="导航管理">导航管理</a>
+                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.tags/index',[],false)}"
+                    title="标签管理">标签管理</a>
+                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.seoer/index',[],false)}"
+                    title="SEO优化">SEO优化</a>
+                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.rewrite/index',[],false)}"
+                    title="URL生成">URL生成</a>
+                    <a href="javascript:;" class="workplace-action" sa-event="tabs" lay-url="{:url('/system.friendlink/index',[],false)}"
+                    title="友情链接">友情链接 <span class="layui-badge-dot"></span></a>
+                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.adwords/index',[],false)}" 
+                    title="广告管理">广告管理</a>
+                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.dictionary/index',[],false)}"
+                    title="字典管理">字典管理</a>
                 </ul>
             </div>
           </div>

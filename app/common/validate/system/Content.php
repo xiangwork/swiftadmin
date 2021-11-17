@@ -42,7 +42,6 @@ class Content extends Validate
      */
     protected function sensitive($value)
     {
-
         if ($value && saenv('user_sensitive')) {
 
             $instance = SensitiveHelper::instance();
@@ -59,7 +58,5 @@ class Content extends Validate
         }
 
         return true;
-
     }
-	
 }

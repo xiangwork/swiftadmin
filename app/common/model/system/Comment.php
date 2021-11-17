@@ -20,17 +20,7 @@ class Comment extends Model
     
     // 定义时间戳字段名
     protected $createTime = 'createtime';
-    protected $updateTime = 'updatetime';
-
-    /**
-     * 获取当前对象
-     * @access  public
-     * @return  void
-     */
-    public function video()
-    {
-        return $this->hasOne(Video::class,'id','sid');
-    }    
+    protected $updateTime = 'updatetime'; 
 
     public function user()
     {

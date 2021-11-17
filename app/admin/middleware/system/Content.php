@@ -31,7 +31,7 @@ class Content
                 $pid = explode(',',$pid);
             }
             
-            if (!$pid || !Auth::instance()->check_rulecates_node($pid,
+            if (!$pid || !Auth::instance()->checkRuleCatesNode($pid,
                 'cates','private')) {
                 if(request()->isAjax()) {
                     return json(ResultCode::AUTH_ERROR);

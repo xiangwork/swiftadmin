@@ -58,7 +58,7 @@
     <div class="layui-row">
         <div class="layui-card">
             <div class="layui-card-body">
-            <form id="baseForm" action="{:url('/index/baseset')}"  lay-filter="baseForm" class="layui-form layui-row model-form" wid100 > 
+            <form id="baseForm" action="{:url('/index/baseSet')}"  lay-filter="baseForm" class="layui-form layui-row model-form" wid100 > 
               <div class="layui-tab layui-tab-brief"  >
                 <ul class="layui-tab-title">
                   <li class="layui-this">{:__('网站设置')}</li>
@@ -198,30 +198,25 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">{:__('全文检索功能')}</label>
                         <div class="layui-input-inline">
-                            <input type="radio" name="sphinx[sphinx_status]"  lay-display="sphinx" lay-filter="radioStatus"
-                            value="1" title="{:__('开启')}"  <if condition="$config['sphinx']['sphinx_status'] eq 1 "> checked </if> >
-                            <input type="radio" name="sphinx[sphinx_status]"  lay-display="sphinx" lay-filter="radioStatus"
-                            value="0" title="{:__('关闭')}"  <if condition="$config['sphinx']['sphinx_status'] eq 0 "> checked </if>>
+                            <input type="radio" name="fulltext[search_status]"  lay-display="fulltext" lay-filter="radioStatus"
+                            value="1" title="{:__('开启')}"  <if condition="$config['fulltext']['search_status'] eq 1 "> checked </if> >
+                            <input type="radio" name="fulltext[search_status]"  lay-display="fulltext" lay-filter="radioStatus"
+                            value="0" title="{:__('关闭')}"  <if condition="$config['fulltext']['search_status'] eq 0 "> checked </if>>
                         </div>    
                         <div class="layui-form-mid layui-word-aux">* {:__('适用于为用户提供丰富的检索结果展示！')}</div>           
                     </div>
-
-                    <div class="sphinx" <eq name="$config['sphinx']['sphinx_status']" value="0" > style="display:none;" </eq> >
                     
+                    <div class="fulltext" <eq name="$config['fulltext']['search_status']" value="0" > style="display:none;" </eq> >
                         <div class="layui-form-item">
-                            <label class="layui-form-label">{:__('Sphinx服务器')}</label>
+                            <label class="layui-form-label">{:__('全文索引类型')}</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="sphinx[sphinx_host]" placeholder="Sphinx服务器" value="{$config['sphinx']['sphinx_host']}" class="layui-input" >
-                            </div>
-                            <div class="layui-form-mid layui-word-aux">* {:__('Sphinx服务器的IP地址，一般建议使用内网IP。')}</div>
+                                <input type="radio" name="fulltext[search_model]" style="clear: both;" 
+                                value="XunSearch" title="{:__('迅搜')}" <if condition="$config['fulltext']['search_model'] eq 'XunSearch'"> checked </if> >
+                                <input type="radio" name="fulltext[search_model]"
+                                value="ElasticSearch" title="{:__('ElasticSearch')}"  <if condition="$config['fulltext']['search_model'] eq 'ElasticSearch'"> checked </if>>
+                            </div>    
+                            <div class="layui-form-mid layui-word-aux">* {:__('基于国产XunSearch与分布式ElasticSearch全文检索功能')}</div> 
                         </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">{:__('Sphinx端口')}</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="sphinx[sphinx_port]" placeholder="Sphinx端口" value="{$config['sphinx']['sphinx_port']}" class="layui-input" >
-                            </div>
-                            <div class="layui-form-mid layui-word-aux">* {:__('Sphinx服务器的端口号,请设置防火墙策略！')}</div>
-                        </div>                    
                     </div>
 
                     <div class="layui-form-item">
@@ -335,7 +330,7 @@
                                 </div>
                                 <button type="button" class="layui-btn layui-btn-primary" 
                                 lay-ajax="" 
-                                lay-url="{:url('/index/testcache')}" 
+                                lay-url="{:url('/index/testCache')}" 
                                 lay-object="type:ctype,host:chost,port:cport,user:cuser,pass:cpass" >{:__('测试连接')}</button>
                             </div>
                         </div>
@@ -438,7 +433,7 @@
                         </div>
                         <button type="button" class="layui-btn layui-btn-primary" 
                             lay-ajax="" 
-                            lay-url="{:url('/index/testftp')}" 
+                            lay-url="{:url('/index/testFtp')}" 
                             lay-object="host:ftp_host,port:ftp_port,user:ftp_user,pass:ftp_pass"
                             >{:__('测试连接')}</button>
                     </div>
@@ -836,7 +831,7 @@
                                          <div class="layui-form-mid layui-word-aux">
                                              <a href="javascript:void(0)" class="layui-color-blue"
                                              lay-open=""
-                                             lay-url="{:url('/tpl/showtpl')}" 
+                                             lay-url="{:url('/tpl/showTpl')}" 
                                              lay-title="邮件模板{:__('')}" 
                                              lay-area="500px,260px" 
                                              lay-offset="30%"

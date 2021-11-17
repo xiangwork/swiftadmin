@@ -59,7 +59,7 @@ class Ftp
      * @param  string $filename     文件名称	 
      * @return bool   true|false
      */
-	public function ftp_upload($source,$filepath,$filename) 
+	public function ftpUpload($source,$filepath,$filename) 
     {
 		
 		if (!empty($source) && !empty($filepath)) {
@@ -107,7 +107,7 @@ class Ftp
      * @param  array    $config       配置信息	 
      * @return bool     true|false
      */ 
-    public function ftp_test($config)
+    public function ftpTest($config)
     {
 
         $connect = @ftp_connect($config['host'],(int)$config['port']) or die('Could not connect');

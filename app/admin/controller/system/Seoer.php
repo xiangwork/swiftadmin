@@ -10,11 +10,7 @@ declare (strict_types = 1);
 // | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 namespace app\admin\controller\system;
-
-
 use app\AdminController;
-use app\common\model\system\Article;
-use app\common\model\system\Category;
 
 class Seoer extends AdminController 
 {

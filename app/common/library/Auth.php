@@ -76,7 +76,7 @@ class Auth
      * 用户组id
      * @var array
      */
-    public $group_ids = [];
+    public $groupIDs = [];
 
 
     /**
@@ -95,7 +95,7 @@ class Auth
      * 保活时间
      * @var string
      */
-    protected $keeptime = 2592000;
+    protected $keepTime = 2592000;
 
     /**
      * 接口访问类型
@@ -153,7 +153,7 @@ class Auth
      * @param string        $relation 		如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
      * @return bool               	        通过验证返回true;失败返回false
      */
-    public function checkauth($name, $uid = 0, $type = 1, $mode = 'url', $relation = 'or') 
+    public function checkAuths($name, $uid = 0, $type = 1, $mode = 'url', $relation = 'or') 
     {
         // 转换格式
         if (is_string($name)) {
@@ -170,7 +170,7 @@ class Auth
             $REQUEST = unserialize(strtolower(serialize($this->request->param())));
         }
 
-        foreach ($this->get_auth_list($uid) as $auth) {
+        foreach ($this->getAuthList($uid) as $auth) {
 
             // 非鉴权接口
             $router = $auth['router'];
@@ -181,7 +181,7 @@ class Auth
 
             // 校验正则模式
             if (!empty($auth['condition'])) {
-                $rule = $condition = null;
+                $rule = $condition = '';
                 $user = $this->getUserInfo();
                 $command = preg_replace('/\{(\w*?)\}/', '$user[\'\\1\']', $rule);
                 
@@ -226,7 +226,7 @@ class Auth
      * @param  string   $type   节点类型
      * @return array
      */
-    public function _get_auth_nodes($uid = null, string $type = 'rules')
+    public function getAuthNodes($uid = null, string $type = 'rules')
     {
         // 私有节点
         $authGroup = $authPrivate = [];
@@ -257,12 +257,12 @@ class Auth
      * @access  public
      * @return  JSON|Array
      */
-    public function _get_auth_menus()
+    public function getAuthMenus()
     {
         // 查找节点
         $where[] = ['status','=','normal'];
-        $auth_nodes = $this->_get_auth_nodes();
-        $list = $this->get_auth_list($this->admin['id'] ,$auth_nodes);
+        $auth_nodes = $this->getAuthNodes();
+        $list = $this->getAuthList($this->admin['id'] ,$auth_nodes);
 
         // 循环处理数据
         foreach ($list as $key => $value) {
@@ -285,12 +285,12 @@ class Auth
      * @param  array    $nodes      已获取节点
      * @return mixed
      */
-    public function get_auth_list($uid = 0, array $nodes = []) 
+    public function getAuthList($uid = 0, array $nodes = []) 
     {
         // 查找节点
         $where[] = ['status','=','normal'];
         if (!$this->superAdmin()) {
-            $auth_nodes = !empty($nodes) ? $nodes : $this->_get_auth_nodes($uid);
+            $auth_nodes = !empty($nodes) ? $nodes : $this->getAuthNodes($uid);
             return AdminRulesModel::where(function ($query) use ($where,$auth_nodes) {
                 if (empty($auth_nodes[$this->authPrivate])) {
                     $where[] = ['auth','=','0'];
@@ -312,7 +312,7 @@ class Auth
      * @param mixed|null $class
      * @return \think\response\Json
      */
-    public function get_rulecates_tree($type = null, $class = null, $tree = true)
+    public function getRuleCatesTree($type = null, $class = null, $tree = true)
     {
         
         $list  = [];
@@ -322,7 +322,7 @@ class Auth
         }
 
         $class = $class != $this->authGroup ? $this->authPrivate : $class;
-        $auth_nodes = $this->_get_auth_nodes($this->admin['id'], $type);
+        $auth_nodes = $this->getAuthNodes($this->admin['id'], $type);
         if ($type && $type == 'rules') {
 
             $where[] = ['status','=','normal'];
@@ -343,11 +343,11 @@ class Auth
         } else {
             if (!$this->superAdmin()) {
                 if (!empty($auth_nodes[$class])) {
-                    $list = CategoryModel::whereIn('id',$auth_nodes[$class])->where('status',1)->select()->toArray();
+                    $list = CategoryModel::field('id,cid,pid,title,access')->whereIn('id',$auth_nodes[$class])->where('status',1)->select()->toArray();
                 }
             }
             else {
-                $list = CategoryModel::where('status',1)->select()->toArray();
+                $list = CategoryModel::field('id,cid,pid,title,access')->where('status',1)->select()->toArray();
             }
         }
 
@@ -362,13 +362,13 @@ class Auth
      * @param string|null $class
      * @return bool
      **/
-    public function check_rulecates_node($rules = null, string $type = null, string $class = null)
+    public function checkRuleCatesNode($rules = null, string $type = null, string $class = null)
     {
         if (!$this->superAdmin() && !empty($rules)) {
             $type   = !empty($type) ? $type :'rules';
             $class  = !empty($class) ? $class : $this->authGroup;
             $class  = $class != $this->authGroup ? $this->authPrivate : $class;
-            $auth_nodes = $this->_get_auth_nodes($this->admin['id'], $type);
+            $auth_nodes = $this->getAuthNodes($this->admin['id'], $type);
             $differ = array_unique(array_merge($rules, $auth_nodes[$class]));
             if (count($differ) > count($auth_nodes[$class])) {
                 return false;
@@ -385,18 +385,21 @@ class Auth
      */
     public function superAdmin() 
     {
-        $group_ids = AdminModel::field('group_id')->find($this->admin['id']);
-        $group_ids = explode(',',$group_ids['group_id']);
-        $this->group_ids = $group_ids;
-        return array_search(1,$group_ids) !== false ? true : false;
+        $groupIDs = AdminModel::field('group_id')->find($this->admin['id']);
+        $groupIDs = explode(',',$groupIDs['group_id']);
+        $this->groupIDs = $groupIDs;
+        if ($this->admin['id'] == 1 || array_search(1,$groupIDs)) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * 管理组分级鉴权
-     * @param array $group_ids 
+     * @param array $groupIDs 
      * @return bool
      */
-    public function check_group_auth(array $group_ids = [])
+    public function checkGroupAuth(array $groupIDs = [])
     {
         if ($this->superAdmin()) {
             return true;
@@ -406,8 +409,8 @@ class Auth
         $list = AdminGroupModel::select()->toArray();
         foreach ($list as $value) {
             // 循环处理组PID
-            if (in_array($value['id'], $group_ids)) {
-                foreach ($this->group_ids as $id) {
+            if (in_array($value['id'], $groupIDs)) {
+                foreach ($this->groupIDs as $id) {
                     $self = list_search($list,['id'=>$id]);
                     if (!empty($self) && 
                         ($value['pid'] < $self['id'] || $value['pid'] == $self['pid']) ) {
@@ -446,7 +449,7 @@ class Auth
      * @param string|null $class
      * @return bool
      */
-    public function checkapi(string $class = null) {
+    public function checkAPI(string $class = null) {
         
         // 请求参数
         $this->params = input();
@@ -566,7 +569,7 @@ class Auth
     protected function dayCeilingSeconds(array $result = []) 
     {
         // 查询规则
-        $access = md5hash($this->params['app_id'].$result['class']);
+        $access = md5_hash($this->params['app_id'].$result['class']);
         if ($result['day'] || $result['ceiling'] || $result['seconds'] ) {
             $condition = ApiCondition::where('hash',$access)->find();
             if (empty($condition)) {
@@ -697,13 +700,13 @@ class Auth
      * @param object|array  $array
      * @return bool
      */
-    public function setloginState($array = null, $token = false)
+    public function setloginState(object|array $array = null, $token = false)
     {
         $this->token = $token ? cookie('token') : $this->buildToken($array);
-        cookie('uid',$array['id'],$this->keeptime);
-        cookie('token',$this->token,$this->keeptime);
-        cookie('nickname',$array['nickname'] ?? $array['name'],$this->keeptime);
-        $this->setactiveState(is_object($array) ? $array : $array);
+        cookie('uid',$array['id'],$this->keepTime);
+        cookie('token',$this->token,$this->keepTime);
+        cookie('nickname',$array['nickname'] ?? $array['name'],$this->keepTime);
+        $this->setActiveState(is_object($array) ? $array : $array);
     }
 
     /**
@@ -711,10 +714,10 @@ class Auth
      * @param   array $array
      * @return  bool
      */
-    public function setactiveState($array = []) {
-        $tag = md5hash((string)$array['id']);
+    public function setActiveState(object|array $array = []) {
+        $tag = md5_hash((string)$array['id']);
         \think\facade\Cache::tag($tag)->clear();
-        \think\facade\Cache::tag($tag)->set($this->token,$array,$this->keeptime);
+        \think\facade\Cache::tag($tag)->set($this->token,$array,$this->keepTime);
     }
 
     /**

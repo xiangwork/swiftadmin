@@ -20,7 +20,7 @@ class Tpl extends AdminController
     /**
      * 读取模板列表
      */
-    public function showtpl() 
+    public function showTpl() 
     {
         // 读取配置文件
         $list = include (root_path().'extend/conf/tpl/tpl.php');
@@ -34,7 +34,7 @@ class Tpl extends AdminController
     /**
      * 编辑邮件模板
      */
-    public function edittpl() 
+    public function editTpl() 
     {
         if (request()->isPost()) {
             $post = input();

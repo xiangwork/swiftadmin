@@ -10,10 +10,7 @@ declare (strict_types = 1);
 // | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 namespace app\common\library;
-
 use WordAnalysis\Analysis;
-use app\common\model\system\Recyclebin;
-
 /**
  * 全局模型数据处理类
  * 1、自动设置字段属性
@@ -22,7 +19,7 @@ use app\common\model\system\Recyclebin;
 class Content 
 {
     /**
-     * 数据写入前置操作
+     * 数据写入前
      * @access  public
      * @param   object $data
      * @return  void
@@ -30,32 +27,96 @@ class Content
     public static function onBeforeWrite($data)
     {}
 
+    
     /**
-     * 数据删除事件
-     * @access      public
-     * @param       array        $data           当前数组
-     * @return      string
+     * 数据新增前
+     * @access  public
+     * @param   object $data
+     * @return  void
      */
-    public static function onAfterDelete($data)
+    public static function onBeforeInsert($data)
+    {}
+
+    /**
+     * 数据新增后
+     * @access  public
+     * @param   object $data
+     * @return  void
+     */
+    public static function onAfterInsert($data, $index = null)
     {
-        return Recyclebin::recycleData($data);
+        $index && search_model()::instance()->index($index)->create($data);
+    }
+
+    /**
+     * 数据更新前
+     * @access  public
+     * @param   object $data
+     * @return  void
+     */
+    public static function onBeforeUpdate($data)
+    {}
+
+    /**
+     * 数据更新后
+     * @access  public
+     * @param   object $data
+     * @return  void
+     */
+    public static function onAfterUpdate($data, $index = null)
+    {
+        $index && search_model()::instance()->index($index)->update($data);
     }
 
     /**
      * 数据写入后
-     * @param   object  $data
-     * @return  string
+     * @param [type] $data
+     * @param string $index
+     * @return void
      */
-    public static function onAfterWrite($data)
+    public static function onAfterWrite($data,$index = null)
+    {}
+    
+    /**
+     * 数据删除前
+     * @access      public
+     * @param       array 
+     * @return      string
+     */
+    public static function onBeforeDelete($data)
+    {}
+
+    /**
+     * 数据删除后
+     * @access      public
+     * @param       array 
+     * @return      string
+     */
+    public static function onAfterDelete($data, $index = null)
     {
-        try {
-            if (saenv('url_model') == STATICS) {
-                $base = new \app\admin\controller\system\Rewrite(app('app'));
-                $base->createhtmlByone($data);
-            }
-        } catch (\Throwable $th) {
-            throw new \Exception($th->getMessage());
+        if (!isset($data['delete_force'])) {
+            $index && search_model()::instance()->index($index)->delete($data['id']);
         }
+    }
+
+    /**
+     * 数据恢复前
+     * @access      public
+     * @param       array 
+     * @return      string
+     */
+    public static function onBeforeRestore($data)
+    {}
+
+    /**
+     * 数据恢复后
+     * @access      public
+     * @param       array 
+     * @return      string
+     */
+    public static function onAfterRestore($data, $index = null)
+    {
+        $index && search_model()::instance()->index($index)->create($data);
     }
 
     /**
@@ -87,23 +148,6 @@ class Content
         }
         return $letter;
     }  
-
-    /**
-     * 获取哈希值
-     * @access      public
-     * @param       string       $hash           属性值
-     * @param       array        $data           当前数组
-     * @return      string
-     */
-    public static function setHashAttr($hash, $data) 
-    {
-        if (empty($data['hash'])) {
-            return md5hash($data['cid'].$data['id']);
-        }
-
-        return $hash;
-    }
-
 
     /**
      * 获取内容属性
@@ -355,14 +399,15 @@ class Content
     public static function getReadurlAttr($readUrl,$data)
     {
 
-        if ($data['jumpurl']) {
-            return $data['jumpurl'];
+        if (isset($data['attr']['jumpurl'])
+            && !empty($data['attr']['jumpurl'])) {
+            return $data['attr']['jumpurl'];
         }
-        
+
         if (!empty($readUrl)) {
             return $readUrl;
         }
 
-        return build_request_url($data,'content_page');
+        return build_request_url($data,'content_style');
     }
 }

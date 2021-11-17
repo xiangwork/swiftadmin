@@ -11,10 +11,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 namespace app\admin\controller\system;
 
-
 use app\AdminController;
-
-use think\facade\Db;
 use app\common\model\system\Dictionary as DictionaryModel;
 
 class Dictionary extends AdminController
@@ -23,7 +20,7 @@ class Dictionary extends AdminController
     public function initialize() 
     {
 		parent::initialize();
-        $this->model =  new DictionaryModel();
+        $this->model = new DictionaryModel();
     }
     
     public function index() 
@@ -34,7 +31,7 @@ class Dictionary extends AdminController
         if ($pid == 'parent') {
             $pid = 0;
         } else {
-            $pid = $pid ?? $this->model->minid();
+            $pid = $pid ?? $this->model->minId();
         }
 
         if (request()->isAjax()) {

@@ -155,7 +155,7 @@ class HomeController extends BaseController
     public function findUrltype()
     {
         $types = ['id','hash','pinyin'];
-        $urls = saenv('content_page');
+        $urls = saenv('content_style');
         foreach ($types as $value) {
             if (strstr($urls,$value)) {
                 return $value;

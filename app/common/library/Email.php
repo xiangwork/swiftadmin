@@ -260,7 +260,7 @@ class Email
     /**
      * 测试发送
      */
-    public function testemail($config) 
+    public function testEmail($config) 
     {
 
         if (empty($config) || !is_array($config)) {

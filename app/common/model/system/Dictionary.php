@@ -33,7 +33,7 @@ class Dictionary extends Model
     /**
      * 返回最小id
      */
-    public static function minid()
+    public static function minId()
     {
         return (int)self::where('pid','0')->min('id');
     }

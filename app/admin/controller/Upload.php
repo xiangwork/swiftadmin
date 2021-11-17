@@ -55,6 +55,4 @@ class Upload extends AdminController
 
 		return json($filename);
 	}
-
-
 }

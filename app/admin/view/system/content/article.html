@@ -7,6 +7,7 @@
         <div class="layui-card-body">
 	        <gt name="$data.id" value="0">
 	            <input type="text" name="id" value="{$data.id}" hidden="">
+	            <input type="text" name="_field_distribution" value="error" hidden="">
 	            <else/>
 	            <input type="text" name="id" value="" hidden="">
 	        </gt>
@@ -30,11 +31,7 @@
 		                    </div>
 		                </div>
 
-						<div class="layui-form-item layui-form-item-fixed">
-		                    <label class="layui-form-label">{:__('文章拼音')}</label>
-		                    <div class="layui-input-inline" >
-		                        <input type="text" name="pinyin" placeholder="{:__('默认自动生成')}" value="{$data.pinyin}" class="layui-input">
-		                    </div>							
+						<div class="layui-form-item layui-form-item-fixed">						
 							<label class="layui-form-label">{:__('分类')}</label>
 							<div class="layui-input-inline" >
 								<div id="pid"></div>
@@ -83,7 +80,7 @@
 		                <div class="layui-form-item" >
 		                    <label class="layui-form-label">{:__('文章内容')}</label>
 		                    <div class="layui-input-block">
-		                        <textarea id="content" class="layui-hide" name="content" type="layui-textarea" >{$data.content}</textarea>
+		                        <textarea id="content" class="layui-hide" name="content" type="layui-textarea" >{$data.attr.content|default=''}</textarea>
 		                    </div>
 		                </div>
                     </div>
@@ -96,7 +93,7 @@
 		                    	<select name="skin">
 		                    		<option value=""></option>
 		                    		<salibs:customtpl id="vo">
-		                    		<option value="{$vo}" <if condition="$vo eq $data['skin']"> selected </if> >{$vo}</option>
+		                    		<option value="{$vo}" <if condition="$vo eq $data['attr']['skin']"> selected </if> >{$vo}</option>
 		                    		</salibs:customtpl>
 		                    	</select>
 		                    </div>  		               
@@ -104,34 +101,34 @@
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('SEO标题')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="seo_title" placeholder="{:__('请输入SEO标题')}" value="{$data.seo_title}" class="layui-input">
+		                        <input type="text" name="seo_title" placeholder="{:__('请输入SEO标题')}" value="{$data.attr.seo_title}" class="layui-input">
 		                    </div>                                          
 		                </div>
 
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('关键TAG')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="seo_keywords" placeholder="{:__('请输入SEO关键词')}" value="{$data.seo_keywords}" class="layui-input">
+		                        <input type="text" name="seo_keywords" placeholder="{:__('请输入SEO关键词')}" value="{$data.attr.seo_keywords}" class="layui-input">
 		                    </div>                                          
 		                </div>
 
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('SEO简介')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <textarea name="seo_description" placeholder="{:__('请输入SEO描述信息')}" class="layui-textarea" >{$data.seo_description}</textarea>
+		                        <textarea name="seo_description" placeholder="{:__('请输入SEO描述信息')}" class="layui-textarea" >{$data.attr.seo_description}</textarea>
 		                    </div>                                          
 		                </div>
 
 		                <div class="layui-form-item" >
 		                    <label class="layui-form-label" >{:__('采集来源')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="reurl" placeholder="http://" value="{$data.reurl}" class="layui-input">
+		                        <input type="text" name="reurl" placeholder="http://" value="{$data.attr.reurl}" class="layui-input">
 		                    </div>
 		                </div>
 		                <div class="layui-form-item" >
 		                    <label class="layui-form-label" >{:__('跳转地址')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="jumpurl" placeholder="https://" value="{$data.jumpurl}" class="layui-input">
+		                        <input type="text" name="jumpurl" placeholder="https://" value="{$data.attr.jumpurl}" class="layui-input">
 		                    </div>
 		                </div>
 
@@ -241,7 +238,7 @@
 <script>
 	var grouplist = {:get_usergroup_json()};
 	// 添加标签cid
-	var categorylist = {:get_category_json(0,1,'id,cid,pid,title')};
+	var categorylist = {:get_category_json()};
 </script>
 <script>
     layui.use(['admin','content'], function () {

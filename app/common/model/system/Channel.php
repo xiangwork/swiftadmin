@@ -23,9 +23,8 @@ class Channel extends Model
     /**
      * 获取模型数据
      */
-    public static function get_channel_list($id = null) 
-    { 
-
+    public static function getChannelList($id = null, string $tpl = null, string $field = null) 
+    {
         $data = system_cache('channel');
         if (empty($data)) {
             $data = self::select()->toArray();
@@ -36,16 +35,18 @@ class Channel extends Model
         }
 
         // 判断数据
-        if (!empty($data) && $data !== 0) {
-
-            if (!\is_empty($id)) {
-                $data = list_search($data, ['id'=>$id]);
-            }
-            
-            return $data;
+        if (!empty($id)) {
+            $data = list_search($data, ['id'=>$id]);
         }
-
+        
+        if (!empty($tpl)) {
+            $data = list_search($data, ['template'=>$tpl]);
+        }
+        
+        if (!empty($field) && isset($data[$field])) {
+            $data = $data[$field];
+        }
+        
+        return $data; 
     }
-    
-
 }

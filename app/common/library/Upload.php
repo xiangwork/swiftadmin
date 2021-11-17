@@ -109,7 +109,7 @@ class Upload
         }
 
         // 文件信息过滤器
-        if (!$this->filefilter($file)) {
+        if (!$this->fileFilter($file)) {
             $this->setError($this->_error ?? '禁止上传的文件类型！');
 			return false;
         }
@@ -167,14 +167,14 @@ class Upload
         }
 
         // 文件信息过滤器
-        if (!$this->filefilter($file)) {
+        if (!$this->fileFilter($file)) {
             $this->setError($this->_error);
 			return false;
         }
 
         // 拼接文件路径
         if ($avatar) {
-            $this->filename = md5hash((string)$id).'_100x100.'.strtolower($file->extension());
+            $this->filename = md5_hash((string)$id).'_100x100.'.strtolower($file->extension());
             $this->filepath = $this->config['upload_path'].'/avatar'; 
         }else {
             $this->filename = uniqid().'.'.strtolower($file->extension());
@@ -205,7 +205,7 @@ class Upload
              * 后续优化代码
              */
             /*if ($this->config['upload_water']) {
-                $this->Images->watermark($this->resource,$this->config);
+                $this->Images->waterMark($this->resource,$this->config);
             }
 
             if ($this->config['upload_thumb'] || $avatar ){
@@ -255,11 +255,18 @@ class Upload
                 $heads = @get_headers($url, true);
                 if (empty($heads)) {
                     continue;
-                } else if (!stristr($heads[0], "200") 
-                            && !stristr($heads[0], "301")
-                            && !stristr($heads[0], "302")
-                            && !stristr($heads[0], "304")) {
+                } 
+                else if (!stristr($heads[0], "200") 
+                    && !stristr($heads[0], "301") 
+                    && !stristr($heads[0], "302") 
+                    && !stristr($heads[0], "304")) 
+                {
                     continue;
+                }
+
+                // 获取跳转后的URL地址
+                if (stristr($heads[0], "302")) {
+                    $url = $heads['Location'];
                 }
 
                 // 从缓冲区读取
@@ -269,25 +276,30 @@ class Upload
                         'follow_location' => false
                     ))
                 );
+
                 readfile($url, false, $context);
                 $content = ob_get_contents();
-                if (empty($content)) {
+                if (empty($content) || strlen($content) <= 300) {
                     $content = Http::get($url);
                 }
+                
                 ob_end_clean();
                 $this->filename = uniqid().'.'.strtolower('jpg');
                 $this->filepath = $this->config['upload_path'].'/images/'.date($this->config['upload_style']); 
                 $this->resource = $this->filepath .'/'. $this->filename;
-
+                if (!write_file($this->resource,$content)) {
+                    continue;
+                }
+  
                 // 写入文件
                 if (!write_file($this->resource,$content)) {
                     continue;
                 }
                 if ($this->config['upload_water']) {
-                    $this->Images->watermark($this->resource,$this->config);
+                    // $this->Images->waterMark($this->resource,$this->config);
                 }
                 if ($this->config['upload_thumb'] && $key <= 0){
-                    $this->Images->thumb($this->filepath, $this->filename, $this->config);
+                    // $this->Images->thumb($this->filepath, $this->filename, $this->config);
                 }
 
                 $images[$field] = '/'.$this->resource;
@@ -342,10 +354,10 @@ class Upload
             // 存在微缩图则上传
             $thumbfile = $this->filepath.'/thumb_'.$this->filename;
             if ($this->config['upload_ftp'] && is_file($thumbfile)) {
-                $ftpstatus = Ftp::instance()->ftp_upload($thumbfile,$this->filepath,'thumb_'.$this->filename,$this->config);
+                $ftpstatus = Ftp::instance()->ftpUpload($thumbfile,$this->filepath,'thumb_'.$this->filename,$this->config);
             }
             
-            $ftpstatus = Ftp::instance()->ftp_upload($this->resource,$this->filepath,$this->filename,$this->config);
+            $ftpstatus = Ftp::instance()->ftpUpload($this->resource,$this->filepath,$this->filename,$this->config);
 			if ($ftpstatus) {
 
 				// 删除本地文件
@@ -367,7 +379,7 @@ class Upload
     /**
      * 验证文件类型
      */
-    public function filefilter($file) 
+    public function fileFilter($file) 
     {
         // 查找文件类型	
         foreach ($this->config['upload_class'] as $key => $value) {

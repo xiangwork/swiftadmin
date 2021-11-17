@@ -13,7 +13,6 @@ namespace app;
 use think\App;
 use think\Validate;
 use think\Response;
-use think\facade\View;
 use think\exception\ValidateException;
 use think\exception\HttpResponseException;
 
@@ -219,7 +218,7 @@ abstract class BaseController
      */
     protected function buildHtml(string $htmlfile = null,string $htmlpath = null, string $templateFile = null,$suffix = 'html') 
     {
-        $content = View::fetch($templateFile); 
+        $content = $this->app->view->fetch($templateFile);
         $htmlpath = !empty($htmlpath) ? $htmlpath : './';
         $htmlfile = $htmlpath . $htmlfile . '.' . $suffix; 
 

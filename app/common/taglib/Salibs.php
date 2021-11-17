@@ -47,18 +47,20 @@ class Salibs extends TagLib {
      * @param  string  $tags 值或变量
      * @return string
      */
-	public function tagCategory($tags, $content) {
+	public function tagCategory($tags, $content)
+	{
 
-		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
+		$tags['id'] = !empty($tag['id'])?$tag['id']:'vo';
 		$id = $this->autoBuildVar($tags['id']);
 		$pid = isset($tags['pid']) ? $tags['pid'] : '0';
-		$cid = isset($tags['cid']) ? $tags['cid'] : '0';
+		$cid = isset($tags['cid']) ? $tags['cid'] : '';
 		$type = isset($tags['type']) ? $tags['type'] : 'top';
 		$typeid = isset($tags['typeid']) ? $tags['typeid'] : '';
-		$single = isset($tags['single']) ? $tags['single'] : '0';
-		$limit  = isset($tags['limit']) ? $tags['limit'] : '10';
-		$field  = isset($tags['field']) ? $tags['field'] : '*';
-		$order  = isset($tags['order']) ? $tags['order'] : 'id asc';
+		$field  = !empty($tags['field'])  ? $tags['field']  :  '*';
+		$limit  = !empty($tags['limit'])  ? $tags['limit']  :  '10';
+		$single = !empty($tags['single']) ? $tags['single'] :  '0';
+		$order  = !empty($tags['order'])  ? $tags['order']  :  'id asc';
+
 		$html = <<<Eof
 		<?php
 			\$where = [];
@@ -68,14 +70,13 @@ class Salibs extends TagLib {
 			if (!empty('{$cid}')) {
 				\$where[] = ['cid','=','{$cid}'];
 			}
-			\$where[] = ['status','=','1'];
 			\$where[] = ['pid','=','{$pid}'];
+			\$where[] = ['status','=','1'];
 			\$where[] = ['single','=','{$single}'];
-			\$Db = new \app\common\model\system\Category();
-			\$list = \$Db->where(\$where)->field('{$field}')->limit({$limit})->order('{$order}')->select();
+			\$list = \app\common\model\system\Category::where(\$where)->field('{$field}')->limit({$limit})->order('{$order}')->select();
 			if ('{$type}' == 'son') {
-				foreach (\$list as \$key => \$child) {
-					\$list[\$key]['child'] = \$Db->where('pid',\$list[\$key]['id'])->field('{$field}')->limit({$limit})->order('{$order}')->select();
+				foreach (\$list as \$key => \$son) {
+					\$list[\$key]['son'] = \app\common\model\system\Category::where('pid',\$list[\$key]['id'])->field('{$field}')->limit({$limit})->order('{$order}')->select();
 				}
 			}
 			foreach (\$list as \$key => {$id}):
@@ -98,7 +99,6 @@ class Salibs extends TagLib {
 		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
 		$id = $this->autoBuildVar($tags['id']);
 		
-
 		$html = <<<Eof
 		<?php
 			\$list = \app\common\model\system\Navmenu::getListNav();
@@ -329,7 +329,7 @@ class Salibs extends TagLib {
 		$id = $this->autoBuildVar($tags['id']);
 		$limit 	= isset($tags['limit']) ? (!empty($tags['limit']) ? $tags['limit'] : '10' ): '10';
 		$field 	= isset($tags['field']) ? (!empty($tags['field']) ? $tags['field'] : '*' ): '*';
-		$order 	= isset($tags['order']) ? (!empty($tags['order']) ? $tags['order'] : 'createtime desc' ): 'createtime desc';
+		$order 	= isset($tags['order']) ? (!empty($tags['order']) ? $tags['order'] : 'id desc' ): 'id desc';
 		$thumb  = isset($tags['thumb']) ? (!empty($tags['thumb']) ? $tags['thumb'] : 'not' ): 'not';
 		$title  = isset($tags['title']) ? (!empty($tags['title']) ? $tags['title'] : 'not' ): 'not';
 
@@ -343,7 +343,7 @@ class Salibs extends TagLib {
 			if ('{$title}' != 'not') {
 				\$where[] = ['title','like','%'.'{$title}'.'%'];
 			}
-			\$list = \app\common\model\system\Article::where(\$where)->field('{$field}')->order('{$order}')->limit({$limit})->select()->toArray();
+			\$list = \app\common\model\system\Content::where(\$where)->field('{$field}')->order('{$order}')->limit({$limit})->select()->toArray();
 			foreach (\$list as \$key => {$id}):
 		?>
 		$content
@@ -352,8 +352,6 @@ class Salibs extends TagLib {
 		return $html;
 
 	}
-
-
 
 	/**
 	 * 自定义变量标签

@@ -83,8 +83,8 @@ class Admin extends AdminController
             // 循环处理数据
             foreach ($list as $key => $value) {
 
-                $group_ids = explode(',', $value['group_id']);
-                foreach ($group_ids as $field => $id) {
+                $groupIDs = explode(',', $value['group_id']);
+                foreach ($groupIDs as $field => $id) {
                     // 查找组
                     if ($result = list_search($this->group, ['id' => $id])) {
                         $list[$key]['group'][$field] = $result;
@@ -95,10 +95,10 @@ class Admin extends AdminController
                     $list[$key]['group'] = list_sort_by($list[$key]['group'], 'id');
                 }
 
-                $authnodes = $this->auth->_get_auth_nodes($value['id']);
+                $authnodes = $this->auth->getAuthNodes($value['id']);
                 $list[$key]['rules'] = $authnodes[$this->auth->authPrivate];
 
-                $authnodes = $this->auth->_get_auth_nodes($value['id'], 'cates');
+                $authnodes = $this->auth->getAuthNodes($value['id'], 'cates');
                 $list[$key]['cates'] = $authnodes[$this->auth->authPrivate];
             }
 
@@ -121,7 +121,7 @@ class Admin extends AdminController
 
             // 验证数据
             $post = input('post.');
-            $post = safe_field_model($post, get_class($this->model));
+            $post = safe_field_model($post, $this->model::class);
             if (!is_array($post)) {
                 return $this->error($post);
             }
@@ -164,7 +164,7 @@ class Admin extends AdminController
 
                 // 验证数据
                 $post = input('post.');
-                $post = safe_field_model($post, get_class($this->model));
+                $post = safe_field_model($post, $this->model::class);
                 if (!is_array($post)) {
                     return $this->error($post);
                 }
@@ -193,16 +193,16 @@ class Admin extends AdminController
     public function editRules()
     {
         if (request()->isPost()) {
-            return $this->_update_rulecates();
+            return $this->_update_RuleCates();
         }
     }
 
     /**
      * 编辑栏目权限
      */
-    public function editcates()
+    public function editCates()
     {
-        return $this->_update_rulecates('cates');
+        return $this->_update_RuleCates('cates');
     }
 
     /**
@@ -211,7 +211,7 @@ class Admin extends AdminController
      * @param       string          $type  规则
      * @return      mixed|array
      */
-    protected function _update_rulecates($type = 'rules')
+    protected function _update_RuleCates($type = 'rules')
     {
         if (request()->isPost()) {
 
@@ -220,11 +220,11 @@ class Admin extends AdminController
 
             if (!empty($uid) && $uid > 0) {
 
-                $access = $this->auth->_get_auth_nodes($uid, $type);
+                $access = $this->auth->getAuthNodes($uid, $type);
                 $rules  = array_diff($rules, $access[$this->auth->authGroup]);
 
                 // 权限验证
-                if (!$this->auth->check_rulecates_node($rules, $type, $this->auth->authPrivate)) {
+                if (!$this->auth->checkRuleCatesNode($rules, $type, $this->auth->authPrivate)) {
                     return $this->error('没有权限!');
                 }
 
@@ -232,7 +232,7 @@ class Admin extends AdminController
                 $differ = array_diff($access[$this->auth->authPrivate], $access[$this->auth->authGroup]);
                 $current = [];
                 if (!$this->auth->superAdmin()) {
-                    $current = $this->auth->_get_auth_nodes();
+                    $current = $this->auth->getAuthNodes();
                     $current = array_diff($differ, $current[$this->auth->authPrivate]);
                 }
 
@@ -260,7 +260,7 @@ class Admin extends AdminController
     {
         $action = request()->param('action/s');
         if (request()->isAjax()) {
-            $action = $action ?? '_get_auth_menus';
+            $action = $action ?? 'getAuthMenus';
             if (is_callable(array($this->auth, $action))) {
                 return call_user_func(array($this->auth, $action), input());
             }
@@ -448,7 +448,7 @@ class Admin extends AdminController
     public function language()
     {
         $language = input('l/s');
-        $env = root_path() . '.env';
+        $env = root_path().'.env';
         $array = parse_ini_file($env, true);
         $array['LANG']['default_lang'] = $language;
         $content = parse_array_ini($array);
@@ -514,13 +514,13 @@ class Admin extends AdminController
             try {
                 // 清理内容
                 if ($type == 'all' || $type == 'content') {
-                    recursiveDelete(root_path() . 'runtime');
+                    recursive_delete(root_path('runtime'));
                     \think\facade\Cache::clear();
                 }
 
                 // 清理模板
                 if ($type == 'all' || $type == 'template') {
-                    recursiveDelete(root_path() . 'runtime' . '/temp');
+                    recursive_delete(root_path('runtime' . '/temp'));
                 }
 
                 // 清理插件缓存

@@ -5,7 +5,7 @@ namespace app\common\model\system;
 
 use think\Model;
 use think\model\concern\SoftDelete;
-use app\common\library\Content;
+use app\common\library\Content as ContentLibrary;
 
 /**
  * @mixin \think\Model
@@ -153,7 +153,7 @@ class Category extends Model
      */
     public function setPinyinAttr($pinyin, $data) 
     {
-        return Content::setPinyinAttr($pinyin,$data);
+        return ContentLibrary::setPinyinAttr($pinyin,$data);
     }
 
     /**
@@ -164,7 +164,7 @@ class Category extends Model
      */
     public function setImageAttr($image,$data)
     {
-        return Content::setImageAttr($image,$data);
+        return ContentLibrary::setImageAttr($image,$data);
     }
 
     /**
@@ -175,7 +175,7 @@ class Category extends Model
      */
     public function getImageAttr($image)
     {
-        return Content::getImageAttr($image);
+        return ContentLibrary::getImageAttr($image);
     }
 
     /**
@@ -186,7 +186,7 @@ class Category extends Model
      */
     public function getBannerAttr($image)
     {
-        return Content::getImageAttr($image);
+        return ContentLibrary::getImageAttr($image);
     }    
 
     /**
@@ -197,7 +197,7 @@ class Category extends Model
      */
     public function setContentAttr($content,$data)
     {
-        return Content::setContentAttr($content,$data);
+        return ContentLibrary::setContentAttr($content,$data);
     }
 
     /**
@@ -208,7 +208,7 @@ class Category extends Model
      */
     public function getContentAttr($content,$data)
     {
-        return Content::getContentAttr($content,$data);
+        return ContentLibrary::getContentAttr($content,$data);
     }
 
     /**
@@ -225,7 +225,7 @@ class Category extends Model
         return $sort;
     }
 
-    public function getreadurlattr($readUrl,$data)
+    public function getReadurlAttr($readUrl,$data)
     {
         if ($data['jumpurl']) {
             return $data['jumpurl'];
@@ -235,6 +235,6 @@ class Category extends Model
             return $readUrl;
         }
 
-        return build_request_url($data,'category_page');
+        return build_request_url($data,'category_style');
     }
 }

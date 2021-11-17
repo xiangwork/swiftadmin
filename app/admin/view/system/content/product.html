@@ -7,6 +7,7 @@
         <div class="layui-card-body">
 	        <gt name="$data.id" value="0">
 	            <input type="text" name="id" value="{$data.id}" hidden="">
+	            <input type="text" name="_field_distribution" value="error" hidden="">
 	            <else/>
 	            <input type="text" name="id" value="" hidden="">
 	        </gt>
@@ -262,7 +263,7 @@
 <script src="/static/js/tinymce/tinymce.min.js"></script>
 <script>
 	var grouplist = {:get_usergroup_json()};
-	var categorylist = {:get_category_json(0,5,'id,cid,pid,title')};
+	var categorylist = {:get_category_json()};
 </script>
 <script>
     layui.use(['admin','content'], function () {

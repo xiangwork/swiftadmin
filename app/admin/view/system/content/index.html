@@ -135,6 +135,7 @@
             elem: "#lay-tableList"
             ,url: tableURL
             ,page: true
+            ,limit: 18
             ,cols: [[
                 {type: 'checkbox'},
                 {field:'id' ,align: 'center',sort: true,width: 80,  title: 'ID'},
@@ -176,7 +177,7 @@
             return eleTree({
                 el: '#' + elem ,
                 data: admin.event.getAjaxData(authURL,{ 
-                    action : 'get_rulecates_tree',
+                    action : 'getrulecatestree',
                     type   : 'cates',
                     class  : 'private'
                 }),
@@ -222,26 +223,28 @@
                     'pid': event.data.id
                 });
 
+                
+
                 // 重载地址参数
                 var url = clickthis.attr('lay-value');
-
+                console.log(url);
                 if (url.indexOf('move') == -1) {
                     clickthis.attr('lay-url',url + param);
                     clickthis.attr('lay-area','100%,100%');
                     clickthis.removeAttr('lay-title lay-callback');
                     parent.layui.jquery(clickthis).trigger('click');
                 } else {
-                    
+                    console.log(event.data);
                     // 模拟元素点击
                     var batchthis = jquery('#batch');
                     if (!batchthis.length) {
-                        var html = '<div id="batch" lay-url="'+url+'?destpid='+event.data.id+'"'; 
-                        html += 'lay-batch="lay-tableList" lay-field="cid"></div>';
+                        var html = '<div id="batch" lay-batch="lay-tableList" lay-field="cid"></div>';
                         jquery(clickthis).parent().append(html);
                         batchthis = jquery('#batch');
                     }
-                    batchthis.trigger('click');
 
+                    batchthis.attr('lay-url',url+'?destpid='+event.data.id);
+                    batchthis.trigger('click');
                 }
 
                 layui.layer.close(colletction.index);

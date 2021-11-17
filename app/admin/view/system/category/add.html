@@ -85,7 +85,7 @@
                         <div class="layui-form-item"> 
                             <label class="layui-form-label">{:__('关键字')}</label>
                             <div class="layui-input-inline wid650">
-                                <input name="seo_words" type="text" class="layui-input" value="{$data.seo_keywords}" placeholder="{:__('请填写SEO关键字')}"/>
+                                <input name="seo_keywords" type="text" class="layui-input" value="{$data.seo_keywords}" placeholder="{:__('请填写SEO关键字')}"/>
                             </div>
                         </div>
 
@@ -162,7 +162,7 @@
 <script src="/static/js/tinymce/tinymce.min.js"></script>
 <script>
     var grouplist = {:get_usergroup_json()};
-    var categorylist = {:get_category_json()};  
+    var categorylist = {:get_category_json()};
 </script>
 <script>
     layui.use(['content'],function () {

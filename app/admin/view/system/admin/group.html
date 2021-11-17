@@ -98,7 +98,7 @@
 <!-- // 栏目权限列表 -->
 <script type="text/html" id="cateForms">
 <div class="layui-fluid layui-bg-white" >
-    <form action="{:url('/system.admingroup/editcates')}" class="layui-form">
+    <form action="{:url('/system.admingroup/editCates')}" class="layui-form">
     <div class="layui-authtree" style="padding-left: 15px"><div id="cateTree"></div></div>
     <div class="layui-footer layui-form-item layui-center "  >
         <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('取消')}</button>
@@ -167,7 +167,7 @@
             // 创建实例
             var tree = eleTree({
                 el: '#authTree',
-                data: _ajax('get_rulecates_tree'),
+                data: _ajax('getrulecatestree'),
                 highlightCurrent: true,
                 showCheckbox: true,
                 showLine: false,
@@ -246,7 +246,7 @@
             // 创建实例
             var tree = eleTree({
                 el: '#cateTree',
-                data: _ajax('get_rulecates_tree','cates'),
+                data: _ajax('getrulecatestree','cates'),
                 highlightCurrent: true,
                 showCheckbox: true,
                 isDefaultChangePstatus: true,

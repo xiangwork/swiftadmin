@@ -48,6 +48,7 @@ class Wiki extends ApiController
         $where['app_id'] = 1;
         $list = ApiGroup::where($where)->select()->toArray();
         $apis = Api::where($where)->order('pid','asc')->select()->each(function($item) {
+            
             // 避免主键冲突
             $item['id'] = 10000 + $item['id'];
             return $item;

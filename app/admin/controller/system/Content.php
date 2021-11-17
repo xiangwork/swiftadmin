@@ -11,49 +11,29 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 namespace app\admin\controller\system;
 
-
-use app\AdminController;
 use think\facade\Db;
+use app\AdminController;
 use app\common\model\system\Channel;
 use app\common\model\system\Category;
+use app\common\model\system\Content as ContentModel;
 use app\common\validate\system\Content as Contvalidate;
 
 class Content extends AdminController 
 {
-
-   /**
-    * 模型数据表
-    * @access   protected
-    * @var      string
-    */
-    protected   $parent = null;
-
     // 初始化函数
     public function initialize() {
-
         parent::initialize();
         try {
-
-            // 查找当前模型
-            $cid = request()->param('cid');
-            if (!is_array($cid)) {
-                $channel = Channel::get_channel_list($cid);
+            $ModelId = request()->param('cid');
+            if (!empty($ModelId) && !is_array($ModelId)) {
+                $this->channel = Channel::getChannelList($ModelId);
+                $this->template = $this->channel['template'];
             }
-            
-            // 是否存在数据库表
-            if (isset($channel['table'])) {
-                $namespace = NAMESPACEMODELSYSTEM.ucfirst($channel['table']);
-                if (class_exists($namespace)) {
-                    $this->parent = $channel['table'];
-                    $this->model = new $namespace;
-                }
-            }
-        }
-        catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             return $this->error($th->getMessage());
         }
-
-		$this->middleware = [\app\admin\middleware\system\Content::class];    
+        $this->model = new ContentModel();
+		$this->middleware = [\app\admin\middleware\system\Content::class];
     }
 
 	/**
@@ -67,93 +47,44 @@ class Content extends AdminController
             $post = input();
             $pid   = request()->param('pid');
             $page = request()->param('page/d') ?? 1;
-            $limit = request()->param('limit/d') ?? 2;
-            $status = !empty($post['status']) ? $post['status']-1:1;
+            $limit = request()->param('limit/d') ?? 18;
+            $status = !empty($post['status']) ? $post['status']-1 : 1;
 
             // 生成查询条件
             $where = array();
-            
-            $where[] = ['pid','=',$pid];
-            $where[] = ['status','=',$status];
-            
+
             if (!empty($post['title'])) {
                 $where[] = ['title','like','%'.$post['title'].'%'];
             }
-
-            $lists = [];
-            $count = 0;
-            try {
-
-                if (empty($pid) && !$this->parent) {
-                    
-                    // 获取权限节点
-                    $category = $this->auth->get_rulecates_tree('cates',$this->auth->authPrivate,false);
-                    $tables = [];
-                    foreach ($category as $value) {
-                        $channel = Channel::get_channel_list($value['cid']);
-                        if (isset($channel['table'])) {
-                            $table = $channel['table'];
-                            $tables[$table][] = $value['id'];
-                        }
-                    }
-                    
-                    // 组合UNION查询
-                    $unionSql = [];
-                    $where[] = ['delete_time','=',null];
-                    $field = "id,cid,pid,title,hash,status,hits,pinyin,author,gold,attribute,createtime";
-                    foreach ($tables as $table => $elems) {
-
-                        // 筛选条件
-                        foreach ($where as $key => $value) {
-                            $fixed[$key] = $where[$key];
-                            if ($fixed[$key][0] == 'pid') {
-                                $fixed[$key][1] = 'in';
-                                $fixed[$key][2] = implode(',',$elems);
-                            }
-                            $fixed[$key][0] = $table.'.'.$fixed[$key][0];
-                        }
-
-                        $unionSql[] = Db::view($table, $field)
-                                        ->view('category', ['title'=>'category'], "category.id=$table.pid")
-                                        ->where($fixed)->buildSql();
-                        if (count($tables) == 1) {
-                            $unionSql = current($unionSql);
-                            break;
-                        }
-
-                        if ($elems == end($tables)) {
-                            $unionSql = Db::view($table, $field)
-                                        ->view('category', ['title'=>'category'], "category.id=$table.pid")
-                                        ->where($fixed)->union($unionSql)->buildSql();
-                        }
-                    }
-
-                    if (!empty($unionSql)) {
-                        
-                        // 闭包循环处理数据
-                        $lists  = Db::table($unionSql . ' alias')->order('id','desc')
-                            ->paginate($limit)->each(function($item){
-                                    $item['readurl'] = build_request_url($item,'content_page'); 
-                                    $item['createtime'] = date('Y-m-d H:i:s',$item['createtime']);
-                                    return $item;
-                            })->toArray();
-                        $count  = $lists['total'];
-                        $lists  = $lists['data'] ?? [];
-                    }
+            
+            $where[] = ['status','=',$status];
+            if (!empty($pid)) {
+                $where[] = ['pid','=',$pid];
+            } else {
+                if (!$this->auth->SuperAdmin()) {
+                    $where[] = ['pid','in',$this->getCateNodes()];
                 }
-                else {
-                    $count = $this->model->where($where)->count();
-                    $page = ($count <= $limit) ? 1 : $page;
-                    $lists = $this->model->with('category')->where($where)
-                                                            ->order('id','desc')
-                                                            ->withoutField('content')
-                                                            ->limit($limit)
-                                                            ->page($page)->select()->toArray();
-                }
-
-            } catch (\Throwable $th) {
-                return $this->error($th->getMessage());
             }
+            
+            // try {
+                
+                if (saenv('search_status') && !empty($post['title'])) {
+                    $result = search_model()::instance()->index('content')->where($where)->order('id','desc')->limit($limit)->page($page)->search($post['title']);
+                    // halt($result);
+                    $count = search_model()::instance()->getCount();
+                    $subQuery = empty($result) ? '(0)' : '('.implode(',',array_column($result,'id')).')';
+                } else {
+                   
+                    $count = $this->model->where($where)->count();
+                    $subQuery = $this->model->field('id')->where($where)->order('id','desc')->limit($limit)->page($page)->buildSql();
+                    $subQuery = '( SELECT content.id FROM '.$subQuery.' AS content )';
+                }
+
+                $page = ($count <= $limit) ? 1 : $page;
+                $lists = $this->model->with('category')->where('id in'.$subQuery)->select();
+            // } catch (\Throwable $th) {
+            //     return $this->error($th->getMessage());
+            // }
 
             return $this->success('查询成功', null, $lists, $count, 0);
         }
@@ -170,7 +101,6 @@ class Content extends AdminController
         if (request()->isPost()) {
 
             try {
-                
                 $post = request()->post();
                 $post['admin_id'] = $this->admin['id'];
                 $post['author'] = $this->admin['name'];
@@ -179,7 +109,7 @@ class Content extends AdminController
                     throw new \Exception($post);
                 }
 
-                $this->model->create($post);
+                $this->model->together($this->setAttrField($post))->save($post);
 
             } catch (\Throwable $th) {
                 return $this->error($th->getMessage());
@@ -187,11 +117,11 @@ class Content extends AdminController
            
             return $this->success();
         }
-        
+
         // 渲染页面
-        $data = $this->getField($this->parent);
+        $data = $this->getAttrField();
         $data = array_merge($data,request()->param());
-        return view($this->parent,['data' => $data]);
+        return view($this->template,['data' => $data]);
     }
 
     /**
@@ -199,26 +129,29 @@ class Content extends AdminController
      */
     public function edit()
     {
-
         // 查找数据
         $id = request()->param('id');
         $pid = request()->param('pid');
-        $data = $this->model->where(['id'=>$id,'pid'=>$pid])->find();
+
+        $data = $this->model->with($this->setAttrField([],true))->where([
+            'id'=>$id,
+            'pid'=>$pid
+        ])->find();
 
         if (request()->isPost()) {
             
             try {
-
+                
                 $post = request()->post();
                 $post['attribute'] = input('attribute') ?? [];
                 $post = safe_validate_model($post,Contvalidate::class);
 
-                // 验证出错
                 if (!is_array($post)) {
                     throw new \Exception($post);
                 }
-                
-                $this->model->update($post);
+
+                $data = $this->model->update($post);
+                $data->together($this->setAttrField($post))->save();
 
             } catch (\Throwable $th) {
                 return $this->error($th->getMessage());
@@ -227,7 +160,57 @@ class Content extends AdminController
             return $this->success();
         }
 
-        return view($this->parent,['data' => $data]);
+        return view($this->template,['data' => $data]);
+    }
+
+    /**
+     * 获取模型属性
+     *
+     * @return void
+     */
+    public function getAttrField()
+    {
+        $fields = $this->getField();
+        $fields['attr'] = $this->getField($this->defaultAttr);
+
+        if ($this->channel['attr'] !== 'none') {
+            $attrs = $this->getField('content'.$this->channel['attr']);
+            $fields[$this->channel['attr']] = $attrs;
+        }
+
+        return $fields;
+    }
+
+    /**
+     * 设置模型属性
+     *
+     * @param array $post
+     * @param boolean $flags
+     * @return void
+     */
+    public function setAttrField(array $post = [], bool $flags = false)
+    {
+ 
+        $attrs = [
+            'attr' => $post
+        ];
+
+        if ($flags) {
+
+            // 置空属性
+            $attrs = [];
+            $attrs[] = 'attr';
+            if ($this->channel['attr'] !== 'none') {
+                $attrs[] = $this->channel['attr'];
+            }
+            return $attrs;
+        }
+
+        if ($this->channel['attr'] !== 'none') {
+            $attrs[$this->channel['attr']] = $post;
+        }
+
+        return $attrs;
     }
 
     /**
@@ -239,30 +222,38 @@ class Content extends AdminController
         if (request()->isPost()) {
             
             $ids = request()->param('id');
-            $cid = request()->param('cid');
             $destpid = request()->param('destpid');
 
-            // 查找模型
+            // 查找栏目
             $category = Category::getByid($destpid);
             if (empty($category)) {
                 return $this->error();
             }
 
-            // 对比数据模型
-            foreach ($ids as $key => $value) {
-
-                // 获取数据表
-                $channel = Channel::get_channel_list($cid[$key]);
-                $table = $channel['table'];
-
-                $data = Db::name($table)->find($value);
-                if ($data['cid'] == $category['cid']) {
-                    $data['pid'] = $destpid;
-                    Db::name($table)->save($data);
+            foreach ($ids as $id) {
+                $data = $this->model->find($id);
+                if (!empty($data) 
+                    && $data['cid'] == $category['cid']) {
+                    $data->pid = $destpid;
+                    $data->save();
+                } else {
+                    return $this->error('数据模型不匹配');
                 }
             }
 
             return $this->success();
         }
+    }
+
+    /**
+     * 获取栏目权限节点
+     *
+     * @return void
+     */
+    public function getCateNodes()
+    {
+        $rulecates = $this->auth->getrulecatestree('cates',$this->auth->authPrivate,false);
+        $rulecates = array_column($rulecates,'id');
+        return implode(',',$rulecates);
     }
 }   

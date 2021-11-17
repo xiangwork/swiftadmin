@@ -14,6 +14,7 @@ namespace app\admin\controller\system;
 use app\AdminController;
 use app\common\model\system\Channel  as ChannelModel;
 use app\common\model\system\Category as CategoryModel;
+use app\common\model\system\Content  as ContentModel;
 use system\Http;
 use think\facade\Db;
 
@@ -25,7 +26,7 @@ class Category extends AdminController
 		parent::initialize();
         $skin = [];
         // 分配前端模板
-        $skinPath = root_path().'app/index/view/category/';
+        $skinPath = root_path('app/index/view/category');
         if (is_dir($skinPath)) {
             $skin = glob($skinPath.'*.html');
             $skin = str_replace(array($skinPath,'.html'),'',$skin);
@@ -49,7 +50,7 @@ class Category extends AdminController
 
             // 获取数据
             $list = $this->model->getListCate(0,0,['status'=>$status]);
-            $channel = ChannelModel::get_channel_list();
+            $channel = ChannelModel::getChannelList();
 
             if (!is_empty($model)) {
                 $model = list_search($channel, ['title'=> '/'.$model.'/']);
@@ -99,7 +100,7 @@ class Category extends AdminController
 		if (request()->isPost()) {
 
 			$post = input('post.');
-            $post = safe_validate_model($post,get_class($this->model));
+            $post = safe_validate_model($post,$this->model::class);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
             }
@@ -127,7 +128,7 @@ class Category extends AdminController
             $post = input('post.'); 
             $post['pid'] = input('post.pid'); 
             $post['cid'] = input('post.cid'); 
-            $post = safe_validate_model($post,get_class($this->model));
+            $post = safe_validate_model($post,$this->model::class);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
             }
@@ -175,8 +176,7 @@ class Category extends AdminController
                 $data = $this->model->find($array['id']);
                 $data->status = $array['status'];
                 $data->save();
-                $model = NAMESPACEMODELSYSTEM.ucfirst($data->channel->table);
-                $this->status = $model::where('pid',$data->id)->update(['status'=>$data->status]);
+                ContentModel::where('pid',$data->id)->update(['status'=>$data->status]);
                 Db::commit();
             } catch (\PDOException $e) {
                 Db::rollback();

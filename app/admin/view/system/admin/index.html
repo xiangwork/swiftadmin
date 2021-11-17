@@ -316,7 +316,7 @@
                 el: '.deps',
                 tips: '请选择部门',
                 name: 'dep_id',
-                data: department,
+                data: {$department|raw},
                 radio: true,
                 clickClose: true,
                 initValue: !status ? tableThis.data.dep_id.split(',') : [],
@@ -381,7 +381,7 @@
             // 创建实例
             var tree = eleTree({
                 el: '#authTree',
-                data: _ajax('get_rulecates_tree',event,'private'),
+                data: _ajax('getrulecatestree',event,'private'),
                 highlightCurrent: true,
                 showCheckbox: true,
                 showLine: false,

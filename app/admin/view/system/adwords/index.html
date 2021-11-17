@@ -106,11 +106,15 @@
 </script>
 <include file="/public/footer" />
 <script>
-    layui.use(['table','admin'], function () {
+    layui.use(['table','admin','admins'], function () {
         
         var admin = layui.admin;
         var table = layui.table;
         var jquery = layui.jquery;
+        var admins = layui.admins;
+
+        admins.test(222);
+
         /*
          * 初始化表格
         */

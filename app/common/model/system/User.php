@@ -55,7 +55,7 @@ class User extends Model
         if (Auth::instance()->isLogin()) {
             $data = self::getById($data['id']);
             if (Auth::instance()->userInfo->id == $data['id']) {
-                Auth::instance()->setactiveState($data);
+                Auth::instance()->setActiveState($data);
             }
         }
     }
@@ -68,7 +68,6 @@ class User extends Model
      */
     public function getAvatarAttr($value, $data)
     {
-        
         if ($value && strpos($value,'://')) {
             return $value;
         }

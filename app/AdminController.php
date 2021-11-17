@@ -85,6 +85,20 @@ class AdminController extends BaseController
      */
     public $sename = 'AdminLogin';
 
+
+    /**
+    * 获取模板
+    * @access   protected
+    * @var      string
+    */
+    public $template = null;
+
+    /**
+     * 默认属性值
+	 * @var string
+     */
+    public $defaultAttr = 'contentattr';	
+
     /**
      * 权限验证类
      * @var object
@@ -108,6 +122,7 @@ class AdminController extends BaseController
     // 后台应用全局初始化
     protected function initialize()
     {
+		self::sysField();
 		$this->admin = Session::get($this->sename);
 		if (!isset($this->admin['id'])) {
 			// 非登录跳转页面
@@ -122,7 +137,7 @@ class AdminController extends BaseController
 		// 校验权限
 		$this->auth = Auth::instance();
 		if (!in_array($this->method,$this->noNeedLogin)) {
-			if (!$this->auth->SuperAdmin() && !$this->auth->checkauth($this->method,$this->admin['id'])) {
+			if (!$this->auth->SuperAdmin() && !$this->auth->checkAuths($this->method,$this->admin['id'])) {
 				if(request()->isAjax()) {
 					return $this->error('没有权限!');
 				}
@@ -132,21 +147,25 @@ class AdminController extends BaseController
 			}
 		}
 		
-		// 初始化字段信
-		// self::sysfield();
-
 		// 系统日志
 		if (saenv('admin_log_status')) {
 			$array = get_system_logs();
 			$array['type'] = 2;
 			Systemlog::write($array);
 		}
+
+		// 分配变量
+		$this->app->view->assign([
+			'app'=>$app,
+			'controller'=>$this->controller,
+			'action'=>$this->action,
+			'AdminLogin'=>$this->admin
+		]);
+		
         // 获取站点数据
         foreach (saenv('site') as $key => $value) {
             $this->app->view->assign($key,$value);
         }
-		
-		View::assign(['app'=>$app,'controller'=>$this->controller,'action'=>$this->action,'AdminLogin'=>$this->admin]);
 	}
 
 	/**
@@ -192,7 +211,7 @@ class AdminController extends BaseController
 		if (request()->isPost()) {
 
 			$post = input();
-			$validate = $this->isValidate ? get_class($this->model) : $this->isValidate;
+			$validate = $this->isValidate ? $this->model::class : $this->isValidate;
             $post = safe_field_model($post,$validate,$this->scene);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
@@ -224,7 +243,7 @@ class AdminController extends BaseController
 
         if (request()->isPost()) {
 			$post = input();
-			$validate = $this->isValidate ? get_class($this->model) : $this->isValidate;
+			$validate = $this->isValidate ? $this->model::class : $this->isValidate;
             $post = safe_field_model($post,$validate,$this->scene);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
@@ -317,7 +336,7 @@ class AdminController extends BaseController
      * @param  array     	$where   查询条件
      * @return array
      */	
-    public function _before_where($where = []) 
+    public function beforeWhere($where = []) 
 	{
         $ids = input('id') ?? 'all';
         if (is_array($ids) && !empty($ids)) {
@@ -328,6 +347,7 @@ class AdminController extends BaseController
         }else if (\is_numeric($ids)) {
             $where[] = ['id','=',$ids];
         }
+		
         return $where;
 	}
 
@@ -362,7 +382,7 @@ class AdminController extends BaseController
 	/**
 	 * 生成字典
 	 */
-	public static function sysfield() 
+	public static function sysField() 
 	{
 		$debug = env('app_debug') || 0;
 		if(!is_file(config_path().'sysfield.php') ||  $debug = 1) {

@@ -7,34 +7,30 @@
         <div class="layui-card-body">
 	        <gt name="$data.id" value="0">
 	            <input type="text" name="id" value="{$data.id}" hidden="">
+	            <input type="text" name="_field_distribution" value="error" hidden="">
 	            <else/>
 	            <input type="text" name="id" value="" hidden="">
 	        </gt>
             <div class="layui-tab layui-tab-brief"  >
                 <ul class="layui-tab-title">
-                  <li class="layui-this">{:__('编辑软件')}</li>
+                  <li class="layui-this">{:__('编辑图集')}</li>
                   <li>{:__('SEO设置')}</li>
                   <li>{:__('高级选项')}</li>
                 </ul>
                 <div class="layui-tab-content" >
                     <div class="layui-tab-item layui-show">
-
                         <div class="layui-form-item">
 		                    <gt name="$data.id" value="0"><input type="text" name="id" value="{$data.id}" hidden=""></gt>
 		                    <input type="text" value="{$data.cid}" name="cid"  hidden="">
 		                    <input type="text" value="{$data.pid}" name="pid"  hidden="">
 		                    <input type="text" value="{$data.hash}" name="hash"  hidden="">
-		                    <label class="layui-form-label">{:__('软件标题')}</label>
+		                    <label class="layui-form-label">{:__('图集标题')}</label>
 		                    <div class="layui-input-inline wid650" >
 		                        <input type="text" name="title" autocomplete="off" value="{$data.title}" class="layui-input">
 		                    </div>
 		                </div>
 
-						<div class="layui-form-item layui-form-item-fixed">
-		                    <label class="layui-form-label">{:__('软件拼音')}</label>
-		                    <div class="layui-input-inline" >
-		                        <input type="text" name="pinyin" placeholder="{:__('默认自动生成')}" value="{$data.pinyin}" class="layui-input">
-		                    </div>							
+						<div class="layui-form-item layui-form-item-fixed">						
 							<label class="layui-form-label">{:__('分类')}</label>
 							<div class="layui-input-inline" >
 								<div id="pid"></div>
@@ -47,9 +43,8 @@
 							  </select>
 							</div>
 						</div>
-
 						<div class="layui-form-item">
-							<label class="layui-form-label">{:__('软件状态')}</label>
+							<label class="layui-form-label">{:__('图集状态')}</label>
 							<div class="layui-input-block">
 							    <input type="checkbox" value="1" name="attribute[]" lay-skin="primary" <in name="1" value="$data.attribute">checked=""</in> title="头条">
 							    <input type="checkbox" value="2" name="attribute[]" lay-skin="primary" <in name="2" value="$data.attribute">checked=""</in> title="推荐">
@@ -59,98 +54,42 @@
 							    <input type="checkbox" value="6" name="attribute[]" lay-skin="primary" <in name="6" value="$data.attribute">checked=""</in> title="跳转">
 							</div>                                         
 						</div>
-
-						<div class="layui-form-item layui-form-item-fixed">
-		                    <label class="layui-form-label">{:__('软件类型')}</label>
-		                    <div class="layui-input-inline" >
-							  <select name="file_type">
-							  		<option value="">{:__('请选择')}</option>
-							  		<php> $file_type = ['国产软件','国外软件','汉化补丁','手机软件']; </php>
-		                        	<volist name="$file_type" id="vo">
-		                        		<option value="{$vo}" <eq name="$vo" value="$data['file_type']"> selected </eq> >{$vo}</option>
-		                        	</volist>
-							  </select>
-		                    </div>				
-							<label class="layui-form-label">{:__('语言')}</label>
-							<div class="layui-input-inline" >
-							  <select name="file_language">
-							  		<option value="">{:__('请选择')}</option>
-							  		<php> $file_language = ['简体中文','英文原版','繁体版本','其他语种']; </php>
-		                        	<volist name="$file_language" id="vo">
-		                        		<option value="{$vo}" <eq name="$vo" value="$data['file_language']"> selected </eq> >{$vo}</option>
-		                        	</volist>
-							  </select>
-							</div>
-							<label class="layui-form-label">{:__('授权')}</label>
-							<div class="layui-input-inline" >
-							  <select name="file_auth">
-							  		<option value="">{:__('请选择')}</option>
-								    <php> $file_auth = ['开源软件','免费软件','共享软件','商业软件','破解软件']; </php>
-		                        	<volist name="$file_auth" id="vo">
-		                        		<option value="{$vo}" <eq name="$vo" value="$data['file_auth']"> selected </eq> >{$vo}</option>
-		                        	</volist>
-							  </select>
-							</div>
-						</div>
-		                <div class="layui-form-item layui-form-soft">
-		                    <label class="layui-form-label" >{:__('运行环境')}</label>
-		                    <div class="layui-input-inline">
-		                        <input type="text" name="file_env" placeholder="{:__('Win2003WinXPWin2000Win9X')}" value="{$data.file_env}" class="layui-input">
-		                    </div> 
-		                    <label class="layui-form-label" >{:__('大小')}</label>
-		                    <div class="layui-input-inline">
-		                        <input type="file_size" name="file_size" placeholder="{:__('文件大小')}" value="{$data.file_size}" class="layui-input">
-		                    </div>  	
-		                    <label class="layui-form-label" >{:__('类型')}</label>
-		                    <div class="layui-input-inline">
-		                        <select name="file_ext">
-		                        	<option value="">{:__('请选择')}</option>
-		                        	<php> $file_ext = ['.gz','.exe','.zip','.rar','.iso','.其它']; </php>
-		                        	<volist name="$file_ext" id="vo">
-		                        		<option value="{$vo}" <eq name="$vo" value="$data['file_ext']"> selected </eq> >{$vo}</option>
-		                        	</volist>
-		                        </select> 
-		                    </div> 		                	                                                         
-		                </div>
-						<div class="layui-form-item layui-form-soft">
-
-	                    	<label class="layui-form-label" >{:__('官方网站')}</label>
-		                    <div class="layui-input-inline">
-		                        <input type="text" name="file_website" placeholder="{:__('http://')}" value="{$data.file_website}" class="layui-input">
-		                    </div>
-		                    <label class="layui-form-label" >{:__('作者')}</label>
-		                    <div class="layui-input-inline">
-		                        <input type="text" name="file_author" placeholder="{:__('软件作者')}" value="{$data.file_author}" class="layui-input">
-		                    </div>  	
-		                    <label class="layui-form-label" >{:__('总数')}</label>
-		                    <div class="layui-input-inline">
-		                        <input type="text" name="file_downtotal" placeholder="{:__('下载次数')}" value="{$data.file_downtotal}" class="layui-input">
-		                    </div> 			                    
-		                </div>
 		                <div class="layui-form-item">
-		                    <label class="layui-form-label" >{:__('微缩图')}</label>
-		                    <div class="layui-input-inline wid550" >
-		                        <input type="text" name="thumb" placeholder="{:__('请上传微缩图')}" lay-image-hover="" value="{$data.thumb}" class="layui-input thumb">
-		                    </div>   
-		                    
-		                    <button type="button" class="layui-btn" lay-upload="" lay-input="thumb" >上传图片</button>
-		                </div> 
-
-		                <div class="layui-form-item">
-		                    <label class="layui-form-label" >{:__('软件封面')}</label>
+		                    <label class="layui-form-label" >{:__('图集封面')}</label>
 		                    <div class="layui-input-inline wid550" >
 		                        <input type="text" name="image" lay-image-hover="" 
-		                        placeholder="{:__('请上传软件封面')}" value="{$data.image}" class="layui-input image">
+		                        placeholder="{:__('请上传图集封面')}" value="{$data.image}" class="layui-input image">
 		                    </div>   
-
 		                    <button type="button" class="layui-btn" lay-upload="" lay-input="image" >{:__('上传封面')}</button>
-
 		                </div> 
 
+		                <div class="layui-form-item layui-form-item-fixed">
+							<label class="layui-form-label" >{:__('图集列表')}</label>
+							<div class="layui-imagesbox">
+								<volist name="$data['images']['album']" id="vo">
+								<div class="layui-input-inline">
+									<img src="{$vo.src}" lay-image-hover >
+									<input type="text" name="album[{$key}][src]" class="layui-hide" value="{$vo.src}" >
+									<input type="text" name="album[{$key}][title]" class="layui-input" value="{$vo.title}" placeholder="图片简介">
+									<span class="layui-badge layui-badge-red" onclick="layui.jquery(this).parent().remove();">删除</span>
+								</div>
+								</volist>
+
+								<div class="layui-input-inline">
+				                	<div class="layui-upload-drag" lay-upload lay-callback="images">
+									  <i class="layui-icon layui-icon-upload"></i>
+									  <p>点击上传，或将文件拖拽到此处</p>
+									  <div class="layui-hide" >
+									  </div>
+									</div>
+								</div>
+							</div>
+		                </div>	
+
 		                <div class="layui-form-item" >
-		                    <label class="layui-form-label">{:__('软件内容')}</label>
+		                    <label class="layui-form-label">{:__('图集内容')}</label>
 		                    <div class="layui-input-block">
-		                        <textarea id="content" class="layui-hide" name="content" type="layui-textarea" >{$data.content}</textarea>
+		                        <textarea id="content" class="layui-hide" name="content" type="layui-textarea" >{$data.attr.content}</textarea>
 		                    </div>
 		                </div>
                     </div>
@@ -170,33 +109,33 @@
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('SEO标题')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="seo_title" placeholder="{:__('请输入SEO标题')}" value="{$data.seo_title}" class="layui-input">
+		                        <input type="text" name="seo_title" placeholder="{:__('请输入SEO标题')}" value="{$data.attr.seo_title}" class="layui-input">
 		                    </div>                                          
 		                </div>
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('关键TAG')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="seo_keywords" placeholder="{:__('请输入SEO关键词')}" value="{$data.seo_keywords}" class="layui-input">
+		                        <input type="text" name="seo_keywords" placeholder="{:__('请输入SEO关键词')}" value="{$data.attr.seo_keywords}" class="layui-input">
 		                    </div>                                          
 		                </div>
 
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('SEO简介')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <textarea name="seo_description" placeholder="{:__('请输入SEO描述信息')}" class="layui-textarea" >{$data.seo_description}</textarea>
+		                        <textarea name="seo_description" placeholder="{:__('请输入SEO描述信息')}" class="layui-textarea" >{$data.attr.seo_description}</textarea>
 		                    </div>                                          
 		                </div>
 
 		                <div class="layui-form-item" >
 		                    <label class="layui-form-label" >{:__('采集来源')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="reurl" placeholder="http://" value="{$data.reurl}" class="layui-input">
+		                        <input type="text" name="reurl" placeholder="http://" value="{$data.attr.reurl}" class="layui-input">
 		                    </div>
 		                </div>
 		                <div class="layui-form-item" >
 		                    <label class="layui-form-label" >{:__('跳转地址')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="jumpurl" placeholder="https://" value="{$data.jumpurl}" class="layui-input">
+		                        <input type="text" name="jumpurl" placeholder="https://" value="{$data.attr.jumpurl}" class="layui-input">
 		                    </div>
 		                </div>	           
 					</div>
@@ -220,7 +159,7 @@
 		                    <div class="layui-input-inline">
 		                    	<div id="access"></div>
 		                    </div>
-		                    <label class="layui-form-label">{:__('软件排序')}</label>
+		                    <label class="layui-form-label">{:__('图集排序')}</label>
 		                    <div class="layui-input-inline">
 								<input type="number" name="sort" class="layui-input" value="{$data.sort}" >
 		                    </div>                    
@@ -282,13 +221,12 @@
 		                    </div>                    
 		                </div>
 
-		                <div class="layui-form-item">		               
+		                <div class="layui-form-item">	               
 		                    <label class="layui-form-label">{:__('录入编辑')}</label>
 		                    <div class="layui-input-inline">
 		                        <input type="text" name="author" placeholder="admin" value="{$data.author}" class="layui-input">
 		                    </div>    
-
-		                </div>                               	       
+		                </div>
                     </div>
                 </div>
           	</div>
@@ -305,7 +243,7 @@
 <script src="/static/js/tinymce/tinymce.min.js"></script>
 <script>
 	var grouplist = {:get_usergroup_json()};
-	var categorylist = {:get_category_json(0,4,'id,cid,pid,title')};
+	var categorylist = {:get_category_json()};
 </script>
 <script>
     layui.use(['admin','content'], function () {
@@ -318,5 +256,20 @@
 		content.tinymce('content');
 		content.xmselect('pid',categorylist,[{$data.pid}],false);
 		content.xmselect('access',grouplist,[{$data.access}]);
+
+        // 上传回调函数
+        admin.callback.images = function(clickthis,colletction,config) {
+        	var res = colletction.res;
+        	if (res.code == 200) {
+		        var index = jquery('.layui-imagesbox .layui-input-inline');
+		        index = index.length ? index.length - 1 : 0;
+        		var html = '<div class="layui-input-inline">';
+        		html += '<img src="'+res.url+'" lay-image-hover >';
+        		html += '<input type="text" name="album['+index+'][src]" class="layui-hide" value="'+res.url+'">';
+        		html += '<input type="text" name="album['+index+'][title]" class="layui-input" placeholder="图片简介">';
+        		html += '<span class="layui-badge layui-badge-red" onclick="layui.jquery(this).parent().remove();">删除</span></div>';
+        		clickthis.parent().before(html);
+        	}
+        }
     });
 </script>

@@ -7,6 +7,7 @@
         <div class="layui-card-body">
 	        <gt name="$data.id" value="0">
 	            <input type="text" name="id" value="{$data.id}" hidden="">
+	            <input type="text" name="_field_distribution" value="code" hidden="">
 	            <else/>
 	            <input type="text" name="id" value="" hidden="">
 	        </gt>
@@ -43,13 +44,13 @@
 		                      <select name="language">
 		                        <option value="">{:__('对白')}</option>
 	                            <salibs:language id="vo">
-	                            <option value="{$vo}" <if condition="$vo eq $data['language']">selected</if> >{$vo}</option>  
+	                            <option value="{$vo}" <if condition="$vo eq $data['video']['language']">selected</if> >{$vo}</option>  
 	                            </salibs:language> 
 		                      </select>
 							</div>
 		                    <label class="layui-form-label" >{:__('影片时长')}</label>
 		                    <div class="layui-input-inline" >
-		                        <input type="text" name="minutes" placeholder="{:__('单位为分钟')}" value="{$data.minutes}" class="layui-input">
+		                        <input type="text" name="minutes" placeholder="{:__('单位为分钟')}" value="{$data.video.minutes}" class="layui-input">
 		                    </div>
 
 		                </div>
@@ -57,14 +58,14 @@
 						<div class="layui-form-item layui-form-video">
 		                    <label class="layui-form-label">{:__('影片别名')}</label>
 		                    <div class="layui-input-inline">
-		                        <input type="text" name="alias" autocomplete="off" value="{$data.alias}" class="layui-input">
+		                        <input type="text" name="alias" autocomplete="off" value="{$data.video.alias}" class="layui-input">
 		                    </div> 
 		                    <label class="layui-form-label">{:__('首映地区')}</label>
 		                    <div class="layui-input-inline" >
 		                      <select name="area">
 		                        <option value="">{:__('出产地区')}</option>
 	                            <salibs:arealist id="vo">
-	                            <option value="{$vo}" <if condition="$vo eq $data['area']">selected</if> >{$vo}</option> 
+	                            <option value="{$vo}" <if condition="$vo eq $data['video']['area']">selected</if> >{$vo}</option> 
 	                            </salibs:arealist> 
 		                      </select>
 		                    </div>                     
@@ -72,14 +73,14 @@
 		                      <select name="year">
 		                        <option value="">{:__('年代')}</option>
 	                            <salibs:yearlist id="vo">
-	                            <option value="{$vo}" <if condition="$vo eq $data['year']">selected</if> >{$vo}</option> 
+	                            <option value="{$vo}" <if condition="$vo eq $data['video']['year']">selected</if> >{$vo}</option> 
 	                            </salibs:yearlist> 
 		                      </select>
 		                    </div>  
 		                    <div class="layui-input-inline"  >
 		                      <select name="isfilm">
-							    <option value="1" <if condition="$data['isfilm'] eq 1">selected</if> >{:__('已上映')}</option>
-							    <option value="0" <if condition="$data['isfilm'] eq 0">selected</if> >{:__('未上映')}</option>
+							    <option value="1" <if condition="$data['video']['isfilm'] eq 1">selected</if> >{:__('已上映')}</option>
+							    <option value="0" <if condition="$data['video']['isfilm'] eq 0">selected</if> >{:__('未上映')}</option>
 		                      </select>
 		                    </div> 
 		                    <label class="layui-form-label">{:__('播出周期')}</label>
@@ -87,7 +88,7 @@
 		                        <select name="weekday">
 		                        <option value="">{:__('选择周期')}</option>
 	                            <salibs:weeklist id="vo">
-	                            <option value="{$vo}" <if condition="$vo eq $data['weekday']">selected</if> >{$vo}</option> 
+	                            <option value="{$vo}" <if condition="$vo eq $data['video']['weekday']">selected</if> >{$vo}</option> 
 	                            </salibs:weeklist> 		                         
 		                      </select>
 		                    </div> 
@@ -96,7 +97,7 @@
 		                <div class="layui-form-item layui-form-video">
 		                    <label class="layui-form-label" >{:__('影片简述')}</label>
 		                    <div class="layui-input-inline" style="z-index: 999">
-		                        <input type="text" name="desc" autocomplete="off" value="{$data.desc}" class="layui-input">
+		                        <input type="text" name="desc" autocomplete="off" value="{$data.video.desc}" class="layui-input">
 		                    </div> 
 		                    <label class="layui-form-label" >{:__('影片状态')}</label>
 		                    <div class="layui-input-block">
@@ -111,35 +112,35 @@
 		                <div class="layui-form-item layui-form-video">
 		                    <label class="layui-form-label">{:__('影片主演')}</label>
 		                    <div class="layui-input-inline">
-		                        <input type="text" name="actor" placeholder="{:__('主演')}" value="{$data.actor}" class="layui-input">
+		                        <input type="text" name="actor" placeholder="{:__('主演')}" value="{$data.video.actor}" class="layui-input">
 		                    </div>  
 		                    <label class="layui-form-label" >{:__('影片标签')}</label>
 		                    <div class="layui-input-inline">
-		                        <input type="text" name="class" placeholder="{:__('科幻，战争')}" value="{$data.class}" class="layui-input">
+		                        <input type="text" name="class" placeholder="{:__('科幻，战争')}" value="{$data.video.class}" class="layui-input">
 		                    </div>  
 		                    <div class="layui-input-inline">
-		                        <input type="text" name="continu" placeholder="{:__('当前连载')}" value="{$data.continu}" class="layui-input">
+		                        <input type="text" name="continu" placeholder="{:__('当前连载')}" value="{$data.video.continu}" class="layui-input">
 		                    </div> 
 
 		                    <div class="layui-input-inline">
-		                        <input type="text" name="total" placeholder="{:__('总集数')}" value="{$data.total}" class="layui-input">
+		                        <input type="text" name="total" placeholder="{:__('总集数')}" value="{$data.video.total}" class="layui-input">
 		                    </div> 		          		                 
  
 		                    <label class="layui-form-label" >{:__('备注信息')}</label>
 		                    <div class="layui-input-inline">
-		                        <input type="text" name="marks" placeholder="{:__('备注信息')}" value="{$data.marks}" class="layui-input">
+		                        <input type="text" name="marks" placeholder="{:__('备注信息')}" value="{$data.video.marks}" class="layui-input">
 		                    </div>                                     
 		                </div>
 
 		                <div class="layui-form-item layui-form-fixday">
 		                    <label class="layui-form-label">{:__('影片导演')}</label>
 		                    <div class="layui-input-inline">
-		                        <input type="text" name="director" placeholder="{:__('导演')}" value="{$data.director}" class="layui-input">
+		                        <input type="text" name="director" placeholder="{:__('导演')}" value="{$data.video.director}" class="layui-input">
 		                    </div>  
   
 		                    <label class="layui-form-label" >{:__('上映日期')}</label>
 		                    <div class="layui-input-inline">
-		                        <input type="text" name="filmtime" placeholder="yyyy-MM-dd" lay-datetime value="{$data.filmtime}" class="layui-input">
+		                        <input type="text" name="filmtime" placeholder="yyyy-MM-dd" lay-datetime value="{$data.video.filmtime}" class="layui-input">
 		                    </div> 
 		                    <label class="layui-form-label" >{:__('更新日期')}</label>
 		                    <div class="layui-input-inline">
@@ -168,13 +169,13 @@
 		                    <label class="layui-form-label" >{:__('首页幻灯片')}</label>
 		                    <div class="layui-input-inline wid550" >
 		                        <input type="text" name="banner" lay-image-hover="" 
-		                        placeholder="{:__('请上传幻灯片')}" value="{$data.banner|default=''}" class="layui-input banner">
+		                        placeholder="{:__('请上传幻灯片')}" value="{$data.video.banner|default=''}" class="layui-input banner">
 		                    </div>   
 		                    <button type="button" class="layui-btn" lay-upload="" lay-input="banner" >{:__('上传幻灯片')}</button>
 		                </div>  
 		                <div id="player_list" class="layui-player-list">
-		                <notempty name="data['play']">
-		                    <volist name="data['play']" id="vo" key="key">
+		                <notempty name="data['video']['play']">
+		                    <volist name="data['video']['play']" id="vo" key="key">
 			                    <?php $parent_key = $key; ?>
 			                    <div class="layui-form-item" data-i="{$key}" >
 			                        <label class="layui-form-label" >{:__('播放地址')}{$key}</label>
@@ -191,19 +192,19 @@
 			                          <select name="server[{$parent_key}]" data-server>
 			                            <option value="">{:__('请选择服务器')}</option>
 			                            <salibs:serverlist id="server">
-			                            <option value="{$server.name}" <notempty name="$data['server'][$parent_key-1]"> <if condition="$server.name eq $data['server'][$parent_key-1]">selected</if> </notempty> >{$server.title}</option>
+			                            <option value="{$server.name}" <notempty name="$data['video']['server'][$parent_key-1]"> <if condition="$server.name eq $data['video']['server'][$parent_key-1]">selected</if> </notempty> >{$server.title}</option>
 			                            </salibs:serverlist>
 			                          </select>
 			                        </div>
 
 			                        <div class="layui-input-inline">
 			                            <input type="text" name="note[{$parent_key}]" placeholder="{:__('请输入备注')}"  class="layui-input" 
-			                            <notempty name="$data['note'][$parent_key-1]"> value="{$data['note'][$parent_key-1]}" </notempty> >
+			                            <notempty name="$data['video']['note'][$parent_key-1]"> value="{$data.video.note[($parent_key-1)]}" </notempty> >
 			                        </div>
 			                        <p class="layui-clear"></p>
 			                        <!-- 循环输出每个播放数据 -->
 			                        <div class="layui-input-block layui-data-urls"> 
-			                            <textarea name="url[{$parent_key}]" class="layui-textarea" >{$data.url[($parent_key-1)]}</textarea>
+			                            <textarea name="url[{$parent_key}]" class="layui-textarea" >{$data.video.url[($parent_key-1)]}</textarea>
 			                        </div>                                                                                        
 			                    </div>
 		                    </volist>
@@ -220,7 +221,7 @@
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label">{:__('详细介绍')}</label>
 		                    <div class="layui-input-block">
-		                        <textarea id="content" name="content" class="layui-hide">{$data.content}</textarea>
+		                        <textarea id="content" name="content" class="layui-hide">{$data.attr.content}</textarea>
 		                    </div>
 		                </div>
 		                          
@@ -233,7 +234,7 @@
 		                    	<select name="skin">
 		                    		<option value=""></option>
 		                    		<salibs:customtpl id="vo">
-		                    		<option value="{$vo}" <if condition="$vo eq $data['skin']"> selected </if> >{$vo}</option>
+		                    		<option value="{$vo}" <if condition="$vo eq $data['attr']['skin']"> selected </if> >{$vo}</option>
 		                    		</salibs:customtpl>
 		                    	</select>
 		                    </div>  		               
@@ -241,33 +242,33 @@
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('SEO标题')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="seo_title" placeholder="{:__('请输入SEO标题')}" value="{$data.seo_title}" class="layui-input">
+		                        <input type="text" name="seo_title" placeholder="{:__('请输入SEO标题')}" value="{$data.attr.seo_title}" class="layui-input">
 		                    </div>                                          
 		                </div>
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('关键TAG')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="seo_keywords" placeholder="{:__('请输入SEO关键词')}" value="{$data.seo_keywords}" class="layui-input">
+		                        <input type="text" name="seo_keywords" placeholder="{:__('请输入SEO关键词')}" value="{$data.attr.seo_keywords}" class="layui-input">
 		                    </div>                                          
 		                </div>
 
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('SEO简介')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <textarea name="seo_description" placeholder="{:__('请输入SEO描述信息')}" class="layui-textarea" >{$data.seo_description}</textarea>
+		                        <textarea name="seo_description" placeholder="{:__('请输入SEO描述信息')}" class="layui-textarea" >{$data.attr.seo_description}</textarea>
 		                    </div>                                          
 		                </div>
 
 		                <div class="layui-form-item" >
 		                    <label class="layui-form-label" >{:__('采集来源')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="reurl" placeholder="http://" value="{$data.reurl}" class="layui-input">
+		                        <input type="text" name="reurl" placeholder="http://" value="{$data.attr.reurl}" class="layui-input">
 		                    </div>
 		                </div>
 		                <div class="layui-form-item" >
 		                    <label class="layui-form-label" >{:__('跳转地址')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="jumpurl" placeholder="https://" value="{$data.jumpurl}" class="layui-input">
+		                        <input type="text" name="jumpurl" placeholder="https://" value="{$data.attr.jumpurl}" class="layui-input">
 		                    </div>
 		                </div>	           
 					</div>
@@ -376,7 +377,7 @@
 <script src="/static/js/tinymce/tinymce.min.js"></script>
 <script>
 	var grouplist = {:get_usergroup_json()};
-	var categorylist = {:get_category_json(0,3,'id,cid,pid,title')};
+	var categorylist = {:get_category_json()};
 </script>
 
 <!-- // 列表工具栏 -->

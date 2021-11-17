@@ -17,8 +17,6 @@ use app\HomeController;
 use app\common\model\system\User;
 use app\common\model\system\UserThird;
 
-use function PHPSTORM_META\type;
-
 class Third extends HomeController
 {
     /**

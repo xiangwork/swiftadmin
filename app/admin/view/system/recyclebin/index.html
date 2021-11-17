@@ -70,6 +70,7 @@
     layui.use(['table'],function () {
 
         var table = layui.table;
+        var util = layui.util;
         /*
          * 初始化表格
         */
@@ -81,9 +82,21 @@
                 {type: 'checkbox', width:45},
                 {field: 'id', align: 'center',sort: true,width: 60,  title: 'ID'},
                 {field: 'title', align: 'left', title: "{:__('标题')}"},
-                {field: 'category', align: 'center', title: "{:__('栏目分类')}"},
-                {field: 'channel', align: 'center',width:220, title: "{:__('数据模型')}"},
-                {field: 'createtime', align: 'center',width:220,title: "{:__('删除时间')}"},
+                {field: 'category.title',templet:function(d){
+                    if (d.category.title) {
+                        d.category = d.category.title;
+                    }
+                    return d.category;
+                }, align: 'center',width: 120, title: '{:__("栏目分类")}'},
+                {field: 'channel.title',templet:function(d){
+                    if (d.channel.title) {
+                        d.channel = d.channel.title;
+                    }
+                    return d.channel;
+                }, align: 'center',width: 120, title: '{:__("数据模型")}'},
+                {field: 'delete_time',templet :function(d) {
+                    return layui.util.toDateString((d.delete_time*1000), "yyyy-MM-dd HH:mm:ss");
+                }, align: 'center',width:220,title: "{:__('删除时间')}"},
                 {align: 'center', toolbar: '#tableBar', width:220, title: "{:__('操作')}"},
             ]]
         })

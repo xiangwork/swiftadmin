@@ -39,7 +39,7 @@ class Sms
     protected $event = "default";
 
     // 短信参数
-    protected $params = [];
+    protected $params = null;
 
     // 手机号码
     protected $phone = [];
