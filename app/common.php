@@ -1329,10 +1329,10 @@ if (!function_exists('get_list_url')) {
 	/**
 	 * 获取列表页地址
 	 *
-	 * @param mixed $param
+	 * @param array $param
 	 * @return void
 	 */
-	function get_list_url(mixed $param = [])
+	function get_list_url(array $param = [])
 	{
 		if (!$param) {
 			return false;
