@@ -148,6 +148,7 @@
 						jquery('.layui-btn-admin').attr('href','/'+loginfile);
 						jquery('.layui-complete').show();
 						jquery.get('/install.php/index/clear/loginfile/'+loginfile,{},function(res){});
+						layer.msg(res.msg);
 					}
 					else {
 						// 移动焦点
