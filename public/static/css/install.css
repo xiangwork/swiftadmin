@@ -1,6 +1,7 @@
 
 body {
 	background: #f2f2f2;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
 }
 
 .layui-header  {
@@ -14,6 +15,11 @@ body {
     width: 210px;
     margin: 23px 0;
     float: left;
+    font-weight: 500; 
+}
+
+.layui-header .logo span {
+    margin-left: 10px;
 }
 
 .layui-header .logo .pic {
@@ -22,7 +28,6 @@ body {
 }
 
 .layui-header .title {
-
 	position: absolute;
     top: 25px;
     left: 44%;
@@ -30,7 +35,6 @@ body {
     font-size: 22px;
     line-height: 40px;
     text-align: center;
-
 }
 
 .layui-content {

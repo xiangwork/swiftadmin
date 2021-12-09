@@ -1,15 +1,8 @@
 /* 内容管理模块 */
-layui.define(function (exports) {
+layui.define(['jquery','layer'],function (exports) {
 
-    var admin = layui.admin;
     var jquery = layui.jquery;
-
-    var baseUrl = window.location.href.split("://")[1],
-    _begin = baseUrl.indexOf('/'),
-    _end   = baseUrl.indexOf('.php')+4,
-    _header = baseUrl.substring(_begin,_end),
-    uploadUrl = _header + '/upload/upload';
-
+    var layer = layui.layer;
     var content = {
         tinymce: function (elem) {
             elem = elem || 'content';
@@ -33,7 +26,7 @@ layui.define(function (exports) {
                         formData.append('file',file);
                         jquery.ajax({
                             type:'post',
-                            url: uploadUrl,                
+                            url: '/upload/file',
                             data: formData,                   
                             async: false,
                             cache: false,
@@ -42,9 +35,7 @@ layui.define(function (exports) {
                             success: function (res) {
                                 if (res.code == 200) {
                                     success(res.url);
-                                    top.layui.iziToast.success({
-                                        message: res.msg,
-                                    });
+                                    layer.msg(res.msg);
                                 }
                                 else {
                                     failure(res.msg);
@@ -71,10 +62,7 @@ layui.define(function (exports) {
         xmselect: function(elem, data, initvalue, group = true) // 下拉菜单
         {
             if (!elem) {
-                layui.iziToast.error({
-                    message: 'elem error',
-                })
-
+                layer.msg('elem error','error');
                 return false;
             }
 
@@ -82,6 +70,7 @@ layui.define(function (exports) {
                 return xmSelect.render({
                     el: '#'+elem, 
                     name: elem,
+                    tips: '请选择',
                     size: 'small',
                     theme: {
                         color: '#0081ff', 
@@ -99,6 +88,7 @@ layui.define(function (exports) {
                 return xmSelect.render({
                     el: '#'+elem, 
                     name: elem,
+                    tips: '请选择',
                     height: 'auto',
                     data: data,
                     radio: true,

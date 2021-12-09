@@ -46,8 +46,8 @@ class Api extends AdminController
 
            // 生成查询条件
            $where = array();
-           if (!empty($post['name'])) {
-                $where[] = ['name|class','like','%'.$post['name'].'%'];
+           if (!empty($post['title'])) {
+                $where[] = ['title|class','like','%'.$post['title'].'%'];
            }
 
            // 生成查询数据
@@ -66,7 +66,7 @@ class Api extends AdminController
            return $this->success('查询成功', "", [
                'item' => $list,
                'group' => $group,
-           ], $count, 0);
+           ], $count);
         }
 
 
@@ -108,7 +108,7 @@ class Api extends AdminController
             $post = input();
             if ($this->model->update($post)) {
                 if (isset($post['class'])) { // 清理接口缓存
-                    system_cache(md5_hash($post['class']),null); 
+                    system_cache(md5($post['class']),null); 
                 }
                 $this->api_Router();
                 return $this->success();
@@ -225,7 +225,7 @@ class Api extends AdminController
             }
 
             $list = ApiParamsModel::where($where)->select()->toArray();
-            return $this->success('查询成功', "", $list, count($list), 0);
+            return $this->success('查询成功', "", $list, count($list));
 
         }
 
@@ -302,7 +302,7 @@ class Api extends AdminController
             }
 
             $list = ApiRestfulModel::where($where)->select()->toArray();
-            return $this->success('查询成功', "", $list, count($list), 0);
+            return $this->success('查询成功', "", $list, count($list));
 
         }
 

@@ -1,4 +1,4 @@
-/** SwiftAdmin iframe date:2021-5-1 License By http://www.swiftadmin.net */
+/** SwiftAdmin iframe v1.0.0 date:2021-5-1 License By http://www.swiftadmin.net */
 
 // 以下代码是配置layui扩展模块的目录，每个页面都需要引入
 layui.config({
@@ -6,16 +6,13 @@ layui.config({
     base: getProjectUrl() + 'module/'
 }).extend({
     step: 'step/step',
-    iziToast: 'iziToast/iziToast',
     cascader: 'cascader/cascader',
     echarts: "echarts/echarts",
     fileManager: 'fileManager/fileManager',
-    eleTree: "eleTree/eleTree",
     xmselect: 'xmselect/xmselect',
     treetable: 'treetable/treetable',
     tableSelect: 'tableSelect/tableSelect',
     iconHhysFa: 'iconHhys/iconHhysFa',
-    notice: 'notice/notice',
 }).use(['admin'], function () {
     var $ = layui.jquery;       // jquery的
     var admin = layui.admin;    // amdin模块的
@@ -39,5 +36,3 @@ function getProjectUrl() {
 
     return layuiDir.substring(0, layuiDir.indexOf('layui'));
 }
-
-/*公共库函数*/

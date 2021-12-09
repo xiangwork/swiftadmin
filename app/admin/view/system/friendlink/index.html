@@ -2,7 +2,7 @@
 <div class="layui-fluid">
     <div class="layui-card">
         <!-- // 默认操作按钮 -->
-        <div class="layui-card-header layuiadmin-card-header-auto ">
+        <div class="layui-card-header layadmin-card-header-auto ">
             <div class="layui-form">
                 <div class="layui-form-item">
 
@@ -48,9 +48,9 @@
         <div class="layui-input-inline">
             <select name="type">
                 <option value="">请选择</option>
-                <salibs:friendtype id="vo">
-                <option value="{$vo}">{$vo}</option>
-                </salibs:friendtype> 
+                <salibs:dictionary id="vo" value="friendlink" >
+                <option value="{$vo.value}">{$vo.name}</option>
+                </salibs:dictionary>  
             </select>
         </div>
     </div>    

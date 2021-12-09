@@ -9,14 +9,14 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
 <link rel="stylesheet" href="/static/js/layui/css/layui.css">
-<link rel="stylesheet" href="/static/css/install.css">
+<link rel="stylesheet" href="/static/css/install.css?{:config('app.version')}">
 <script src="/static/js/layui/layui.js"></script>
 </head>
 <body>
 
 <div class="layui-header">
 	<div class="layui-container">
-		<h1 class="logo"><a href="https://www.SwiftAdmin.net"><img class="pic" src="https://www.swiftadmin.net/static/admin/images/logo.png" alt="">SwiftAdmin</a></h1>
+		<h1 class="logo"><a href="https://www.SwiftAdmin.net"><img class="pic" src="__ADMINIMAGES__/logo.png" alt=""><span>SwiftAdmin</span></a></h1>
 		<div class="title">安装向导</div>
 	</div>
 </div>
@@ -66,7 +66,7 @@
 							  2. <a href="/" target="_blank" class="layui-admin">后台地址：</a>
 							</blockquote>
 							<a href="/" target="_blank" class="layui-btn layui-btn-normal layui-btn-fixed">访问前台</a>
-							<a href="/" target="_blank" class="layui-btn layui-btn-normal layui-btn-fixed">访问后台</a>
+							<a href="/" target="_blank" class="layui-btn layui-btn-normal layui-btn-admin">访问后台</a>
 						</div>
 		    		</div>
 					</div>
@@ -86,9 +86,6 @@
 		var jquery = layui.jquery;
 		var element = layui.element;
 
-		// GET安装脚本 交给任务线程处理
-		jquery.get('/install.php/index/install',{},function(res){});
-
 		// 随机字符串
 		function randomString(len) {
 		　　len = len || 32;
@@ -101,66 +98,68 @@
 		　　return pwd;
 		}
 
-		// 定时检测是否安装成功
-		var tasks = setInterval(function(){
+		// 加载数据信息
+		jquery.get('/install.php/index/install',{},function(res){
+			if (res.code == 200) {
+				queryProgress();
+			}
+		});
 
-			jquery.get('/install.php/index/progress',{},function(res){
-
-				// 渲染进度条
-				jquery('.layui-progress-bar').attr('lay-percent',res.progress) && element.render();
-
-				// 查找当前元素
-				var logsElem = jquery('.layui-install-logs');
-
-				 // 插入HTML元素
-				if (res.msg !== null) {
-
-					var html = '';
-					if (res.code == 200) {
-
-						// 循环写入表数据
-						for (var i in res.msg) {
-							var elem = 'layui-table-'+i;
-							if (jquery('.'+elem).length === 0) {
-								html += '<li class="'+ elem +'">'+res.msg[i].msg+'</li>';
-							}
-						}
-					}
-					else if (res.code == 101){
-						// 销毁定时器
-						html = '<li><font color="red">'+res.msg+'</font></li>';
-						clearInterval(tasks);
+		var progress = 1;
+        var queryProgress = function() {
+			
+			jquery.ajax({
+				url: '/install.php/index/progress',
+				data: {
+					key: progress
+				},
+				type: 'get',
+				async: false,
+				dataType: 'json',
+				success:function(res) {
+				
+					// 设置延时
+					if (!res || typeof res.msg == undefined) {
+						setTimeout(queryProgress, 1000);
+						return false;
 					}
 					
-					if (html) {
-						logsElem.append(html);
+					// 查找元素
+					var html = '';
+					var logsElem = jquery('.layui-install-logs');
+					if (res.code == 200) {
+						if (res.msg) {
+							html += '<li class="'+ res.key +'">'+res.msg+'</li>';
+						}
+						if (progress < res.total) {
+							progress += 1;
+						}
+					} else if (res.code == 101) { // 错误信息
+						html = '<li><font color="red">'+res.msg+'</font></li>';
 					}
-				} else {
-					return false;
-				}
 
-				if (logsElem[0].scrollHeight >= logsElem[0].clientHeight) {
-					var scrollTop = logsElem[0].scrollHeight-logsElem[0].clientHeight;
-					logsElem.scrollTop(scrollTop);
-				}
-
-				if (parseInt(res.progress) >= 100) {
-
-					jquery('.layui-install').remove();
-					var admin = jquery('.layui-admin'),
-					address = randomString(8);
-					admin.attr('href','/'+address+'.php');
-					admin.html('后台地址：https://'+ location.host +'/'+address+'.php');
-					jquery('.layui-btn-fixed').attr('href','/'+address+'.php');
-					jquery('.layui-complete').show();
-
-					// 清理安装包
-					jquery.get('/install.php/index/clear/admin/'+address,{},function(res){});
-					return clearInterval(tasks);
+					if (parseInt(res.progress) >= 100) {
+						jquery('.layui-install').remove();
+						var admin = jquery('.layui-admin'), loginfile=randomString(8)+'.php';
+						admin.attr('href','/'+loginfile);
+						admin.html('后台地址：https://'+ location.host +'/'+loginfile);
+						jquery('.layui-btn-admin').attr('href','/'+loginfile);
+						jquery('.layui-complete').show();
+						jquery.get('/install.php/index/clear/loginfile/'+loginfile,{},function(res){});
+					}
+					else {
+						// 移动焦点
+						logsElem.append(html);
+						if (logsElem[0].scrollHeight >= logsElem[0].clientHeight) {
+							var scrollTop = logsElem[0].scrollHeight-logsElem[0].clientHeight;
+							logsElem.scrollTop(scrollTop);
+						}
+						setTimeout(queryProgress, 10);
+					}
+					jquery('.layui-progress-bar').attr('lay-percent',res.progress) && element.render();
 				}
 			});
-
-		},300);
+        }
 	})
 </script>
 </html>

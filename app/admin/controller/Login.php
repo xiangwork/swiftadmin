@@ -27,6 +27,7 @@ class Login extends AdminController
 	 */
     public function index()
     {
+
 		if (request()->isPost()) {
 
 			// 用户信息

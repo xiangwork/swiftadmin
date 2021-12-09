@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"> 
 <title>swiftAdmin {:__('后台登录')}</title>
 <link href="/favicon.ico" rel="icon">
 <meta name="renderer" content="webkit">
@@ -10,15 +10,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
-<link href="__STATICADMIN__layui/css/layui.css?v=1.0" rel="stylesheet" type="text/css" />
-<link href="__STATICADMIN__css/login.css?v=1.01" rel="stylesheet" type="text/css" />
+<link href="__STATICADMIN__layui/css/layui.css?v{:config('app.version')}" rel="stylesheet" type="text/css" />
+<link href="__STATICADMIN__css/login.css?v{:config('app.version')}" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <div class="swiftadmin-login">
         <div class="swiftadmin-login-main">
-            <!-- // 头部信息 -->
+            <!-- // 头部信息2 -->  
             <div class="swiftadmin-login-box swiftadmin-login-header">
-                <h2><img  src="/static/admin/images/logo.png" alt="logo" class="logo">Swift Admin</h2>
+                <h2><img  src="__ADMINIMAGES__/logo.png" alt="logo" class="logo">Swift Admin</h2>
                 <p>SwiftAdmin.NET 最懂你的极速开发框架管理后台 </p>
             </div>
             <!-- // 登录页面 -->
@@ -188,11 +188,11 @@
         </div>
     </div>
 </body>
-<script src="__STATICADMIN__layui/layui.js"></script>
-<script src="__STATICADMIN__js/common.js"></script>
+<script src="__STATICADMIN__layui/layui.js?{:config('app.version')}"></script>
+<script src="__STATICADMIN__js/common.js?{:config('app.version')}"></script>
 <script>
     window.sessionStorage.clear();
-    layui.use(function() {
+    layui.use(['layer','form'],function() {
         var $ = layui.jquery, 
         layer = layui.layer, 
         form = layui.form,
@@ -205,7 +205,7 @@
                 pwd = $('input[name="pwd"]').val(),
                 captcha = $('input[name="captcha"]').val(),
                 __token__ = $('input[name="__token__"]').val();
-            layui.iziToast.info({message: "{:__('数据提交中...')}"});
+            layer.msg("{:__('数据提交中...')}",'warning');
             that.prop('disabled', true);
             $_ajax(that,{name: name, pwd: pwd, captcha: captcha,__token__:__token__});
             return false;
@@ -225,15 +225,11 @@
             email = $('input[name="email"]').val();
             
             if (pass != repass) {
-                layui.iziToast.error({
-                    message: "{:__('两次输入密码不同')}",
-                });
+                layer.msg("{:__('两次输入密码不同')}",'error');
                 return false;
             }
 
-            layui.iziToast.info({
-                message: "{:__('数据提交中...')}",
-            });
+            layer.msg("{:__('数据提交中...')}",'warning');
             that.prop('disabled', true);
             $_ajax(that,{name: name, pwd: pass, email:email,captcha: captcha});
             return false;
@@ -316,7 +312,7 @@
             valicode = $('input[name="valicode"]').val();
             
             if (pass != repass) {
-                layer.msg("{:__('两次输入密码不同')}")
+                layer.msg("{:__('两次输入密码不同')}",'error')
                 return false;
             }
 
@@ -330,7 +326,7 @@
                             location.reload();
                         });
                     }else {
-                        layer.msg(res.msg);
+                        layer.msg(res.msg,'error');
                     }
                 }
             })
@@ -353,15 +349,9 @@
                 data: data,
                 success: function (res) {
 
-                    layui. iziToast.destroy({
-                        time: 500
-                    });
-
                     if(res.code == 200){
 
-                        layui.iziToast.success({
-                            message: res.msg,
-                        });
+                        layer.msg(res.msg);
 
                         if (jump == undefined) {
                             window.location = res.url; // 跳转到主页
@@ -369,7 +359,7 @@
                     
                     }else {
 
-                        layui.iziToast.error({message: res.msg});
+                        layer.msg(res.msg,'error');
                         that.prop('disabled', false);
                         $("#captchaImg,#captchaImg2,#captchaImg3").attr('src',captchaUrl+'?rand='+Math.random()).parents('.layui-form-item').show();
                         if (res.data.token) {
@@ -381,9 +371,7 @@
                 },
                 error: function() {
                     that.prop('disabled', false);
-                    layui.iziToast.error({
-                        message: "{:__('好像是网络出错了...')}",
-                    });
+                    layer.msg("{:__('好像是网络出错了...')}",'error');
                 }
             })
         }

@@ -34,7 +34,7 @@ class Navmenu extends AdminController
 
             // 获取数据
             $list = $this->model->getListNav();
-            return $this->success('查询成功', "", $list, count($list), 0);
+            return $this->success('查询成功', "", $list, count($list));
         }
 
 		return view('',[
@@ -50,7 +50,7 @@ class Navmenu extends AdminController
 
 		if (request()->isPost()) {
 			$post = input('post.');
-            $post = safe_field_model($post,$this->model::class);
+            $post = safe_field_model($post,get_class($this->model));
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
             }
@@ -72,7 +72,7 @@ class Navmenu extends AdminController
         if (request()->isPost()) {
             
             $post = input('post.'); 
-            $post = safe_field_model($post,$this->model::class);
+            $post = safe_field_model($post,get_class($this->model));
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
             }

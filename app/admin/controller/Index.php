@@ -101,7 +101,7 @@ class Index extends AdminController
             // 修改入口文件
             $index = public_path().'index.php';
             $files = '../extend/conf/index.tpl';
-            if (!$config['site']['site_status']) {
+            if ($config['site']['site_status']) {
                 $close = '../extend/conf/close.tpl';
                 $content = file_get_contents($close);
                 write_file($index,$content);

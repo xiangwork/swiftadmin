@@ -10,7 +10,7 @@
 <body>
 <div id="header">
 	<div class="logo">
-		<h2> <img src="/static/admin/images/logo.png" alt="swiftadmin极速开发框架"> SAPHP</h2>
+		<h2> <img src="__ADMINIMAGES__/logo.png" alt="swiftadmin极速开发框架"> SAPHP</h2>
 		<span class="title">REST API</span>
 	</div>
 	<span class="layui-nav-sub layui-small-more" style="display: inline;"></span>
@@ -26,7 +26,7 @@
 			<div class="apiItem header"></div>
 			<volist name="apis" id="vo">
 			<php> $vo['id'] = $vo['id'] - 10000; </php>
-			<div class="apiItem" id="{$vo.name}">
+			<div class="apiItem" id="{$vo.title}">
 				<div class="title">{$vo.name}</div>
 				<div class="desc">{$vo.content}</div>
 				<div class="route">
@@ -71,18 +71,16 @@
 
 				<div class="request">
 					<div class="mintitle">Request-Example: <span class="layui-badge-rim APIrun">在线测试</span></div>
-					<pre class="response language-javascript"></pre>
-					<pre class="response_headers language-javascript"></pre>
-					<pre class="language-javascript" tabindex="0">
-					<code class="language-javascript">
-{$vo.request}</code>
+					<pre class="response"><code></code></pre>
+					<pre class="response_headers"><code></code></pre>
+					<pre>
+					<code class="language-javascript">{$vo.request}</code>
 					</pre>
 				</div>
 				<div class="restful">
 					<div class="mintitle">Success-Response:</div>
-					<pre class="language-javascript" tabindex="0">
-					<code class="language-javascript">
-{$vo.restful}</code>
+					<pre>
+					<code class="language-javascript">{$vo.restful}</code>
 					</pre>
 				</div>
 				</div>
@@ -93,36 +91,25 @@
 <include file="public:footer">
 </body>
 <script type="text/javascript">
-	layui.config({
-	  base: '/static/js/layui/'
-	}).extend({
-	    eleTree: "eleTree/eleTree",
-	}).use(['eleTree'],function(){
+	layui.use(['tree'],function(){
 		var jquery = layui.jquery;
 		var form = layui.form;
-		var eleTree = layui.eleTree;
+		var tree = layui.tree;
 
         // 创建API分组
-        var apiTree = eleTree({
-            el: '#apinav',
-            data: {$apinav|raw},
-            highlightCurrent: true,
-            showLine: false,
-            defaultPid: 0,
-            request: {
-                name: "name",
-            },
-            defaultExpandAll: true,
-        })
-        
-        // 定位锚点
-        apiTree.on('click',function(event) {
-        	var name = event.data.name;
-        	var elem = jquery('#'+name);
-        	if (elem.length >= 1) {
-        		jquery('html,body').animate({scrollTop: elem.offset().top-50 + 'px'}, 300);
-        	}
-        })
+		tree.render({
+			id: 'apinav'
+            ,elem: '#apinav'
+            ,data: {$apinav|raw}
+			,onlyIconControl: true      
+			,click: function(obj){
+				var name = obj.data.title;
+				var elem = jquery('#'+name);
+				if (elem.length >= 1) {
+					jquery('html,body').animate({scrollTop: elem.offset().top-50 + 'px'}, 300);
+				}
+			}
+		});
 
         // 获取侧边栏
         jquery('.layui-small-more').click(function(e) {
@@ -146,7 +133,7 @@
         // 测试API接口
         jquery(document).on('click','.APIrun',function(n) {
 
-        	// 在自身的后面进行数据的表单传送，拼接表单进行数据处理。
+        	// 测试表单接口
         	jquery('form,.ajax').remove();
         	var that = jquery(this),
         		parents = that.parent().parents('.apiItem'),
@@ -213,22 +200,23 @@
 		                success: function(data, status, xhr) {
 		                 	if (typeof data === 'object') {
 	                            var str = JSON.stringify(data, null, 2);
-	                            parents.find('.response').html(syntaxHighlight(str)).show();
+	                            parents.find('.response>code').html(str);
 	                        } else {
-	                            parents.find('.response').html(data || '').show();
+	                            parents.find('.response>code').html(data);
 	                        }
-	                        parents.find('.response_headers').html('HTTP ' + xhr.status + ' ' + xhr.statusText + '<br/><br/>' + xhr.getAllResponseHeaders()).show();
+	                        parents.find('.response_headers>code').html('HTTP ' + xhr.status + ' ' + xhr.statusText + '<br/><br/>' + xhr.getAllResponseHeaders());
+							parents.find('.response,.response_headers').show();
 		                },
 		                error: function(data, status, xhr) {
-		                    layer.msg('Access methods failure');
+		                    layer.msg('Access methods failure','error');
 		                }
 		            });
-		        	console.log(data);
 		        	return false;
 		        })
         	}
         })
 
+		// 处理高亮函数
         function syntaxHighlight(json) {
             if (typeof json != 'string') {
                 json = JSON.stringify(json, undefined, 2);

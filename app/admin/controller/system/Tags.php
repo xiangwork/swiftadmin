@@ -34,6 +34,8 @@ class Tags extends AdminController
 
             // 生成查询条件
             $post  = input();
+            $page = input('page/d') ?? 1;
+            $limit = input('limit/d') ?? 10;
             $type  = !empty($post['type']) ? $post['type']-1:1;
             $status = !empty($post['status']) ? $post['status']-1:1;
 
@@ -44,10 +46,13 @@ class Tags extends AdminController
             
             $where[]=['type','=',$type];
             $where[]=['status','=',$status];
+            
+            $count = $this->model->where($where)->count();
+            $page = ($count <= $limit) ? 1 : $page;            
 
             // 生成查询数据
-            $list = $this->model->where($where)->order("id asc")->select()->toArray();
-            return $this->success('查询成功', "", $list, count($list), 0);
+            $list = $this->model->where($where)->order("id desc")->limit($limit)->page($page)->select()->toArray();
+            return $this->success('查询成功', "", $list, $count);
         }
 
 		return view();

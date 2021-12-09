@@ -39,7 +39,7 @@ class Fulltext extends AdminController
 
             // 生成查询数据
             $list = $this->model->where($where)->order("id asc")->select()->toArray();
-            return $this->success('查询成功', "", $list, count($list), 0);
+            return $this->success('查询成功', "", $list, count($list));
         }
 
         return view();
@@ -55,7 +55,7 @@ class Fulltext extends AdminController
         if (request()->isPost()) {
             
             $post = input();
-			$validate = $this->isValidate ? $this->model::class : $this->isValidate;
+			$validate = $this->isValidate ? get_class($this->model) : $this->isValidate;
             $post = safe_field_model($post,$validate,$this->scene);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);

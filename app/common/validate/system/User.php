@@ -15,7 +15,7 @@ class User extends Validate
      */	
     protected $rule =   [
 		'test_filed' => 'max:255',
-        'name'  => 'require|min:2|max:12|filters|chsAlphaNum',
+        'nickname'  => 'require|min:2|max:12|filters|chsAlphaNum',
         'pwd|密码'   => 'require|min:6|max:64',
     ];
 	
@@ -27,11 +27,11 @@ class User extends Validate
      * @var array
      */	
     protected $message  =   [
-        'name.require'		=> '用户名不能为空',
-        'name.min'     	    => '用户名不能少于2个字符',		
-        'name.max'     	    => '用户名不能超过12个字符',
-        'name.filters'      => '用户名包含禁止注册字符',
-        'name.chsAlphaNum'  => '用户名只能是汉字、字母和数字',		
+        'nickname.require'		=> '用户名不能为空',
+        'nickname.min'     	    => '用户名不能少于2个字符',		
+        'nickname.max'     	    => '用户名不能超过12个字符',
+        'nickname.filters'      => '用户名包含禁止注册字符',
+        'nickname.chsAlphaNum'  => '用户名只能是汉字、字母和数字',		
 		'test_filed.max'     => '测试场景用',
     ];
 	

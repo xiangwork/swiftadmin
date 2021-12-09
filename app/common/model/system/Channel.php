@@ -23,15 +23,15 @@ class Channel extends Model
     /**
      * 获取模型数据
      */
-    public static function getChannelList($id = null, string $tpl = null, string $field = null) 
+    public static function getChannelList($id = null, string $table = null, string $field = null) 
     {
-        $data = system_cache('channel');
+        $data = system_cache('redis-channel');
         if (empty($data)) {
             $data = self::select()->toArray();
             foreach ($data as $key => $value) {
                 $data[$key]['title'] = __($value['title']);
             }
-            system_cache('channel', $data);
+            system_cache('redis-channel', $data);
         }
 
         // 判断数据
@@ -39,8 +39,8 @@ class Channel extends Model
             $data = list_search($data, ['id'=>$id]);
         }
         
-        if (!empty($tpl)) {
-            $data = list_search($data, ['template'=>$tpl]);
+        if (!empty($table)) {
+            $data = list_search($data, ['table'=>$table]);
         }
         
         if (!empty($field) && isset($data[$field])) {

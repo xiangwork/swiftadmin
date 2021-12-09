@@ -6,13 +6,13 @@
         <div class="layui-card-header">{:__('风格设置')}</div>
         <div class="layui-card-body">
             <div class="drawer-item" lay-style="light" >
-                <img src="/static/admin/images/light.svg" lay-tips="亮色系风格" lay-offset="1" alt="light">
+                <img src="__ADMINIMAGES__/light.svg" lay-tips="亮色系风格" lay-offset="1" alt="light">
             </div>
             <div class="drawer-item"  lay-style="dark">
-                <img src="/static/admin/images/dark.svg" lay-tips="暗色系风格" lay-offset="1" alt="dark">
+                <img src="__ADMINIMAGES__/dark.svg" lay-tips="暗色系风格" lay-offset="1" alt="dark">
             </div>
             <div class="drawer-item" lay-style="black">
-                <img src="/static/admin/images/black.svg" lay-tips="暗黑模式" lay-offset="1" alt="black">
+                <img src="__ADMINIMAGES__/black.svg" lay-tips="暗黑模式" lay-offset="1" alt="black">
             </div>
         </div>
 
@@ -30,9 +30,9 @@
 
         <div class="layui-card-header">{:__('导航模式')}</div>
         <div class="layui-card-body" >
-            <div class="drawer-menu" lay-nav="left" ><img src="/static/admin/images/dark.svg" lay-tips="左侧菜单布局" lay-offset="1" alt="left"></div>
-            <div class="drawer-menu" lay-nav="top" ><img src="/static/admin/images/top.svg" lay-tips="顶部菜单布局" lay-offset="1"  alt="top"></div>
-            <div class="drawer-menu" lay-nav="hybrid" ><img src="/static/admin/images/hybrid.svg" lay-tips="混合菜单布局" lay-offset="1" alt="hybrid"></div>
+            <div class="drawer-menu" lay-nav="left" ><img src="__ADMINIMAGES__/dark.svg" lay-tips="左侧菜单布局" lay-offset="1" alt="left"></div>
+            <div class="drawer-menu" lay-nav="top" ><img src="__ADMINIMAGES__/top.svg" lay-tips="顶部菜单布局" lay-offset="1"  alt="top"></div>
+            <div class="drawer-menu" lay-nav="hybrid" ><img src="__ADMINIMAGES__/hybrid.svg" lay-tips="混合菜单布局" lay-offset="1" alt="hybrid"></div>
         </div>
         
         <div class="layui-card-body layui-form">
@@ -142,10 +142,8 @@
 
             }else if (stylesheet == 'dark') {
                 top.layui.$('#style-light').remove();
-            }else {
-                layui.iziToast.error({
-                    message: 'noting',
-                });                  
+            }else {  
+                layer.msg('noting','error');               
                 return false;
             }
             layui.admin.setStorage('style',stylesheet);
@@ -233,10 +231,8 @@
         })  
 
         // 路由动画
-        layui.form.on('switch(router)',function(obj) {
-            layui.iziToast.info({
-                message: '系统已经内置loading',
-            });   
+        layui.form.on('switch(router)',function(obj) {  
+            layer.msg('系统已内置loading','info'); 
         })
 
         // 多标签选项卡
@@ -246,10 +242,8 @@
             var nav = layui.admin.getStorage('nav')
             if (nav === 'top' || nav == 'hybrid') {
                 jquery(".pageTabs").prop("checked", true);
-                layui.form.render();
-                layui.iziToast.error({
-                    message: '当前菜单布局不支持该操作！',
-                });   
+                layui.form.render(); 
+                layer.msg('当前菜单布局不支持该操作！','error');
                 return false;
             }
 

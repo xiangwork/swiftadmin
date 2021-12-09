@@ -8,7 +8,7 @@
 <div class="layui-fluid">
     <div class="layui-card">
         <!-- // 默认操作按钮 -->
-        <div class="layui-card-header layuiadmin-card-header-auto ">
+        <div class="layui-card-header layadmin-card-header-auto ">
             <div class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline">
@@ -318,9 +318,7 @@
                 
                 
                 if (typeof(_pageUrl) === 'undefined') {
-                    layui.iziToast.info({
-                        message: '按钮缺少 url 属性',
-                    });   
+                    layer.msg('按钮缺少 url 属性','info'); 
                     return false;
                 }
                 
@@ -329,9 +327,7 @@
                     post.field, function(res){
                         if (res.code == 200) {
 
-                            layui.iziToast.success({
-                                message: res.msg,
-                            });
+                            layer.msg(res.msg);
 
                             // 更新列数据
                             if (typeof(tableThis) !== 'undefined') {
@@ -344,9 +340,7 @@
                             // 关闭当前窗口
                             layer.close(colletction.index);
                         }else {
-                            layui.iziToast.error({
-                                message: res.msg,
-                            });
+                            layer.msg(res.msg,'error');
                         }
                 }, 'json');
 

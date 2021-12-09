@@ -45,33 +45,63 @@ class Content extends Model
     }
 
     /**
-     * 关联模型
+     * 默认关联模型
      * @access  public
      * @return  void
      */
-    public function attr()
+    public function article()
     {
-        return $this->hasOne(ContentAttr::class,'content_id','id');
+        return $this->hasOne(ContentArticle::class,'content_id','id');
     }
 
+    /**
+     * 关联图片模型
+     *
+     * @return void
+     */
     public function images()
     {
         return $this->hasOne(ContentImages::class,'content_id','id');
     }
+
+    /**
+     * 关联软件模型
+     *
+     * @return void
+     */
 
     public function soft()
     {
         return $this->hasOne(ContentSoft::class,'content_id','id');
     }
 
+    /**
+     * 关联产品模型
+     *
+     * @return void
+     */
     public function product()
     {
         return $this->hasOne(ContentProduct::class,'content_id','id');
     }
 
+    /**
+     * 关联视频模型
+     *
+     * @return void
+     */
     public function video()
     {
         return $this->hasOne(ContentVideo::class,'content_id','id');
+    }
+
+    /**
+     * 关联标签
+     * @return void
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tags::class,TagsMapping::class,'tid','cid');
     }
 
     /**
@@ -192,24 +222,16 @@ class Content extends Model
      */
     public static function _extendFields(object $data)
     {
-        $result = $data;
-        $result = $result->toArray();
-        $attrs[] = $data->attr->toArray();
         $channel = ChannelModel::getChannelList($data['cid']);
-        if ($channel['attr'] !== 'none') {
-            $property = $channel['attr'];
-            $attrs[] = $data->$property->toArray();
-        }
-
-        foreach ($attrs as $object) {
-            foreach ($object as $key => $value) {
-                if (!isset($result[$key])) {
-                    $result[$key] = $value;
-                }
+        $property = $data->$channel['table']->toArray();
+        $result = $data->toArray();
+        foreach ($property as $key => $value) {
+            if (!isset($result[$key])) {
+                $result[$key] = $value;
             }
         }
 
-        return $result;
+        return $result ?? [];
     }
     
     /**
@@ -235,8 +257,6 @@ class Content extends Model
     {
         return ContentLibrary::setAttributeAttr($attribute,$data);
     }
-    
-
 
     /**
      * 修改图片
@@ -291,7 +311,37 @@ class Content extends Model
      */
     public function getReadurlAttr($readUrl,$data)
     {
-        return ContentLibrary::getReadurlAttr($readUrl,$data);
+        if (!empty($readUrl)) {
+            return $readUrl;
+        }
+
+        if (isset($data['attr']['jumpurl'])
+            && !empty($data['attr']['jumpurl'])) {
+            return $data['attr']['jumpurl'];
+        }
+
+        // 获取列表样式
+        $urlStyle = saenv('content_style');
+        if (strstr($urlStyle,'[model]')) {
+            $module = Channel::getChannelList($data['cid'],null,'module');
+            $readUrl = '/'.$module.'/'.$data['id'].'.html';
+        } else {
+
+            $current = list_search(Category::getListCache(),['id' => $data['pid']]);
+            if (strstr($urlStyle,'[sublist]') && $current['pid']) {
+                $parent = list_search(Category::getListCache(),['id' => $current['pid']]);
+            }
+      
+            // 确定父类存在
+            if (!isset($parent) || empty($parent['pinyin'])) {
+                $readUrl = '/'.$current['pinyin'].'/'.$data['id'].'.html';
+            }
+            else {
+                $readUrl = '/'.$parent['pinyin'].'/'.$current['pinyin'].'/'.$data['id'].'.html';
+            }
+        }
+        
+        return saenv('url_domain') ? saenv('site_http') . $readUrl : $readUrl;
     }
 
     /**

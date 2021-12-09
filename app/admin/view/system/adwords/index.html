@@ -3,7 +3,7 @@
 <div class="layui-fluid">
     <div class="layui-card">
         <!-- // 默认操作按钮 -->
-        <div class="layui-card-header layuiadmin-card-header-auto ">
+        <div class="layui-card-header layadmin-card-header-auto ">
         <div class="layui-form">
             <div class="layui-form-item">
 
@@ -106,14 +106,11 @@
 </script>
 <include file="/public/footer" />
 <script>
-    layui.use(['table','admin','admins'], function () {
+    layui.use(['table','admin'], function () {
         
         var admin = layui.admin;
         var table = layui.table;
         var jquery = layui.jquery;
-        var admins = layui.admins;
-
-        admins.test(222);
 
         /*
          * 初始化表格
@@ -146,9 +143,7 @@
             input.select();
 
             if (document.execCommand('copy')) {
-                layui.iziToast.success({
-                    message:'复制成功',
-                })
+                layer.msg('复制成功');
             }
 
             // 移除元素

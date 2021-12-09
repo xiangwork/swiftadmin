@@ -31,7 +31,7 @@ class UtilsExec
      */
     public function __construct()
     {
-        $this->_BaiduToken = saenv('map_xml_token');
+        $this->_BaiduToken = saenv('map_baidu_token');
     }
 
     /**
@@ -57,7 +57,7 @@ class UtilsExec
      */
     public function pushUrls(array|string $urls = [])
     {
-        $api = 'http://data.zz.baidu.com/urls?site='.saenv('site_http').'&token='.saenv('map_xml_token');
+        $api = 'http://data.zz.baidu.com/urls?site='.saenv('site_http').'&token='.saenv('map_baidu_token');
         $ch = curl_init();
 
         // 是否为数组

@@ -56,6 +56,12 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                 setChecked(res, curr, count);
                 tableDone(res, curr, count);
             };
+
+            // 增加自定义数据回调
+            if (typeof opt.parseData != 'undefined') {
+                opt.table.parseData = opt.parseData;
+            }
+            
             var tableSelect_table = table.render(opt.table);
 
             //分页选中保存数组

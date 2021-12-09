@@ -47,7 +47,7 @@ class Images
 
 				$ImageWaterInfo = getimagesize($config['upload_water_img']);
 
-				// 对比图片大小 /*太小了，不压缩了*/
+				// 对比图片大小
 				if ($ImageWaterInfo[0] >= $ImageInfo[0] || 
 					$ImageWaterInfo[1] >= $ImageInfo[1]) {
 					return false;

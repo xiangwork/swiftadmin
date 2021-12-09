@@ -17,24 +17,75 @@ class Category extends Model
 
     // 自动写入时间戳字段
     protected $autoWriteTimestamp = 'int';
+    
     // 定义时间戳字段名
     protected $createTime = 'createtime';
-	protected $updateTime = 'updatetime';
+    protected $updateTime = 'updatetime';
 	
     public function channel()
     {
         return $this->hasOne(Channel::class,'id','cid');
     }
 
-   /**
-   * 获取无限极分类
-   * @access public static   
-   * @param int     $pid     栏目父ID
-   * @param array   $array   引用数组
-   * @param string  $blank   替换字符
-   * @param int     $level   栏目等级   
-   * @return json
-   */
+    /**
+     * 数据写入前
+     * @access  public
+     * @param   object
+     * @return  void
+     */
+    public static function onBeforeWrite($data)
+    {}
+
+    /**
+     * 数据新增前
+     * @access  public
+     * @param   object 
+     * @return  void
+     */
+    public static function onBeforeInsert($data)
+    {}
+
+    /**
+     * 数据新增后
+     * @param   object  
+     * @return  string
+     */
+    public static function onAfterInsert($data)
+    {}
+
+    /**
+     * 数据更新前
+     * @param   object 
+     * @return  string
+     */
+    public static function onBeforeUpdate($data)
+    {}    
+
+    /**
+     * 数据更新后
+     * @param   object 
+     * @return  string
+     */
+    public static function onAfterUpdate($data)
+    {}
+
+    /**
+     * 数据写入后
+     * @param   object
+     * @return  string
+     */
+    public static function onAfterWrite($data)
+    {}
+    
+    /**
+     * 获取无限极分类
+     * @access public static   
+     * @param int     $pid     栏目父ID
+     * @param array   $array   引用数组
+     * @param string  $blank   替换字符
+     * @param int     $level   栏目等级   
+     * @return json
+     */
     public static function getListCate($pid = 0, $cid = 0, array $param = [], &$array=[], $blank=0, $level = 0)
     {
 		// 获取字段
@@ -99,36 +150,29 @@ class Category extends Model
      * @access      public
      * @return      tree||array
      */
-
-    public static function getListCache()
+    public static function getListCache(bool $reload = false)
     {
-        $name = hash('sha256','cate_cache');
+        $name = 'redis-category';
         $data = system_cache($name);
-        if (empty($data)) {
+
+        if (empty($data) || $reload) {
             $data = self::where('status',1)->select();
             system_cache($name,$data);
         }
+
         return $data;
     }
 
     /**
-     * 获取指定模型栏目
-     * @access      public
-     * @param       model        $model      模型类型
-     * @return      array
+     * 获取栏目数据
+     *
+     * @param integer $id
+     * @return void
      */
-    public static function getspecifiedcate($id)
+    public static function queryCategory(int $id = 0)
     {
-        $name = hash('sha256','specified');
-        $data = system_cache($name);
-        if (empty($data)) {
-            $data = self::where('cid',$id)->select()->toArray();
-            system_cache($name,$data);
-      
-        }
-        return $data;
+        return list_search(self::getListCache(),['id'=>$id]);
     }
-
 
     /**
      * 栏目统计
@@ -137,10 +181,10 @@ class Category extends Model
      * @param       array        $where      查询条件
      * @return      array
      */
-	public static function getlistcount($model, $where) 
+	public static function getListCount($where,$model = 'content') 
     {
 		if (!empty($model) && is_array($where)) {
-			return self::name($model)->where($where)->count();
+			return self::name($model)->where($where)->count('id');
 		}
     }
     
@@ -235,6 +279,16 @@ class Category extends Model
             return $readUrl;
         }
 
-        return build_request_url($data,'category_style');
+        $urlStyle = saenv('category_style');
+        $readUrl = !$data['single']?'/'.$data['pinyin'].'/':'/'.$data['pinyin'].'.html';
+        if (strstr($urlStyle,'[sublist]') && $data['pid'] != 0) {
+            $parentClass = list_search(self::getListCache(),['id' => $data['pid']]);
+            if (!empty($parentClass)) {
+                $readUrl = '/'.$parentClass['pinyin'].$readUrl;
+            }
+        }
+
+        return saenv('url_domain') ? saenv('site_http') . $readUrl : $readUrl;
     }
+
 }

@@ -55,6 +55,10 @@ span .layui-btn {
 	margin-bottom: 2px;
 }
 
+.lay-upgrade {
+	line-height: 30px;
+}
+
 i.layui-icon-picture {
 	color: #1890ff;
 	margin-left:3px;
@@ -87,11 +91,23 @@ button[lay-filter="formSearch"] {
     width: 243px;
 }
 
+.layui-form-item .layui-btn {
+	margin: 0px 10px;
+}
+
 .layui-elem-quote {
     padding: 10px;
 }
 
 .layui-elem-plugin {
+	color: red;
+	background: url(/static/images/plugin-login.png);
+	border-radius: 3px;
+	height: 53px;
+    border: none;
+}
+
+.layui-elem-uninstall {
 	background: #FF5722;
 	color: #fff;
 	border-color: #FF5722;
@@ -108,11 +124,9 @@ button[lay-filter="formSearch"] {
 }
 
 .layui-layer-title {
-	color: #fff;
     height: 50px;
     line-height: 50px;
-    background-color: #191a23;
-    border: 0;
+	border-bottom: 1px solid #f6f6f6;
 }
 
 .layui-plugin-tables {

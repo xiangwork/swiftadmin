@@ -14,17 +14,13 @@
 <font size="20" >开源不易，求送颗星星，谢谢！</font>
 </p>
 
-
-
-
-<b>请注意，本框架增加了低版本php7的适配，现在支持PHP7 PHP8，如有疑问可加QQ群反馈</b><br/>
-<b>请注意，框架安装成功后会自动删除安装脚本文件！！！</b><br/>
-<b>开发环境：Windows服务器版 VScode Apache MySQL5.7 PHP7 - PHP8</b><br/>
 <b>后台演示 <a href="http://demo.swiftadmin.net/admin.php"  target="_blank">http://demo.swiftadmin.net/admin.php</a> </b><br/>
 <b>管理账号  admin admin888 </b><br/>
-<b>测试账号  ceshi admin888 </b>注意：前端使用JavaScript鉴权！<br/>
+<b>测试账号  ceshi admin888 </b>如正式运营环境请删除测试账号;<br/>
+<b>请注意，框架安装成功后会自动删除安装脚本文件！！！</b><br/>
+<b>开发环境：Windows服务器版 VScode Apache MySQL5.7 PHP7 - PHP8</b><br/>
 
-<a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="swiftadmin"></a>
+<a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-Apache-blue.svg" alt="swiftadmin"></a>
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/ThinkPHP-6.0.8-brightgreen.svg" alt="thinkphp"></a>
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/Layui-2.6.n-red.svg" alt="layui"></a>
 <a href="https://gitee.com/meystack/swiftadmin/stargazers"><img src="https://gitee.com/meystack/swiftadmin/badge/star.svg?theme=gvp" alt="star"></a>
@@ -35,44 +31,48 @@
 
 ## 开发初衷
 
-1.  swiftadmin框架的开发，主要是为了减少在自己开发过程中的频繁造轮子，并且swiftAdmin框架主张简单就是高效的原则，相信没有比判断0或者1更有效率的算法了吧，所以最简单的东西才是效率最高的，可能你的应用场景很复杂，但是你可以把复杂的事情简单化！
+1.  SAPHP框架的开发，主要是为了减少在自己开发过程中的频繁造轮子，并且SAPHP框架主张简单就是高效的原则，相信没有比判断0或者1更有效率的算法了吧，所以最简单的东西才是效率最高的，可能你的应用场景很复杂，但是你可以把复杂的事情简单化！
 
 2.  在最开始接触互联网的时候，都是用一些开源的CMS系统制作自己的网站，后期因为扩展和二次开发的问题，导致觉得很多东西并不是那么简单易用，比如后台的很多JS代码封装的不是很好，而且界面也操作性很差，所以自己开发这款框架封装了很多常用的特性，足以满足日常后台的开发需要，在使用的过程中你会发现，SAPHP框架里面用的最多的是属性而不是对象，一是为了在书写HTML标签的时候方便。二是为了和layui本身区分开！这样让你更容易在这个上面进行扩展！
 
-3.  系统默认从基础控制器继承了增删改查操作。但这种方式并不适合大多数硬性的应用场景和逻辑需求，你可能在后期需要摈弃大多数利用了一键CURD的方法进行重载函数，虽然swiftadmin框架里面也有，但swiftadmin框架的设计初衷是为了在易用性和操作性上折中找一个方案来做，当前基于第一个版本的SAPHP框架在这方面的表现还不是特别好。但随着应用场景检验和优化，本框架会逐步的进行完善和提高性能！
+3.  系统默认从基础控制器继承了增删改查操作。但这种方式并不适合大多数硬性的应用场景和逻辑需求，你可能在后期需要摈弃大多数利用了一键CURD的方法进行重载函数，虽然SAPHP框架里面也有，但框架的设计初衷是为了在易用性和操作性上折中找一个方案来做，当前基于第一个版本的SAPHP框架在这方面的表现还不是特别好。但随着应用场景检验和优化，本框架会逐步的进行完善和提高性能！
 
-4.  在市面上目前的开源极速开发框架的学习成本略高，想搞一个学习成本极低，但性能不低的框架！
+4.  在市面上目前的开源极速开发框架的学习成本略高，想搞一个学习成本极低，但性能不低的框架（CMS系统）！
 
-5.  想着开发一款底层设计配置和应用分开的系统，这样对于很多小白用户不会在项目已经上线运行中的时候，误操作系统的配置导致数据丢失，错乱的问题。比如有些字段需要手动在数据库进行修改，
+5.  想着开发一款底层设计配置和应用分开的系统，这样对于很多小白用户不会在项目已经上线运行中的时候，误操作系统的配置导致数据丢失，错乱的问题。比如有些字段需要手动在数据库进行修改。
 
 ## 侧重点
 
- *  swiftAdmin的架构和开发更倾向于内容管理系统[CMS]的方向，当然你也可以当中API系统使用<br/>
+ *  SAPHP的架构和开发更倾向于内容管理系统[CMS]的方向，当然你也可以当中API系统使用<br/>
  
  *  系统默认的缓存机制为redis缓存，所以请确保安装redis扩展和服务器[摒弃操蛋的file缓存吧]<br/>
  
  *  如果你只是需要一个极简的API管理系统，那么建议你删除不需要的模块和菜单项！<br/>
 
- *  本框架会侧重于SEO优化、流量管理、蜘蛛池、区块链以及采集方面的应用！！！<br/>
+ *  会侧重于SEO优化、客户管理、流量管理、蜘蛛池、区块链以及采集方面的应用！！！<br/>
 
- *  本框架会逐渐偏向于社区版开源的方向，主要由社区共同的爱好者免费开发维护插件！！！
-
- *  本框架特别适合个人开发者和小型创业公司，找一款真正适合自己的框架不容易，所以先来试试swiftadmin吧！
+ *  坚持偏向于社区版开源的方向，主要由社区共同的爱好者免费开发维护插件！！！
+  
+ *  SAPHP已经上线插件市场🔧，适用于中小型企业采购付费商业版插件的使用！！
+  
+ *  本框架特别适合个人开发者和小型创业公司，找一款真正适合自己的框架不容易，所以先来试试SAPHP吧！
 
 ## `框架优势`
 
-* `代码量最少、逻辑最清晰`
+* `代码量最少最精简、逻辑简单清晰`
 
-* `入门学习成本是同类框架中最低的`
+* `参考官方文档，只需会PHP JS 开箱即用`
 
 * `界面基于ant design设计 [可操作性强]`
 
 * `控制器与栏目管理双鉴权，满足日常大部分需求`
 
 * `前端JavaScript鉴权，后端AUTH类鉴权，减少请求`
+* `封装常用组件和快捷属性，小白即可快速二次开发`
+* `支持全文索引XS/ElasticSearch轻松支持PB级数据`
+* `通用型thinkPHP插件开发架构，可轻松迁移其他插件`
 
 * `代码安全质量高，修复大部分低危、高危代码漏洞`
-
 * `高占比AJAX数据调用，响应速度可媲美前后端分离`
 
 ## 集成功能
@@ -93,6 +93,7 @@
 - [x] `TAG过滤`  支持违规词、敏感词配置
 - [x] `短信平台` 支持阿里云、腾讯云短信发送
 - [x] `附件上传` 支持FTP、阿里云、腾讯云OSS附件上传
+- [x] `全文检索` 支持XunSearch、<font color="red">ElasticSearch集群</font>PB级全文检索
 - [ ] `服务监控` 服务监控：监视当前系统CPU、内存、磁盘、堆栈等相关信息。
 - [ ] `定时任务` 在线（添加、修改、删除)任务调度包含执行结果日志。
 - [ ] `代码生成` 前后端代码的生成（php、html、layui、sql）支持一键CRUD 。
@@ -189,4 +190,4 @@ git clone https://gitee.com/meystack/swiftadmin.git ./src && cd src && composer 
 		<td><img src="https://www.swiftadmin.net/static/images/pay/zfbfk.jpg" width="300" /></td>
 	</tr>
 </table>
-<code>您的捐助和支持，将是SAPHP开源项目发展最大的动力，感谢年少(209766828) 200元、HeLe(38510621) 200元捐赠，以上排名不分先后！</code>
+<code>您的捐助和支持，将会是SAPHP/SACMS开源项目得到更快更好的发展！</code>

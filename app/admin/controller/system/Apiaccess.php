@@ -41,7 +41,7 @@ class Apiaccess extends AdminController
             // 生成查询条件
             $where = array();
             if (!empty($post['name'])) {
-                $name[] = ['name','like','%'.$post['name'].'%'];
+                $name[] = ['nickname','like','%'.$post['nickname'].'%'];
                 $uIds = User::where($name)->field('id')->select()->toArray();
                 foreach ($uIds as $key => $value) {
                     $ids[] = $value['id'];
@@ -71,14 +71,14 @@ class Apiaccess extends AdminController
             $page = ($count <= $limit) ? 1 : $page;
             $list = $this->model->alias('a')
                                 ->field('a.*')
-                                ->view('user','name','user.id=a.uid')
-                                ->view('api','class,hash,name as title,method','api.id=a.api_id')
+                                ->view('user','nickname','user.id=a.uid')
+                                ->view('api','class,hash,title,method','api.id=a.api_id')
                                 ->where($where)
                                 ->limit($limit)
                                 ->page($page)
                                 ->order("a.id asc")
                                 ->select()->toArray();
-            return $this->success('查询成功', "", $list, $count, 0);
+            return $this->success('查询成功', "", $list, $count);
         }
 
         return view();
@@ -125,7 +125,7 @@ class Apiaccess extends AdminController
         $id = input('id/d');
         $data = $this->model->alias('a')
                             ->field('a.*')
-                            ->view('user','name','user.id=a.uid')
+                            ->view('user','nickname','user.id=a.uid')
                             ->view('api','class,hash','api.id=a.api_id')
                             ->where('a.id',$id)
                             ->find()->toArray();

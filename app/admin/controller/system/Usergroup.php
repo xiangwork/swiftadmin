@@ -58,7 +58,7 @@ class UserGroup extends AdminController
 				$list[$key]['title'] = __($value['title']);
 			}
 
-			return $this->success('查询成功', null, $list, $count, 0);
+			return $this->success('查询成功', null, $list, $count);
 		}
 
         return view('system/user/group');

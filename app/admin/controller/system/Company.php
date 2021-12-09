@@ -41,7 +41,7 @@ class Company extends AdminController
 
             // 生成查询数据
             $list = $this->model->where($where)->select()->toArray();
-            return $this->success('查询成功', null, $list, count($list), 0);
+            return $this->success('查询成功', null, $list, count($list));
         }
 
 		return view();
@@ -55,7 +55,7 @@ class Company extends AdminController
 		if (request()->isPost()) {
 
 			$post = input('post.');
-            $post = safe_field_model($post,$this->model::class);
+            $post = safe_field_model($post,get_class($this->model));
             if (empty($post) || !is_array($post)) {
                 $this->error($post);
             }
@@ -80,7 +80,7 @@ class Company extends AdminController
         $id = input('id/d');
         if (request()->isPost()) {
             $post = input('post.');
-            $post = safe_validate_model($post,$this->model::class);
+            $post = safe_validate_model($post,get_class($this->model));
             if (empty($post) || !is_array($post)) {
                 $this->error($post);
             }

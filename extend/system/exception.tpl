@@ -153,8 +153,7 @@ pre.prettyprint .fun{color:red}
 .head-line{font-size:36px}
 .subheader{font-size:27px;line-height:37px}
 .hr{margin:30px auto;width:215px}
-}
-@media screen and (max-width:450px){padding:30px}
+}@media screen and (max-width:450px){padding:30px}
 .head-line{font-size:32px}
 .hr{margin:25px auto;width:180px}
 .context{font-size:15px;line-height:22px}

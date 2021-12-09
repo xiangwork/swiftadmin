@@ -3,9 +3,9 @@ declare (strict_types = 1);
 
 namespace app\common\model\system;
 
-use app\common\library\Content;
 use think\Model;
 use think\model\concern\SoftDelete;
+use app\common\library\Content as ContentLibrary;
 
 /**
  * @mixin \think\Model
@@ -20,11 +20,61 @@ class Comment extends Model
     
     // 定义时间戳字段名
     protected $createTime = 'createtime';
-    protected $updateTime = 'updatetime'; 
+    protected $updateTime = 'updatetime';
 
+    // 自定义关联字段
+    protected $userField  = 'id,nickname,heart,loginip,avatar,readurl,score';
+
+    /**
+     * 关联用户
+     *
+     * @return void
+     */
     public function user()
     {
-        return $this->hasOne(User::class,'id','uid')->fieldRaw("ifnull(name,'游客') as name,ifnull(avatar,'/static/images/user_default.jpg') as avatar");
+        return $this->hasOne(User::class,'id','uid')->field($this->userField);
+    }
+
+    /**
+     * 获取回复ID
+     *
+     * @return void
+     */
+    public function replay()
+    {
+        return $this->hasOne(User::class,'id','rid')->field($this->userField);
+    }
+
+    /**
+     * 关联回复
+     * 限定5条数据/可用AJAX调用查询
+     * @return void
+     */
+    public function child()
+    {
+        return $this->hasMany(self::class,'pid','id')->order('id asc')->limit(10)->with(['user','replay']);
+    }
+ 
+    /**
+     * 修改内容数据
+     * @access  public
+     * @param   string  $content
+     * @return  string
+     */
+    public function setContentAttr($content)
+    {
+        return htmlspecialchars(str_replace('script','',$content));
+    }
+
+    /**
+     * 获取内容数据
+     * @access  public
+     * @param   string  $content
+     * @return  string
+     */
+    public function getContentAttr($content)
+    {
+        return html_entity_decode($content);
     }
 
     /**
@@ -35,7 +85,7 @@ class Comment extends Model
      */
     public function setIPAttr($ip)
     {
-        return Content::setIPAttr($ip);
+        return ContentLibrary::setIPAttr($ip);
     }
 
     /**
@@ -46,6 +96,6 @@ class Comment extends Model
      */
     public function getIPAttr($ip)
     {
-        return Content::getIPAttr($ip);
+        return ContentLibrary::getIPAttr($ip);
     }    
 }

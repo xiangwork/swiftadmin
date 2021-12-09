@@ -122,6 +122,7 @@ class AdminController extends BaseController
     // 后台应用全局初始化
     protected function initialize()
     {
+		
 		self::sysField();
 		$this->admin = Session::get($this->sename);
 		if (!isset($this->admin['id'])) {
@@ -129,7 +130,7 @@ class AdminController extends BaseController
 			return $this->redirect(url('/login')->suffix(false));
 		}
 
-		$app = strtolower(str_replace('/','',request()->root()));
+		$app = strtolower(request()->root());
 		$this->controller = request()->controller(true);		
 		$this->action  = request()->action(true);
 		$this->method = '/'.$this->controller.'/'.$this->action;
@@ -197,7 +198,7 @@ class AdminController extends BaseController
 			$list = $this->model->where($where)->order("id asc")->limit($limit)->page($page)->select()->toArray();
 
 			// TODO..
-			return $this->success('查询成功', null, $list, $count, 0);
+			return $this->success('查询成功', null, $list, $count);
 		}
 
 		return view();
@@ -211,7 +212,7 @@ class AdminController extends BaseController
 		if (request()->isPost()) {
 
 			$post = input();
-			$validate = $this->isValidate ? $this->model::class : $this->isValidate;
+			$validate = $this->isValidate ? get_class($this->model) : $this->isValidate;
             $post = safe_field_model($post,$validate,$this->scene);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
@@ -243,7 +244,7 @@ class AdminController extends BaseController
 
         if (request()->isPost()) {
 			$post = input();
-			$validate = $this->isValidate ? $this->model::class : $this->isValidate;
+			$validate = $this->isValidate ? get_class($this->model) : $this->isValidate;
             $post = safe_field_model($post,$validate,$this->scene);
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
@@ -284,7 +285,14 @@ class AdminController extends BaseController
 			try {
                 $where[] = ['id','in',implode(',',$id)];
                 $list = $this->model->where($where)->select();
-                foreach ($list as $index => $item) {
+                foreach ($list as $key => $item) {
+
+					// 过滤字段
+					if (isset($item->isSystem) 
+						&& $item->isSystem) {
+						throw new \Exception('禁止删除系统级字段');
+					}
+
                     $this->status += $item->delete();
                 }
                 Db::commit();
@@ -385,7 +393,7 @@ class AdminController extends BaseController
 	public static function sysField() 
 	{
 		$debug = env('app_debug') || 0;
-		if(!is_file(config_path().'sysfield.php') ||  $debug = 1) {
+		if(!is_file(config_path().'sysfield.php') ||  $debug == 1) {
 			// 查询所有表
 			$mysql_base = config('database.connections.mysql.database');
 			$mysql_prefix = config('database.connections.mysql.prefix'); 

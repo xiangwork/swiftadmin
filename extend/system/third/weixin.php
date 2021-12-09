@@ -10,8 +10,7 @@ use GuzzleHttp\Client;
 
 class weixin 
 {
-
-    const GET_AUTH_CODE_URL = "https://open.weixin.qq.com/connect/oauth2/authorize";
+    const GET_AUTH_CODE_URL = "https://open.weixin.qq.com/connect/qrconnect";
     const GET_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
     const GET_USERINFO_URL = "https://api.weixin.qq.com/sns/userinfo";
 
@@ -53,9 +52,9 @@ class weixin
         session('state', $state);
         $queryarr = array(
             "response_type" => "code",
-            "client_id"     => $this->config['app_id'],
+            "appid"     => $this->config['app_id'],
             "redirect_uri"  => $this->config['callback'],
-            "scope"         => 'snsapi_userinfo',
+            "scope"         => 'snsapi_login,',
             "state"         => $state,
         );
 
@@ -77,13 +76,14 @@ class weixin
 
             //获取access_token
             $data = isset($params['code']) ? $this->getAccessToken($params['code']) : $params;
+            
             $access_token = isset($data['access_token']) ? $data['access_token'] : '';
             $refresh_token = isset($data['refresh_token']) ? $data['refresh_token'] : '';
             $expires_in = isset($data['expires_in']) ? $data['expires_in'] : 0;
             if ($access_token) {
                 $openid = isset($data['openid']) ? $data['openid'] : '';
                 $unionid = isset($data['unionid']) ? $data['unionid'] : '';
-                if (stripos($this->config['scope'], 'snsapi_userinfo') !== false) {
+                if (stripos($data['scope'], 'snsapi_login') !== false) {
                     //获取用户信息
                     $queryarr = [
                         "access_token" => $access_token,
@@ -102,6 +102,7 @@ class weixin
                 } else {
                     $userinfo = [];
                 }
+
                 $data = [
                     'access_token'  => $access_token,
                     'refresh_token' => $refresh_token,
@@ -110,6 +111,7 @@ class weixin
                     'unionid'       => $unionid,
                     'userinfo'      => $userinfo
                 ];
+
                 return $data;
             }
         }

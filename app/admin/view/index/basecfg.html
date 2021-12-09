@@ -99,7 +99,7 @@
                             lay-upload=""
                             lay-input="logo" 
                             lay-images="imgsrc" 
-                            lay-data="{url: '{:url('/upload/logo')}'}" > 
+                            lay-data="{url: '/upload/logo'}" > 
                             <i class="layui-icon layui-icon-upload"></i>{:__('上传图片')}
                         </button>
                     </div>
@@ -109,7 +109,7 @@
                             <div class="layui-upload-logo">
                                 <dl>
                                 <dt> <img class="imgsrc" src="{$config.site.site_logo}" alt="{:__('站点LOGO')}" ></dt>
-                                <dd class="layui-badge" onclick="javascript:layer.msg('好像没写代码！')" >{:__('删除')}</dd>
+                                <dd class="layui-badge" onclick="javascript:layer.msg('好像没写代码！','error')" >{:__('删除')}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -340,9 +340,9 @@
                         <label class="layui-form-label" >{:__('关闭网站')}</label>
                         <div class="layui-input-inline" >
                              <input type="radio" name="site[site_status]"   
-                             value="1" title="开启"  <if condition="$config['site']['site_status'] eq 1 "> checked </if> >
+                             value="1" title="是"  <if condition="$config['site']['site_status'] eq 1 "> checked </if> >
                              <input type="radio" name="site[site_status]"   
-                             value="0" title="关闭" <if condition="$config['site']['site_status'] eq 0 "> checked </if> >
+                             value="0" title="否" <if condition="$config['site']['site_status'] eq 0 "> checked </if> >
                         </div>   
                         <div class="layui-form-mid layui-word-aux">* {:__('关闭网站，全站会显示关闭提示！')}</div>                
                      </div> 
@@ -1017,9 +1017,9 @@
                                     <label class="layui-form-label">支付模式</label>
                                     <div class="layui-input-inline">
                                         <input type="radio" name="payface[alipay][mode]"   
-                                        value="" title="正式环境" <if condition="$config['payface']['alipay']['mode'] eq '' "> checked </if> >
+                                        value="0" title="正式环境" <if condition="$config['payface']['alipay']['mode'] eq  0 "> checked </if> >
                                         <input type="radio" name="payface[alipay][mode]"   
-                                        value="dev" title="沙箱模式" <if condition="$config['payface']['alipay']['mode'] eq 'dev' "> checked </if> >
+                                        value="1" title="沙箱模式" <if condition="$config['payface']['alipay']['mode'] eq 1 "> checked </if> >
                                     </div>    
                                     <div class="layui-form-mid layui-word-aux"><font color="red">*</font> 沙箱环境下，请使用沙箱版支付宝调试</div>           
                                 </div>                                   
@@ -1031,16 +1031,16 @@
                                     <div class="layui-form-mid layui-word-aux">* {:__('支付宝应用appid')}</div> 
                                 </div> 
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">ali_public_key</label>
+                                    <label class="layui-form-label">app_public_cert_path</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="payface[alipay][ali_public_key]"  value="{$config.payface.alipay.ali_public_key}" class="layui-input">
+                                        <input type="text" name="payface[alipay][app_public_cert_path]"  value="{$config.payface.alipay.app_public_cert_path}" class="layui-input">
                                     </div> 
                                     <div class="layui-form-mid layui-word-aux"><font color="red">*</font>  {:__('支付宝RSA2_PKCS1公钥')}</div>        
                                 </div>
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">private_key</label>
+                                    <label class="layui-form-label">app_secret_cert</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="payface[alipay][private_key]" value="{$config.payface.alipay.private_key}" class="layui-input">
+                                        <input type="text" name="payface[alipay][app_secret_cert]" value="{$config.payface.alipay.app_secret_cert}" class="layui-input">
                                     </div>
                                     <div class="layui-form-mid layui-word-aux"><font color="red">*</font>  {:__('应用RSA2_PKCS1私钥')}</div> 
                                 </div>
@@ -1061,18 +1061,18 @@
                                     <div class="layui-form-mid layui-word-aux"><font color="red">*</font>  {:__('支付成功异步服务器通知地址,业务逻辑')}</div> 
                                 </div> 
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">cert_client</label>
+                                    <label class="layui-form-label">alipay_public_cert_path</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="payface[alipay][cert_client]" value="{$config.payface.alipay.cert_client}" class="layui-input cert_client">
+                                        <input type="text" name="payface[alipay][alipay_public_cert_path]" value="{$config.payface.alipay.alipay_public_cert_path}" class="layui-input cert_client">
                                     </div>
-                                    <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="cert_client">{:__('上传应用证书')}</button>
+                                    <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="cert_client">{:__('上传支付宝公钥证书')}</button>
                                 </div> 
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">cert_key</label>
+                                    <label class="layui-form-label">alipay_root_cert_path</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="payface[alipay][cert_key]" value="{$config.payface.alipay.cert_key}" class="layui-input cert_key">
+                                        <input type="text" name="payface[alipay][alipay_root_cert_path]" value="{$config.payface.alipay.alipay_root_cert_path}" class="layui-input cert_key">
                                     </div>
-                                   <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="cert_key">{:__('上传支付宝证书')}</button>
+                                   <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="cert_key">{:__('上传支付宝根证书')}</button>
                                 </div>              
 
                                 <!-- // 微信支付开始 -->
@@ -1083,73 +1083,71 @@
                                     <label class="layui-form-label">支付模式</label>
                                     <div class="layui-input-inline">
                                         <input type="radio" name="payface[wechat][mode]"   
-                                        value="" title="正式环境" <if condition="$config['payface']['wechat']['mode'] eq '' "> checked </if> >
+                                        value="0" title="正式环境" <if condition="$config['payface']['wechat']['mode'] eq 0 "> checked </if> >
                                         <input type="radio" name="payface[wechat][mode]"   
-                                        value="dev" title="仿真环境" <if condition="$config['payface']['wechat']['mode'] eq 'dev' "> checked </if> >
+                                        value="1" title="仿真环境" <if condition="$config['payface']['wechat']['mode'] eq 1 "> checked </if> >
                                     </div>    
                                     <div class="layui-form-mid layui-word-aux">* 仿真环境下，请使用sandboxnew地址访问</div>           
                                 </div>  
-                                <div class="layui-form-item">
-                                    <label class="layui-form-label">appid</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="payface[wechat][appid]" value="{$config.payface.wechat.appid}" class="layui-input"  >
-                                    </div>
-                                    <div class="layui-form-mid layui-word-aux"><font color="red">*</font>  {:__('网站应用的APPID')}</div> 
-                                </div> 
 
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">app_id</label>
+                                    <label class="layui-form-label">商户ID</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="payface[wechat][app_id]"  value="{$config.payface.wechat.app_id}" class="layui-input">
-                                    </div>   
-                                    <div class="layui-form-mid layui-word-aux">* {:__('公众号支付app_id')}</div>      
-                                </div>
-
-                               <div class="layui-form-item">
-                                    <label class="layui-form-label">KEY</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="payface[wechat][key]"  value="{$config.payface.wechat.key}" class="layui-input">
-                                    </div>   
-                                    <div class="layui-form-mid layui-word-aux">* {:__('公众号支付的appkey')}</div>      
-                                </div>
-
-                                <div class="layui-form-item">
-                                    <label class="layui-form-label">miniapp_id</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="payface[wechat][miniapp_id]"  value="{$config.payface.wechat.miniapp_id}" class="layui-input">
-                                    </div>   
-                                    <div class="layui-form-mid layui-word-aux">* {:__('微信小程序支付miniapp_id')}</div>      
-                                </div>
-
-                                <div class="layui-form-item">
-                                    <label class="layui-form-label">mch_id</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="payface[wechat][mch_id]" value="{$config.payface.wechat.mch_id}" class="layui-input">
+                                        <input type="text" name="payface[wechat][mch_id]" placeholder="{:__('必填')}" 
+                                        value="{$config.payface.wechat.mch_id}" class="layui-input">
                                     </div>
                                     <div class="layui-form-mid layui-word-aux"><font color="red">*</font>  {:__('微信支付绑定商户号的MCH_ID')}</div> 
                                 </div> 
+                                
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">商户私钥</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="payface[wechat][mch_secret_key]" placeholder="{:__('必填')}" 
+                                        value="{$config.payface.wechat.mch_secret_key}" class="layui-input">
+                                    </div>   
+                                    <div class="layui-form-mid layui-word-aux">* {:__('微信商户平台V3版秘钥')}</div>      
+                                </div>
+                                
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">公众号ID</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="payface[wechat][mp_app_id]" placeholder="{:__('选填')}" 
+                                        value="{$config.payface.wechat.mp_app_id}" class="layui-input">
+                                    </div>   
+                                    <div class="layui-form-mid layui-word-aux">* {:__('微信公众号ID')}</div>      
+                                </div>
 
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">notify_url</label>
+                                    <label class="layui-form-label">小程序ID</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="payface[wechat][notify_url]"  value="{$config.payface.wechat.notify_url}" class="layui-input">
+                                        <input type="text" name="payface[wechat][mini_app_id]" placeholder="{:__('选填')}" 
+                                         value="{$config.payface.wechat.mini_app_id}" class="layui-input">
+                                    </div>   
+                                    <div class="layui-form-mid layui-word-aux">* {:__('微信小程序ID')}</div>      
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">回调地址</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="payface[wechat][notify_url]" placeholder="{:__('必填')}" 
+                                        value="{$config.payface.wechat.notify_url}" class="layui-input">
                                     </div>   
                                     <div class="layui-form-mid layui-word-aux"><font color="red">*</font>  {:__('微信支付成功回调地址')}</div>      
                                 </div>
 
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">cert_client</label>
+                                    <label class="layui-form-label">商户私钥证书</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="payface[wechat][cert_client]" value="{$config.payface.wechat.cert_client}" class="layui-input wxcert_client">
+                                        <input type="text" name="payface[wechat][mch_secret_cert]" value="{$config.payface.wechat.mch_secret_cert}" class="layui-input wxcert_client">
                                     </div>
-                                    <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="wxcert_client">{:__('上传应用证书')}</button>
+                                    <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="wxcert_client">{:__('上传V3私钥证书')}</button>
                                 </div> 
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">cert_key</label>
+                                    <label class="layui-form-label">商户公钥证书</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="payface[wechat][cert_key]" value="{$config.payface.wechat.cert_key}" class="layui-input wxcert_key">
+                                        <input type="text" name="payface[wechat][mch_public_cert_path]" value="{$config.payface.wechat.mch_public_cert_path}" class="layui-input wxcert_key">
                                     </div>
-                                   <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="wxcert_key">{:__('上传微信证书')}</button>
+                                   <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="wxcert_key">{:__('上传V3公钥证书')}</button>
                                 </div>  
 
                               </div>
@@ -1247,41 +1245,31 @@
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">APP_ID</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="wechat[secret_id]"  value="{$config.wechat.secret_id}" class="layui-input">
+                                        <input type="text" name="mpwechat[secret_id]"  value="{$config.mpwechat.secret_id}" class="layui-input">
                                     </div>        
-                                    <div class="layui-form-mid layui-word-aux">* {:__('您在腾讯云中API密钥的SecretId')}。</div> 
-                                </div>
-                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">APP_URL</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="wechat[secret_id]"  value="{$config.wechat.secret_id}" class="layui-input">
-                                    </div>        
-                                    <div class="layui-form-mid layui-word-aux">* {:__('您在腾讯云中API密钥的SecretId')}。</div> 
-                                </div>                               
-
-                                <div class="layui-form-item">
-                                    <label class="layui-form-label">APP_TOKEN</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="wechat[secret_id]"  value="{$config.wechat.secret_id}" class="layui-input">
-                                    </div>        
-                                    <div class="layui-form-mid layui-word-aux">* {:__('您在腾讯云中API密钥的SecretId')}。</div> 
+                                    <div class="layui-form-mid layui-word-aux">* {:__('开发者ID是公众号开发识别码，配合开发者密码可调用公众号的接口能力')}。</div> 
                                 </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">APP_SECRET</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="wechat[secret_key]"  value="{$config.wechat.secret_key}" class="layui-input">
+                                        <input type="text" name="mpwechat[secret_key]"  value="{$config.mpwechat.secret_key}" class="layui-input">
                                     </div>        
-                                    <div class="layui-form-mid layui-word-aux"><font color="red">* {:__('您在腾讯云中API密钥的SecretKey，建议创建子密钥使用')}。</font></div> 
-                                </div>      
-
+                                    <div class="layui-form-mid layui-word-aux"><font color="red">* {:__('开发者密码是校验公众号开发者身份的密码，具有极高的安全性。')}。</font></div> 
+                                </div>                               
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">APP_TOKEN</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="mpwechat[secret_token]"  value="{$config.mpwechat.secret_token}" class="layui-input">
+                                    </div>        
+                                    <div class="layui-form-mid layui-word-aux">* {:__('微信公众平台令牌(Token)')}。</div> 
+                                </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">ENCODING_KEY</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="wechat[secret_key]"  value="{$config.wechat.secret_key}" class="layui-input">
+                                        <input type="text" name="mpwechat[EncodingAESKey]"  value="{$config.mpwechat.EncodingAESKey}" class="layui-input">
                                     </div>        
-                                    <div class="layui-form-mid layui-word-aux"><font color="red">* {:__('您在腾讯云中API密钥的SecretKey，建议创建子密钥使用')}。</font></div> 
+                                    <div class="layui-form-mid layui-word-aux"><font color="red">* {:__('消息加解密密钥将用于消息体加解密')}。</font></div> 
                                 </div> 
-
                               </div>
                             </div>
                           </div>   

@@ -13,58 +13,39 @@ declare (strict_types = 1);
 namespace app\index\controller;
 
 use app\HomeController;
+use app\common\model\system\Content;
 
 class Gold extends HomeController
 {
 	// js评分函数
 	public function show() 
 	{
-		// 获取参数
-		$param = input();
-		if (!isset($param['id']) 
-            || !isset($param['model']) 
-            || !isset($param['value']) ) {
-            return $this->error('请求参数错误！');
-		}
-		
-		// 组合COOKIE
-		$cookies = 'gd_'.md5hash($param['model'].'-gold-'.$param['id']);
-		if (cookie($cookies)) {
-            return $this->error("您已经评分过了");
-		}
-
-        try {
-			// 查询数据
-			if (!stripos($param['model'],'.')) {
-				$InstanceModel = "\\app\\common\\model\\".ucfirst($param['model']);
-			}
-			else {
-				$InstanceModel = explode('.',$param['model']);
-				$InstanceModel = "\\app\\common\\model\\".$InstanceModel[0].'\\'.ucfirst($InstanceModel[1]);
-			}
-
-            $InstanceObject = new $InstanceModel;
-            $result = $InstanceObject::field('id,gold,golder')->find($param['id']);
-            if (!empty($result)) {
-                if (!empty($param['value'])) {
-
+        if (request()->isAjax()) {
+            // 获取参数
+            $param = input();
+            if (!isset($param['id']) || !isset($param['value']) ) {
+                return $this->error('请求参数错误！');
+            }
+            // 组合COOKIE
+            $cookieName = 'GD'.$param['id'].$param['value'];
+            if (cookie($cookieName)) {
+                return $this->error("您已经评分过了");
+            }
+            try {
+                $result = Content::field('id,gold,golder')->find($param['id']);
+                if (!empty($result)) {
                     $array['gold'] = number_format(($result['gold']*$result['golder'] + intval($param['value'])) / ($result['golder']+1),1);
                     $array['golder'] = $result['golder']+1;
                     $result->where('id',$param['id'])->update($array);
-
                     // 设置COOKIE
-                    cookie($cookies,create_rand(10),today_seconds());
-                }
-            } 
-            else {
-                $array['gold'] = 0.0;
-                $array['golder'] = 0;
-            }
-  
-        } catch (\Throwable $th) {
-           return $this->error('操作异常');
-        }
+                    cookie($cookieName,create_rand(10),today_seconds());
+                } 
 
-        return $this->success('感谢您的评分！',null,$array);
+            } catch (\Throwable $th) {
+                return $this->error('操作异常');
+            }
+
+            return $this->success('感谢您的评分！',null, $array);
+        }
 	}
 }

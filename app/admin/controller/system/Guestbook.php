@@ -56,7 +56,7 @@ class Guestbook extends AdminController
                 $list[$key]['ip'] = long2ip($value['ip']);
             }                    
  			// TODO..
-            return $this->success('查询成功', "", $list, $count, 0);
+            return $this->success('查询成功', "", $list, $count);
 
         }
 

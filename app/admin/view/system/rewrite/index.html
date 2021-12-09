@@ -26,7 +26,9 @@
     .layui-tab-content {
       background-color: #fff;
     }
-
+    .layui-form-item {
+        margin-bottom: 13px;
+    }
     .layui-form-item .layui-input-inline {
         width: 300px;
     }
@@ -98,7 +100,7 @@
                                 <select id="channel">
                                     <option value="">{:__('请选择模型')}</option>
                                     <salibs:channel id="vo">
-                                        <option value="{$vo.id}" >{$vo.title}</option>
+                                        <option value="{$vo.id}" module="{$vo.table}" >{$vo.title}</option>
                                     </salibs:channel>
                                 </select>
                             </div>       
@@ -118,6 +120,17 @@
                             <input type="radio" name="rewrite[url_model]"   
                                 value="0" title="动态URL" <if condition="$rewrite['url_model'] eq 0 "> checked </if> >
                         </div>
+                      </div>
+
+                      <div class="layui-form-item ">
+                        <label class="layui-form-label">页面压缩</label>
+                        <div class="layui-input-inline">
+                            <select name="rewrite[compression_page]">
+                                <option value="1" <eq name="$rewrite['compression_page']" value="1" > selected="" </eq> >{:__('开启')}</option>
+                                <option value="0" <eq name="$rewrite['compression_page']" value="0" > selected="" </eq> >{:__('关闭')}</option>
+                            </select>
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">* 推荐开启页面压缩，需提高服务器性能</div>
                       </div>
 
                       <div class="layui-form-item ">
@@ -271,24 +284,24 @@
                     <div class="layui-form-item ">
                       <label class="layui-form-label">生成XML上限</label>
                         <div class="layui-input-inline">
-                            <input name="sitemap[map_xml_max]" type="text" 
-                                class="layui-input" maxlength="5"  lay-verify="required" value="{$sitemap.map_xml_max}"/>
+                            <input name="sitemap[map_max_limit]" type="text" 
+                                class="layui-input" maxlength="5"  lay-verify="required" value="{$sitemap.map_max_limit}"/>
                         </div>  
                         <div class="layui-form-mid layui-word-aux">* 单个XML地图文件地址上限。</div>               
                     </div>
                     <div class="layui-form-item ">
                       <label class="layui-form-label">地图保存目录</label>
                         <div class="layui-input-inline">
-                            <input name="sitemap[map_xml_path]"  type="text" 
-                                class="layui-input"  lay-verify="required" value="{$sitemap.map_xml_path}"/>
+                            <input name="sitemap[map_file_path]"  type="text" 
+                                class="layui-input"  lay-verify="required" value="{$sitemap.map_file_path}"/>
                         </div>     
                         <div class="layui-form-mid layui-word-aux"><font color="red">* </font>XML文件目录，建议非根目录防止被采集！</div>          
                     </div>   
                     <div class="layui-form-item ">
                         <label class="layui-form-label">实时推送token</label>
                         <div class="layui-input-inline">
-                            <input name="sitemap[map_xml_token]"  type="text" 
-                                class="layui-input"  lay-verify="required" value="{$sitemap.map_xml_token}"/>
+                            <input name="sitemap[map_baidu_token]"  type="text" 
+                                class="layui-input"  lay-verify="required" value="{$sitemap.map_baidu_token}"/>
                         </div>     
                         <div class="layui-form-mid layui-word-aux"><font color="red">* 百度搜索资源平台</font> 的准入密钥,发布文章实时推送！</div>          
                     </div> 
@@ -332,8 +345,8 @@
         })
 
         // 常规元素渲染
-        contents.xmselect('pid',categorylist,[],false);
-        contents.xmselect('cid',categorylist,[],false);
+        var category = contents.xmselect('pid',categorylist,[],false);
+        var content = contents.xmselect('cid',categorylist,[],false);
 
         // 生成栏目页/列表页/内容页
         jquery('.createhtml').click(function(){
@@ -341,18 +354,18 @@
                 var url = '',
                 type = jquery(this).attr('value'),
                 elem = eval(type);
-                console.log(elem);
-                return;
                 url  = elem.getValue()[0].id;
                 url  = '&id='+url;
+
+
+
             }catch(error) {}
             self.location.href = "{:url('/system.rewrite/createHtml')}?type=" + type + url;
         })
 
         // 生成模型地图  
         jquery('.createmap').click(function(){
-            var model = jquery('#channel').val();
-            self.location.href = "{:url('/system.rewrite/createMap')}?model="+model;
+            self.location.href = "{:url('/system.rewrite/createMap')}?id="+jquery('#channel').val();
         })
     })
 

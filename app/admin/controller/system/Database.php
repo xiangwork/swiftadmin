@@ -58,7 +58,7 @@ class Database extends AdminController
                 }
             }
 
-            return $this->success('获取成功', null, $list, count($list), 0);            
+            return $this->success('获取成功', null, $list, count($list));            
 
 
         }

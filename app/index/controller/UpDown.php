@@ -13,61 +13,56 @@ declare (strict_types = 1);
 namespace app\index\controller;
 
 use app\HomeController;
-use think\facade\Cookie;
-
+use app\common\model\system\Content;
+/**
+ * 顶踩控制器
+ * @ 
+ */
 class UpDown extends HomeController
 {	
 	// 顶踩函数
 	public function show() 
 	{
-		// 获取参数
-		$param = input();
-		if (!isset($param['id']) 
-            || !isset($param['model']) 
-            || !isset($param['type']) ) {
-			return $this->error("请求参数错误！");
-		}
-		
-		// 组合COOKIE
-		$cookies = 'up-'.md5hash($param['model'].'-updown-'.$param['id']);
-		$content = cookie($cookies);
-		if (!empty($content)) {
-			if (stristr($content,$param['type'])) {
-				return $this->error("您已操作过，晚点再试！");
+		if (request()->isAjax()) {
+			
+			// 获取参数
+			$param = input();
+			if (!isset($param['id']) || !isset($param['type']) ) {
+				return $this->error("请求参数错误！");
 			}
-		}
-		
-        try {
-
-			// 查询数据
-			if (!stripos($param['model'],'.')) {
-				$InstanceModel = "\\app\\common\\model\\".ucfirst($param['model']);
+			
+			// 组合COOKIE
+			$cookieName = 'UP'.$param['id'].$param['type'];
+			$cookieData = cookie($cookieName);
+			if (!empty($cookieData)) {
+				if (stristr($cookieData,$param['type'])) {
+					return $this->error("您已操作过，晚点再试！");
+				}
 			}
-			else {
-				$InstanceModel = explode('.',$param['model']);
-				$InstanceModel = "\\app\\common\\model\\".$InstanceModel[0].'\\'.ucfirst($InstanceModel[1]);
-			}
+			
+			try {
 
-			$InstanceObject = new $InstanceModel;
-			$result = $InstanceObject::field('id')->find($param['id']);
+				// 查询数据
+				$result = Content::field('id')->find($param['id']);
 
-			if (!empty($result)) {
-				if ($param['type'] == 'up') {
-					$content .= 'up';
-					$InstanceObject->where('id',$result['id'])->inc('up')->update();
-				}else if ($param['type'] == 'down') {
-					$content .= 'down';
-					$InstanceObject->where('id',$result['id'])->inc('down')->update();
+				if (!empty($result)) {
+					if ($param['type'] == 'up') {
+						$cookieData .= 'up';
+						Content::where('id',$result['id'])->inc('up')->update();
+					}else if ($param['type'] == 'down') {
+						$cookieData .= 'down';
+						Content::where('id',$result['id'])->inc('down')->update();
+					}
+
+					// 设置COOKIE
+					cookie($cookieName,$cookieData, today_seconds());
 				}
 
-				// 设置COOKIE
-				Cookie::set($cookies,$content, today_seconds());
+			} catch (\Throwable $th) {
+				return $this->error($th->getMessage());
 			}
 
-        } catch (\Throwable $th) {
-			return $this->error($th->getMessage());
-        }
-
-		return $this->success("感谢您的参与，操作成功！",$result['up'].':'.$result['down']);
+			return $this->success("感谢您的参与，操作成功！",$result['up'].':'.$result['down']);			
+		}
 	}
 }

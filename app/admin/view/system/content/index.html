@@ -4,7 +4,11 @@
     html, body,.layui-fluid, .layui-card,.layui-card-body,.layui-col-md2,.layui-col-md10 {
         height: 98.8%;
     }
-    .layui-card-header.layuiadmin-card-header-auto {
+
+    .layui-layer-content {
+        background-color: #fff;
+    }
+    .layui-card-header.layadmin-card-header-auto {
         border-bottom: 0px;
         padding-bottom: 0px;
     }
@@ -27,21 +31,11 @@
     .layui-badge {
         margin-right: 5px;
     }
-
-    .eleTree-title {
-        cursor: pointer;
-    }
-
-    .eleTree-group .eleTree-node .eleTree-title {
-        position: relative;
-        line-height: 35px;
-        height: 35px;
-    }
 </style>
 <div class="layui-col-md2">
     <div class="layui-fluid">
         <div class="layui-card">
-            <div class="layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-card-header layadmin-card-header-auto">
                 <h5>
                     <i class="layui-icon layui-icon-list"></i> {:__('栏目管理')}</h5>
                 </div>
@@ -57,7 +51,7 @@
     <div class="layui-fluid">
         <div class="layui-card">
             <!-- // 默认操作按钮 -->
-            <div class="layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-card-header layadmin-card-header-auto">
             <div class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline">
@@ -103,7 +97,7 @@
 </div>
 <!-- // 请选择栏目 -->
 <script type="text/html" id="content">
-    <div class="layui-card-body" style="margin-top: 10px">
+    <div class="layui-card-body" style="margin-top: 10px;">
         <div id="category"></div>
     </div>
 </script>
@@ -121,14 +115,14 @@
 </script>
 <include file="/public/footer" />
 <script>
-    layui.use(['admin','eleTree'], function () {
+    layui.use(['admin','tree'], function () {
 
         var admin = layui.admin;
-        var eleTree = layui.eleTree;
+        var tree = layui.tree;
         var table = layui.table; 
         var jquery = layui.jquery;
         var tableURL = "{:url('/system.content/index/')}";
-        var authURL  = '{:url("/system.admin/_get_auth_func")}';
+        var authURL  = '{:url("/system.admin/authorizeInterface")}';
 
         // 数据表格
         var isTable = table.render({
@@ -172,84 +166,74 @@
             }
         })
 
-        // 获取权限列表
-        var createTree = function(elem) {
-            return eleTree({
-                el: '#' + elem ,
-                data: admin.event.getAjaxData(authURL,{ 
-                    action : 'getrulecatestree',
-                    type   : 'cates',
-                    class  : 'private'
-                }),
-                highlightCurrent: true,
-                showLine: true,
-                defaultPid: 0,
-                request: {
-                    name: "title",
-                },
-
-                defaultExpandAll: true,
-            })
-        }
-
         // 重载数据表格
-        var Tree = createTree('tree');
-        Tree.on('click',function(event) {
-
-            param = '?' + jquery.param({
-                'cid': event.data.cid,
-                'pid': event.data.id
-            });
-
-            table.reload('lay-tableList', {
-                url: tableURL + param,
-                where: {}
-            });
-
-            var that = jquery('.layui-btn-add');
-            that.attr('lay-area','100%,100%');
-            that.removeAttr('lay-title lay-callback');
-            that.attr('lay-url',that.attr('lay-value') + param);
-        })
-
-        // 添加栏目回调
-        admin.callback.category = function(clickthis,colletction,config) {
-
-            var Tree = createTree('category');
-            Tree.on('click',function(event) {
-
+        tree.render({
+            elem: '#tree',
+            data: admin.event.getAjaxData(authURL,{ 
+                action : 'getrulecatestree',
+                type   : 'cates',
+                class  : 'private'
+            })
+            ,onlyIconControl: true
+            ,click: function (event) {
                 param = '?' + jquery.param({
                     'cid': event.data.cid,
                     'pid': event.data.id
                 });
 
-                
+                table.reload('lay-tableList', {
+                    url: tableURL + param,
+                    where: {}
+                });
 
-                // 重载地址参数
-                var url = clickthis.attr('lay-value');
-                console.log(url);
-                if (url.indexOf('move') == -1) {
-                    clickthis.attr('lay-url',url + param);
-                    clickthis.attr('lay-area','100%,100%');
-                    clickthis.removeAttr('lay-title lay-callback');
-                    parent.layui.jquery(clickthis).trigger('click');
-                } else {
-                    console.log(event.data);
-                    // 模拟元素点击
-                    var batchthis = jquery('#batch');
-                    if (!batchthis.length) {
-                        var html = '<div id="batch" lay-batch="lay-tableList" lay-field="cid"></div>';
-                        jquery(clickthis).parent().append(html);
-                        batchthis = jquery('#batch');
+                var that = jquery('.layui-btn-add');
+                that.attr('lay-area','100%,100%');
+                that.removeAttr('lay-title lay-callback');
+                that.attr('lay-url',that.attr('lay-value') + param);
+            }          
+        })
+
+        // 添加栏目回调
+        admin.callback.category = function(clickthis,colletction,config) {
+
+            tree.render({
+                elem: '#category',
+                data: admin.event.getAjaxData(authURL,{ 
+                    action : 'getrulecatestree',
+                    type   : 'cates',
+                    class  : 'private'
+                })
+                ,onlyIconControl: true
+                ,click: function (event) {
+
+                    param = '?' + jquery.param({
+                        'cid': event.data.cid,
+                        'pid': event.data.id
+                    });
+
+                    // 重载地址参数
+                    var url = clickthis.attr('lay-value');
+                    if (url.indexOf('move') == -1) {
+                        clickthis.attr('lay-url',url + param);
+                        clickthis.attr('lay-area','100%,100%');
+                        clickthis.removeAttr('lay-title lay-callback');
+                        parent.layui.jquery(clickthis).trigger('click');
+                    } else {
+
+                        // 模拟元素点击
+                        var batchthis = jquery('#batch');
+                        if (!batchthis.length) {
+                            var html = '<div id="batch" lay-batch="lay-tableList" lay-field="cid"></div>';
+                            jquery(clickthis).parent().append(html);
+                            batchthis = jquery('#batch');
+                        }
+
+                        batchthis.attr('lay-url',url+'?destpid='+event.data.id);
+                        batchthis.trigger('click');
                     }
-
-                    batchthis.attr('lay-url',url+'?destpid='+event.data.id);
-                    batchthis.trigger('click');
-                }
-
-                layui.layer.close(colletction.index);
+                    layui.layer.close(colletction.index);               
+                }          
             })
         }
-
     })
 </script>

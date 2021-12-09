@@ -19,6 +19,13 @@
 
      .task .layui-table td {
         white-space: nowrap;
+        max-width: 120px;
+     }
+
+     .layui-table[lay-skin="nob"] th, .layui-table[lay-skin="nob"] td {
+       white-space: nowrap;
+       max-width: 50px;
+       overflow: hidden;
      }
 
     ul.layui-timeline {
@@ -77,6 +84,12 @@
         margin-top: 5px;
     }
 
+    @media screen and (max-width: 1200px){
+      .layui-admin-workplace {
+        margin: 0 8px 0px 1px;
+      }
+    }
+
 </style>
 
 <div class="layui-fluid ">
@@ -127,16 +140,16 @@
           <div class="layui-card-body" style="padding: 20px;">
             <div style="height: 78px">
                 <ul>
-                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.navmenu/index',[],false)}"
-                    title="导航管理">导航管理</a>
-                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.tags/index',[],false)}"
-                    title="标签管理">标签管理</a>
+                    <a href="https://www.sprog.com.cn" class="workplace-action" target="_blank"
+                    title="菜鸟学院 - 免费基础编程教学">菜鸟学院 ❤️</a>
+                    <a href="https://www.yingtwo.com" class="workplace-action" target="_blank"
+                    title="高性价比云服务器">云服务器 <span class="layui-badge" style="height: 11px;line-height:11px;font-size:10px;" >HOT</span></a>
                     <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.seoer/index',[],false)}"
                     title="SEO优化">SEO优化</a>
                     <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.rewrite/index',[],false)}"
                     title="URL生成">URL生成</a>
                     <a href="javascript:;" class="workplace-action" sa-event="tabs" lay-url="{:url('/system.friendlink/index',[],false)}"
-                    title="友情链接">友情链接 <span class="layui-badge-dot"></span></a>
+                    title="友情链接">友情链接 </a>
                     <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.adwords/index',[],false)}" 
                     title="广告管理">广告管理</a>
                     <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.dictionary/index',[],false)}"
@@ -365,7 +378,7 @@
                     </tr>
                     <tr>
                       <td>PHP版本</td>
-                      <td>支持>=7.* 8*</td>
+                      <td>支持>=7.* 8* QQ群：68221484</td>
                     </tr>
                     <tr>
                       <td>主要特色</td>
@@ -375,8 +388,8 @@
                       <td>获取渠道</td>
                       <td style="padding-bottom: 0;">
                         <div class="layui-btn-container">
-                          <a href="http://www.swiftadmin.net/" target="_blank" class="layui-btn layui-btn-danger">获取授权</a>
-                          <a href="http://www.swiftadmin.net/solutions/home.html" target="_blank" class="layui-btn">立即下载</a>
+                          <div class="layui-col-md4"><a href="https://www.swiftadmin.net/authorize.html" target="_blank" class="layui-btn layui-btn-danger">获取授权</a></div>
+                          <div class="layui-col-md4"><a href="#" target="_blank" class="layui-btn">立即下载</a></div>
                         </div>
                       </td>
                     </tr>
@@ -489,31 +502,31 @@
           <div class="layui-card-header">小组成员</div>
           <div class="layui-card-body" style="height: 260px" >
             <div class="console-user-group">
-                <img src="/static/admin/images/user.png" class="console-user-group-head" alt=""/>
+                <img src="__ADMINIMAGES__/user.png" class="console-user-group-head" alt=""/>
                 <div class="console-user-group-name">周星星</div>
                 <div class="console-user-group-desc">产品负责人</div>
                 <span class="layui-badge layui-badge-green">在线</span>
             </div>
             <div class="console-user-group">
-                <img src="/static/admin/images/user.png" class="console-user-group-head" alt=""/>
+                <img src="__ADMINIMAGES__/user.png" class="console-user-group-head" alt=""/>
                 <div class="console-user-group-name">周星星</div>
                 <div class="console-user-group-desc">项目负责人</div>
                 <span class="layui-badge layui-badge-green">在线</span>
             </div>
             <div class="console-user-group">
-                <img src="/static/admin/images/user.png" class="console-user-group-head" alt=""/>
+                <img src="__ADMINIMAGES__/user.png" class="console-user-group-head" alt=""/>
                 <div class="console-user-group-name">周星星</div>
                 <div class="console-user-group-desc">产品负责人</div>
                 <span class="layui-badge layui-badge-red">离线</span>
             </div>
             <div class="console-user-group">
-                <img src="/static/admin/images/user.png" class="console-user-group-head" alt=""/>
+                <img src="__ADMINIMAGES__/user.png" class="console-user-group-head" alt=""/>
                 <div class="console-user-group-name">周星星</div>
                 <div class="console-user-group-desc">测试负责人</div>
                 <span class="layui-badge layui-badge-red">离线</span>
             </div>
             <div class="console-user-group">
-                <img src="/static/admin/images/user.png" class="console-user-group-head" alt=""/>
+                <img src="__ADMINIMAGES__/user.png" class="console-user-group-head" alt=""/>
                 <div class="console-user-group-name">周星星</div>
                 <div class="console-user-group-desc">测试负责人</div>
                 <span class="layui-badge layui-badge-red">离线</span>

@@ -3,7 +3,7 @@
 <div class="layui-fluid">
     <div class="layui-card">
         <!-- // 默认操作按钮 -->
-        <div class="layui-card-header layuiadmin-card-header-auto ">
+        <div class="layui-card-header layadmin-card-header-auto ">
         <div class="layui-form">
             <div class="layui-form-item">
             <div class="layui-inline">
@@ -122,10 +122,10 @@
 
 <include file="/public/footer" />
 <script>
-    layui.use(['admin','layer','table','eleTree','form'], function () {
+    layui.use(['admin','layer','table','tree','form'], function () {
         var jquery = layui.jquery;
         var admin = layui.admin;
-        var eleTree = layui.eleTree;
+        var tree = layui.tree;
         var form = layui.form;
         var layer = layui.layer;
         var table = layui.table;
@@ -148,7 +148,6 @@
             ]]
         })
 
-
         /*
          * 角色回调函数
          */
@@ -156,6 +155,7 @@
 
             // 获取表格对象
             var tableThis = colletction.tableThis,checkKeys = [];
+
             // 勾选默认权限
             if (typeof (tableThis.data.rules) !== undefined && tableThis.data.rules != null) {
                 checkKeys = tableThis.data.rules.split(',');
@@ -164,63 +164,45 @@
                 }
             }
 
-            // 创建实例
-            var tree = eleTree({
-                el: '#authTree',
-                data: _ajax('getrulecatestree'),
-                highlightCurrent: true,
-                showCheckbox: true,
-                showLine: false,
-                isDefaultChangePstatus: true,
-                defaultPid: 0,
-                request: {
-                    name: "title",
-                },
-                defaultCheckedKeys: checkKeys,
-            })
+            // 渲染树列表
+            tree.render({
+                id: 'authTree'
+                ,elem: '#authTree'
+                ,data: _ajax('getrulecatestree')
+                ,showCheckbox: true
+                ,checkids: checkKeys
+                ,oncheck: function(obj){}
+            });
            
             // 监听提交
             form.on("submit(submitPage)",function(post){
                 // 获取提交地址
                 var pageThat = jquery(this), _form = pageThat.parents('form'), 
-                rules = [],_pageUrl = _form.attr("action") || pageThat.attr('lay-url');
+                _pageUrl = _form.attr("action") || pageThat.attr('lay-url');
                 pageThat.attr("disabled",true);
                 if (typeof(_pageUrl) === 'undefined') {
-                    layui.iziToast.error({
-                        message: "缺少 url 属性",
-                    });
+                    layer.msg('缺少URL属性','error');
                     return false;
-                }
-                
-                // 遍历节点数据
-                var nodes = tree.getChecked(false,true);
-                for (var i in nodes) {
-                    rules.push(nodes[i].id);
                 }
 
                 // 增加角色id
                 post.field.id = tableThis.data.id;
                 // 增加节点数据
-                post.field.rules = rules;
+                post.field.rules = tree.getChecked('authTree',true);
 
                 // 开始POST提交数据
                 jquery.post(_pageUrl, 
                     post.field, function(res){
                         if (res.code == 200) {
-                            layui.iziToast.success({
-                                message: res.msg,
-                            });
+                            layer.msg(res.msg);
                             // 更新本地规则
-                            rules = rules.join(',');
                             tableThis.update({
-                                rules: rules
+                                rules: tree.getChecked('authTree',true).join(',')
                             });
                             // 关闭当前窗口
                             layer.close(colletction.index);
                         }else{
-                            layui.iziToast.error({
-                                message: res.msg,
-                            });
+                            layer.msg(res.msg,'error');
                         }
                 }, 'json');
 
@@ -243,63 +225,45 @@
                 }
             }
 
-            // 创建实例
-            var tree = eleTree({
-                el: '#cateTree',
-                data: _ajax('getrulecatestree','cates'),
-                highlightCurrent: true,
-                showCheckbox: true,
-                isDefaultChangePstatus: true,
-                showLine: false,
-                defaultPid: 0,
-                request: {
-                    name: "title",
-                },
-                defaultCheckedKeys: checkKeys,
-            })
+            // 渲染树列表
+            tree.render({
+                id: 'cateTree'
+                ,elem: '#cateTree'
+                ,data: _ajax('getrulecatestree','cates')
+                ,showCheckbox: true
+                ,checkids: checkKeys
+                ,oncheck: function(obj){}
+            });
 
             // 监听提交
             form.on("submit(submitPage)",function(post){
                 // 获取提交地址
                 var pageThat = jquery(this), _form = pageThat.parents('form'), 
-                cates = [],_pageUrl = _form.attr("action") || pageThat.attr('lay-url');
+                _pageUrl = _form.attr("action") || pageThat.attr('lay-url');
                 pageThat.attr("disabled",true);
                 if (typeof(_pageUrl) === 'undefined') {
-                    layui.iziToast.error({
-                        message: "缺少 url 属性",
-                    });
+                    layer.msg('缺少URL属性','error');
                     return false;
-                }
-                
-                // 遍历节点数据
-                var nodes = tree.getChecked(false,true);
-                for (var i in nodes) {
-                    cates.push(nodes[i].id);
                 }
 
                 // 增加角色id
                 post.field.id = tableThis.data.id;
                 // 增加节点数据
-                post.field.cates = cates;
+                post.field.cates = tree.getChecked('cateTree',true);
 
                 // 开始POST提交数据
                 jquery.post(_pageUrl, 
                     post.field, function(res){
                         if (res.code == 200) {
-                            layui.iziToast.success({
-                                message: res.msg,
-                            });
+                            layer.msg(res.msg);
                             // 更新栏目权限
-                            cates = cates.join(',');
                             tableThis.update({
-                                cates: cates
+                                cates: tree.getChecked('cateTree',true).join(',')
                             });
                             // 关闭当前窗口
                             layer.close(colletction.index);
                         }else{
-                            layui.iziToast.error({
-                                message: res.msg,
-                            });
+                            layer.msg(res.msg,'error');
                         }
                 }, 'json');
 
@@ -309,7 +273,7 @@
 
         // 同步加载函数
         var _ajax = function (action,type,classd) {
-            var func = '{:url("/system.admin/_get_auth_func")}';
+            var func = '{:url("/system.admin/authorizeInterface")}';
             return admin.event.getAjaxData(func,{ 
                 action : action,
                 type   : type,

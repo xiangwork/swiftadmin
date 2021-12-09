@@ -41,12 +41,12 @@ class Plugin extends AdminController
         if (request()->isAjax()) {
 
             $localPlugin = [];
+
             foreach ($list as $key => $value) {
                 $localPlugin[$key] = $value;
-
             }
             $count = count($localPlugin);
-            return $this->success('获取成功',null,$localPlugin,$count,0);
+            return $this->success('获取成功',null,$localPlugin,$count);
         }
 
         $plugin = $this->localPlugin($list);

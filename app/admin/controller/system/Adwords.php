@@ -44,7 +44,7 @@ class Adwords extends AdminController
             // 生成查询数据
             $where[]=['status','=',$status];
             $list = $this->model->where($where)->order("id asc")->select()->toArray();
-            return $this->success('查询成功', NULL, $list, count($list), 0);
+            return $this->success('查询成功', NULL, $list, count($list));
         }
 
 		return view();
@@ -63,7 +63,7 @@ class Adwords extends AdminController
             }
 
             // 单独验证场景
-            $post = safe_validate_model($post,$this->model::class);
+            $post = safe_validate_model($post,get_class($this->model));
             if (empty($post) || !is_array($post)) {
                 $this->error($post);
             }
@@ -89,15 +89,12 @@ class Adwords extends AdminController
         $id = input('id/d');
         
         if (request()->isPost()) {
+            
             $post = input('post.');
-			if (empty($post) || !is_array($post)) {
-				return $this->error($post);
-            }
 
             // 单独验证场景
-            $post = safe_validate_model($post,$this->model::class);
-            if (empty($post) || !is_array($post)) {
-                $this->error($post);
+            if ($this->autoPostValidate($post,get_class($this->model))) {
+                return $this->error($this->errorMsg);
             }
 
             $post['expirestime'] = strtotime($post['expirestime']);

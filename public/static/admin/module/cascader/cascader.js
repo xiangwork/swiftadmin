@@ -9,7 +9,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
     var $ = layui.jquery;
     var laytpl = layui.laytpl;
     var layer = layui.layer;
-    var zIndex=3000;    // 共用一个层级
+    var zIndex = 3000;    // 共用一个层级
     
     function Cascader(option) {
         this.option=option;     // 获取传入的数据
@@ -296,7 +296,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                 self.onOff = !self.onOff;
                 zIndex++;
                 if (self.onOff) {
-                    $(self.elem).siblings(".urp-cascader-content").find("ul").slideDown(100);
+                    $(self.elem).siblings(".urp-cascader-content").find("ul").css('display','inline-block').slideDown(100);
                     $(self.elem).siblings("i").removeClass("layui-icon-down").addClass("layui-icon-up")
 
                     self.domContent.css("zIndex",zIndex);
@@ -312,6 +312,7 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
                 self.onOff = false;
                 if(!self.onOff){
                     $(self.elem).siblings(".urp-cascader-content").find("ul").slideUp(100);
+                    
                     $(self.elem).siblings("i").removeClass("layui-icon-up").addClass("layui-icon-down")
                 }
             })
@@ -343,7 +344,8 @@ layui.define(["jquery","laytpl","layer"], function (exports) {
             }
         }
     }
-    
+
+    layui.link(layui.cache.base + 'cascader/cascader.css');
     exports('cascader', function(option) {
         var ins=new Cascader(option);
         return thisCas.call(ins);

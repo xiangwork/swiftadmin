@@ -12,11 +12,15 @@ declare (strict_types = 1);
 
 namespace app\index\controller;
 
-use app\common\library\Auth;
 use app\HomeController;
+use app\common\library\Auth;
 use app\common\model\system\User;
 use app\common\model\system\UserThird;
 
+/**
+ * 社会化登录
+ * @ QQ 微信 微博
+ */
 class Third extends HomeController
 {
     /**
@@ -65,7 +69,7 @@ class Third extends HomeController
            return $this->register($userInfos,$this->type);
         }
         else if ($this->auth->isLogin()) { // 绑定用户
-            return $this->doBind($userInfos,$this->type);
+            return $this->doBind($userInfos,$this->type); 
         }
     }
 
@@ -74,29 +78,30 @@ class Third extends HomeController
      */
     public function register(array $userInfos = [], string $type = null) 
     {
-
+        
         // 查询是否已经注册
         $openid = $userInfos['openid'] ?? $userInfos['id'];
         $nickname = $userInfos['userinfo']['name'] ?? $userInfos['userinfo']['nickname'];
+
         $result = UserThird::alias('th')->view('user','*','user.id=th.user_id')
                                         ->where(['openid'=>$openid,'type'=>$type])->find();
         if (!empty($result)) {
             $array['id'] = $result['id'];
-            $array['logintime'] = time(); // 更新登录数据
+            $array['logintime'] = time();
             $array['loginip'] = request()->ip();
             $array['logincount'] = $result['logincount'] + 1;
             if (User::update($array)) {
                 $this->auth->setloginState($result,false);
-                $this->reload();
+                $this->refreshStatus();
             }
         }
         else {
 
             // 注册本地用户
-			$local['name'] = $nickname;
+			$local['nickname'] = $nickname;
 			$local['avatar'] = $userInfos['userinfo']['avatar'];	
-            if (User::getByName($nickname)) {
-                $local['name'] .= create_rand(6);
+            if (User::getByNickname($nickname)) {
+                $local['nickname'] .= create_rand(6);
             }
 
             $local['createip'] = request()->ip();
@@ -120,7 +125,8 @@ class Third extends HomeController
             // 注册第三方数据
             if (isset($third) && is_array($third)) {
                 if (UserThird::create($third)) {
-                    $this->reload();
+                    $this->auth->setloginState($result,false);
+                    $this->refreshStatus();
                 }
             }
         }
@@ -156,7 +162,6 @@ class Third extends HomeController
             if (UserThird::where($where)->delete()) {
                 return $this->success('解除绑定成功！');
             }
-
           }
         }
 
@@ -192,7 +197,7 @@ class Third extends HomeController
 
             try {
                 if (UserThird::create($third)) {
-                    return $this->reload();
+                    return $this->refreshStatus();
                 }
             } catch (\Throwable $th) {
                 return $this->error($th->getMessage());
@@ -204,15 +209,18 @@ class Third extends HomeController
 
 	/**
      * 页面登录JS刷新
-     * window.thridreload = function(e) 
+     * window.refreshLogin = function(e) 
      * { top.location.reload();}
+     * // 单独登录也可使用HEADER
      */
-	protected function reload () 
+	protected function refreshStatus () 
     {
-		$script = '<script>';
-		$script .= 'window.opener.thridreload();';
-		$script .= 'window.close();';	
-		$script .= '</script>';	
-		echo $script;
+        $refreshLogin = <<<Eof
+            <script>
+                window.opener.refreshLogin();
+                window.close();
+            </script>
+        Eof;
+        echo $refreshLogin;
 	}
 }

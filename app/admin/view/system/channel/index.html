@@ -7,12 +7,12 @@
 <div class="layui-fluid">
     <div class="layui-card">
         <!-- // 默认操作按钮 -->
-        <div class="layui-card-header layuiadmin-card-header-auto ">
+        <div class="layui-card-header layadmin-card-header-auto ">
         <div class="layui-form">
             <div class="layui-form-item">
             <div class="layui-inline">
                 <div class="layui-form-label">{:__('模型名称')}</div>
-                <div class="layui-input-inline "><input name="model" class="layui-input" type="text" placeholder="{:__('模型名称')}"/></div>
+                <div class="layui-input-inline "><input name="title" class="layui-input" type="text" placeholder="{:__('模型名称')}"/></div>
             </div>
             <div class="layui-inline" >
                 <!-- // 默认搜索 -->
@@ -51,7 +51,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('属性表名')}</label>
         <div class="layui-input-block">
-            <input name="attr"  type="text" class="layui-input" />
+            <input name="table"  type="text" class="layui-input" />
         </div>
     </div>
 
@@ -74,8 +74,6 @@
 <script type="text/html" id="tableBar"> 
     <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-area="580px,300px" lay-url="#editforms" lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-title="{:__('字段')} {{d.title}}" lay-area="580px,530px" lay-url="#editforms" lay-event="edit" >{:__('字段')}</a>
-    <div class="layui-divider layui-divider-vertical"></div>
     <a class="layui-table-text" lay-url="{:url('/system.channel/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 <include file="/public/footer" />
@@ -93,11 +91,11 @@
                 {type: 'checkbox', width:45},
                 {field: 'id', align: 'center',sort: true,width: 80,  title: 'ID'},
                 {field: 'title', align: 'left', title: '{:__("名称")}'},
+                {field: 'table', align: 'center',title: '{:__("模型属性")}'},
                 {field: 'template', align: 'center',title: '{:__("模板名")}'},
-                {field: 'attr', align: 'center',title: '{:__("模型属性")}'},
                 {field: 'updatetime', align: 'center', title: '{:__("修改时间")}'},
                 {field: 'createtime', align: 'center', title: '{:__("创建时间")}'},
-                {align: 'center', toolbar: '#tableBar', width:250, title: '{:__("操作")}'},
+                {align: 'center', toolbar: '#tableBar', width:230, title: '{:__("操作")}'},
             ]]
         })
 

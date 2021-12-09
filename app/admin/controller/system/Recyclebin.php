@@ -43,7 +43,7 @@ class Recyclebin extends AdminController
             $list = $this->model->onlyTrashed()->with([
                 'channel','category'
             ])->where($where)->order("id asc")->select()->toArray();
-            return $this->success('查询成功', NULL, $list, count($list), 0);
+            return $this->success('查询成功', NULL, $list, count($list));
         }
         
         return view();

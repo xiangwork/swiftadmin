@@ -86,7 +86,7 @@ class Category extends AdminController
                 }
             }
             
-            return $this->success('查询成功', null, $list, count($list), 0);
+            return $this->success('查询成功', null, $list, count($list));
         }
 
 		return view();
@@ -100,7 +100,7 @@ class Category extends AdminController
 		if (request()->isPost()) {
 
 			$post = input('post.');
-            $post = safe_validate_model($post,$this->model::class);
+            $post = safe_validate_model($post,get_class($this->model));
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
             }
@@ -128,21 +128,13 @@ class Category extends AdminController
             $post = input('post.'); 
             $post['pid'] = input('post.pid'); 
             $post['cid'] = input('post.cid'); 
-            $post = safe_validate_model($post,$this->model::class);
+            $post = safe_validate_model($post,get_class($this->model));
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
             }
 
             // 查询栏目统计
-            $existing = $this->model::getlistcount(
-                $data->channel->table,
-                array(
-                    'pid' => $data['id']
-                )
-            );
-
-            // 避免跨模型操作
-            if (!empty($existing)) {
+            if (!empty($this->model::getListCount(['pid'=>$data['id']]))) {
                 $parent = $this->model->getById($post['pid']);
                 if (($post['cid'] && $data->cid != $post['cid'])
                     ||($parent && $parent->cid != $data->cid)) {

@@ -7,7 +7,7 @@
 <div class="layui-fluid">
     <div class="layui-card">
         <!-- // 默认操作按钮 -->
-        <div class="layui-card-header layuiadmin-card-header-auto ">
+        <div class="layui-card-header layadmin-card-header-auto ">
         <div class="layui-form">
             <div class="layui-form-item">
             <div class="layui-inline">
@@ -58,9 +58,9 @@
         </div>
         <label class="layui-form-label">{:__('数据表')}</label>
         <div class="layui-input-inline">
-            <select name="table">
+            <select name="module">
                 <option value="">请选择数据表</option>
-                <volist name="table" id="vo">
+                <volist name="module" id="vo">
                 <option value="{$vo.table}" >{$vo.table}</option>
                 </volist>
             </select>
@@ -138,7 +138,7 @@
                 {field: 'id', align: 'center',sort: true,width: 80,  title: 'ID'},
                 {field: 'title', align: 'left', title: '{:__("采集接口")}'},
                 {field: 'class', align: 'center',title: '{:__("类方法名")}'},
-                {field: 'table', align: 'center',  title: '{:__("数据库表")}'},                
+                {field: 'module', align: 'center',  title: '{:__("数据库表")}'},                
                 {field: 'sort', sort: true,align: 'center', title: '{:__("排序")}'},
                 {field: 'status', align: 'center',templet: '#columnStatus', title: '{:__("状态")}'},
                 {align: 'center', toolbar: '#tableBar', width:150, title: '{:__("操作")}'},

@@ -23,7 +23,6 @@
 		                    <gt name="$data.id" value="0"><input type="text" name="id" value="{$data.id}" hidden=""></gt>
 		                    <input type="text" value="{$data.cid}" name="cid"  hidden="">
 		                    <input type="text" value="{$data.pid}" name="pid"  hidden="">
-		                    <input type="text" value="{$data.hash}" name="hash"  hidden="">
 		                    <label class="layui-form-label">{:__('产品标题')}</label>
 		                    <div class="layui-input-inline wid650" >
 		                        <input type="text" name="title" autocomplete="off" value="{$data.title}" class="layui-input">
@@ -31,9 +30,9 @@
 		                </div>
 
 						<div class="layui-form-item layui-form-item-fixed">
-		                    <label class="layui-form-label">{:__('产品拼音')}</label>
+		                    <label class="layui-form-label">{:__('关键词TAG')}</label>
 		                    <div class="layui-input-inline" >
-		                        <input type="text" name="pinyin" placeholder="{:__('默认自动生成')}" value="{$data.pinyin}" class="layui-input">
+		                        <input type="text" name="seo_keywords" placeholder="{:__('默认自动生成')}" value="{$data.product.seo_keywords}" class="layui-input">
 		                    </div>							
 							<label class="layui-form-label">{:__('分类')}</label>
 							<div class="layui-input-inline">
@@ -59,18 +58,24 @@
 							    <input type="checkbox" value="6" name="attribute[]" lay-skin="primary" <in name="6" value="$data.attribute">checked=""</in> title="跳转">
 							</div>                                         
 						</div>
+		                <div class="layui-form-item">
+		                    <label class="layui-form-label" >{:__('关键TAG')}</label>
+		                    <div class="layui-input-inline wid650">
+		                        <input type="text" id="seo_keywords" name="seo_keywords" placeholder="{:__('请输入SEO关键词')}" value="{$data.product.seo_keywords}" class="layui-input">
+		                    </div>                                          
+		                </div>
 						<div class="layui-form-item layui-form-item-fixed">
 		                    <label class="layui-form-label">{:__('产品价格')}</label>
 		                    <div class="layui-input-inline" >
-		                        <input type="text" name="price" placeholder="{:__('请输入产品价格')}" value="{$data.price}" class="layui-input">
+		                        <input type="number" name="price" placeholder="{:__('请输入产品价格')}" value="{$data.product.price}" class="layui-input">
 		                    </div>							
 							<label class="layui-form-label">{:__('优惠')}</label>
 							<div class="layui-input-inline" >
-								<input type="text" name="discount" placeholder="{:__('请输入优惠后价格')}" value="{$data.discount}" class="layui-input">
+								<input type="number" name="discount" placeholder="{:__('请输入优惠后价格')}" value="{$data.product.discount}" class="layui-input">
 							</div>
 							<label class="layui-form-label">{:__('库存')}</label>
 							<div class="layui-input-inline" >
-								<input type="text" name="inventory" placeholder="{:__('请输入库存余量')}" value="{$data.inventory}" class="layui-input">
+								<input type="number" name="inventory" placeholder="{:__('请输入库存余量')}" value="{$data.product.inventory}" class="layui-input">
 							</div>
 						</div>	
 		                <div class="layui-form-item">
@@ -85,7 +90,7 @@
 		                <div class="layui-form-item layui-form-item-fixed">
 							<label class="layui-form-label" >{:__('产品图册')}</label>
 							<div class="layui-imagesbox">
-								<volist name="$data['album']" id="vo">
+								<volist name="$data['product']['album']" id="vo">
 								<div class="layui-input-inline">
 									<img src="{$vo.src}" lay-image-hover >
 									<input type="text" name="album[{$key}][src]" class="layui-hide" value="{$vo.src}" >
@@ -108,7 +113,7 @@
 		                <div class="layui-form-item" >
 		                    <label class="layui-form-label">{:__('产品内容')}</label>
 		                    <div class="layui-input-block">
-		                        <textarea id="content" class="layui-hide" name="content" type="layui-textarea" >{$data.content}</textarea>
+		                        <textarea id="content" class="layui-hide" name="content" type="layui-textarea" >{$data.product.content}</textarea>
 		                    </div>
 		                </div>
                     </div>
@@ -130,20 +135,14 @@
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('SEO标题')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="seo_title" placeholder="{:__('请输入SEO标题')}" value="{$data.seo_title}" class="layui-input">
-		                    </div>                                          
-		                </div>
-		                <div class="layui-form-item">
-		                    <label class="layui-form-label" >{:__('关键TAG')}</label>
-		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="seo_keywords" placeholder="{:__('请输入SEO关键词')}" value="{$data.seo_keywords}" class="layui-input">
+		                        <input type="text" name="seo_title" placeholder="{:__('请输入SEO标题')}" value="{$data.product.seo_title}" class="layui-input">
 		                    </div>                                          
 		                </div>
 
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('SEO简介')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <textarea name="seo_description" placeholder="{:__('请输入SEO描述信息')}" class="layui-textarea" >{$data.seo_description}</textarea>
+		                        <textarea name="seo_description" placeholder="{:__('请输入SEO描述信息')}" class="layui-textarea" >{$data.product.seo_description}</textarea>
 		                    </div>                                          
 		                </div>
 		                <div class="layui-form-item" >
@@ -266,11 +265,18 @@
 	var categorylist = {:get_category_json()};
 </script>
 <script>
-    layui.use(['admin','content'], function () {
+    layui.use(['admin','content','tags'], function () {
 
         var jquery = layui.jquery;
         var admin = layui.admin;
+        var tags = layui.tags;
         var content = layui.content;
+
+		var isTags = tags.render({
+            elem: '#seo_keywords',
+            url: '/ajax/getTags',
+            done: function(key,all) {}
+        });
 
         // 常规元素渲染
 		content.tinymce('content');

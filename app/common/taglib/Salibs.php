@@ -28,7 +28,7 @@ class Salibs extends TagLib {
 		'category'		=> ['attr'=>'id,cid,pid,typeid,field,limit,order,type,single'],// 获取栏目
 		'navlist'		=> ['attr'=>'id'],										// 导航标签
 		'channel'		=> ['attr'=>'id'],										// 模型标签
-		'article'		=> ['attr'=>'pid,field,limit,order,title,thumb'],		// 获取文章标签
+		'content'		=> ['attr'=>'model,pid,ids,field,limit,order,title,thumb,page,paging'], // 获取内容标签
 		'customtpl'		=> ['attr'=>'id'],										// 自定义模板
 		'usergroup'		=> ['attr'=>'id'],										// 用户组			
 		'playlist'		=> ['attr'=>'id'],										// 播放器列表
@@ -38,7 +38,7 @@ class Salibs extends TagLib {
 		'weeklist'		=> ['attr'=>'id'],										// 星期列表
 		'language'		=> ['attr'=>'id'],										// 语言列表
 		'friendlink'	=> ['attr'=>'id,type'],									// 获取友链
-		'friendtype'	=> ['attr'=>'id'],										// 获取友链类型
+		'dictionary'	=> ['attr'=>'id,value'],							    // 获取字典列表
     ];
 
 	/**
@@ -73,13 +73,13 @@ class Salibs extends TagLib {
 			\$where[] = ['pid','=','{$pid}'];
 			\$where[] = ['status','=','1'];
 			\$where[] = ['single','=','{$single}'];
-			\$list = \app\common\model\system\Category::where(\$where)->field('{$field}')->limit({$limit})->order('{$order}')->select();
+			\$_CATE_LIST = \app\common\model\system\Category::where(\$where)->field('{$field}')->limit({$limit})->order('{$order}')->select();
 			if ('{$type}' == 'son') {
-				foreach (\$list as \$key => \$son) {
-					\$list[\$key]['son'] = \app\common\model\system\Category::where('pid',\$list[\$key]['id'])->field('{$field}')->limit({$limit})->order('{$order}')->select();
+				foreach (\$_CATE_LIST as \$key => \$son) {
+					\$_CATE_LIST[\$key]['son'] = \app\common\model\system\Category::where('pid',\$_CATE_LIST[\$key]['id'])->field('{$field}')->limit({$limit})->order('{$order}')->select();
 				}
 			}
-			foreach (\$list as \$key => {$id}):
+			foreach (\$_CATE_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
@@ -101,8 +101,8 @@ class Salibs extends TagLib {
 		
 		$html = <<<Eof
 		<?php
-			\$list = \app\common\model\system\Navmenu::getListNav();
-			foreach (\$list as \$key => {$id}):
+			\$_NAV_LIST = \app\common\model\system\Navmenu::getListNav();
+			foreach (\$_NAV_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
@@ -125,8 +125,8 @@ class Salibs extends TagLib {
 		
 		$html = <<<Eof
 		<?php
-			\$list = explode(',',saenv('play_area'));
-			foreach (\$list as \$key => {$id}):
+			\$_AREA_LIST = explode(',',saenv('play_area'));
+			foreach (\$_AREA_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
@@ -148,8 +148,8 @@ class Salibs extends TagLib {
 		
 		$html = <<<Eof
 		<?php
-			\$list = explode(',',saenv('play_year'));
-			foreach (\$list as \$key => {$id}):
+			\$_YEAR_LIST = explode(',',saenv('play_year'));
+			foreach (\$_YEAR_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
@@ -171,8 +171,8 @@ class Salibs extends TagLib {
 		
 		$html = <<<Eof
 		<?php
-			\$list = explode(',',saenv('play_week'));
-			foreach (\$list as \$key => {$id}):
+			\$_WEEK_LIST = explode(',',saenv('play_week'));
+			foreach (\$_WEEK_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
@@ -194,8 +194,8 @@ class Salibs extends TagLib {
 		
 		$html = <<<Eof
 		<?php
-			\$list = explode(',',saenv('play_language'));
-			foreach (\$list as \$key => {$id}):
+			\$_LANG_LIST = explode(',',saenv('play_language'));
+			foreach (\$_LANG_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
@@ -217,8 +217,8 @@ class Salibs extends TagLib {
 		
 		$html = <<<Eof
 		<?php
-			\$list = config('player');
-			foreach (\$list as \$key => {$id}):
+			\$_PLAY_LIST = config('player');
+			foreach (\$_PLAY_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
@@ -240,8 +240,8 @@ class Salibs extends TagLib {
 		
 		$html = <<<Eof
 		<?php
-			\$list = config('Server');
-			foreach (\$list as \$key => {$id}):
+			\$_SERVER_LIST = config('Server');
+			foreach (\$_SERVER_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
@@ -264,9 +264,9 @@ class Salibs extends TagLib {
 		$html = <<<Eof
 		<?php
 			\$path = root_path().'app/index/view/custom/';
-			\$list = glob(\$path.'*.html');
-			\$list = str_replace(array(\$path,'.html'),'',\$list);
-			foreach (\$list as \$key => {$id}):
+			\$_TPL_LIST = glob(\$path.'*.html');
+			\$_TPL_LIST = str_replace(array(\$path,'.html'),'',\$_TPL_LIST);
+			foreach (\$_TPL_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
@@ -287,8 +287,8 @@ class Salibs extends TagLib {
 		$id = $this->autoBuildVar($tags['id']);
 		$html = <<<Eof
 		<?php
-			\$list = \app\common\model\system\Channel::select()->toArray();
-			foreach (\$list as \$key => {$id}):
+			\$_CHANNEL_LIST = \app\common\model\system\Channel::select()->toArray();
+			foreach (\$_CHANNEL_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
@@ -308,8 +308,8 @@ class Salibs extends TagLib {
 		$id = $this->autoBuildVar($tags['id']);
 		$html = <<<Eof
 		<?php
-			\$list = \app\common\model\system\UserGroup::select()->toArray();
-			foreach (\$list as \$key => {$id}):
+			\$_USER_LIST = \app\common\model\system\UserGroup::select()->toArray();
+			foreach (\$_USER_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
@@ -323,28 +323,49 @@ class Salibs extends TagLib {
      * @param  string  $tags 值
      * @return string
      */
-	public function tagArticle($tags, $content) {
+	public function tagContent($tags, $content) {
 
 		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
 		$id = $this->autoBuildVar($tags['id']);
-		$limit 	= isset($tags['limit']) ? (!empty($tags['limit']) ? $tags['limit'] : '10' ): '10';
-		$field 	= isset($tags['field']) ? (!empty($tags['field']) ? $tags['field'] : '*' ): '*';
-		$order 	= isset($tags['order']) ? (!empty($tags['order']) ? $tags['order'] : 'id desc' ): 'id desc';
-		$thumb  = isset($tags['thumb']) ? (!empty($tags['thumb']) ? $tags['thumb'] : 'not' ): 'not';
-		$title  = isset($tags['title']) ? (!empty($tags['title']) ? $tags['title'] : 'not' ): 'not';
+
+		// 查询参数
+		$table = !empty($tags['table']) ? $tags['table'] : 'article';
+		$queryParams = 'table:'.$table.';';
+		if (!empty($tags['ids'])) {
+			$queryParams .= 'ids:'.$tags['ids'].';';
+		}
+		if (!empty($tags['pid'])) {
+			$queryParams .= 'pid:'.$tags['pid'].';';
+		}
+		
+		if (!empty($tags['field'])) {
+			$queryParams .= 'field:'.$tags['field'].';';
+		}
+
+		if (!empty($tags['limit'])) {
+			$queryParams .= 'limit:'.$tags['limit'].';';
+		}
+
+		if (!empty($tags['order'])) {
+			$queryParams .= 'order:'.$tags['order'].';';
+		}
+
+		if (!empty($tags['page'])) {
+			$queryParams .= 'page:true;';
+		}
+		
+		if (!empty($tags['title'])) {
+			$queryParams .= 'wd:'.$tags['title'].';';
+		}
+
+		if (empty($tags['paging'])) {
+			$tags['paging'] = '';
+		}
 
 		$html = <<<Eof
 		<?php
-			\$where = [];
-			if ('{$thumb}' != 'not') {
-				\$where[] = ['thumb','<>',''];
-			}
-
-			if ('{$title}' != 'not') {
-				\$where[] = ['title','like','%'.'{$title}'.'%'];
-			}
-			\$list = \app\common\model\system\Content::where(\$where)->field('{$field}')->order('{$order}')->limit({$limit})->select()->toArray();
-			foreach (\$list as \$key => {$id}):
+			\$_CONTENT_LIST = mysql_content('{$queryParams}','{$tags['paging']}');
+			foreach (\$_CONTENT_LIST['data'] as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
@@ -412,8 +433,8 @@ class Salibs extends TagLib {
 				\$where[] = ['type','=','{$tags['type']}'];
 			} 
 			\$where[] = ['status','=',1];
-			\$list = \app\common\model\system\Friendlink::where(\$where)->select()->toArray();
-			foreach (\$list as \$key => {$tags['id']}):
+			\$_FRIEND_LIST = \app\common\model\system\Friendlink::where(\$where)->select()->toArray();
+			foreach (\$_FRIEND_LIST as \$key => {$tags['id']}):
 		?>
 		$content
 		<?php endforeach;?>
@@ -422,21 +443,30 @@ class Salibs extends TagLib {
 	}
 
 	/**
-	 * 获取友情标签
+	 * 获取字典标签
      * @access public
      * @param  string  $tags 值或变量
      * @param  string  $content 自定义元素
      * @return string
 	 */	
-	public function tagfriendtype($tags,$content) 
+	public function tagDictionary($tags,$content) 
 	{
 		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
 		$id = $this->autoBuildVar($tags['id']);
+		$value = isset($tags['value']) ? $tags['value'] : '';
 		
 		$html = <<<Eof
 		<?php
-			\$list = explode(',','资源,社区,帮助,合作伙伴');
-			foreach (\$list as \$key => {$id}):
+			\$where = [];
+			if ('{$value}' !== '') {
+				\$params['pid'] = 0;
+				\$params['value'] = '{$value}';
+				\$_DIC_DATA = \app\common\model\system\Dictionary::queryDiction(\$params,'id',false);
+				\$where['pid'] = \$_DIC_DATA['id'];
+			}
+
+			\$_DIC_LIST = \app\common\model\system\Dictionary::queryDiction(\$where);
+			foreach (\$_DIC_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>

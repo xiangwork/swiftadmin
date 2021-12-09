@@ -40,6 +40,12 @@ abstract class BaseController
     protected $batchValidate = false;
 
     /**
+     * 验证错误消息
+     * @var bool
+     */
+    protected $errorMsg = null;
+
+    /**
      * 控制器中间件
      * @var array
      */
@@ -99,6 +105,32 @@ abstract class BaseController
 
         return $v->failException(true)->check($data);
     }
+
+    /**
+     * 自动POST校验
+     *
+     * @param array $post
+     * @param string $valiclass
+     * @param string $valiscene
+     * @return void
+     */
+    protected function autoPostValidate(array $post, $valiclass = '', $valiscene = '')
+    {
+        if (empty($post) || !is_array($post)) {
+            $this->errorMsg = __('参数不符合预期');
+            return true;
+        }
+        
+        // 普通模式
+        $post = safe_validate_model($post,$valiclass,$valiscene);
+        if (empty($post) || !is_array($post)) {
+            $this->errorMsg = $post;
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * 操作成功跳转的快捷方法
      * @access protected
@@ -219,6 +251,9 @@ abstract class BaseController
     protected function buildHtml(string $htmlfile = null,string $htmlpath = null, string $templateFile = null,$suffix = 'html') 
     {
         $content = $this->app->view->fetch($templateFile);
+        if (saenv('compression')) {
+            $content = preg_replace('/\s+/i',' ',$content);
+        }
         $htmlpath = !empty($htmlpath) ? $htmlpath : './';
         $htmlfile = $htmlpath . $htmlfile . '.' . $suffix; 
 

@@ -22,14 +22,12 @@ if (!function_exists('checkenv')) {
      */
     function checkenv() 
     {
-        $items = [];
         $items['php'] = PHP_VERSION;
         $items['mysqli'] =  extension_loaded('mysqli');
         $items['redis'] = extension_loaded('redis');
         $items['curl'] = extension_loaded('curl');
         $items['fileinfo'] = extension_loaded('fileinfo');
         $items['exif'] = extension_loaded('exif');
-
         return $items;
     }
 }
@@ -46,7 +44,6 @@ if (!function_exists('check_dirfile')) {
             array('dir', SUCCESS, SUCCESS, './public/upload'),
             array('dir', SUCCESS, SUCCESS, './runtime'),
             array('dir', SUCCESS, SUCCESS, './extend'),
-            // array('dir', SUCCESS, SUCCESS, './test/1.txt'),
         );
 
         foreach ($items as &$value) {
@@ -57,6 +54,7 @@ if (!function_exists('check_dirfile')) {
             if (!is_writable($item)) {
                 $value[1] = ERROR;
             }
+
             // 读取权限
             if (!is_readable($item)) {
                 $value[2] = ERROR;
@@ -73,7 +71,6 @@ if (!function_exists('recursiveDelete')) {
      */
     function recursiveDelete($dir) 
     {
-
         // 打开指定目录
       if ($handle = @opendir($dir)) {
    
@@ -81,11 +78,11 @@ if (!function_exists('recursiveDelete')) {
             if (($file == ".") || ($file == "..")){
               continue;
             }
-            if (is_dir($dir . '/' . $file)){ // 递归
+            if (is_dir($dir . '/' . $file)){
               recursiveDelete($dir . '/' . $file);
             }
             else{
-              unlink($dir . '/' . $file); // 删除文件
+              unlink($dir . '/' . $file);
             }
         }
         
@@ -107,6 +104,7 @@ if (!function_exists('parse_array_ini')) {
 
         foreach ($array as $key => $value) {
             if (is_array($value)) {
+
                 // 分割符PHP_EOL
                 $content .= PHP_EOL.'['.$key.']'.PHP_EOL;
                 foreach ($value as $field => $data) {

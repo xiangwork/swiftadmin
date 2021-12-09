@@ -24,7 +24,6 @@
 		                    <gt name="$data.id" value="0"><input type="text" name="id" value="{$data.id}" hidden=""></gt>
 		                    <input type="text" value="{$data.cid}" name="cid"  hidden="">
 		                    <input type="text" value="{$data.pid}" name="pid"  hidden="">
-		                    <input type="text" value="{$data.hash}" name="hash"  hidden="">
 		                    <label class="layui-form-label">{:__('软件标题')}</label>
 		                    <div class="layui-input-inline wid650" >
 		                        <input type="text" name="title" autocomplete="off" value="{$data.title}" class="layui-input">
@@ -136,6 +135,12 @@
 		                    </div>  			                    
 		                </div>
 		                <div class="layui-form-item">
+		                    <label class="layui-form-label" >{:__('关键TAG')}</label>
+		                    <div class="layui-input-inline wid650">
+		                        <input type="text" id="seo_keywords" name="seo_keywords" placeholder="{:__('请输入SEO关键词')}" value="{$data.soft.seo_keywords}" class="layui-input">
+		                    </div>                                          
+		                </div>
+		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('微缩图')}</label>
 		                    <div class="layui-input-inline wid550" >
 		                        <input type="text" name="thumb" placeholder="{:__('请上传微缩图')}" lay-image-hover="" value="{$data.thumb}" class="layui-input thumb">
@@ -156,7 +161,7 @@
 		                <div class="layui-form-item" >
 		                    <label class="layui-form-label">{:__('软件内容')}</label>
 		                    <div class="layui-input-block">
-		                        <textarea id="content" class="layui-hide" name="content" type="layui-textarea" >{$data.attr.content}</textarea>
+		                        <textarea id="content" class="layui-hide" name="content" type="layui-textarea" >{$data.soft.content}</textarea>
 		                    </div>
 		                </div>
                     </div>
@@ -168,7 +173,7 @@
 		                    	<select name="skin">
 		                    		<option value=""></option>
 		                    		<salibs:customtpl id="vo">
-		                    		<option value="{$vo}" <if condition="$vo eq $data['attr']['skin']"> selected </if> >{$vo}</option>
+		                    		<option value="{$vo}" <if condition="$vo eq $data['skin']"> selected </if> >{$vo}</option>
 		                    		</salibs:customtpl>
 		                    	</select>
 		                    </div>  		               
@@ -176,33 +181,27 @@
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('SEO标题')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="seo_title" placeholder="{:__('请输入SEO标题')}" value="{$data.attr.seo_title}" class="layui-input">
-		                    </div>                                          
-		                </div>
-		                <div class="layui-form-item">
-		                    <label class="layui-form-label" >{:__('关键TAG')}</label>
-		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="seo_keywords" placeholder="{:__('请输入SEO关键词')}" value="{$data.attr.seo_keywords}" class="layui-input">
+		                        <input type="text" name="seo_title" placeholder="{:__('请输入SEO标题')}" value="{$data.soft.seo_title}" class="layui-input">
 		                    </div>                                          
 		                </div>
 
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('SEO简介')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <textarea name="seo_description" placeholder="{:__('请输入SEO描述信息')}" class="layui-textarea" >{$data.attr.seo_description}</textarea>
+		                        <textarea name="seo_description" placeholder="{:__('请输入SEO描述信息')}" class="layui-textarea" >{$data.soft.seo_description}</textarea>
 		                    </div>                                          
 		                </div>
 
 		                <div class="layui-form-item" >
 		                    <label class="layui-form-label" >{:__('采集来源')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="reurl" placeholder="http://" value="{$data.attr.reurl}" class="layui-input">
+		                        <input type="text" name="reurl" placeholder="http://" value="{$data.reurl}" class="layui-input">
 		                    </div>
 		                </div>
 		                <div class="layui-form-item" >
 		                    <label class="layui-form-label" >{:__('跳转地址')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="jumpurl" placeholder="https://" value="{$data.attr.jumpurl}" class="layui-input">
+		                        <input type="text" name="jumpurl" placeholder="https://" value="{$data.jumpurl}" class="layui-input">
 		                    </div>
 		                </div>	           
 					</div>
@@ -314,12 +313,17 @@
 	var categorylist = {:get_category_json()};
 </script>
 <script>
-    layui.use(['admin','content'], function () {
+    layui.use(['admin','content','tags'], function () {
 
         var jquery = layui.jquery;
         var admin = layui.admin;
+        var tags = layui.tags;
         var content = layui.content;
-
+        var isTags = tags.render({
+            elem: '#seo_keywords',
+            url: '/ajax/getTags',
+            done: function(key,all) {}
+        });
         // 常规元素渲染
 		content.tinymce('content');
 		content.xmselect('pid',categorylist,[{$data.pid}],false);

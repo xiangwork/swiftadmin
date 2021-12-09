@@ -138,7 +138,7 @@
             <div class="layui-card">
                 <div class="layui-card-body" style="padding: 25px;">
                     <div class="text-center layui-text">
-                        <div class="user-info-head" id="imgHead" lay-upload lay-images="imgHead" lay-data="{url: '{:url('/upload/avatar')}'}" lay-callback="imgHead">
+                        <div class="user-info-head" id="imgHead" lay-upload lay-images="imgHead" lay-data="{url: '/upload/avatar?auth_key={:saenv('auth_key')}'}" lay-callback="imgHead">
                             <img src="{$data.face}" class="imgHead" />
                         </div>
                         <h2 style="padding-top: 20px;">{$data.nickname|default='没有昵称'}</h2>
@@ -295,15 +295,11 @@
                     field: 'face'
                     ,face: res.url
                 },function(res) {
-                    layui.iziToast.success({
-                        message: "{:__('上传成功')}",
-                    });
+                    layer.msg("{:__('上传成功')}");
                 })
             }
             else {
-                layui.iziToast.error({
-                    message: res.msg,
-                });              
+                layer.msg(res.msg,'error');
             }
         }
 
@@ -351,9 +347,7 @@
                     elem += '</span>';
                     jquery('.layui-badge-list').append(elem);
                 }else {
-                    layui.iziToast.error({
-                        message: res.msg,
-                    });
+                    layer.msg(res.msg,'error');
                 }
             })                       
         })
@@ -370,9 +364,7 @@
                 if (res.code == 200) {
                     that.parent('span').remove();
                 }else {
-                    layui.iziToast.error({
-                        message: res.msg,
-                    });
+                    layer.msg(res.msg,'error');
                 }
             })             
         })

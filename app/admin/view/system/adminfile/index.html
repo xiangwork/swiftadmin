@@ -54,9 +54,7 @@
             ,url: "{:url('/upload/upload')}" //上传接口
             ,done:function(res, index, upload){
                 if (res.code == 200) {
-                    layui.iziToast.success({
-                        message: res.msg,
-                    });  
+                    layer.msg(res.msg);
                     fileManager.reload('files');
                 }
             }
@@ -68,9 +66,7 @@
 
         //监听新建文件夹事件
         fileManager.on('new_dir(files)', function(obj){
-            layui.iziToast.info({
-                message:"暂未写接口！",
-            });  
+            layer.msg('暂未写接口','info'); 
         });
     })
 </script>

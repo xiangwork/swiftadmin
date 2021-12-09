@@ -4,12 +4,9 @@
     html, body,.layui-fluid, .layui-card,.layui-card-body,.layui-col-md3,.layui-col-md9 {
         height: 98.5%;
     }
-    .layui-card-header.layuiadmin-card-header-auto {
+    .layui-card-header.layadmin-card-header-auto {
         border-bottom: 0px;
         padding-bottom: 0px;
-    }
-    .eleTree-title {
-        cursor: pointer;
     }
 
     .layui-card-body {
@@ -27,16 +24,11 @@
         top: 2px;
     }  
 
-    #tree .eleTree-group .eleTree-node .eleTree-title {
-        position: relative;
-        line-height: 35px;
-        height: 35px;
-    }
 </style>
 <div class="layui-col-md3">
     <div class="layui-fluid">
         <div class="layui-card">
-            <div class="layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-card-header layadmin-card-header-auto">
                 <h5> <i class="layui-icon layui-icon-user"></i> {:__('公司结构')}</h5>
             </div>
             <div class="layui-card-body">
@@ -51,7 +43,7 @@
     <div class="layui-fluid">
         <div class="layui-card">
             <!-- // 默认操作按钮 -->
-            <div class="layui-card-header layuiadmin-card-header-auto ">
+            <div class="layui-card-header layadmin-card-header-auto ">
             <div class="layui-form">
                 <div class="layui-form-item">
 
@@ -223,16 +215,17 @@
 <include file="/public/footer" />
 <script src="__STATICADMIN__module/xmselect/xmselect.js"></script>
 <script>
-    layui.use(['admin','layer','table','form','eleTree'], function () {
+    layui.use(['admin','layer','table','form','tree'], function () {
 
         var admin = layui.admin;
         var layer = layui.layer;
         var table = layui.table;        // 表格
-        var eleTree = layui.eleTree;    // 权限树
+        var tree = layui.tree;          // 权限树
         var form = layui.form;
 
         // 定义表格URL
         var tableURL = "{:url('/system.admin/index')}";
+        var department =  {$department|raw};
 
         // 基础表格
         var isTable = table.render({
@@ -251,25 +244,16 @@
             ]]
         })
 
-        // 创建部门实例
-        var publicTree = eleTree({
-            el: '#tree',
-            data: {$department|raw},
-            highlightCurrent: true,
-            showLine: false,
-            defaultPid: 0,
-            request: {
-                name: "title",
-            },
-            defaultExpandAll: true,
-        })
-
-        // 重载表格数据
-        publicTree.on('click',function(event) {
-            var url = tableURL + '?dep=' + event.data.id;
-            table.reload('lay-tableList', {
-                url: url
-            });
+        tree.render({
+            elem: '#tree',
+            data: department,
+            spread: true,
+            click: function (event) {
+                var url = tableURL + '?dep=' + event.data.id;
+                table.reload('lay-tableList', {
+                    url: url
+                });
+            }
         })
 
         // 添加 / 编辑用户
@@ -316,7 +300,7 @@
                 el: '.deps',
                 tips: '请选择部门',
                 name: 'dep_id',
-                data: {$department|raw},
+                data: department,
                 radio: true,
                 clickClose: true,
                 initValue: !status ? tableThis.data.dep_id.split(',') : [],
@@ -352,17 +336,13 @@
                 layui.$.post(_pageUrl,
                     post.field, function(res){
                         if (res.code == 200) {
-                            layui.iziToast.success({
-                                message: res.msg,
-                            });
+                            layer.msg(res.msg);
                             // 关闭当前窗口
                             table.reload('lay-tableList');
                             layer.close(colletction.index);
                         }
                         else {
-                            layui.iziToast.error({
-                                message: res.msg,
-                            });
+                            layer.msg(res.msg,'error');
                         }
 
                 }, 'json');
@@ -371,26 +351,18 @@
             })
         }
 
-
         // 编辑用户权限/栏目权限回调函数
         admin.callback.rulecates = function(clickthis,colletction,config) {
 
             var tableThis = colletction.tableThis,
                 event = tableThis.event;
-
             // 创建实例
-            var tree = eleTree({
-                el: '#authTree',
+            tree.render({
+                id: 'authTree',
+                elem: '#authTree',
                 data: _ajax('getrulecatestree',event,'private'),
-                highlightCurrent: true,
                 showCheckbox: true,
-                showLine: false,
-                isDefaultChangePstatus: true,
-                defaultPid: 0,
-                request: {
-                    name: "title",
-                },
-                defaultCheckedKeys: tableThis.data[event].map(Number),
+                checkids: tableThis.data[event].map(Number)
             })
 
             // 监听权限提交
@@ -398,36 +370,24 @@
 
                 // 获取用户id
                 post.field.uid = tableThis.data.id;
-
-                // 遍历节点数据
-                var rules = [], nodes = tree.getChecked(false,true);
-                for (var i in nodes) {
-                    rules.push(nodes[i].id);
-                }
-
                 // 增加节点数据
-                post.field[event] = rules;
-
+                post.field[event] = tree.getChecked('authTree',true);
                 // 开始POST提交数据
                 clickthis.attr("disabled",true);
                 layui.$.post("{:url('/system.admin/edit"+event+"')}", 
                     post.field, function(res){
                         if (res.code == 200) {
-                            layui.iziToast.success({
-                                message: res.msg,
-                            });
                             
                             // 更新本地规则
                             tableThis.update({
-                                [event]: rules
+                                [event]: post.field[event]
                             });
 
                             // 关闭当前窗口
+                            layer.msg(res.msg);
                             layer.close(colletction.index);
                         }else {
-                            layui.iziToast.error({
-                                message: res.msg,
-                            });                            
+                            layer.msg(res.msg,'error');                         
                         }
                 }, 'json');
 
@@ -437,7 +397,7 @@
         
         // 同步加载函数
         var _ajax = function (action,type,classd) {
-            var func = '{:url("/system.admin/_get_auth_func")}';
+            var func = '{:url("/system.admin/authorizeInterface")}';
             return admin.event.getAjaxData(func,{ 
                 action : action,
                 type   : type,

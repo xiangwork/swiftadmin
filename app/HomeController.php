@@ -13,8 +13,6 @@ namespace app;
 
 use app\BaseController;
 use app\common\library\Auth;
-use think\facade\Cache;
-use think\facade\Config;
 
 // 前台全局控制器基类
 class HomeController extends BaseController 
@@ -138,9 +136,6 @@ class HomeController extends BaseController
             }
         }
 
-        // 获取地址类型
-        $this->Urltype = $this->findUrltype();
-
         // 获取站点数据
         foreach (saenv('site') as $key => $value) {
             $this->app->view->assign($key,$value);
@@ -148,20 +143,18 @@ class HomeController extends BaseController
     }
 
     /**
-     * 获取内容页类型
-     * @access public
-     * @return void        
+     * 视图过滤
+     *
+     * @return void
      */
-    public function findUrltype()
+    public function view($template = '', array $argc = [])
     {
-        $types = ['id','hash','pinyin'];
-        $urls = saenv('content_style');
-        foreach ($types as $value) {
-            if (strstr($urls,$value)) {
-                return $value;
-            }   
-        }
-        return $types[0];
+        return view($template,$argc)->filter(function($content) {
+            if (saenv('compression_page')) {
+                $content = preg_replace('/\s+/i',' ',$content);
+            }
+        	return $content;
+        });
     }
 
     /**
@@ -172,6 +165,7 @@ class HomeController extends BaseController
 	public function logOut() {
         cookie('uid', NULL);
         cookie('token', NULL);
+        cookie('nickname', NULL);
 		$this->redirect('/');
 	}
 

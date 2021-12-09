@@ -267,6 +267,12 @@ class Auth
         // 循环处理数据
         foreach ($list as $key => $value) {
             $list[$key]['title'] = __($value['title']);
+           
+            if ($value['router'] != '#') {
+                $list[$key]['router'] = (string)url($value['router']);
+            }
+
+
             $auth_nodes['everycate'] = $value['router'] == 'everycate' ? true : false;
             $auth_nodes['privateauth'] = $value['router'] == 'privateauth' ? true : false;
         }
@@ -569,7 +575,7 @@ class Auth
     protected function dayCeilingSeconds(array $result = []) 
     {
         // 查询规则
-        $access = md5_hash($this->params['app_id'].$result['class']);
+        $access = md5($this->params['app_id'].$result['class']);
         if ($result['day'] || $result['ceiling'] || $result['seconds'] ) {
             $condition = ApiCondition::where('hash',$access)->find();
             if (empty($condition)) {
@@ -639,12 +645,12 @@ class Auth
      * @param string $pwd
      * @return bool
      */
-    public function login(string $name, string $pwd) {
+    public function login(string $nickname = '', string $pwd = '') {
 
-        if(filter_var($name, FILTER_VALIDATE_EMAIL)){
-            $where[] = ['email','=',htmlspecialchars(trim($name))];
+        if(filter_var($nickname, FILTER_VALIDATE_EMAIL)){
+            $where[] = ['email','=',htmlspecialchars(trim($nickname))];
         }else{
-            $where[] = ['name','=',htmlspecialchars(trim($name))];
+            $where[] = ['mobile','=',htmlspecialchars(trim($nickname))];
         }
 
         $where[] = ['pwd','=',hash_pwd($pwd)];
@@ -677,12 +683,15 @@ class Auth
      */
     public function isLogin() 
     {
-        $token = cookie('token') ?? input('token/s');
-        
+        $token = cookie('token');
+        if (empty($token)) {
+            $token = request()->request('token');
+        }
+   
         if (!$token) {
             return false;
         }
-
+        
         $array = $this->checkToken($token);
         if (!empty($array)) {
             $this->token = $token; 
@@ -705,7 +714,7 @@ class Auth
         $this->token = $token ? cookie('token') : $this->buildToken($array);
         cookie('uid',$array['id'],$this->keepTime);
         cookie('token',$this->token,$this->keepTime);
-        cookie('nickname',$array['nickname'] ?? $array['name'],$this->keepTime);
+        cookie('nickname',$array['nickname'],$this->keepTime);
         $this->setActiveState(is_object($array) ? $array : $array);
     }
 
@@ -715,7 +724,7 @@ class Auth
      * @return  bool
      */
     public function setActiveState(object|array $array = []) {
-        $tag = md5_hash((string)$array['id']);
+        $tag = md5((string)$array['id']);
         \think\facade\Cache::tag($tag)->clear();
         \think\facade\Cache::tag($tag)->set($this->token,$array,$this->keepTime);
     }

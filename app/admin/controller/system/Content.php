@@ -11,27 +11,36 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 namespace app\admin\controller\system;
 
-use think\facade\Db;
 use app\AdminController;
 use app\common\model\system\Channel;
 use app\common\model\system\Category;
 use app\common\model\system\Content as ContentModel;
-use app\common\validate\system\Content as Contvalidate;
+use app\common\model\system\TagsMapping;
 
 class Content extends AdminController 
 {
-    // 初始化函数
+    /**
+     * 初始化函数
+     *
+     * @return void
+     */
     public function initialize() {
+
         parent::initialize();
+
         try {
+
             $ModelId = request()->param('cid');
             if (!empty($ModelId) && !is_array($ModelId)) {
                 $this->channel = Channel::getChannelList($ModelId);
+                $this->table = $this->channel['table'];
                 $this->template = $this->channel['template'];
             }
+
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
         }
+
         $this->model = new ContentModel();
 		$this->middleware = [\app\admin\middleware\system\Content::class];
     }
@@ -65,28 +74,26 @@ class Content extends AdminController
                     $where[] = ['pid','in',$this->getCateNodes()];
                 }
             }
-            
-            // try {
+ 
+            try {
                 
                 if (saenv('search_status') && !empty($post['title'])) {
                     $result = search_model()::instance()->index('content')->where($where)->order('id','desc')->limit($limit)->page($page)->search($post['title']);
-                    // halt($result);
                     $count = search_model()::instance()->getCount();
                     $subQuery = empty($result) ? '(0)' : '('.implode(',',array_column($result,'id')).')';
                 } else {
-                   
-                    $count = $this->model->where($where)->count();
+                    $count = $this->model->where($where)->count('id');
+                    $page = ($count <= $limit) ? 1 : $page;
                     $subQuery = $this->model->field('id')->where($where)->order('id','desc')->limit($limit)->page($page)->buildSql();
                     $subQuery = '( SELECT content.id FROM '.$subQuery.' AS content )';
                 }
-
-                $page = ($count <= $limit) ? 1 : $page;
+                
                 $lists = $this->model->with('category')->where('id in'.$subQuery)->select();
-            // } catch (\Throwable $th) {
-            //     return $this->error($th->getMessage());
-            // }
+            } catch (\Throwable $th) {
+                return $this->error($th->getMessage());
+            }
 
-            return $this->success('查询成功', null, $lists, $count, 0);
+            return $this->success('查询成功', null, $lists, $count);
         }
 
         return view();
@@ -94,6 +101,8 @@ class Content extends AdminController
 
     /**
      * 添加数据项
+     * 
+     * @return void
      */
     public function add() 
     {
@@ -101,16 +110,18 @@ class Content extends AdminController
         if (request()->isPost()) {
 
             try {
-                $post = request()->post();
+
+                $post = request()->post('post.');
                 $post['admin_id'] = $this->admin['id'];
                 $post['author'] = $this->admin['name'];
-                $post = safe_validate_model($post,Contvalidate::class);
-                if (!is_array($post)) {
-                    throw new \Exception($post);
+
+                if ($this->autoPostValidate($post,get_class($this->model))) {
+                    return $this->error($this->errorMsg);
                 }
 
-                $this->model->together($this->setAttrField($post))->save($post);
-
+                $data = $this->model->together([$this->table=>$post])->save($post);
+                TagsMapping::writeMapID((int)$data['id'],$post['seo_keywords']);
+                
             } catch (\Throwable $th) {
                 return $this->error($th->getMessage());
             }
@@ -119,13 +130,16 @@ class Content extends AdminController
         }
 
         // 渲染页面
-        $data = $this->getAttrField();
+        $data = $this->getField();
+        $data[$this->table] = $this->getField('content'.$this->table);
         $data = array_merge($data,request()->param());
         return view($this->template,['data' => $data]);
     }
 
     /**
      * 编辑数据项
+     * 
+     * @return void
      */
     public function edit()
     {
@@ -133,25 +147,26 @@ class Content extends AdminController
         $id = request()->param('id');
         $pid = request()->param('pid');
 
-        $data = $this->model->with($this->setAttrField([],true))->where([
-            'id'=>$id,
-            'pid'=>$pid
-        ])->find();
-
+        $data = $this->model
+                    ->with($this->table)
+                    ->where(['id'=>$id,'pid'=>$pid])
+                    ->find();
+        
         if (request()->isPost()) {
             
             try {
                 
                 $post = request()->post();
                 $post['attribute'] = input('attribute') ?? [];
-                $post = safe_validate_model($post,Contvalidate::class);
 
-                if (!is_array($post)) {
-                    throw new \Exception($post);
+                if ($this->autoPostValidate($post,get_class($this->model))) {
+                    return $this->error($this->errorMsg);
                 }
 
-                $data = $this->model->update($post);
-                $data->together($this->setAttrField($post))->save();
+                $this->model->update($post)->together([$this->table=>$post])->save();
+                if ($data[$this->table]['seo_keywords'] != $post['seo_keywords']) {
+                    TagsMapping::writeMapID((int)$data['id'],$post['seo_keywords']);
+                }
 
             } catch (\Throwable $th) {
                 return $this->error($th->getMessage());
@@ -164,57 +179,9 @@ class Content extends AdminController
     }
 
     /**
-     * 获取模型属性
-     *
-     * @return void
-     */
-    public function getAttrField()
-    {
-        $fields = $this->getField();
-        $fields['attr'] = $this->getField($this->defaultAttr);
-
-        if ($this->channel['attr'] !== 'none') {
-            $attrs = $this->getField('content'.$this->channel['attr']);
-            $fields[$this->channel['attr']] = $attrs;
-        }
-
-        return $fields;
-    }
-
-    /**
-     * 设置模型属性
-     *
-     * @param array $post
-     * @param boolean $flags
-     * @return void
-     */
-    public function setAttrField(array $post = [], bool $flags = false)
-    {
- 
-        $attrs = [
-            'attr' => $post
-        ];
-
-        if ($flags) {
-
-            // 置空属性
-            $attrs = [];
-            $attrs[] = 'attr';
-            if ($this->channel['attr'] !== 'none') {
-                $attrs[] = $this->channel['attr'];
-            }
-            return $attrs;
-        }
-
-        if ($this->channel['attr'] !== 'none') {
-            $attrs[$this->channel['attr']] = $post;
-        }
-
-        return $attrs;
-    }
-
-    /**
      * 移动内容
+     * 
+     * @return void
      */
     public function move()
     {
@@ -252,7 +219,7 @@ class Content extends AdminController
      */
     public function getCateNodes()
     {
-        $rulecates = $this->auth->getrulecatestree('cates',$this->auth->authPrivate,false);
+        $rulecates = $this->auth->getRuleCatesTree('cates',$this->auth->authPrivate,false);
         $rulecates = array_column($rulecates,'id');
         return implode(',',$rulecates);
     }

@@ -12,14 +12,17 @@ use think\facade\Route;
 
 Route::rule('wiki','wiki/index');
 Route::rule('token','auth/token');
+
 // 导入自定义路由	
 require app_path().'route/api.php';
 
-// Route::miss(function() {
-// 	$result = [
-// 		'code'=> -1,
-// 		'msg'=> '接口调用错误',
-// 		'status'=> 'API_ERROR',
-// 	];
-// 	return json($result);
-// });
+/* // 如强制路由 可开启
+Route::miss(function() {
+	$result = [
+		'code'=> -1,
+		'msg'=> '接口调用错误',
+		'status'=> 'API_ERROR',
+	];
+	return json($result);
+});
+*/

@@ -92,13 +92,14 @@ class ApiController extends BaseController
 
 	// 初始化函数
     public function initialize() 
-    {
+    { 
         parent::initialize();
-        
+       
         // 检查跨域请求
         check_referer_origin();
         $this->auth = Auth::instance();
         if ($this->authWorkflow) {
+           
             // 验证API控制器
             $this->controller = request()->controller(true);
             $this->action = request()->action(true);

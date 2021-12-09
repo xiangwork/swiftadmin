@@ -60,7 +60,7 @@ class Systemlog extends AdminController
             $list = $this->model->where($where)->order('id', 'desc')
                                 ->limit($limit)->page($page)->select()->toArray();
 
-            return $this->success('查询成功', "", $list, $count, 0);
+            return $this->success('查询成功', "", $list, $count);
 
         }
 

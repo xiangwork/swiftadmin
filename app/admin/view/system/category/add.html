@@ -110,9 +110,9 @@
                             <label class="layui-form-label" >{:__('投稿选项')}</label>
                             <div class="layui-input-inline" >
                                  <input type="radio" name="contribute"   
-                                 value="1" title="是"  <if condition="$data.contribute eq 1 "> checked </if> >
+                                 value="1" title="是"  <if condition="$data['contribute'] eq 1 "> checked </if> >
                                  <input type="radio" name="contribute"   
-                                 value="0" title="否" <if condition="$data.contribute eq 0 "> checked </if> >
+                                 value="0" title="否" <if condition="$data['contribute'] eq '' "> checked </if> >
                             </div>   
                             <div class="layui-form-mid layui-word-aux">* {:__('是否开启会员投稿支持！')}</div>                
                         </div> 
@@ -121,9 +121,9 @@
                             <label class="layui-form-label" >{:__('是否单页面')}</label>
                             <div class="layui-input-inline" >
                                  <input type="radio" name="single"   
-                                 value="1" title="是"  <if condition="$data.single eq 1 "> checked </if> >
+                                 value="1" title="是"  <if condition="$data['single'] eq 1 "> checked </if> >
                                  <input type="radio" name="single"   
-                                 value="0" title="否" <if condition="$data.single eq 0 "> checked </if> >
+                                 value="0" title="否" <if condition="$data['single'] eq '' "> checked </if> >
                             </div>   
                             <div class="layui-form-mid layui-word-aux">* {:__('当前栏目是否为单页面形式')}</div>                
                         </div> 

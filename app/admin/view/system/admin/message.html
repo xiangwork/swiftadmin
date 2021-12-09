@@ -107,9 +107,7 @@
 
         // 加载更多
         $('#more').click(function (obj) {
-            layui.iziToast.info({
-                message: '没有更多了！',
-            });                      
+            layer.msg('没有更多了','info');                 
         })
 
         // 清空消息点击事件

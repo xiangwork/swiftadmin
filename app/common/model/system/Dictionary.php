@@ -31,6 +31,33 @@ class Dictionary extends Model
 	}
 
     /**
+     * 获取字典信息
+     *
+     * @param array $where
+     * @param string $field
+     * @param boolean $style
+     * @return void
+     */
+    public static function queryDiction(array $where = [], string $field = '*', bool $style = true)
+    {
+        $dicCacheName = sha1(implode(',',$where).$field);
+        $dicCacheData = system_cache($dicCacheName);
+
+        if (empty($dicCacheData)) {
+            if ($style == false) {
+                $dicCacheData = self::where($where)->field($field)->find();
+            }
+            else {
+                $dicCacheData = self::where($where)->field($field)->select()->toArray();
+            }
+            
+            system_cache($dicCacheName,$dicCacheData,saenv('cache_time'));
+        }
+
+        return $dicCacheData;
+    }
+
+    /**
      * 返回最小id
      */
     public static function minId()

@@ -302,13 +302,16 @@ class Sms
 
     /**
      * 检查验证码
+     *
+     * @param string $mobile
+     * @param string $event
+     * @return void
      */
     public function check(string $mobile, string $event = "default") 
     {
         $where['event'] = $event;
         $where['mobile'] = $mobile;
-        $UserValidate = new \app\common\model\system\UserValidate();
-        $this->objectValidate = $UserValidate->where($where)->order("id","desc")->find();
+        $this->objectValidate = UserValidate::where($where)->order("id","desc")->find();
 
         if (!empty($this->objectValidate)) {
             $difftime = time() - strtotime($this->objectValidate['createtime']);
@@ -319,6 +322,8 @@ class Sms
             // 删除验证码
             $this->objectValidate->delete();
             $this->setError("当前验证码已过期！");
+        } else {
+            $this->setError("当前手机号不存在");
         }
 
         return false;

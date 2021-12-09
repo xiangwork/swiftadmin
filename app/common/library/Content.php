@@ -252,7 +252,7 @@ class Content
                 }
             }
         }
-        
+
         return htmlspecialchars($content);
     }
 
@@ -397,17 +397,5 @@ class Content
      * @return  string
      */
     public static function getReadurlAttr($readUrl,$data)
-    {
-
-        if (isset($data['attr']['jumpurl'])
-            && !empty($data['attr']['jumpurl'])) {
-            return $data['attr']['jumpurl'];
-        }
-
-        if (!empty($readUrl)) {
-            return $readUrl;
-        }
-
-        return build_request_url($data,'content_style');
-    }
+    {}
 }

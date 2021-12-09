@@ -39,8 +39,8 @@ class Comment extends AdminController
 
             // 生成查询数据
             $where = array();
-            if (!empty($post['name'])) {
-                $where[] = ['content','like','%'.$post['name'].'%'];
+            if (!empty($post['nickname'])) {
+                $where[] = ['content','like','%'.$post['nickname'].'%'];
             }
 
             $count = $this->model->where($where)->where('status',$status)->count();
@@ -59,13 +59,13 @@ class Comment extends AdminController
                                 ->select()
                                 ->toArray();
             foreach ($list as $key => $value) {
-                $result = Db::name('user')->field('name')->where('id',$value['uid'])->find();
+                $result = Db::name('user')->field('nickname')->where('id',$value['uid'])->find();
                 if (!empty($result)) {
-                    $list[$key]['name'] = $result['name'];
+                    $list[$key]['nickname'] = $result['nickname'];
                 }
             }                             
  			// TODO..
-            return $this->success('查询成功', "", $list, $count, 0);
+            return $this->success('查询成功', "", $list, $count);
 
         }
 
@@ -103,14 +103,14 @@ class Comment extends AdminController
             $page = ($count <= $limit) ? 1 : $page; 
 
             $list = $this->model->view('comment','*')
-                                ->view('user','name', 'user.id = comment.uid', 'LEFT')
+                                ->view('user','nickname', 'user.id = comment.uid', 'LEFT')
                                 ->where('comment.status',1)
                                 ->where('rid',$id)
                                 ->limit($limit)
                                 ->page($page)
                                 ->select()
                                 ->toArray();
-            return $this->success('查询成功', "", $list, $count, 0);
+            return $this->success('查询成功', "", $list, $count);
         }
 
         $data = $this->model->find($id);

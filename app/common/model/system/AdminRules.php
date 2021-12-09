@@ -46,7 +46,11 @@ class AdminRules extends Model
        return $array;
     }
 	
-	// 返回栏目树形结构
+	/**
+     * 返回栏目树形结构
+     *
+     * @return void
+     */
 	public static function getListTree() 
     {
         $array = self::field('*,title as name')->order('sort asc')->select()->toArray();
@@ -59,7 +63,12 @@ class AdminRules extends Model
 		}
     }
 
-    // 字段修改器
+    /**
+     * 字段修改器
+     *
+     * @param [type] $value
+     * @return void
+     */
     public function setSortAttr($value) 
     {
         if (is_empty($value)) {

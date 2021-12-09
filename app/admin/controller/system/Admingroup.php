@@ -55,7 +55,7 @@ class AdminGroup extends AdminController
 				$list[$key]['title'] = __($value['title']);
 			}
 
-			return $this->success('查询成功', null, $list, $count, 0);
+			return $this->success('查询成功', null, $list, $count);
 		}
 
 		return view('/system/admin/group',['group'=>$this->model->getListGroup()]);
@@ -70,7 +70,7 @@ class AdminGroup extends AdminController
 			// 接收数据
 			$post = input('post.');
 			// halt($post);
-			$post = safe_field_model($post, $this->model::class);
+			$post = safe_field_model($post, get_class($this->model));
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
 			}
@@ -89,7 +89,7 @@ class AdminGroup extends AdminController
     {
 		if (request()->isPost()) {
 			$post = input('post.');
-			$post = safe_field_model($post, $this->model::class);
+			$post = safe_field_model($post, get_class($this->model));
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
 			}

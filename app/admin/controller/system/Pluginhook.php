@@ -44,7 +44,7 @@ class Pluginhook extends AdminController
             // 生成查询数据
             $where[]=['status','=',$status];
             $list = $this->model->where($where)->order("id asc")->select()->toArray();
-            return $this->success('查询成功', "", $list, count($list), 0);
+            return $this->success('查询成功', "", $list, count($list));
           
         }
 

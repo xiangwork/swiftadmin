@@ -28,10 +28,26 @@ class User extends Model
         return $this->hasMany(UserThird::class,'user_id');
     }
 
-    // 定义插件关联
-    public function plugin()
+    /**
+     * 关联用户组
+     *
+     * @return void
+     */
+    public function group()
     {
-        return $this->hasMany(Plugin::class,'user_id')->withoutField('filepath');
+        return $this->hasOne(UserGroup::class,'id','group_id');
+    }
+
+
+    /**
+     * 关联评论列表
+     *
+     * @param integer $id
+     * @return void
+     */
+    public function comment()
+    {
+        return $this->hasMany(Comment::class,'uid');
     }
 
     /**
@@ -40,10 +56,7 @@ class User extends Model
      * @return string
      */
     public static function onAfterInsert($data)
-    {
-        $data = self::getById($data['id']);
-        Auth::instance()->setloginState($data,false);
-    }
+    {}
 
     /**
      * 更新会员数据
@@ -55,11 +68,11 @@ class User extends Model
         if (Auth::instance()->isLogin()) {
             $data = self::getById($data['id']);
             if (Auth::instance()->userInfo->id == $data['id']) {
-                Auth::instance()->setActiveState($data);
+                Auth::instance()->setactiveState($data);
             }
         }
     }
-
+    
     /**
      * 获取头像
      * @param   string $value
@@ -68,12 +81,13 @@ class User extends Model
      */
     public function getAvatarAttr($value, $data)
     {
+        
         if ($value && strpos($value,'://')) {
             return $value;
         }
         
         if (empty($value)) {
-            $value = letter_avatar($data['name']);
+            $value = letter_avatar($data['nickname']);
         }
 
         $prefix = get_upload_Http_Perfix();
@@ -175,5 +189,30 @@ class User extends Model
         return $value;
     }
 
+    /**
+     * 获取会员地址
+     *
+     * @param [type] $readUrl
+     * @param [type] $data
+     * @return void
+     */
+    public function getReadUrlAttr($readUrl, $data)
+    {
+        return '/u/'.$data['id'];
+    }
+
+    /**
+     * 减少会员积分
+     *
+     * @param integer $id
+     * @param integer $score
+     * @return void
+     */
+    public static function reduceScore(int $id = 0, int $score = 0)
+    {
+        try {
+            self::where('id',$id)->dec('score',$score)->update();
+        } catch (\Throwable $th) {}
+    }
 }
 

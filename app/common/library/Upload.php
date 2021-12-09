@@ -174,8 +174,8 @@ class Upload
 
         // 拼接文件路径
         if ($avatar) {
-            $this->filename = md5_hash((string)$id).'_100x100.'.strtolower($file->extension());
-            $this->filepath = $this->config['upload_path'].'/avatar'; 
+            $this->filename = md5((string)$id).'_100x100.'.strtolower($file->extension());
+            $this->filepath = $this->config['upload_path'].'/avatars'; 
         }else {
             $this->filename = uniqid().'.'.strtolower($file->extension());
             $this->filepath = $this->config['upload_path'].'/'.$this->fileclass.'/'.date($this->config['upload_style']); 
@@ -183,7 +183,7 @@ class Upload
 
         
         $this->resource = $this->filepath .'/'. $this->filename;
-        
+
         // 移动上传文件
         if (!$file->move($this->filepath, $this->filename)) {
             $this->setError('请检查服务器读写权限！');
@@ -195,25 +195,20 @@ class Upload
             return false;
         }
 
-    
-        // 图形文件类型
-        if ($this->fileclass == "images") {
+        // 过滤gif文件
+        if ($this->fileclass == "images" 
+            && !strstr($file->extension(),'gif')) {
 
             // 设置水印/微缩图
-            /**
-             * 暂时注释掉水印和微缩图
-             * 后续优化代码
-             */
-            /*if ($this->config['upload_water']) {
+            if ($this->config['upload_water']) {
                 $this->Images->waterMark($this->resource,$this->config);
             }
 
             if ($this->config['upload_thumb'] || $avatar ){
                 $this->Images->thumb($this->filepath, $this->filename, $this->config, $avatar);
-            } */
+            } 
         }
         
-
 		return $this->success('文件上传成功！','/'.$this->resource);   
     }
 
@@ -267,6 +262,7 @@ class Upload
                 // 获取跳转后的URL地址
                 if (stristr($heads[0], "302")) {
                     $url = $heads['Location'];
+                    $heads = @get_headers($url, true);
                 }
 
                 // 从缓冲区读取
@@ -295,11 +291,11 @@ class Upload
                 if (!write_file($this->resource,$content)) {
                     continue;
                 }
-                if ($this->config['upload_water']) {
-                    // $this->Images->waterMark($this->resource,$this->config);
+                if ($this->config['upload_water'] && !strstr($heads['0']['Content-Type'],'gif')) {
+                    $this->Images->waterMark($this->resource,$this->config);
                 }
-                if ($this->config['upload_thumb'] && $key <= 0){
-                    // $this->Images->thumb($this->filepath, $this->filename, $this->config);
+                if ($this->config['upload_thumb'] && $key <= 0 && !strstr($heads['0']['Content-Type'],'gif')){
+                    $this->Images->thumb($this->filepath, $this->filename, $this->config);
                 }
 
                 $images[$field] = '/'.$this->resource;
@@ -330,12 +326,10 @@ class Upload
                     'filename'=> $this->resource
                     ]
                 ) !== false) {
-
                     // 删除本地文件
                     if ($this->config['upload_del']) {
                         unlink($this->resource);
                     }
-
                 }
            } catch (\Throwable $th) {
                 $this->setError($th->getMessage());

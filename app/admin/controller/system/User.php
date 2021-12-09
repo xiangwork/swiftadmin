@@ -42,8 +42,8 @@ class User extends AdminController
             
             // 生成查询条件
             $where = array();
-            if (!empty($post['name'])) {
-                $where[] = ['name','like','%'.$post['name'].'%'];
+            if (!empty($post['nickname'])) {
+                $where[] = ['nickname','like','%'.$post['nickname'].'%'];
             }
 
             if (!empty($post['group_id'])) {
@@ -66,7 +66,7 @@ class User extends AdminController
             }
 
 			// TODO..
-			return $this->success('查询成功', "", $list, $count, 0);
+			return $this->success('查询成功', "", $list, $count);
 		}
 
 		return view('',[
@@ -82,13 +82,13 @@ class User extends AdminController
 
         if (request()->isPost()) {
 			$post = input('post.');
-            $post = safe_field_model($post,$this->model::class);
+            $post = safe_field_model($post,get_class($this->model));
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
             }
 
             // 禁止重复注册
-            $whereName[] = ['name','=',$post['name']];
+            $whereName[] = ['nickname','=',$post['nickname']];
             $whereEmail[] = ['email','=',$post['email']];
 			if($this->model->whereOr([$whereName,$whereEmail])->find()) {
 				return $this->error('该用户ID或邮箱已经存在！');
@@ -110,14 +110,14 @@ class User extends AdminController
 
         if (request()->isPost()) {
 			$post = input();
-            $post = safe_field_model($post,$this->model::class);
+            $post = safe_field_model($post,get_class($this->model));
 			if (empty($post) || !is_array($post)) {
 				return $this->error($post);
             }
             // 查询数据
             $data = $this->model->find($post['id']);
-            if ($data['name'] != $post['name']) {
-                $whereName[] = ['name','=',$post['name']];
+            if ($data['nickname'] != $post['nickname']) {
+                $whereName[] = ['nickname','=',$post['nickname']];
                 if($this->model->where($whereName)->find()) {
                     return $this->error('该用户ID已经存在！');
                 }

@@ -102,7 +102,7 @@ class Admin extends AdminController
                 $list[$key]['cates'] = $authnodes[$this->auth->authPrivate];
             }
 
-            return $this->success('查询成功', null, $list, $count, 0);
+            return $this->success('查询成功', null, $list, $count);
         }
 
         return view('', [
@@ -121,7 +121,7 @@ class Admin extends AdminController
 
             // 验证数据
             $post = input('post.');
-            $post = safe_field_model($post, $this->model::class);
+            $post = safe_field_model($post, get_class($this->model));
             if (!is_array($post)) {
                 return $this->error($post);
             }
@@ -164,7 +164,7 @@ class Admin extends AdminController
 
                 // 验证数据
                 $post = input('post.');
-                $post = safe_field_model($post, $this->model::class);
+                $post = safe_field_model($post, get_class($this->model));
                 if (!is_array($post)) {
                     return $this->error($post);
                 }
@@ -256,7 +256,7 @@ class Admin extends AdminController
      * @access      public
      * @return      mixed|array
      */
-    public function _get_auth_func()
+    public function authorizeInterface()
     {
         $action = request()->param('action/s');
         if (request()->isAjax()) {
@@ -525,6 +525,7 @@ class Admin extends AdminController
 
                 // 清理插件缓存
                 if ($type == 'all' || $type == 'plugin') {
+                    \think\facade\Cache::set('plug-in.hooks',null);
                 }
             } catch (\Throwable $th) {
                 return $this->error($th->getMessage());

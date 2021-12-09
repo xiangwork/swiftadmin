@@ -46,12 +46,11 @@ class Collect extends AdminController
             // 生成查询数据
             $where[]=['status','=',$status];
             $list = $this->model->where($where)->order("id asc")->select()->toArray();
-            return $this->success('查询成功', "", $list, count($list), 0);
+            return $this->success('查询成功', "", $list, count($list));
         }
        
-        $table = Channel::field('table')->select();
         return view('',[
-            'table'=>$table
+            'module' => Channel::select()
         ]);
     }
 
