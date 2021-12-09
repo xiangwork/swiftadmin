@@ -706,10 +706,10 @@ class Auth
 
     /**
      * 设置用户登录状态
-     * @param object|array  $array
+     * @param array  $array
      * @return bool
      */
-    public function setloginState(object|array $array = null, $token = false)
+    public function setloginState(array $array = null, $token = false)
     {
         $this->token = $token ? cookie('token') : $this->buildToken($array);
         cookie('uid',$array['id'],$this->keepTime);
@@ -723,7 +723,7 @@ class Auth
      * @param   array $array
      * @return  bool
      */
-    public function setActiveState(object|array $array = []) {
+    public function setActiveState(array $array = []) {
         $tag = md5((string)$array['id']);
         \think\facade\Cache::tag($tag)->clear();
         \think\facade\Cache::tag($tag)->set($this->token,$array,$this->keepTime);
