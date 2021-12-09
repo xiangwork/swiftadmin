@@ -248,21 +248,6 @@ if (!function_exists('strtoJs')) {
 	}
 }
 
-if (!function_exists('url_raw')) {
-    /**
-     * 转换成JS
-     * @param  string $str 字符串 
-     * @return bool   $mark 标记/直接返回转移代码
-     */		
-	function url_raw($str)
-	{
-		if (is_empty($str)) {
-			return false;
-		}
-		return str_replace('.html','',url($str,[],false));
-	}
-}
-
 if (!function_exists('msubstr')) {
     /**
      * 字符串截取(同时去掉HTML与空白)
