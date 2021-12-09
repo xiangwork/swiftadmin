@@ -268,13 +268,15 @@ class Index extends BaseController
 
                     // 清理安装包
                     Cache::clear();
-                    recursiveDelete(app_path());
                     unlink(public_path().'install.php');
+                    recursiveDelete(app_path());
                 }
             }
             catch (\Throwable $th) {
                 return $this->error($th->getMessage());
             }
+
+            return $this->success('安装成功,如install模块未删除，请手动删除');
         }
     }
 }
