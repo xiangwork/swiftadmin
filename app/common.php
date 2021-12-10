@@ -1413,33 +1413,6 @@ if (!function_exists('get_page')) {
 	}
 }
 
-
-if (!function_exists('get_usergroup_json')) {
-	/**
-	 * 获取用户组
-	 */
-	function get_usergroup_json()
-	{
-		return json_encode(\app\common\model\system\UserGroup::select()->toArray());
-	}
-}
-if (!function_exists('get_category_json')) {
-
-	/**
-	 * 获取栏目JSON数据
-	 * @param int 		$pid
-	 * @param int 		$cid
-	 * @param int 		$limit
-	 * @param string 	$field
-	 * @param string 	$order
-	 * @return string|false
-	 */
-	function get_category_json($pid = 0,$cid = 0,$field = '*',$limit = 100,$order = 'id asc')
-	{
-		return app\common\library\Auth::instance()->getrulecatestree('cates','private');
-	}
-}
-
 if (!function_exists('array_filter_callback')) {
     /**
      * array_filter 回调函数，只过滤空值

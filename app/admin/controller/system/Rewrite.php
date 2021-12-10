@@ -86,6 +86,10 @@ class Rewrite extends AdminController
         if (strpos($this->action,'create') !== false) {
             $this->app->view->config(['view_path' => $this->template]);
         }
+
+        // 获取用户权限
+        $cateGory = $this->auth->getrulecatestree('cates','private');
+        $this->app->view->assign(['cateGory'=>$cateGory]);
     }
 
     /**

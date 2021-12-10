@@ -357,7 +357,7 @@ class Auth
             }
         }
 
-        return $tree ? ($list ? json_encode(list_to_tree($list)) : json()) : $list;
+        return $tree ? ($list ? json_encode(list_to_tree($list)) : json_encode([])) : $list;
     }
 
     /**

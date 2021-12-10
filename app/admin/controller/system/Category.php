@@ -15,7 +15,7 @@ use app\AdminController;
 use app\common\model\system\Channel  as ChannelModel;
 use app\common\model\system\Category as CategoryModel;
 use app\common\model\system\Content  as ContentModel;
-use system\Http;
+use app\common\model\system\UserGroup;
 use think\facade\Db;
 
 class Category extends AdminController
@@ -24,15 +24,26 @@ class Category extends AdminController
     public function initialize() 
     {
 		parent::initialize();
-        $skin = [];
+
+        $this->model = new CategoryModel();
+        
         // 分配前端模板
+        $skin = [];
         $skinPath = root_path('app/index/view/category');
         if (is_dir($skinPath)) {
             $skin = glob($skinPath.'*.html');
             $skin = str_replace(array($skinPath,'.html'),'',$skin);
         }
+
         $this->app->view->assign('skin',$skin);
-        $this->model = new CategoryModel();
+
+        // 获取用户权限
+        $userGroup = json_encode(UserGroup::select()->toArray());
+        $cateGory = $this->auth->getrulecatestree('cates','private');
+        $this->app->view->assign([
+            'cateGory'=>$cateGory,
+            'UserGroup'=>$userGroup
+        ]);
     }
 
     /**

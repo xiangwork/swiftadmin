@@ -241,8 +241,8 @@
 <script src="__STATICADMIN__module/xmselect/xmselect.js"></script>
 <script src="/static/js/tinymce/tinymce.min.js"></script>
 <script>
-	var grouplist = {:get_usergroup_json()};
-	var categorylist = {:get_category_json()};
+	var grouplist = {$UserGroup|raw};
+	var categorylist = {$cateGory|raw};
 </script>
 <script>
     layui.use(['admin','content','tags'], function () {

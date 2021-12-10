@@ -16,6 +16,7 @@ use app\common\model\system\Channel;
 use app\common\model\system\Category;
 use app\common\model\system\Content as ContentModel;
 use app\common\model\system\TagsMapping;
+use app\common\model\system\UserGroup;
 
 class Content extends AdminController 
 {
@@ -40,6 +41,9 @@ class Content extends AdminController
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
         }
+
+        $userGroup = json_encode(UserGroup::select()->toArray());
+        $this->app->view->assign('UserGroup',$userGroup);
 
         $this->model = new ContentModel();
 		$this->middleware = [\app\admin\middleware\system\Content::class];

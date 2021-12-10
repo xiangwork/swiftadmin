@@ -329,7 +329,7 @@
 </div>
 <include file="/public/footer" />
 <script>
-    var categorylist = {:get_category_json()};
+    var categorylist = {$cateGory|raw};
 </script>
 <script src="__STATICADMIN__module/xmselect/xmselect.js"></script>
 <script type="text/javascript">
