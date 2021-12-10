@@ -36,8 +36,8 @@ class Friendlink extends AdminController
             $status = !empty($post['status']) ? $post['status']-1:1;
 
             $where = array();
-            if (!empty($post['name'])) {
-                $where[] = ['name','like','%'.$post['name'].'%'];
+            if (!empty($post['title'])) {
+                $where[] = ['title','like','%'.$post['title'].'%'];
             }
             
             $where[]=['status','=',$status];

@@ -1,9 +1,6 @@
 <include file="/public/header" />
 <!-- // 重定位Style -->
 <style>
-    html, body,.layui-fluid, .layui-card,.layui-card-body,.layui-col-md3,.layui-col-md9 {
-        height: 97%;
-    }
     .layui-card-header.layadmin-card-header-auto {
         border-bottom: 0px;
         padding-bottom: 0px;
@@ -19,6 +16,19 @@
 
     .layui-table-tool-temp {
         padding-right: 0px;
+    }
+
+    @media screen and (max-width: 1200px){
+        .layui-table-tool-temp .layui-btn {
+            height: 30px;
+            line-height: 30px;
+            padding: 0 10px;
+            font-size: 12px;
+        }
+
+        .layui-table-tool-temp .layui-btn:nth-last-child(3) {
+            display: none;
+        }
     }
 
     #layui_side_left table thead tr:first-child i 
