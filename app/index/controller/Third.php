@@ -103,7 +103,8 @@ class Third extends HomeController
             if (User::getByNickname($nickname)) {
                 $local['nickname'] .= create_rand(6);
             }
-
+            
+            $local['group_id'] = 1;
             $local['createip'] = request()->ip();
             $result = User::create($local);
 
