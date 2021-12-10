@@ -28,7 +28,7 @@ class Salibs extends TagLib {
 		'category'		=> ['attr'=>'id,cid,pid,typeid,field,limit,order,type,single'],// 获取栏目
 		'navlist'		=> ['attr'=>'id'],										// 导航标签
 		'channel'		=> ['attr'=>'id'],										// 模型标签
-		'content'		=> ['attr'=>'model,pid,ids,field,limit,order,title,thumb,page,paging'], // 获取内容标签
+		'content'		=> ['attr'=>'table,pid,ids,field,limit,order,title,thumb,page,paging'], // 获取内容标签
 		'customtpl'		=> ['attr'=>'id'],										// 自定义模板
 		'usergroup'		=> ['attr'=>'id'],										// 用户组			
 		'playlist'		=> ['attr'=>'id'],										// 播放器列表
