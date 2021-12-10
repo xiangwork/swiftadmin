@@ -1795,11 +1795,8 @@ if (!function_exists('safe_field_model')) {
 				$valiclass = str_replace("\\model\\", "\\validate\\", $valiclass);
 			}
 			
-			$valiFilePath = root_path().$valiclass.'.php';
-			$valiFilePath = str_replace('\\','/',$valiFilePath);
-			
 			try {
-				if (is_file($valiFilePath)) {
+				if (class_exists($valiclass)) {
 					$validate = new $valiclass;
 					if (!$validate->scene($valiscene)->check($data)) {
 						return $validate->getError();
@@ -1832,11 +1829,8 @@ if (!function_exists('safe_validate_model')) {
 				$valiclass = str_replace("\\model\\", "\\validate\\", $valiclass);
 			}
 
-			$valiFilePath = root_path().$valiclass.'.php';
-			$valiFilePath = str_replace('\\','/',$valiFilePath);
-			
 			try {
-				if (is_file($valiFilePath)) {
+				if (class_exists($valiclass)) {
 					$validate = new $valiclass;
 					if (!$validate->scene($valiscene)->check($data)) {
 						return $validate->getError();
