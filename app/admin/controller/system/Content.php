@@ -119,14 +119,14 @@ class Content extends AdminController
 
             try {
 
-                $post = request()->post('post.');
+                $post = request()->post();
                 $post['admin_id'] = $this->admin['id'];
                 $post['author'] = $this->admin['name'];
 
                 if ($this->autoPostValidate($post,get_class($this->model))) {
                     return $this->error($this->errorMsg);
                 }
-
+                
                 $data = $this->model->together([$this->table=>$post])->save($post);
                 TagsMapping::writeMapID((int)$data['id'],$post['seo_keywords']);
                 

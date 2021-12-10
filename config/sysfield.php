@@ -380,7 +380,7 @@ return [
     'id' => 'tinyint(3) unsigned',
     'title' => 'varchar(32)',
     'desc' => 'varchar(100)',
-    'logo' => 'varchar(64)',
+    'logo' => 'varchar(255)',
     'url' => 'varchar(64)',
     'type' => 'int(11)',
     'sort' => 'tinyint(4)',
