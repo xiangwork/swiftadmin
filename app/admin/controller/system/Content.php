@@ -43,7 +43,11 @@ class Content extends AdminController
         }
 
         $userGroup = json_encode(UserGroup::select()->toArray());
-        $this->app->view->assign('UserGroup',$userGroup);
+        $cateGory = $this->auth->getrulecatestree('cates','private');
+        $this->app->view->assign([
+            'cateGory'=>$cateGory,
+            'UserGroup'=>$userGroup
+        ]);
 
         $this->model = new ContentModel();
 		$this->middleware = [\app\admin\middleware\system\Content::class];
