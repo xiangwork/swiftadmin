@@ -14,7 +14,7 @@ class Analysis
      * @param int $num 获取数量
      * @return string
      */
-    public static function getKeywords(string $content = null,int $num = 6) {
+    public static function getKeywords(string $content = null,int $num = 2) {
 
         if (empty ($content )) {
             return '';
