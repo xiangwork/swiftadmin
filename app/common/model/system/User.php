@@ -51,7 +51,21 @@ class User extends Model
     }
 
     /**
-     * 注册会员
+     * 注册会员前
+     * @param   array  $data
+     * @return string
+     */
+    public static function onBeforeInsert($data)
+    {
+        if (!empty($data['pwd'])) {
+            $data['pwd'] = hash_pwd($data['pwd']);
+        }
+
+        return $data;
+    }
+
+    /**
+     * 注册会员后
      * @param   array  $data
      * @return string
      */
@@ -175,30 +189,6 @@ class User extends Model
     public function getIPAttr($ip)
     {
         return Content::getIPAttr($ip);
-    }
-
-    /**
-     * 设置密码
-     */
-    public function setPwdAttr($value)
-    {
-        if (!empty($value)) {
-            $value = hash_pwd($value);
-        }
-
-        return $value;
-    }
-
-    /**
-     * 获取会员地址
-     *
-     * @param [type] $readUrl
-     * @param [type] $data
-     * @return void
-     */
-    public function getReadUrlAttr($readUrl, $data)
-    {
-        return '/u/'.$data['id'];
     }
 
     /**
