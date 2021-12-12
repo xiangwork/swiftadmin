@@ -237,6 +237,10 @@ body {
 	padding: 2px 50px;
 }
 
+.layui-footer{    
+    position: revert;
+    padding: 0px;
+}
 
 @media screen and (max-width: 600px) {
     .layui-header .title {

@@ -79,7 +79,6 @@ class User extends AdminController
      */
     public function add() 
     {
-
         if (request()->isPost()) {
 			$post = input('post.');
             $post = safe_field_model($post,get_class($this->model));
