@@ -26,8 +26,3 @@ Route::get('<dir>/$','category/index');
 Route::get('<dir>/list_<page>','category/index')->ext('html');
 Route::get('<parent>/<dir>/$','category/index');
 Route::get('<parent>/<dir>/list_<page>','category/index')->ext('html');
-
-// 定义错误路由
-Route::miss(function() {
-    abort(404, '页面不存在');
-});
