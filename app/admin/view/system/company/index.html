@@ -31,9 +31,9 @@
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar">
     <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" 
-        lay-area="762px,430px" lay-url="{:url('/system.company/edit/')}id/{{d.id}}"  lay-event="edit" >{:__('编辑')}</a>
+        lay-area="762px,430px" lay-url="{:url('/system.company/edit')}?id={{d.id}}"  lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.company/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" lay-url="{:url('/system.company/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 
 

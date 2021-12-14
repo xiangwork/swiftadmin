@@ -86,7 +86,7 @@
 <script type="text/html" id="tableBar"> 
     <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-url="#editforms" lay-area="500px" lay-callback="group" lay-event="edit" >{:__('编辑')}</a>
 	<div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.api/groupDel/')}app_id/{$app_id}/id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" lay-url="{:url('/system.api/groupDel')}?app_id={$app_id}&id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 <include file="/public/footer" />
 <script src="__STATICADMIN__module/xmselect/xmselect.js"></script>

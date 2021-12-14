@@ -47,9 +47,9 @@
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar"> 
     <a class="layui-table-text" lay-open lay-title="{:__('编辑')}" 
-        lay-area="762px,520px" lay-url="{:url('/system.apiaccess/edit/')}id/{{d.id}}" >{:__('编辑')}</a>
+        lay-area="762px,520px" lay-url="{:url('/system.apiaccess/edit')}?id={{d.id}}" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.apiaccess/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" lay-url="{:url('/system.apiaccess/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 
 <include file="/public/footer" />

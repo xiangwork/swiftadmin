@@ -76,12 +76,12 @@
                     <!-- // 打开添加页面 -->
                     <button class="layui-btn icon-btn layui-btn-add" 
                         lay-open lay-title="{:__('请选择栏目')}" lay-area="300px,560px" 
-                        lay-url="#content" lay-callback="category" lay-value="{:url('/system.content/add/')}" >
+                        lay-url="#content" lay-callback="category" lay-value="{:url('/system.content/add')}" >
                         <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                     </button>
                     <button class="layui-btn icon-btn" 
                         lay-open lay-title="{:__('请选择栏目')}" lay-area="300px,560px" 
-                        lay-url="#content" lay-callback="category" lay-value="{:url('/system.content/move/')}" >
+                        lay-url="#content" lay-callback="category" lay-value="{:url('/system.content/move')}" >
                         <i class="layui-icon layui-icon-transfer "></i>{:__('批量移动')}
                     </button>
                 </div>
@@ -103,15 +103,15 @@
 </script>
 <!-- // 列表状态栏 -->
 <script type="text/html" id="status">
-    <input type="checkbox" lay-filter="switchStatus" lay-url="{:url('/system.content/status/')}cid/{{d.cid}}" value="{{d.id}}" lay-skin="switch"
+    <input type="checkbox" lay-filter="switchStatus" lay-url="{:url('/system.content/status')}?cid={{d.cid}}" value="{{d.id}}" lay-skin="switch"
      {{d.status==1?'checked':''}}  />
 </script>
 <!-- // 列表编辑框 -->
 <script type="text/html" id="tableBar"> 
     <a class="layui-table-text"
-    lay-url="{:url('/system.content/edit/')}cid/{{d.cid}}/pid/{{d.pid}}/id/{{d.id}}" lay-maxmin="true" lay-area="100%,100%" lay-event="edit" >{:__('编辑')}</a>
+    lay-url="{:url('/system.content/edit')}?cid={{d.cid}}&pid={{d.pid}}&id={{d.id}}" lay-maxmin="true" lay-area="100%,100%" lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.content/del/')}cid/{{d.cid}}/pid/{{d.pid}}/id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" lay-url="{:url('/system.content/del')}?cid={{d.cid}}&pid={{d.pid}}&id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 <include file="/public/footer" />
 <script>
@@ -121,7 +121,7 @@
         var tree = layui.tree;
         var table = layui.table; 
         var jquery = layui.jquery;
-        var tableURL = "{:url('/system.content/index/')}";
+        var tableURL = "{:url('/system.content/index')}";
         var authURL  = '{:url("/system.admin/authorizeInterface")}';
 
         // 数据表格

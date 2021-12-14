@@ -42,9 +42,9 @@
 
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar"> 
-    <a class="layui-table-text" lay-title="{:__('查看评论')}" lay-area="80%,82%" lay-url="{:url('/system.comment/view/')}id/{{d.id}}" lay-event="edit">{:__('查看')}</a>
+    <a class="layui-table-text" lay-title="{:__('查看评论')}" lay-area="80%,82%" lay-url="{:url('/system.comment/view')}?id={{d.id}}" lay-event="edit">{:__('查看')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.comment/del/')}id/{{d.id}}" lay-event="del">{:__('删除')}</a>
+    <a class="layui-table-text" lay-url="{:url('/system.comment/del')}?id={{d.id}}" lay-event="del">{:__('删除')}</a>
 </script>
 
 <include file="/public/footer" />
@@ -57,7 +57,7 @@
         */
         var isTable = table.render({
             elem: "#lay-tableList"
-            ,url: "{:url('/system.comment/view/')}id/{$data.id}"
+            ,url: "{:url('/system.comment/view')}?id={$data.id}"
             ,page: true
             ,cols: [[
                 {type: 'checkbox', width:45},

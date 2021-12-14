@@ -60,7 +60,7 @@
                 <!-- // 创建数据实例 -->
                 <table class="layui-table" 
                         lay-data="{
-                        url:'{:url('/system.dictionary/index/')}?pid=0', 
+                        url:'{:url('/system.dictionary/index')}?pid=0', 
                         toolbar: '#toolbar',
                         defaultToolbar: [],
                         id:'lay-tree'}" 
@@ -157,7 +157,7 @@
 
     <div class="layui-footer layui-form-item layui-center">
         <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('取消')}</button>
-        <button class="layui-btn" lay-add="{:url('/system.dictionary/add/')}" lay-edit="{:url('/system.dictionary/edit/')}" lay-filter="submitPage" 
+        <button class="layui-btn" lay-add="{:url('/system.dictionary/add')}" lay-edit="{:url('/system.dictionary/edit')}" lay-filter="submitPage" 
         lay-submit>{:__('提交')}</button>
     </div>
     </form>
@@ -168,7 +168,7 @@
 <script type="text/html" id="tableBar"> 
     <a class="layui-table-text" lay-title="{:__('编辑字典项')}" lay-url="#editforms" lay-area="398px" lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.dictionary/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" lay-url="{:url('/system.dictionary/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 
 <include file="/public/footer" />

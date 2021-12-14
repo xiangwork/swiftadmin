@@ -85,7 +85,7 @@
 <script type="text/html" id="tableBar">
     <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-area="500px" lay-url="#editforms"  lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.usergroup/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" lay-url="{:url('/system.usergroup/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 
 

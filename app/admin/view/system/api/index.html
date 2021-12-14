@@ -265,7 +265,7 @@
                                         type: 2,
                                         title: "请求参数",
                                         area: ['80%','80%'],
-                                        content: "{:url('/system.api/params/')}id/"+ listId,
+                                        content: "{:url('/system.api/params')}?id="+ listId,
                                         success: function() {}
                                     })
                             break;
@@ -274,7 +274,7 @@
                                      type: 2,
                                      title: "返回参数",
                                      area: ['80%','80%'],
-                                     content: "{:url('/system.api/restful/')}id/"+listId,
+                                     content: "{:url('/system.api/restful')}?id="+listId,
                                      success: function() {}
                                  }) 
                             break;
@@ -322,7 +322,7 @@
                 type: 2,
                 title: '编辑分组',
                 area: ['800px','600px'],
-                content: "{:url('/system.api/group/')}app_id/"+app_id,
+                content: "{:url('/system.api/group')}?app_id="+app_id,
                 success: function(r) {}
             })
         })

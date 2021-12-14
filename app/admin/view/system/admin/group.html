@@ -116,7 +116,7 @@
     <div class="layui-divider layui-divider-vertical"></div>
     <a class="layui-table-text" lay-callback="cate" lay-area="300px" lay-title="{:__('栏目权限')}" lay-url="#cateForms" lay-offset="8%" lay-event="cate" >{:__('栏目')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.admingroup/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" lay-url="{:url('/system.admingroup/del')?}id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 
 

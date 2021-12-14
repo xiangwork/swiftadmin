@@ -115,7 +115,7 @@
     <div class="layui-divider layui-divider-vertical"></div>
     <a class="layui-table-text" lay-title="{:__('编辑菜单')}" lay-area="668px" lay-url="#editforms" lay-event="edit" lay-callback="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.adminrules/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" lay-url="{:url('/system.adminrules/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 
 <include file="/public/footer" />

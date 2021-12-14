@@ -196,7 +196,7 @@
     <a class="layui-table-text" lay-title="{:__('栏目授权')}" 
         lay-callback="rulecates" lay-url="#authForms" lay-area="300px" lay-offset="8%" lay-event="cates" >{:__('栏目')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.admin/del/')}id/{{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" lay-url="{:url('/system.admin/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 
 <!-- // 列表状态栏 -->

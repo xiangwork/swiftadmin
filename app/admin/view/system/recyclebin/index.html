@@ -59,10 +59,10 @@
 
 <!-- // 列表编辑框 -->
 <script type="text/html" id="tableBar"> 
-    <a class="icon-btn" lay-url="{:url('/system.recyclebin/restore/')}id/{{d.id}}" lay-event="ajax" >
+    <a class="icon-btn" lay-url="{:url('/system.recyclebin/restore')}?id={{d.id}}" lay-event="ajax" >
         <i class="layui-icon layui-icon-refresh-3" style="font-size: 13px;margin-right: 2px"></i>{:__('还原')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="icon-btn" lay-url="{:url('/system.recyclebin/destroy/')}id/{{d.id}}" lay-event="del" ><i class="layui-icon layui-icon-close"></i>{:__('销毁')}</a>
+    <a class="icon-btn" lay-url="{:url('/system.recyclebin/destroy')}?id={{d.id}}" lay-event="del" ><i class="layui-icon layui-icon-close"></i>{:__('销毁')}</a>
 </script>
 
 <include file="/public/footer" />

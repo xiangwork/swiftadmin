@@ -84,7 +84,7 @@
 <script type="text/html" id="tableBar"> 
     <a class="layui-table-text" lay-title="{:__('回复留言')}" lay-area="580px,530px" lay-url="#editforms" lay-event="reply">{:__('回复')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.guestbook/del/')}id/{{d.id}}" lay-event="del">{:__('删除')}</a>
+    <a class="layui-table-text" lay-url="{:url('/system.guestbook/del')}?id={{d.id}}" lay-event="del">{:__('删除')}</a>
 </script>
 
 <include file="/public/footer" />

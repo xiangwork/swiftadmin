@@ -91,9 +91,10 @@
 <script type="text/html" id="tableBar"> 
     <a class="layui-table-text" lay-title="{:__('编辑索引')}" lay-area="695px" lay-url="#editforms" lay-event="edit">{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-open="" lay-title="{:__('编辑字段')}" lay-area="850px,680px" lay-url="{:url('/system.fulltext/field/')}id/{{d.id}}/type/{{d.type}}" >{:__('字段')}</a>
+    <a class="layui-table-text" lay-open="" lay-title="{:__('编辑字段')}" lay-area="850px,680px" 
+    lay-url="{:url('/system.fulltext/field')}?id={{d.id}}&type={{d.type}}" >{:__('字段')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.fulltext/del/')}id/{{d.id}}/type/{{d.type}}" lay-event="del">{:__('删除')}</a>
+    <a class="layui-table-text" lay-url="{:url('/system.fulltext/del')}?id={{d.id}}&type={{d.type}}" lay-event="del">{:__('删除')}</a>
 </script>
 
 <include file="/public/footer" />

@@ -70,20 +70,20 @@
 			lay-title="{:__('配置插件')}" 
 			lay-area="{{d.area}}" 
 			lay-maxmin="true"
-			lay-url="{:url('/system.plugin/config/')}name/{{d.name}}" lay-event="edit" >{:__('配置')}</a>
+			lay-url="{:url('/system.plugin/config')}?name={{d.name}}" lay-event="edit" >{:__('配置')}</a>
 			<div class="layui-divider layui-divider-vertical"></div>
 		{{# } }}
 		{{# if(d.upgrade) { }}
 			<span class="layui-upgrade-elem">
 			<a class="layui-table-text upgrade" 
-			lay-url="{:url('/system.plugin/config/')}name/{{d.name}}" >{:__('升级')}<span class="layui-badge-dot"></span></a>
+			lay-url="{:url('/system.plugin/config')}?name={{d.name}}" >{:__('升级')}<span class="layui-badge-dot"></span></a>
 			<div class="layui-divider layui-divider-vertical"></div>
 			</span>
 		{{# } }}
 		
-		<a class="layui-table-text uninstall" style="color:red" lay-url="{:url('/system.plugin/uninstall/')}name/{{d.name}}" >{:__('卸载')}</a>
+		<a class="layui-table-text uninstall" style="color:red" lay-url="{:url('/system.plugin/uninstall')}?name={{d.name}}" >{:__('卸载')}</a>
 	{{# } else { }}
-	    <a class="layui-table-text install" lay-url="{:url('/system.plugin/install/')}name/{{d.name}}" >{:__('安装')}</a>
+	    <a class="layui-table-text install" lay-url="{:url('/system.plugin/install')}?name={{d.name}}" >{:__('安装')}</a>
 		{{# if(d.demourl) { }}
 		<div class="layui-divider layui-divider-vertical"></div>
 		<a class="layui-table-text" target="_blank" href="{{d.demourl}}" >{:__('演示')}</a>
