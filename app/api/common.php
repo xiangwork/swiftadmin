@@ -20,7 +20,7 @@ if (!function_exists('get_api_url')) {
     /**
      * 获取API访问地址
      */
-    function get_api_url(object|array $array)
+    function get_api_url(array $array)
     {
         $url = null;
         $url = $array['model'] ? '/'.$array['hash'] : $array['class'];
