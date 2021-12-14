@@ -23,7 +23,7 @@ return [
   ],
   'fulltext' => [
     'search_status' => '0',
-    'search_model' => 'XunSearch',
+    'search_model' => 'ElasticSearch',
   ],
   'logs' => [
     'admin_log_status' => '0',
@@ -225,10 +225,10 @@ return [
   'plugin' => [
     'mutex_file' => '1',
   ],
+  'pid' => '',
+  'cid' => '',
   'variable' => [
     'test' => '我是值2',
     'ceshi' => '我是测试变量的值',
   ],
-  'pid' => '',
-  'cid' => '',
 ];

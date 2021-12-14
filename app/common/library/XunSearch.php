@@ -92,7 +92,7 @@ class XunSearch
      * @param array $info
      * @return void
      */
-    public function indices(array|object $data = [])
+    public function indices(array $data = [])
     {
         try {
             $project = [
@@ -125,7 +125,7 @@ class XunSearch
      * @param array $info
      * @return void
      */
-    public function delices(array|object $data = [])
+    public function delices(array $data = [])
     {
         $app_path = root_path().$this->_app_path . $data['name'] .'.ini';
         if (is_file($app_path)) {
@@ -244,7 +244,7 @@ class XunSearch
      * @param array $data
      * @return void
      */
-    public function create(array $data = null)
+    public function create(array $data = [])
     {
         if (is_array($data) && $this->_status) {
             $document = new \XSDocument();
@@ -258,7 +258,7 @@ class XunSearch
      * @param array|null $data
      * @return void
      */
-    public function update(array $data = null)
+    public function update(array $data = [])
     {
         if (is_array($data) && $this->_status) {
             $document = new \XSDocument();
@@ -272,7 +272,7 @@ class XunSearch
      * @param array|integer|null $id
      * @return void
      */
-    public function delete(array|int $id = null)
+    public function delete(array|int $id = [])
     {
         if (!empty($id) && $this->_status) {
             $this->_client->index->del($id);
@@ -285,7 +285,7 @@ class XunSearch
      * @param array $data
      * @return void
      */
-    public function htmlDeleteXml(array|object $data = [])
+    public function htmlDeleteXml(array $data = [])
     {
         if ($this->_index == 'content') {
             $fields = ['id','cid','pid','access'];
@@ -309,7 +309,7 @@ class XunSearch
      * @param array $data
      * @return void
      */
-    private function queryTimestamp(array|object $data = [])
+    private function queryTimestamp(array $data = [])
     {
         if (!empty($data) && is_array($data)) {
             // TP6-BUG
@@ -332,7 +332,7 @@ class XunSearch
      * @param string|array $field
      * @return void
      */
-    public function search(string $keyword = null, string|array $field = null)
+    public function search(string $keyword = null, string|array $field = [])
     {
         // 设置关键字
         $field = !empty($field) ? $field : 'title';
@@ -426,7 +426,7 @@ class XunSearch
      * @param mixed $fields
      * @return void
      */
-    public function highlight(array|string $fields)
+    public function highlight(mixed $fields)
     {
         if (!is_array($fields)) {
             $fields = str_replace(array('，','|','-'),',',$fields);

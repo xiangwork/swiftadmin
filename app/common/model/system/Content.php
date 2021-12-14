@@ -218,7 +218,7 @@ class Content extends Model
      * 内容扩展字段集
      *
      * @param object $data
-     * @return array|object
+     * @return object
      */
     public static function _extendFields(object $data)
     {

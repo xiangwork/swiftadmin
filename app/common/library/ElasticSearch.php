@@ -95,7 +95,7 @@ class ElasticSearch
      * @return void
      * @return void
      */
-    public function indices(array|object $data = [])
+    public function indices(array $data = [])
     {
 
         try {
@@ -129,7 +129,7 @@ class ElasticSearch
      * @return void
      * @return void
      */
-    public function delices(array|object $data = [])
+    public function delices(array $data = [])
     {
         try {
 
@@ -168,9 +168,10 @@ class ElasticSearch
 
             // 处理字符串
             if (is_string($value)) {
-                $arr = explode(':',$value);
-                $connection[$key]['host'] = $arr[0];
-                $connection[$key]['port'] = $arr[1];
+                $value = rtrim($value,'/');
+                $value = str_replace(['http://','https://'],'',$value);
+                $connection[$key]['host'] = substr($value,0,strrpos($value,":"));
+                $connection[$key]['port'] = substr(strrchr($value, ":"), 1);
                 if (isset($login['username']) && $login['username']) {
                     $connection[$key]['user'] = $login['username'];
                 }
@@ -285,7 +286,7 @@ class ElasticSearch
      * @param array $data
      * @return void
      */
-    public function create(array|object $data = null)
+    public function create(array $data = [])
     {
         if (!empty($data) && is_array($data) && $this->_status) {
 
@@ -313,7 +314,7 @@ class ElasticSearch
      * @param array|null $data
      * @return void
      */
-    public function update(array|object $data = null)
+    public function update(array $data = [])
     {
         if (!empty($data) && is_array($data)) {
 
@@ -369,7 +370,7 @@ class ElasticSearch
      * @param array $data
      * @return void|array
      */
-    public function htmlDeleteXml(array|object $data = [])
+    public function htmlDeleteXml(array $data = [])
     {
         if ($this->_index == 'content') {
             $fields = ['id','cid','pid','access'];
@@ -394,7 +395,7 @@ class ElasticSearch
      * @param array $data
      * @return void
      */
-    private function queryTimestamp(array|object $data = [])
+    private function queryTimestamp(array $data = [])
     {
         if (!empty($data) && is_array($data)) {
             // TP6-BUG
@@ -448,7 +449,7 @@ class ElasticSearch
      * @param string|array $field
      * @return void
      */
-    public function search(string|array $query = null, string|array $field = null)
+    public function search(string|array $query = null, string|array $field = [])
     {
         if ($this->_option['page'] == 0) {
             $length = isset($this->_option['length']) ? $this->_option['length'] : 10;
