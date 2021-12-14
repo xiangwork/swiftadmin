@@ -147,13 +147,13 @@ class Auth
     /**
      * 检查权限
      * @param string|array  $name   	    需要验证的规则列表,支持逗号分隔的权限规则或索引数组
-     * @param int           $uid            认证用户的id
+     * @param int           $admin_id       认证用户的id
      * @param int           $type 			认证类型
      * @param string        $mode 			执行check的模式
      * @param string        $relation 		如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
      * @return bool               	        通过验证返回true;失败返回false
      */
-    public function checkAuths($name, $uid = 0, $type = 1, $mode = 'url', $relation = 'or') 
+    public function checkAuths($name, $admin_id = 0, $type = 1, $mode = 'url', $relation = 'or') 
     {
         // 转换格式
         if (is_string($name)) {
@@ -170,7 +170,7 @@ class Auth
             $REQUEST = unserialize(strtolower(serialize($this->request->param())));
         }
 
-        foreach ($this->getAuthList($uid) as $auth) {
+        foreach ($this->getAuthList($admin_id) as $auth) {
 
             // 非鉴权接口
             $router = $auth['router'];
@@ -222,16 +222,16 @@ class Auth
 
     /**
      * 获取权限节点
-     * @param  int      $uid    用户id
-     * @param  string   $type   节点类型
+     * @param  int      $admin_id       管理员id
+     * @param  string   $type           节点类型
      * @return array
      */
-    public function getAuthNodes($uid = null, string $type = 'rules')
+    public function getAuthNodes($admin_id = null, string $type = 'rules')
     {
         // 私有节点
         $authGroup = $authPrivate = [];
-        $uid = $uid ?? $this->admin['id'];
-        $authnodes = AdminAccess::where('uid',$uid)->find();
+        $admin_id = $admin_id ?? $this->admin['id'];
+        $authnodes = AdminAccess::where('admin_id',$admin_id)->find();
         if (!empty($authnodes[$type])) {
             $authPrivate = explode(',', $authnodes[$type]);
         }
@@ -287,16 +287,16 @@ class Auth
 
     /**
      * 查询权限列表
-     * @param  int      $uid        用户id
+     * @param  int      $admin_id   用户id
      * @param  array    $nodes      已获取节点
      * @return mixed
      */
-    public function getAuthList($uid = 0, array $nodes = []) 
+    public function getAuthList($admin_id = 0, array $nodes = []) 
     {
         // 查找节点
         $where[] = ['status','=','normal'];
         if (!$this->superAdmin()) {
-            $auth_nodes = !empty($nodes) ? $nodes : $this->getAuthNodes($uid);
+            $auth_nodes = !empty($nodes) ? $nodes : $this->getAuthNodes($admin_id);
             return AdminRulesModel::where(function ($query) use ($where,$auth_nodes) {
                 if (empty($auth_nodes[$this->authPrivate])) {
                     $where[] = ['auth','=','0'];
@@ -431,23 +431,24 @@ class Auth
 
     /**
      * 获取用户信息
-     * @param mixed|null $uid
+     * @param mixed|null $admin_id
      * @return bool
      */
-    public function getUserInfo($uid = null) 
+    public function getUserInfo($admin_id = null) 
     {
 
-        $uid = $uid ?? $this->admin['id'];
+        $admin_id = $admin_id ?? $this->admin['id'];
         static $userinfo = [];
 
         $user = Db::name('admin');
+
         // 获取用户表主键
-        $_pk = is_string($user->getPk()) ? $user->getPk() : 'uid';
-        if (!isset($userinfo[$uid])) {
-            $userinfo[$uid] = $user->where($_pk, $uid)->find();
+        $_pk = is_string($user->getPk()) ? $user->getPk() : 'id';
+        if (!isset($userinfo[$admin_id])) {
+            $userinfo[$admin_id] = $user->where($_pk, $admin_id)->find();
         }
 
-        return $userinfo[$uid];
+        return $userinfo[$admin_id];
     }
 
     /**
@@ -551,7 +552,7 @@ class Auth
 
         if (empty($list)) { 
             $list = Db::view('user','id')
-                      ->view('api_access','*','api_access.uid=user.id')
+                      ->view('api_access','*','api_access.user_id=user.id')
                       ->view('api','class','api.id=api_access.api_id')
                       ->where([
                           'user.app_id'=>$this->params['app_id'],
@@ -696,7 +697,7 @@ class Auth
         if (!empty($array)) {
             $this->token = $token; 
 
-            // 只缓存用户uid
+            // 只缓存用户id
             $this->userInfo = $array;
             return true;
         }

@@ -47,7 +47,7 @@ class User extends Model
      */
     public function comment()
     {
-        return $this->hasMany(Comment::class,'uid');
+        return $this->hasMany(Comment::class,'user_id');
     }
 
     /**

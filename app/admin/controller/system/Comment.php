@@ -53,13 +53,13 @@ class Comment extends AdminController
             $list = $this->model->where($where)
                                 ->where('status',$status)
                                 ->order('id','desc')
-                                ->field('id,cid,uid,content,count,sid,status,ip,createtime')
+                                ->field('id,cid,user_id,content,count,sid,status,ip,createtime')
                                 ->limit($limit)
                                 ->page($page)
                                 ->select()
                                 ->toArray();
             foreach ($list as $key => $value) {
-                $result = Db::name('user')->field('nickname')->where('id',$value['uid'])->find();
+                $result = Db::name('user')->field('nickname')->where('id',$value['user_id'])->find();
                 if (!empty($result)) {
                     $list[$key]['nickname'] = $result['nickname'];
                 }
@@ -103,7 +103,7 @@ class Comment extends AdminController
             $page = ($count <= $limit) ? 1 : $page; 
 
             $list = $this->model->view('comment','*')
-                                ->view('user','nickname', 'user.id = comment.uid', 'LEFT')
+                                ->view('user','nickname', 'user.id = comment.user_id', 'LEFT')
                                 ->where('comment.status',1)
                                 ->where('rid',$id)
                                 ->limit($limit)

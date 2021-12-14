@@ -18,7 +18,7 @@ class TagsMapping extends Pivot
      * @param string $type
      * @return void
      */
-    public static function writeMapID(int $id = 0,string|array $tags = '', string $type = 'cid')
+    public static function writeMapID(int $id = 0,string|array $tags = '', string $type = 'content_id')
     {
         if (!$tags) {
             return false;
@@ -32,7 +32,7 @@ class TagsMapping extends Pivot
         $tagsList = Tags::queryTagsID($tags);
         $mapsList = self::where($type,$id)->select()->toArray();
         if (!empty($mapsList)) {
-            $mapsList = array_column($mapsList,'tid');
+            $mapsList = array_column($mapsList,'tag_id');
         }   
 
         $mapsID = [];
@@ -43,7 +43,7 @@ class TagsMapping extends Pivot
             }
             else {
                 $mapsID[$key][$type] = $id;
-                $mapsID[$key]['tid'] = $value['id'];
+                $mapsID[$key]['tag_id'] = $value['id'];
             }
         }
 
@@ -54,7 +54,7 @@ class TagsMapping extends Pivot
         if (!empty($mapsList)) {
             self::where([
                 [$type,'=',$id],
-                ['tid','in',$mapsList]
+                ['tag_id','in',$mapsList]
             ])->delete();
         }
 

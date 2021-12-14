@@ -22,7 +22,7 @@ return [
     'auth_key' => 'WS3hi5Xe0Wx7rXkx',
   ],
   'fulltext' => [
-    'search_status' => '0',
+    'search_status' => '1',
     'search_model' => 'ElasticSearch',
   ],
   'logs' => [

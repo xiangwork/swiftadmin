@@ -99,17 +99,10 @@ class Recyclebin extends AdminController
                     $this->beforeWhere()
                     )->select();
                 foreach ($list as $key => $item) {
-
-                    $item->attr; $attrs[] = 'attr';
-                    $channel = Channel::getChannelList($item['cid']);
-                    if ($channel['attr'] !== 'none') {
-                        $property = $channel['attr'];
-                        $item->$property;
-                        $attrs[] = $channel['attr'];
-                    }
-                    // 删除时间
                     $item['delete_force'] = time();
-                    $this->status += $item->together($attrs)->force()->delete();
+                    $table = Channel::getChannelList($item['cid'])['table'];
+                    Db::name('content_'.$table)->where('content_id',$item->id)->delete();
+                    $this->status += $item->force()->delete();
                 }
     
                 Db::commit();

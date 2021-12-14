@@ -103,9 +103,9 @@
             ,cols: [[
                 {type: 'checkbox', width:45},
                 {field: 'id', align: 'center',sort: true,width: 80,  title: 'ID'},
-                {field: 'uid', align: 'center',sort: true,width: 80,templet:function(d){
-                    return d.uid == 0 ? '无' : d.uid;
-                },  title: 'UID'},
+                {field: 'user_id', align: 'center',sort: true,width: 80,templet:function(d){
+                    return d.user_id == 0 ? '无' : d.user_id;
+                },  title: '用户ID'},
                 {field: 'name', align: 'left', width:120,templet:function(d){
                     return d.name === undefined ? '游客' : d.name;
                 },title: '{:__("昵称")}'},

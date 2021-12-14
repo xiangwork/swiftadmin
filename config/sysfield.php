@@ -3,7 +3,7 @@ return [
   'admin' => [
     'id' => 'mediumint(11) unsigned',
     'group_id' => 'varchar(255)',
-    'dep_id' => 'varchar(255)',
+    'department_id' => 'varchar(255)',
     'jobs_id' => 'varchar(255)',
     'name' => 'varchar(255)',
     'nickname' => 'varchar(255)',
@@ -28,7 +28,7 @@ return [
     'delete_time' => 'int(11)',
   ],
   'adminaccess' => [
-    'uid' => 'mediumint(8) unsigned',
+    'admin_id' => 'mediumint(8) unsigned',
     'group_id' => 'varchar(255)',
     'rules' => 'varchar(2048)',
     'cates' => 'varchar(2048)',
@@ -100,7 +100,7 @@ return [
   ],
   'apiaccess' => [
     'id' => 'int(10) unsigned',
-    'uid' => 'int(11)',
+    'user_id' => 'int(11)',
     'api_id' => 'int(11)',
     'day' => 'int(11)',
     'qps' => 'int(11)',
@@ -206,7 +206,7 @@ return [
     'sid' => 'int(10) unsigned',
     'rid' => 'int(11) unsigned',
     'pid' => 'int(10) unsigned',
-    'uid' => 'mediumint(9)',
+    'user_id' => 'mediumint(9)',
     'content' => 'text',
     'up' => 'mediumint(9)',
     'down' => 'mediumint(9)',
@@ -402,7 +402,7 @@ return [
   'guestbook' => [
     'id' => 'mediumint(8) unsigned',
     'cid' => 'mediumint(9)',
-    'uid' => 'mediumint(9)',
+    'user_id' => 'mediumint(9)',
     'name' => 'varchar(255)',
     'content' => 'text',
     'reply' => 'text',
@@ -483,9 +483,9 @@ return [
   ],
   'tagsmapping' => [
     'id' => 'int(11) unsigned',
-    'tid' => 'int(11)',
-    'cid' => 'int(11) unsigned',
-    'oid' => 'int(11) unsigned',
+    'tag_id' => 'int(11)',
+    'content_id' => 'int(11) unsigned',
+    'other_id' => 'int(11) unsigned',
   ],
   'user' => [
     'id' => 'mediumint(8) unsigned',

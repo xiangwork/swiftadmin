@@ -32,7 +32,7 @@ class Comment extends Model
      */
     public function user()
     {
-        return $this->hasOne(User::class,'id','uid')->field($this->userField);
+        return $this->hasOne(User::class,'id','user_id')->field($this->userField);
     }
 
     /**
@@ -63,7 +63,7 @@ class Comment extends Model
      */
     public function setContentAttr($content)
     {
-        return htmlspecialchars(str_replace('script','',$content));
+        return htmlspecialchars($content);
     }
 
     /**

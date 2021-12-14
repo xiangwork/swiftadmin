@@ -15,9 +15,9 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('会员名称')}</label>
         <div class="layui-input-inline">
-            <input id="uid" ts-selected="{$data.uid}" value="{$data.nickname|default=''}" 
+            <input id="uid" ts-selected="{$data.user_id}" value="{$data.nickname|default=''}" 
                     placeholder="{:__('请选择会员名称')}" type="text" class="layui-input"  lay-verify="required" />
-            <input name="uid" type="text" hidden="" value="{$data.uid}">
+            <input name="uid" type="text" hidden="" value="{$data.user_id}">
         </div>
         <label class="layui-form-label">{:__('排序号')}</label>
         <div class="layui-input-inline">

@@ -18,24 +18,24 @@
             <div class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <button class="layui-btn layui-btn-sm layui-btn-primary icon-btn" lay-filter="formSearch" lay-submit>
+                        <button class="layui-btn layui-btn-sm icon-btn" lay-filter="formSearch" lay-submit>
                             <i class="layui-icon layui-icon-refresh"></i>
                         </button>
                         <button class="layui-btn layui-btn-sm icon-btn" 
                             lay-batch="lay-tableList" lay-url="{:url('/system.recyclebin/restore')}">
-                            <i class="layui-icon layui-icon-link"></i>{:__('还原')}
+                            {:__('还原')}
                         </button>
-                        <button class="layui-btn layui-btn-sm layui-btn-warm icon-btn" 
+                        <button class="layui-btn layui-btn-sm icon-btn" 
                             lay-batch="lay-tableList" lay-url="{:url('/system.recyclebin/destroy')}" >
-                            <i class="layui-icon layui-icon-unlink"></i>{:__('销毁')}
+                            {:__('销毁')}
                         </button>
                         <button class="layui-btn layui-btn-sm icon-btn" 
                             lay-ajax="" lay-table="lay-tableList" lay-url="{:url('/system.recyclebin/restore')}" >
-                            <i class="layui-icon layui-icon-engine"></i>{:__('一键还原')}
+                            {:__('一键还原')}
                         </button>
                         <button class="layui-btn layui-btn-sm layui-btn-danger icon-btn" 
                             lay-ajax="" lay-table="lay-tableList" lay-url="{:url('/system.recyclebin/destroy')}" >
-                            <i class="layui-icon layui-icon-delete"></i>{:__('清空回收站')}
+                            {:__('清空回收站')}
                         </button>
                     </div>
                     <div class="layui-inline">

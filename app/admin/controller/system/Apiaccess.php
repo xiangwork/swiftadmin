@@ -48,7 +48,7 @@ class Apiaccess extends AdminController
                 }
 
                 $ids = isset($ids) ? $ids : [];
-                $where[] = ['uid','in',$ids];                
+                $where[] = ['user_id','in',$ids];                
             }
 
             if (!empty($post['title'])) {
@@ -71,7 +71,7 @@ class Apiaccess extends AdminController
             $page = ($count <= $limit) ? 1 : $page;
             $list = $this->model->alias('a')
                                 ->field('a.*')
-                                ->view('user','nickname','user.id=a.uid')
+                                ->view('user','nickname','user.id=a.user_id')
                                 ->view('api','class,hash,title,method','api.id=a.api_id')
                                 ->where($where)
                                 ->limit($limit)
@@ -125,7 +125,7 @@ class Apiaccess extends AdminController
         $id = input('id/d');
         $data = $this->model->alias('a')
                             ->field('a.*')
-                            ->view('user','nickname','user.id=a.uid')
+                            ->view('user','nickname','user.id=a.user_id')
                             ->view('api','class,hash','api.id=a.api_id')
                             ->where('a.id',$id)
                             ->find()->toArray();

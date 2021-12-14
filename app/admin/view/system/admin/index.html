@@ -147,7 +147,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('归属部门')}</label>
         <div class="layui-input-inline">
-            <div class="deps" name="dep_id" ></div>
+            <div class="deps" name="department_id" ></div>
         </div>
         <label class="layui-form-label">{:__('岗位分配')}</label>
         <div class="layui-input-inline">
@@ -299,11 +299,11 @@
             var select = xmSelect.render({
                 el: '.deps',
                 tips: '请选择部门',
-                name: 'dep_id',
+                name: 'department_id',
                 data: department,
                 radio: true,
                 clickClose: true,
-                initValue: !status ? tableThis.data.dep_id.split(',') : [],
+                initValue: !status ? tableThis.data.department_id.split(',') : [],
                 prop: {
                     value: 'id',
                     name:'title'
@@ -369,7 +369,7 @@
             form.on("submit(submitPage)",function(post){
 
                 // 获取用户id
-                post.field.uid = tableThis.data.id;
+                post.field.admin_id = tableThis.data.id;
                 // 增加节点数据
                 post.field[event] = tree.getChecked('authTree',true);
                 // 开始POST提交数据

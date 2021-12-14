@@ -101,7 +101,7 @@ class Content extends Model
      */
     public function tags()
     {
-        return $this->belongsToMany(Tags::class,TagsMapping::class,'tid','cid');
+        return $this->belongsToMany(Tags::class,TagsMapping::class,'tag_id','content_id');
     }
 
     /**
@@ -193,6 +193,10 @@ class Content extends Model
      */    
     public static function onAfterDelete($data)
     {
+        if (isset($data['delete_force'])) {
+            TagsMapping::where('content_id',$data['id'])->delete();
+        }
+
         return ContentLibrary::onAfterDelete($data, 'content');
     }
 
@@ -226,8 +230,8 @@ class Content extends Model
      */
     public static function _extendFields(object $data)
     {
-        $channel = ChannelModel::getChannelList($data['cid']);
-        $property = $data->$channel['table']->toArray();
+        $table = ChannelModel::getChannelList($data['cid'])['table'];
+        $property = $data->$table->toArray();
         $result = $data->toArray();
         foreach ($property as $key => $value) {
             if (!isset($result[$key])) {

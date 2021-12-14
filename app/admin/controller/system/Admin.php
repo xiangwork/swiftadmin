@@ -67,7 +67,7 @@ class Admin extends AdminController
             }
 
             if (!empty($post['dep'])) {
-                $where[] = ['dep_id', 'find in set', $post['dep']];
+                $where[] = ['department_id', 'find in set', $post['dep']];
             }
 
             if (!empty($post['group_id'])) {
@@ -137,7 +137,7 @@ class Admin extends AdminController
             $post['createip'] = request()->ip();
             $data = $this->model->create($post);
             if (!is_empty($data->id)) {
-                $access['uid'] = $data->id;
+                $access['admin_id'] = $data->id;
                 $access['group_id'] = $data->group_id;
                 AdminAccessModel::insert($access);
                 return $this->success('添加管理员成功！');
@@ -177,7 +177,7 @@ class Admin extends AdminController
 
                 if ($this->model->update($post)) {
                     $access['group_id'] = $post['group_id'];
-                    AdminAccessModel::where('uid', $id)->update($access);
+                    AdminAccessModel::where('admin_id', $id)->update($access);
                     return $this->success('更新管理员成功！');
                 } else {
                     return $this->error('更新管理员失败');
@@ -215,12 +215,12 @@ class Admin extends AdminController
     {
         if (request()->isPost()) {
 
-            $uid  = input('uid/d');
+            $admin_id  = input('admin_id/d');
             $rules = input($type) ?? [];
 
-            if (!empty($uid) && $uid > 0) {
+            if (!empty($admin_id) && $admin_id > 0) {
 
-                $access = $this->auth->getAuthNodes($uid, $type);
+                $access = $this->auth->getAuthNodes($admin_id, $type);
                 $rules  = array_diff($rules, $access[$this->auth->authGroup]);
 
                 // 权限验证
@@ -242,7 +242,7 @@ class Admin extends AdminController
                     "$type" => implode(',', $rules)
                 ];
 
-                if ($this->model->where('uid', $uid)->save($data)) {
+                if ($this->model->where('admin_id', $admin_id)->save($data)) {
                     return $this->success('更新权限成功！');
                 }
 
@@ -492,7 +492,7 @@ class Admin extends AdminController
             // 删除用户
             if ($this->model->destroy($id)) {
                 $arr = implode(',', $id);
-                $where[] = ['uid', 'in', $arr];
+                $where[] = ['admin_id', 'in', $arr];
                 AdminAccessModel::where($where)->delete();
                 return $this->success('删除管理员成功！');
             }
