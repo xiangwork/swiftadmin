@@ -5,13 +5,13 @@
  Source Server Type    : MySQL
  Source Server Version : 50726
  Source Host           : localhost:3306
- Source Schema         : swiftadmin
+ Source Schema         : sademo
 
  Target Server Type    : MySQL
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 09/12/2021 20:43:57
+ Date: 14/12/2021 20:02:53
 */
 
 SET NAMES utf8mb4;
@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `sa_admin`;
 CREATE TABLE `sa_admin`  (
   `id` mediumint(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `group_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '分组id',
-  `dep_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '部门id',
+  `department_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '部门id',
   `jobs_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '岗位id',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '帐号',
   `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户昵称',
@@ -56,7 +56,7 @@ CREATE TABLE `sa_admin`  (
 -- ----------------------------
 -- Records of sa_admin
 -- ----------------------------
-INSERT INTO `sa_admin` VALUES (1, '1', '2', '3', 'admin', '权栈', 'cdb0b337723eb2317a78c60d36093def05c8ba74b27d193f54613d69489b9d73', 1, 'a:3:{i:0;s:21:\"家有傻猫两三只\";i:1;s:15:\"隔壁帅小伙\";i:2;s:9:\"技术宅\";}', '/upload/avatar/f8e34ec67a2a0233_100x100.jpg', '海阔天空，有容乃大', 'admin@swiftadmin.net', '0310', '15188888888', '高级管理人员', 160, '河北省邯郸市', 2130706433, 1639039603, 3232254977, 1, NULL, 1596682835, 1639039603, NULL);
+INSERT INTO `sa_admin` VALUES (1, '1', '2', '3', 'admin', '权栈', 'cdb0b337723eb2317a78c60d36093def05c8ba74b27d193f54613d69489b9d73', 1, 'a:3:{i:0;s:21:\"家有傻猫两三只\";i:1;s:15:\"隔壁帅小伙\";i:2;s:9:\"技术宅\";}', '/upload/avatar/f8e34ec67a2a0233_100x100.jpg', '海阔天空，有容乃大', 'admin@swiftadmin.net', '0310', '15188888888', '高级管理人员', 166, '河北省邯郸市', 2130706433, 1639474503, 3232254977, 1, NULL, 1596682835, 1639474503, NULL);
 INSERT INTO `sa_admin` VALUES (2, '2', '1', '5,6', 'ceshi', '白眉大侠', 'cdb0b337723eb2317a78c60d36093def05c8ba74b27d193f54613d69489b9d73', 1, 'a:3:{i:0;s:6:\"呵呵\";i:1;s:5:\"Think\";i:2;s:12:\"铁血柔肠\";}', '/upload/avatar/a0b923820dcc509a_100x100.png', '吃我一招乾坤大挪移', 'baimei@your.com', '0310', '15188888888', '刀是什么刀，菜刀~来一记webshell~', 32, '河北省邯郸市廉颇大道110号指挥中心', 2130706433, 1637133087, 3232254977, 1, '违规', 1609836672, 1637133087, NULL);
 
 -- ----------------------------
@@ -64,20 +64,20 @@ INSERT INTO `sa_admin` VALUES (2, '2', '1', '5,6', 'ceshi', '白眉大侠', 'cdb
 -- ----------------------------
 DROP TABLE IF EXISTS `sa_admin_access`;
 CREATE TABLE `sa_admin_access`  (
-  `uid` mediumint(8) UNSIGNED NOT NULL COMMENT '用户ID',
+  `admin_id` mediumint(8) UNSIGNED NOT NULL COMMENT '用户ID',
   `group_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '管理员分组',
   `rules` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '自定义权限',
   `cates` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目权限',
-  PRIMARY KEY (`uid`) USING BTREE,
-  INDEX `uid`(`uid`) USING BTREE,
+  PRIMARY KEY (`admin_id`) USING BTREE,
+  INDEX `uid`(`admin_id`) USING BTREE,
   INDEX `group_id`(`group_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '组规则表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '组规则表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_admin_access
 -- ----------------------------
 INSERT INTO `sa_admin_access` VALUES (1, '1', NULL, NULL);
-INSERT INTO `sa_admin_access` VALUES (2, '2', NULL, NULL);
+INSERT INTO `sa_admin_access` VALUES (2, '2', '115,116,117,118,119,120,121', NULL);
 
 -- ----------------------------
 -- Table structure for sa_admin_group
@@ -98,7 +98,7 @@ CREATE TABLE `sa_admin_group`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户组表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户组表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_admin_group
@@ -130,7 +130,7 @@ CREATE TABLE `sa_admin_rules`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
   INDEX `sort`(`sort`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 246 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 246 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单权限表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_admin_rules
@@ -398,7 +398,7 @@ CREATE TABLE `sa_adwords`  (
   `createtime` int(11) NOT NULL COMMENT '添加时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '广告管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '广告管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_adwords
@@ -428,7 +428,7 @@ CREATE TABLE `sa_api`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'API接口信息' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'API接口信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_api
@@ -443,7 +443,7 @@ INSERT INTO `sa_api` VALUES (3, 1, 0, '', 'index/nodes', 'tc4fdkaghq', 1, 1, 1, 
 DROP TABLE IF EXISTS `sa_api_access`;
 CREATE TABLE `sa_api_access`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `uid` int(11) NOT NULL COMMENT '用户id',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
   `api_id` int(11) NOT NULL COMMENT '接口id',
   `day` int(11) NULL DEFAULT NULL COMMENT '每日调用次数',
   `qps` int(11) NULL DEFAULT NULL COMMENT 'QPS',
@@ -454,7 +454,7 @@ CREATE TABLE `sa_api_access`  (
   `contents` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '规则备注',
   `createtime` int(11) NULL DEFAULT NULL COMMENT '规则创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api权限规则表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api权限规则表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_api_access
@@ -474,7 +474,7 @@ CREATE TABLE `sa_api_condition`  (
   `seconds` int(11) NULL DEFAULT NULL COMMENT '秒间隔',
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`hash`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api访问控制表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api访问控制表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_api_condition
@@ -495,7 +495,7 @@ CREATE TABLE `sa_api_group`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api请求参数表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api请求参数表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_api_group
@@ -521,7 +521,7 @@ CREATE TABLE `sa_api_params`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api请求参数表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api请求参数表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_api_params
@@ -544,7 +544,7 @@ CREATE TABLE `sa_api_restful`  (
   `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '返回参数说明',
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api返回参数表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api返回参数表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_api_restful
@@ -587,7 +587,7 @@ CREATE TABLE `sa_category`  (
   INDEX `alias`(`alias`) USING BTREE,
   INDEX `access`(`access`) USING BTREE,
   INDEX `pinyin`(`pinyin`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '栏目管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '栏目管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_category
@@ -608,7 +608,7 @@ CREATE TABLE `sa_channel`  (
   `createtime` int(11) NOT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据模型表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据模型表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_channel
@@ -637,7 +637,7 @@ CREATE TABLE `sa_collect`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据采集接口' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据采集接口' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_collect
@@ -655,7 +655,7 @@ CREATE TABLE `sa_comment`  (
   `sid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '对象ID 内容ID',
   `rid` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '被回复的用户ID',
   `pid` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '父级ID',
-  `uid` mediumint(9) NULL DEFAULT 0 COMMENT '用户UID',
+  `user_id` mediumint(9) NULL DEFAULT 0 COMMENT '用户UID',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '评论内容',
   `up` mediumint(9) NULL DEFAULT 0 COMMENT '顶一下',
   `down` mediumint(9) NULL DEFAULT 0 COMMENT '踩一下',
@@ -672,9 +672,9 @@ CREATE TABLE `sa_comment`  (
   INDEX `pid`(`pid`) USING BTREE,
   INDEX `cid`(`cid`) USING BTREE,
   INDEX `rid`(`rid`) USING BTREE,
-  INDEX `uid`(`uid`) USING BTREE,
+  INDEX `uid`(`user_id`) USING BTREE,
   INDEX `sid`(`sid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户评论表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户评论表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_comment
@@ -699,7 +699,7 @@ CREATE TABLE `sa_company`  (
   `latitude` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '地图纬度',
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '公司信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '公司信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_company
@@ -753,7 +753,7 @@ CREATE TABLE `sa_content`  (
   INDEX `createtime`(`createtime`) USING BTREE,
   INDEX `updatetime`(`updatetime`) USING BTREE,
   INDEX `title`(`title`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章模型数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章模型数据表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_content
@@ -773,7 +773,7 @@ CREATE TABLE `sa_content_article`  (
   `createtime` int(11) NULL DEFAULT 0 COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `content_id`(`content_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章模型数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章模型数据表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_content_article
@@ -794,7 +794,7 @@ CREATE TABLE `sa_content_images`  (
   `createtime` int(11) NULL DEFAULT 0 COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `content_id`(`content_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '图片模型数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '图片模型数据表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_content_images
@@ -820,7 +820,7 @@ CREATE TABLE `sa_content_product`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
   INDEX `pid`(`content_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '产品模型数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '产品模型数据表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_content_product
@@ -852,7 +852,7 @@ CREATE TABLE `sa_content_soft`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
   INDEX `pid`(`content_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '下载模型数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '下载模型数据表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_content_soft
@@ -893,7 +893,7 @@ CREATE TABLE `sa_content_video`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `cid`(`content_id`) USING BTREE,
   INDEX `createtime`(`createtime`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_content_video
@@ -917,7 +917,7 @@ CREATE TABLE `sa_department`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '添加时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '部门管理表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '部门管理表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_department
@@ -948,7 +948,7 @@ CREATE TABLE `sa_dictionary`  (
   INDEX `pid`(`pid`) USING BTREE,
   INDEX `name`(`name`) USING BTREE,
   INDEX `value`(`value`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典数据表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_dictionary
@@ -975,14 +975,14 @@ CREATE TABLE `sa_friendlink`  (
   `title` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '友链名称',
   `desc` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '友链简介',
   `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '友链logo',
-  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '友链地址',
+  `url` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '友链地址',
   `type` int(11) NULL DEFAULT 0 COMMENT '友链类型',
   `sort` tinyint(4) NULL DEFAULT NULL COMMENT '排序ID',
   `status` tinyint(1) NULL DEFAULT 1 COMMENT '友链状态',
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '友情链接表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '友情链接表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_friendlink
@@ -1006,7 +1006,7 @@ CREATE TABLE `sa_fulltext`  (
   `field` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '字段内容',
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_fulltext
@@ -1019,7 +1019,7 @@ DROP TABLE IF EXISTS `sa_guestbook`;
 CREATE TABLE `sa_guestbook`  (
   `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `cid` mediumint(9) NULL DEFAULT 0 COMMENT '分类ID',
-  `uid` mediumint(9) NULL DEFAULT 0 COMMENT '用户UID',
+  `user_id` mediumint(9) NULL DEFAULT 0 COMMENT '用户UID',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '游客' COMMENT '姓名 默认游客',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '内容',
   `reply` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '回复',
@@ -1030,9 +1030,9 @@ CREATE TABLE `sa_guestbook`  (
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
-  INDEX `uid`(`uid`) USING BTREE,
+  INDEX `uid`(`user_id`) USING BTREE,
   INDEX `cid`(`cid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户留言表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户留言表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_guestbook
@@ -1053,7 +1053,7 @@ CREATE TABLE `sa_jobs`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '岗位管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '岗位管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_jobs
@@ -1079,7 +1079,7 @@ CREATE TABLE `sa_navmenu`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '添加时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '导航表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '导航表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_navmenu
@@ -1103,7 +1103,7 @@ CREATE TABLE `sa_pluginhook`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '插件钩子管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '插件钩子管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_pluginhook
@@ -1129,7 +1129,7 @@ CREATE TABLE `sa_project`  (
   `createtime` int(11) NULL DEFAULT NULL,
   `delete_time` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'APP项目表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'APP项目表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_project
@@ -1157,7 +1157,7 @@ CREATE TABLE `sa_systemlog`  (
   `status` int(11) NULL DEFAULT 1 COMMENT '执行状态',
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统日志表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统日志表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_systemlog
@@ -1180,7 +1180,7 @@ CREATE TABLE `sa_tags`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
   INDEX `type`(`type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'SEO关键词库' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'SEO关键词库' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_tags
@@ -1192,14 +1192,14 @@ CREATE TABLE `sa_tags`  (
 DROP TABLE IF EXISTS `sa_tags_mapping`;
 CREATE TABLE `sa_tags_mapping`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `tid` int(11) NULL DEFAULT NULL COMMENT '关键词id',
-  `cid` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '内容id',
-  `oid` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '其他选项',
+  `tag_id` int(11) NULL DEFAULT NULL COMMENT '关键词id',
+  `content_id` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '内容id',
+  `other_id` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '其他选项',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
-  INDEX `cid`(`cid`) USING BTREE,
-  INDEX `tid`(`tid`) USING BTREE,
-  INDEX `oid`(`oid`) USING BTREE
+  INDEX `cid`(`content_id`) USING BTREE,
+  INDEX `tid`(`tag_id`) USING BTREE,
+  INDEX `oid`(`other_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '关键词映射表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1246,7 +1246,7 @@ CREATE TABLE `sa_user`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
   INDEX `group_id`(`group_id`, `status`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '会员管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '会员管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_user
@@ -1265,7 +1265,7 @@ CREATE TABLE `sa_user_group`  (
   `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '会员组说明',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '会员组管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '会员组管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_user_group
@@ -1288,7 +1288,7 @@ CREATE TABLE `sa_user_invitecode`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户邀请码表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户邀请码表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_user_invitecode
@@ -1315,7 +1315,7 @@ CREATE TABLE `sa_user_third`  (
   `expiretime` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '过期时间',
   PRIMARY KEY (`id`, `user_id`) USING BTREE,
   INDEX `user_id`(`user_id`, `type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '第三方登录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '第三方登录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_user_third
@@ -1335,7 +1335,7 @@ CREATE TABLE `sa_user_validate`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户验证码表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户验证码表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sa_user_validate
