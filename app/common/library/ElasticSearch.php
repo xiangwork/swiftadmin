@@ -288,17 +288,17 @@ class ElasticSearch
      */
     public function create(array $data = [])
     {
-        if (!empty($data) && is_array($data) && $this->_status) {
+
+        if (!empty($data) && $this->_status) {
 
             $data = array_intersect_key($data,$this->_app_field);
             $data = $this->htmlDeleteXml($data);
-
             $params = [
                 'index' => $this->_index,
                 'id' => $data['id'], 
                 'body' => $data,
             ];
-
+            
             try {
                 $response = $this->_client->index($params);
             } catch (\Throwable $th) {

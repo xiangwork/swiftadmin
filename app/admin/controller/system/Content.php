@@ -126,10 +126,9 @@ class Content extends AdminController
                 if ($this->autoPostValidate($post,get_class($this->model))) {
                     return $this->error($this->errorMsg);
                 }
-                
+
                 $data = $this->model->together([$this->table=>$post])->save($post);
-                TagsMapping::writeMapID((int)$data['id'],$post['seo_keywords']);
-                
+
             } catch (\Throwable $th) {
                 return $this->error($th->getMessage());
             }
@@ -155,11 +154,7 @@ class Content extends AdminController
         $id = request()->param('id');
         $pid = request()->param('pid');
 
-        $data = $this->model
-                    ->with($this->table)
-                    ->where(['id'=>$id,'pid'=>$pid])
-                    ->find();
-        
+        $data = $this->model->with($this->table)->where(['id'=>$id,'pid'=>$pid])->find();
         if (request()->isPost()) {
             
             try {

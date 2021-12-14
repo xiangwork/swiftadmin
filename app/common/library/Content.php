@@ -10,6 +10,7 @@ declare (strict_types = 1);
 // | Author: 权栈 <coolsec@foxmail.com> Apache 2.0 License Code
 // +----------------------------------------------------------------------
 namespace app\common\library;
+
 use WordAnalysis\Analysis;
 /**
  * 全局模型数据处理类

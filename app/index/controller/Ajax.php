@@ -11,6 +11,8 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 
 namespace app\index\controller;
+
+use app\common\model\system\Tags;
 use app\HomeController;
 
 /**
@@ -19,4 +21,19 @@ use app\HomeController;
  */
 class Ajax extends HomeController
 {
+    /**
+     * 标签调用
+     *
+     * @return void
+     */
+    public function getTags() {	
+		
+        if (request()->isAjax()) {
+            $tag = input('tag');
+            if (!empty($tag)) {
+                $list = Tags::field('name')->where([['name','like','%'.$tag.'%']])->limit(10)->select()->toArray();
+                return $this->success('获取成功',null,$list,count($list));
+            }
+        }
+    }
 }

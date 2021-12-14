@@ -133,6 +133,10 @@ class Content extends Model
      */
     public static function onAfterInsert($data)
     {
+        if (isset($data['seo_keywords']) && $data['seo_keywords']) {
+            TagsMapping::writeMapID((int)$data['id'],$data['seo_keywords']);
+        }
+        
         return ContentLibrary::onAfterInsert($data->toArray(), 'content');
     }
 
