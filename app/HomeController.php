@@ -7,7 +7,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin.NET High Speed Development Framework
 // +----------------------------------------------------------------------
-// | Author: 权栈 <coolsec@foxmail.com> MIT License Code
+// | Author: 权栈 <coolsec@foxmail.com> Apache 2.0 License Code
 // +----------------------------------------------------------------------
 namespace app;
 
