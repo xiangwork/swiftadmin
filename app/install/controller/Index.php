@@ -240,37 +240,32 @@ class Index extends BaseController
 
         if (request()->isAjax()) {
             try {
+            
+                $mysqlInfo = Cache::get('mysqlInfo');
+                $env = app_path().'install.env';
+                $parse = parse_ini_file($env,true);
+                $parse['DATABASE']['HOSTNAME'] = $mysqlInfo['hostname'];
+                $parse['DATABASE']['HOSTPORT'] = $mysqlInfo['hostport'];
+                $parse['DATABASE']['DATABASE'] = $mysqlInfo['database'];
+                $parse['DATABASE']['USERNAME'] = $mysqlInfo['username'];
+                $parse['DATABASE']['PASSWORD'] = $mysqlInfo['password'];
+                $parse['DATABASE']['PREFIX'] = $mysqlInfo['prefix'];
+
+                $parseInfo = parse_array_ini($parse);   
+                write_file(root_path().'.env',$parseInfo);
+                write_file(root_path().'extend/conf/install.lock',true); 
+
+                // 复制入口文件
+                copy('../extend/conf/index.tpl',public_path().'index.php');
                 
-                $progress = Cache::get('progress');
-                $progress = (int)str_replace('%','',$progress);
-                if (is_numeric($progress) && $progress == 100) {
+                // 随机后台文件
+                $loginName = input('loginfile/s') ?? 'admin.php';
+                copy('../extend/conf/admin.tpl',public_path().$loginName);
 
-                    $mysqlInfo = Cache::get('mysqlInfo');
-                    $env = app_path().'install.env';
-                    $parse = parse_ini_file($env,true);
-                    $parse['DATABASE']['HOSTNAME'] = $mysqlInfo['hostname'];
-                    $parse['DATABASE']['HOSTPORT'] = $mysqlInfo['hostport'];
-                    $parse['DATABASE']['DATABASE'] = $mysqlInfo['database'];
-                    $parse['DATABASE']['USERNAME'] = $mysqlInfo['username'];
-                    $parse['DATABASE']['PASSWORD'] = $mysqlInfo['password'];
-                    $parse['DATABASE']['PREFIX'] = $mysqlInfo['prefix'];
-
-                    $parseInfo = parse_array_ini($parse);   
-                    write_file(root_path().'.env',$parseInfo);
-                    write_file(root_path().'extend/conf/install.lock',true); 
-
-                    // 复制入口文件
-                    copy('../extend/conf/index.tpl',public_path().'index.php');
-                    
-                    // 随机后台文件
-                    $loginName = input('loginfile/s') ?? 'admin.php';
-                    copy('../extend/conf/admin.tpl',public_path().$loginName);
-
-                    // 清理安装包
-                    Cache::clear();
-                    unlink(public_path().'install.php');
-                    recursiveDelete(app_path());
-                }
+                // 清理安装包
+                Cache::clear();
+                unlink(public_path().'install.php');
+                recursiveDelete(app_path());
             }
             catch (\Throwable $th) {
                 return $this->error($th->getMessage());
