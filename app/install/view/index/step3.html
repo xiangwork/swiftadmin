@@ -151,7 +151,7 @@
 						admin.html('后台地址：https://'+ location.host +'/'+loginfile);
 						jquery('.layui-btn-admin').attr('href','/'+loginfile);
 						jquery('.layui-complete').show();
-						jquery.get('/install.php/index/clear/loginfile/'+loginfile,{},function(res){});
+						jquery.get('/install.php/index/clear?loginfile='+loginfile,{},function(res){});
 						layer.msg(res.msg);
 					}
 					else {
