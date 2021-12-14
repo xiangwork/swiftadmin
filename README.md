@@ -11,7 +11,7 @@
 	<a href="https://www.swiftadmin.net/help/"  target="_blank">在线使用手册</a>
 </p>
 <p align="center">
-<font size="20" >开源不易，求送颗星星，谢谢！</font>
+<font size="20" >开源不易，右上角请点击stars，感恩！</font>
 </p>
 
 <b>后台演示 <a href="http://demo.swiftadmin.net/admin.php"  target="_blank">http://demo.swiftadmin.net/admin.php</a> </b><br/>
@@ -19,7 +19,7 @@
 <b>测试账号  ceshi admin888 </b>如正式运营环境请删除测试账号;<br/>
 > 请注意，框架安装成功后会自动删除安装脚本文件！！！如权限问题未删除，请手动删除！<br/>
 
-<b>开发环境：Windows服务器版 VScode Apache MySQL5.7 PHP7 - PHP8</b><br/>
+<b>开发环境：Windows服务器版 VScode Apache MySQL5.7 PHP >= 7.4 支持PHP8</b><br/>
 
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-Apache-blue.svg" alt="swiftadmin"></a>
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/ThinkPHP-6.0.8-brightgreen.svg" alt="thinkphp"></a>
