@@ -671,6 +671,9 @@ a {
     display: none;
 }
 
+.layui-nav-tree .layui-nav-item>a .layui-nav-more {
+    padding: 0;
+}
 
 /*// 多系统菜单样式结束*/
 .swiftadmin-drop-in {
