@@ -122,7 +122,6 @@ class AdminController extends BaseController
     // 后台应用全局初始化
     protected function initialize()
     {
-		
 		self::sysField();
 		$this->admin = Session::get($this->sename);
 		if (!isset($this->admin['id'])) {

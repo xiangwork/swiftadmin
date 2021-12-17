@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 14/12/2021 20:02:53
+ Date: 17/12/2021 10:13:25
 */
 
 SET NAMES utf8mb4;
@@ -56,8 +56,8 @@ CREATE TABLE `sa_admin`  (
 -- ----------------------------
 -- Records of sa_admin
 -- ----------------------------
-INSERT INTO `sa_admin` VALUES (1, '1', '2', '3', 'admin', '权栈', 'cdb0b337723eb2317a78c60d36093def05c8ba74b27d193f54613d69489b9d73', 1, 'a:3:{i:0;s:21:\"家有傻猫两三只\";i:1;s:15:\"隔壁帅小伙\";i:2;s:9:\"技术宅\";}', '/upload/avatar/f8e34ec67a2a0233_100x100.jpg', '海阔天空，有容乃大', 'admin@swiftadmin.net', '0310', '15188888888', '高级管理人员', 166, '河北省邯郸市', 2130706433, 1639474503, 3232254977, 1, NULL, 1596682835, 1639474503, NULL);
-INSERT INTO `sa_admin` VALUES (2, '2', '1', '5,6', 'ceshi', '白眉大侠', 'cdb0b337723eb2317a78c60d36093def05c8ba74b27d193f54613d69489b9d73', 1, 'a:3:{i:0;s:6:\"呵呵\";i:1;s:5:\"Think\";i:2;s:12:\"铁血柔肠\";}', '/upload/avatar/a0b923820dcc509a_100x100.png', '吃我一招乾坤大挪移', 'baimei@your.com', '0310', '15188888888', '刀是什么刀，菜刀~来一记webshell~', 32, '河北省邯郸市廉颇大道110号指挥中心', 2130706433, 1637133087, 3232254977, 1, '违规', 1609836672, 1637133087, NULL);
+INSERT INTO `sa_admin` VALUES (1, '1', '2', '3', 'admin', '权栈', 'cdb0b337723eb2317a78c60d36093def05c8ba74b27d193f54613d69489b9d73', 1, 'a:3:{i:0;s:21:\"家有傻猫两三只\";i:1;s:15:\"隔壁帅小伙\";i:2;s:9:\"技术宅\";}', '/upload/avatar/f8e34ec67a2a0233_100x100.jpg', '海阔天空，有容乃大', 'admin@swiftadmin.net', '0310', '15188888888', '高级管理人员', 169, '河北省邯郸市', 2130706433, 1639707016, 3232254977, 1, NULL, 1596682835, 1639707016, NULL);
+INSERT INTO `sa_admin` VALUES (2, '2', '4', '5,6', 'ceshi', '白眉大侠', 'cdb0b337723eb2317a78c60d36093def05c8ba74b27d193f54613d69489b9d73', 1, 'a:3:{i:0;s:6:\"呵呵\";i:1;s:5:\"Think\";i:2;s:12:\"铁血柔肠\";}', '/upload/avatar/a0b923820dcc509a_100x100.png', '吃我一招乾坤大挪移', 'baimei@your.com', '0310', '15188888888', '刀是什么刀，菜刀~来一记webshell~', 36, '河北省邯郸市廉颇大道110号指挥中心', 2130706433, 1639706563, 3232254977, 1, '违规', 1609836672, 1639706563, NULL);
 
 -- ----------------------------
 -- Table structure for sa_admin_access
@@ -77,7 +77,7 @@ CREATE TABLE `sa_admin_access`  (
 -- Records of sa_admin_access
 -- ----------------------------
 INSERT INTO `sa_admin_access` VALUES (1, '1', NULL, NULL);
-INSERT INTO `sa_admin_access` VALUES (2, '2', '115,116,117,118,119,120,121', NULL);
+INSERT INTO `sa_admin_access` VALUES (2, '2', '85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121', NULL);
 
 -- ----------------------------
 -- Table structure for sa_admin_group
@@ -171,7 +171,7 @@ INSERT INTO `sa_admin_rules` VALUES (33, 32, '修改配置', '/index/baseset', '
 INSERT INTO `sa_admin_rules` VALUES (34, 32, 'FTP接口', '/index/testftp', 'index:testftp', 2, NULL, '', 33, '', 0, 'normal', 0, 1621989903, 1621989903, NULL);
 INSERT INTO `sa_admin_rules` VALUES (35, 32, '邮件接口', '/index/testemail', 'index:testemail', 2, NULL, '', 34, '', 0, 'normal', 0, 1621989903, 1621989903, NULL);
 INSERT INTO `sa_admin_rules` VALUES (36, 32, '缓存接口', '/index/testcache', 'index:testcache', 2, NULL, '', 35, '', 0, 'normal', 0, 1621989903, 1621989903, NULL);
-INSERT INTO `sa_admin_rules` VALUES (37, 31, '用户管理', '/system.admin/index', 'system.admin:index', 0, NULL, '', 36, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
+INSERT INTO `sa_admin_rules` VALUES (37, 31, '用户管理', '/system.admin/index', 'system.admin:index', 0, NULL, '', 36, '', 1, 'normal', 0, 1639484140, 1621989903, NULL);
 INSERT INTO `sa_admin_rules` VALUES (38, 37, '查看', '/system.admin/index', 'system.admin:index', 1, NULL, '', 37, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
 INSERT INTO `sa_admin_rules` VALUES (39, 37, '添加', '/system.admin/add', 'system.admin:add', 1, NULL, '', 38, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
 INSERT INTO `sa_admin_rules` VALUES (40, 37, '编辑', '/system.admin/edit', 'system.admin:edit', 1, NULL, '', 39, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
@@ -186,7 +186,7 @@ INSERT INTO `sa_admin_rules` VALUES (48, 37, '修改资料', '/system.admin/modi
 INSERT INTO `sa_admin_rules` VALUES (49, 37, '修改密码', '/system.admin/pwd', 'system.admin:pwd', 2, NULL, '', 48, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
 INSERT INTO `sa_admin_rules` VALUES (50, 37, '系统语言', '/system.admin/language', 'system.admin:language', 2, NULL, '', 49, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
 INSERT INTO `sa_admin_rules` VALUES (51, 37, '清理缓存', '/system.admin/clear', 'system.admin:clear', 2, NULL, '', 50, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
-INSERT INTO `sa_admin_rules` VALUES (52, 37, '数据接口', '/system.admin/_get_auth_func', 'system.admin:_get_auth_func', 3, NULL, '', 51, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (52, 37, '数据接口', '/system.admin/authorizeinterface', 'system.admin:authorizeinterface', 3, NULL, '', 51, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
 INSERT INTO `sa_admin_rules` VALUES (53, 31, '用户中心', '/system.admin/center', 'system.admin:center', 0, NULL, '', 52, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
 INSERT INTO `sa_admin_rules` VALUES (54, 53, '查看', '/system.admin/index', 'system.admin:index', 1, NULL, '', 53, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
 INSERT INTO `sa_admin_rules` VALUES (55, 53, '添加', '/system.admin/add', 'system.admin:add', 1, NULL, '', 54, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
@@ -202,7 +202,7 @@ INSERT INTO `sa_admin_rules` VALUES (64, 53, '修改资料', '/system.admin/modi
 INSERT INTO `sa_admin_rules` VALUES (65, 53, '修改密码', '/system.admin/pwd', 'system.admin:pwd', 2, NULL, '', 64, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
 INSERT INTO `sa_admin_rules` VALUES (66, 53, '系统语言', '/system.admin/language', 'system.admin:language', 2, NULL, '', 65, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
 INSERT INTO `sa_admin_rules` VALUES (67, 53, '清理缓存', '/system.admin/clear', 'system.admin:clear', 2, NULL, '', 66, '', 0, 'normal', 0, 1621989904, 1621989904, NULL);
-INSERT INTO `sa_admin_rules` VALUES (68, 53, '数据接口', '/system.admin/_get_auth_func', 'system.admin:_get_auth_func', 3, NULL, '', 67, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
+INSERT INTO `sa_admin_rules` VALUES (68, 53, '数据接口', '/system.admin/authorizeinterface', 'system.admin:authorizeinterface', 3, NULL, '', 67, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
 INSERT INTO `sa_admin_rules` VALUES (69, 31, '角色管理', '/system.admingroup/index', 'system.admingroup:index', 0, NULL, '', 68, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
 INSERT INTO `sa_admin_rules` VALUES (70, 69, '查看', '/system.admingroup/index', 'system.admingroup:index', 1, NULL, '', 69, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
 INSERT INTO `sa_admin_rules` VALUES (71, 69, '添加', '/system.admingroup/add', 'system.admingroup:add', 1, NULL, '', 70, '', 1, 'normal', 0, 1621989904, 1621989904, NULL);
