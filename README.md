@@ -14,6 +14,8 @@
 <font size="20" >开源不易，右上角请点击stars，感恩！</font>
 </p>
 
+<p>QQ群68221484 加满闭群</p>
+
 <b>后台演示 <a href="http://demo.swiftadmin.net/admin.php"  target="_blank">http://demo.swiftadmin.net/admin.php</a> </b><br/>
 <b>管理账号  admin admin888 </b><br/>
 <b>测试账号  ceshi admin888 </b>如正式运营环境请删除测试账号;<br/>
