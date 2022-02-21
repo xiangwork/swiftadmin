@@ -1,5 +1,5 @@
 ## 腾讯云新春大礼包 推荐  **轻量云 4核8G ** 
-[![输入图片说明](1200x90.jpg)](https://curl.qcloud.com/egOjhJ66)
+[![输入图片说明](public/static/images/1200x90.jpg)](https://curl.qcloud.com/egOjhJ66)
 
 ## 新版一键CURD正在编写中，拖拽设计表单，一键代码生成，支持多种关联模式
 ## 并且admin.js会重构，代码全部重写，并且支持多种布局操作【左侧双栏等】。先上图赏析下！
