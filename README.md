@@ -1,3 +1,9 @@
+# layui的表单设计器也已经开源了
+
+https://gitee.com/meystack/layui-form-design
+
+# 欢迎Fork仓库
+
 ## 腾讯云新春大礼包 推荐  **轻量云 4核8G ** 
 [![输入图片说明](public/static/images/1200x90.jpg)](https://curl.qcloud.com/egOjhJ66)
 
