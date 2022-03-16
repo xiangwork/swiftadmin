@@ -55,7 +55,9 @@ swiftadmin极速后台开发框架采用PHP+MYSQL的基础架构，秉承着代�
 
 我们的建议是：在默认情况下，用户是用不到这些数据的，这些数据的接口基本上就是搜索、添加，编辑的时候使用
 你可以在这个基础上增加函数的过滤，这样来说，至少安全会更好一些；
+
 ```
+
 
 ## 🔥 集成功能
 
@@ -106,6 +108,30 @@ git clone https://gitee.com/meystack/swiftadmin.git
 ```
 http://www.swiftadmin.net/ # 把该域名换成你的域名
 ```
+
+
+## ⁉️ 常见问题
+
+在安装的过程中你可能会出现以下问题
+> php7.3 安装问题 ; 
+
+```
+Warning: require(/vendor/composer/../symfony/polyfill-intl-normalizer/bootstrap.php): failed to open stream: No such file or directory in /vendor/composer/autoload_real.php on line 78
+
+Fatal error: require(): Failed opening required '/vendor/composer/../symfony/polyfill-intl-normalizer/bootstrap.php' (include_path='.:/www/server/php/73/lib/php') in /vendor/composer/autoload_real.php on line 78
+
+Fatal error: Uncaught Error: Failed opening required '/vendor/composer/../symfony/polyfill-intl-normalizer/bootstrap.php' (include_path='.:') in /vendor/composer/autoload_real.php:78 Stack trace: #0 /vendor/composer/autoload_real.php(61): composerRequire437c84fd425ce20384726a1e89d87a70() #1 /vendor/autoload.php(7): ComposerAutoloaderInit437c84fd425ce20384726a1e89d87a70::getLoader() #2 /public/index.php(21): require('...') #3 {main} thrown in /vendor/composer/autoload_real.php on line 78
+
+```
+
+> 解决方法
+
+```
+首先请确保你的runtime文件夹有写入权限，并且你需要在项目的根目录去执行composer update更新下资源路径，否则会出现加载错误！！！
+
+如果你按照上述的指引仍没用解决部署的问题，请加QQ群反馈！！！
+```
+
 
 ## 📃 征集PR
 > 开源项目的发展，离不开您的支持、所以现征集以下PR
