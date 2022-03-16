@@ -243,17 +243,8 @@
         var jquery = layui.jquery;
         var admin = layui.admin;
         var content = layui.content;
-<<<<<<< HEAD
 		var groupList = {:htmlspecialchars_decode($UserGroup)};
 		var categoryList = {:htmlspecialchars_decode($categoryList)};
-=======
-        var tags = layui.tags;
-        var isTags = tags.render({
-            elem: '#seo_keywords',
-            url: '/ajax/getTags',
-            done: function(key,all) {}
-        });
->>>>>>> 6e9a81d4332519398910acab319c666f9dd029c8
 
         // 常规元素渲染
 		content.xmselect('pid',categoryList,[{$data.pid}],false);
