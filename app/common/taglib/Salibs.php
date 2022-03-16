@@ -15,6 +15,10 @@ namespace app\common\taglib;
 use think\facade\Db;
 use think\template\TagLib;
 
+/**
+ * 注意：定界符结尾必须靠墙立正
+ */
+
 class Salibs extends TagLib {
 	
 	/**
@@ -61,7 +65,7 @@ class Salibs extends TagLib {
 		$single = !empty($tags['single']) ? $tags['single'] :  '0';
 		$order  = !empty($tags['order'])  ? $tags['order']  :  'id asc';
 
-		$html = <<<Eof
+		$html = <<<EOD
 		<?php
 			\$where = [];
 			if (!empty('{$typeid}')) {
@@ -83,7 +87,7 @@ class Salibs extends TagLib {
 		?>
 		$content
 		<?php endforeach;?>
-		Eof;
+EOD;
 		return $html;
 	}
 
@@ -96,17 +100,17 @@ class Salibs extends TagLib {
      */
 	public function tagnavlist($tags,$content)
 	{
-		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
-		$id = $this->autoBuildVar($tags['id']);
+		$id = isset($tags['id']) ? $tags['id']: 'vo';
+		$id = $this->autoBuildVar($id);
 		
-		$html = <<<Eof
+		$html = <<<EOD
 		<?php
 			\$_NAV_LIST = \app\common\model\system\Navmenu::getListNav();
 			foreach (\$_NAV_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
-		Eof;
+EOD;
 
 		return $html;
 	}
@@ -120,17 +124,17 @@ class Salibs extends TagLib {
      */
 	public function tagArealist($tags,$content) 
 	{
-		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
+		$tags['id'] = isset($tags['id']) ? $tags['id']: 'vo';
 		$id = $this->autoBuildVar($tags['id']);
 		
-		$html = <<<Eof
+		$html = <<<EOD
 		<?php
 			\$_AREA_LIST = explode(',',saenv('play_area'));
 			foreach (\$_AREA_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
-		Eof;
+EOD;
 		return $html;	
 	}
 
@@ -143,17 +147,17 @@ class Salibs extends TagLib {
      */
 	public function tagYearlist($tags,$content) 
 	{
-		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
+		$tags['id'] = isset($tags['id']) ? $tags['id']: 'vo';
 		$id = $this->autoBuildVar($tags['id']);
 		
-		$html = <<<Eof
+		$html = <<<EOD
 		<?php
 			\$_YEAR_LIST = explode(',',saenv('play_year'));
 			foreach (\$_YEAR_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
-		Eof;
+EOD;
 		return $html;	
 	}
 
@@ -166,17 +170,17 @@ class Salibs extends TagLib {
      */
 	public function tagWeeklist($tags,$content) 
 	{
-		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
+		$tags['id'] = isset($tags['id']) ? $tags['id']: 'vo';
 		$id = $this->autoBuildVar($tags['id']);
 		
-		$html = <<<Eof
+		$html = <<<EOD
 		<?php
 			\$_WEEK_LIST = explode(',',saenv('play_week'));
 			foreach (\$_WEEK_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
-		Eof;
+EOD;
 		return $html;	
 	}
 
@@ -189,17 +193,17 @@ class Salibs extends TagLib {
      */
 	public function taglanguage($tags,$content) 
 	{
-		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
+		$tags['id'] = isset($tags['id']) ? $tags['id']: 'vo';
 		$id = $this->autoBuildVar($tags['id']);
 		
-		$html = <<<Eof
+		$html = <<<EOD
 		<?php
 			\$_LANG_LIST = explode(',',saenv('play_language'));
 			foreach (\$_LANG_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
-		Eof;
+EOD;
 		return $html;	
 	}
 
@@ -212,17 +216,17 @@ class Salibs extends TagLib {
      */
 	public function tagPlaylist($tags,$content) 
 	{
-		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
+		$tags['id'] = isset($tags['id']) ? $tags['id']: 'vo';
 		$id = $this->autoBuildVar($tags['id']);
 		
-		$html = <<<Eof
+		$html = <<<EOD
 		<?php
 			\$_PLAY_LIST = config('player');
 			foreach (\$_PLAY_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
-		Eof;
+EOD;
 		return $html;	
 	}
 
@@ -235,17 +239,17 @@ class Salibs extends TagLib {
      */
 	public function tagServerlist($tags,$content) 
 	{
-		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
+		$tags['id'] = isset($tags['id']) ? $tags['id']: 'vo';
 		$id = $this->autoBuildVar($tags['id']);
 		
-		$html = <<<Eof
+		$html = <<<EOD
 		<?php
 			\$_SERVER_LIST = config('Server');
 			foreach (\$_SERVER_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
-		Eof;
+EOD;
 		return $html;	
 	}
 
@@ -258,10 +262,10 @@ class Salibs extends TagLib {
      */
 	public function tagCustomtpl($tags,$content) 
 	{
-		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
+		$tags['id'] = isset($tags['id']) ? $tags['id']: 'vo';
 		$id = $this->autoBuildVar($tags['id']);
 
-		$html = <<<Eof
+		$html = <<<EOD
 		<?php
 			\$path = root_path().'app/index/view/custom/';
 			\$_TPL_LIST = glob(\$path.'*.html');
@@ -270,7 +274,7 @@ class Salibs extends TagLib {
 		?>
 		$content
 		<?php endforeach;?>
-		Eof;
+EOD;
 		return $html;	
 	}
 
@@ -283,16 +287,16 @@ class Salibs extends TagLib {
      */
 	public function tagChannel($tags, $content) {
 
-		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
+		$tags['id'] = isset($tags['id']) ? $tags['id']: 'vo';
 		$id = $this->autoBuildVar($tags['id']);
-		$html = <<<Eof
+		$html = <<<EOD
 		<?php
 			\$_CHANNEL_LIST = \app\common\model\system\Channel::select()->toArray();
 			foreach (\$_CHANNEL_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
-		Eof;
+EOD;
 		return $html;		
 	}
 
@@ -304,16 +308,16 @@ class Salibs extends TagLib {
      */
 	public function tagUsergroup($tags, $content) 
 	{
-		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
+		$tags['id'] = isset($tags['id']) ? $tags['id']: 'vo';
 		$id = $this->autoBuildVar($tags['id']);
-		$html = <<<Eof
+		$html = <<<EOD
 		<?php
 			\$_USER_LIST = \app\common\model\system\UserGroup::select()->toArray();
 			foreach (\$_USER_LIST as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
-		Eof;
+EOD;
 		return $html;
 	}
 
@@ -325,7 +329,7 @@ class Salibs extends TagLib {
      */
 	public function tagContent($tags, $content) {
 
-		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
+		$tags['id'] = isset($tags['id']) ? $tags['id']: 'vo';
 		$id = $this->autoBuildVar($tags['id']);
 
 		// 查询参数
@@ -362,14 +366,14 @@ class Salibs extends TagLib {
 			$tags['paging'] = '';
 		}
 
-		$html = <<<Eof
+		$html = <<<EOD
 		<?php
 			\$_CONTENT_LIST = mysql_content('{$queryParams}','{$tags['paging']}');
 			foreach (\$_CONTENT_LIST['data'] as \$key => {$id}):
 		?>
 		$content
 		<?php endforeach;?>
-		Eof;
+EOD;
 		return $html;
 
 	}
@@ -426,7 +430,7 @@ class Salibs extends TagLib {
 		$tags['id'] = $tags['id'] ?? 'vo';
 		$tags['id'] = $this->autoBuildVar($tags['id']);
 		$tags['type'] = isset($tags['type']) ? (!empty($tags['type']) ? $tags['type'] : 'null' ): 'null';
-		$html = <<<Eof
+		$html = <<<EOD
 		<?php
 			\$where = [];
 			if ('{$tags['type']}' != 'null') {
@@ -438,7 +442,7 @@ class Salibs extends TagLib {
 		?>
 		$content
 		<?php endforeach;?>
-		Eof;
+EOD;
 		return $html;
 	}
 
@@ -451,11 +455,11 @@ class Salibs extends TagLib {
 	 */	
 	public function tagDictionary($tags,$content) 
 	{
-		$tags['id'] = is_notempty($tags['id']) ?? 'vo';
+		$tags['id'] = isset($tags['id']) ? $tags['id']: 'vo';
 		$id = $this->autoBuildVar($tags['id']);
 		$value = isset($tags['value']) ? $tags['value'] : '';
 		
-		$html = <<<Eof
+		$html = <<<EOD
 		<?php
 			\$where = [];
 			if ('{$value}' !== '') {
@@ -469,7 +473,7 @@ class Salibs extends TagLib {
 		?>
 		$content
 		<?php endforeach;?>
-		Eof;
+EOD;
 		return $html;	
 	}
 

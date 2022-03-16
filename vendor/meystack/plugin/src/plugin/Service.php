@@ -706,10 +706,9 @@ class Service extends \think\Service
         // 检测冲突文件
         $list = self::getGlobalFiles($name, true);
         if ($list) {
-            write_file($name.'_err.log',var_exports($list));
+            // 发现冲突文件，抛出异常
             throw new \Exception(__("插件 %s 存在文件冲突",$name),-118);
         }
-
         return true;
     }
 

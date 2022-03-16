@@ -3,7 +3,7 @@
     "description": "this plug-in system for PHP",
     "homepage": "https://github.com/meystack/plugin",
     "license": "MIT",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "authors": [
         {
             "name": "meystack",
@@ -15,7 +15,7 @@
         "topthink/framework": "^6.0",
         "topthink/think-view": "^1.0",
         "topthink/think-helper": "^3.0.0",
-        "guzzlehttp/guzzle": "^7.3"
+        "guzzlehttp/guzzle": "^6.2"
     }
     ,"autoload": {
         "psr-4": {

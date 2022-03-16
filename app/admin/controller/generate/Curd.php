@@ -32,42 +32,42 @@ class Curd extends AdminController
      *
      * @var string
      */
-    public string $prefix = 'sa_';
+    public $prefix = 'sa_';
 
     /**
      * 获取菜单
      *
      * @var array
      */
-    public array  $menus = [];
+    public  $menus = [];
 
     /**
      * 关联表信息
      *
      * @var array
      */
-    public array  $relation = [];
+    public  $relation = [];
 
     /**
      * 函数体
      *
      * @var array
      */
-    public array  $methods = [];
+    public  $methods = [];
 
     /**
      * 模板路径
      *
      * @var string
      */
-    public string $templatePath = '';
+    public $templatePath = '';
 
     /**
      * 模板文件
      *
      * @var array
      */
-    public array  $templateFiles = [];
+    public  $templateFiles = [];
 
     /**
      * 添加时间字段

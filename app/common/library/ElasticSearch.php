@@ -60,14 +60,14 @@ class ElasticSearch
      *
      * @var array
      */
-    public array $_highlight_field = [];
+    public $_highlight_field = [];
 
     /**
      * 查询规则
      *
      * @var array
      */
-    public array $_where = [];
+    public $_where = [];
 
     /**
      * 查询参数
@@ -202,7 +202,7 @@ class ElasticSearch
      * @param array $login
      * @return void|array
      */
-    protected function parseHttpServer(mixed $hosts = null, array $login = [])
+    protected function parseHttpServer($hosts = null, $login = [])
     {
         if (!is_array($hosts)) {
             $hosts = explode(';', $hosts);

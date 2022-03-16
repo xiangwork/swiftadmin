@@ -35,21 +35,21 @@ class FormBuilder
      *
      * @var integer
      */
-    public int $width = 100;
+    public $width = 100;
 
     /**
      * 标签宽度
      *
      * @var integer
      */
-    public int $labelwidth = 110;
+    public $labelwidth = 110;
 
     /**
      * 公用属性
      *
      * @var array
      */
-    public array $attrs = [
+    public $attrs = [
         'type',
         'name',
         'min',
@@ -61,7 +61,7 @@ class FormBuilder
         'placeholder',
     ];
 
-    public array $replace = [];
+    public $replace = [];
 
     /**
      * @var object 对象实例

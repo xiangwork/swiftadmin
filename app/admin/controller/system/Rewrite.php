@@ -364,7 +364,7 @@ class Rewrite extends AdminController
      * @param array $params
      * @return void
      */
-    protected function createContent(int|array $params = [])
+    protected function createContent($params = [])
     {
         $params = request()->param();
         $contentNodes = system_cache('contentNodes');

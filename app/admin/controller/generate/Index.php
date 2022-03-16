@@ -19,7 +19,7 @@ class Index extends AdminController
      *
      * @var string
      */
-    public string $prefix = 'sa_';
+    public $prefix = 'sa_';
 
     // 初始化操作
     public function initialize()

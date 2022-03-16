@@ -33,10 +33,10 @@ class XunSearch
     private array $_app_field = [];
 
     // 高亮字段
-    public array $_highlight_field = [];
+    public $_highlight_field = [];
 
     // 查询规则
-    public array $_where = [];
+    public $_where = [];
 
     /**
      * 必选字段
@@ -298,7 +298,7 @@ class XunSearch
      * @param string|array $field
      * @return void
      */
-    public function search(string $keyword = null, string|array $field = [])
+    public function search(string $keyword = null, $field = [])
     {
         // 设置关键字
         $field = !empty($field) ? $field : 'title';
