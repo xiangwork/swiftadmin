@@ -43,15 +43,15 @@
             <div class="layui-card-header layadmin-card-header-auto" style="padding-bottom: 5px">
                 <div class="layui-inline layui-hide" id="toolbar">
                     <!-- // 打开添加页面 -->
-                    <button class="layui-btn icon-btn" lay-open="add" lay-title="{:__('添加字典')}" lay-area="398px" lay-url="#editforms" lay-callback="edit" >
+                    <button class="layui-btn icon-btn" lay-open="add" data-title="{:__('添加字典')}" data-area="398px" data-url="#editforms" callback="edit" >
                         <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                     </button>
                     <!-- // 修改页面 -->
-                    <button class="layui-btn icon-btn" lay-open="edit" lay-title="{:__('修改字典')}" lay-area="398px" lay-url="#editforms" lay-callback="edit" >
+                    <button class="layui-btn icon-btn" lay-open="edit" data-title="{:__('修改字典')}" data-area="398px" data-url="#editforms" callback="edit" >
                         <i class="layui-icon layui-icon-edit"></i>{:__('修改')}
                     </button>
                     <!-- // 删除所有 -->
-                    <button class="layui-btn icon-btn layui-btn-danger" lay-batch="lay-tree"  lay-url="{:url('/system.dictionary/del')}" >
+                    <button class="layui-btn icon-btn layui-btn-danger" lay-batch="lay-tree"  data-url="{:url('/system.dictionary/del')}" >
                       <i class="layui-icon layui-icon-delete"></i>{:__('删除')}
                     </button>
                 </div>
@@ -103,11 +103,11 @@
                     <!-- // 默认搜索 -->
                     <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit><i class="layui-icon layui-icon-search"></i>{:__('搜索')}</button>
                     <!-- // 打开添加页面 -->
-                    <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加字典项')}" lay-area="398px" lay-url="#editforms" >
+                    <button class="layui-btn icon-btn" lay-open="" data-title="{:__('添加字典项')}" data-area="398px" data-url="#editforms" >
                         <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                     </button>
                     <!-- // 删除所有 -->
-                    <button class="layui-btn icon-btn layui-btn-danger" lay-batch="lay-tableList"  lay-url="{:url('/system.dictionary/del')}" >
+                    <button class="layui-btn icon-btn layui-btn-danger" lay-batch="lay-tableList"  data-url="{:url('/system.dictionary/del')}" >
                       <i class="layui-icon layui-icon-delete"></i>{:__('删除')}
                     </button>
                 </div>
@@ -166,9 +166,9 @@
 
 <!-- // 列表编辑框 -->
 <script type="text/html" id="tableBar"> 
-    <a class="layui-table-text" lay-title="{:__('编辑字典项')}" lay-url="#editforms" lay-area="398px" lay-event="edit" >{:__('编辑')}</a>
+    <a class="layui-table-text" data-title="{:__('编辑字典项')}" data-url="#editforms" data-area="398px" lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.dictionary/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" data-url="{:url('/system.dictionary/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 
 <include file="/public/footer" />

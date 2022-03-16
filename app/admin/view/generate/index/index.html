@@ -1,0 +1,108 @@
+<include file="/public/header" />
+<!-- 重定位style -->
+<style>
+.layui-table-cell {height: 35px;line-height: 35px;}
+.layui-table, .layui-table-view{margin-top: 0px;}
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <!-- // 默认操作按钮 -->
+        <div class="layui-card-header layadmin-card-header-auto ">
+            <div class="layui-form">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                    
+                        <select name="status">
+                            <option value="">{:__('按状态查询')}</option>
+                            <option value="2" >{:__('正常')}</option>                                 
+                            <option value="1" >{:__('关闭')}</option>      
+                        </select>
+                    
+                    </div>
+                    
+                    <div class="layui-inline">
+                        <div class="layui-form-label">{:__('名称检索')}</div>
+                        <div class="layui-input-inline "><input name="title" class="layui-input" type="text" placeholder="{:__('名称检索')}"/></div>
+                    </div>
+                    
+                    <div class="layui-inline" >
+                        <!-- // 默认搜索 -->
+                        <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit>
+                            <i class="layui-icon layui-icon-search"></i>{:__('搜索')}
+                        </button>
+
+                        <!-- // 打开添加页面 -->
+                        <button class="layui-btn icon-btn" lay-open="" data-area="100%,100%" data-offset="0px" data-maxmin="true" data-url="{:url('/generate.index/add')}" >
+                            <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
+                        </button>
+                    </div>
+                </div>
+            </div> 
+        </div>
+
+        <!-- // 创建数据表实例 -->
+        <table id="lay-tableList" lay-filter="lay-tableList"></table>        
+    </div>
+</div>
+ 
+<!-- // 列表工具栏 -->
+<script type="text/html" id="tableBar"> 
+    <a class="layui-table-text" data-area="100%,100%" data-offset="0px" data-maxmin="true"
+        data-url="{:url('/generate.index/edit')}?id={{d.id}}" lay-event="edit" >{:__('编辑')}</a>
+    <div class="layui-divider layui-divider-vertical"></div>
+    <a class="layui-table-text lay-form-design" data-url="{:url('/generate.index/formDesign')}?curdId={{d.id}}" >{:__('表单')}</a>
+    <div class="layui-divider layui-divider-vertical"></div>
+    <!-- // 当前需要重载表格 -->
+    <a class="layui-table-text" lay-ajax data-table="lay-tableList" data-url="{:url('/generate.curd/index')}?id={{d.id}}" >{:__('执行')}</a>
+    <div class="layui-divider layui-divider-vertical"></div>
+    <a class="layui-table-text"  data-url="{:url('/generate.index/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
+</script>
+
+<!-- // 列表按钮工具栏 -->
+<script type="text/html" id="tableBtn">
+
+</script>
+
+<include file="/public/footer" />
+<script>
+    layui.use(['jquery','layer','util','table'],function () {
+
+        var table = layui.table;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        /*
+         * 初始化表格
+        */
+        var isTable = table.render({
+            elem: "#lay-tableList"
+            ,url: "{:url('/generate.index/index')}"
+            ,toolbar: '#tableBtn'
+            ,defaultToolbar: ['filter', 'exports', 'print','search']
+            ,page: true
+            ,limit: 18
+            ,cols: [[
+                {type: 'checkbox', width:45},
+                {field: 'id', align: 'center',sort: true,width: 80,  title: 'ID'},
+                {field: 'title', align: 'left', title: '{:__("名称")}'},
+                {field: 'table', align: 'center',title: '{:__("数据库表")}'},
+                {field: 'controller', align: 'center',title: '{:__("控制器")}'},
+                {field: 'status', align: 'center',width:180, templet: function(d) {
+                    var status = ['<span class="layui-badge layui-bg-gray">未生成</span>','<span class="layui-badge layui-bg-red">已生成</span>'];
+                    return status[d.status];
+                }, title: '{:__("状态")}'},
+                {field: 'updatetime', align: 'center',title: '{:__("更新时间")}'},
+                {field: 'createtime', align: 'center',title: '{:__("创建时间")}'},
+                {align: 'center', toolbar: '#tableBar', width:260, title: '{:__("操作")}'},
+            ]]
+        })
+
+        $('body').on('click','.lay-form-design',function(params) {
+            top.layer.open({
+                type:2,
+                title: '',
+                area: ['100%','100%'],
+                content: [$(this).data('url')]
+            })
+        })
+    })
+</script>

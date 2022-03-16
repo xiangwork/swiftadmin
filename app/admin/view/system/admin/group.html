@@ -25,7 +25,7 @@
                 <!-- // 默认搜索 -->
                 <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit><i class="layui-icon layui-icon-search"></i>{:__('搜索')}</button>
                 <!-- // 打开添加页面 -->
-                <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加角色')}" lay-area="600px" lay-url="#editforms" >
+                <button class="layui-btn icon-btn" lay-open="" data-title="{:__('添加角色')}" data-area="600px" data-url="#editforms" >
                     <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                 </button>
             </div>
@@ -76,7 +76,7 @@
 
     <div class="layui-footer layui-form-item layui-center"  >
         <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('取消')}</button>
-        <button class="layui-btn" lay-add="{:url('/system.admingroup/add')}" lay-edit="{:url('/system.admingroup/edit')}" lay-filter="submitPage"  lay-submit>{:__('提交')}</button>
+        <button class="layui-btn" lay-filter="submitPage"  lay-submit>{:__('提交')}</button>
     </div>
     </form>
 </div>
@@ -110,13 +110,13 @@
 
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar">
-    <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-area="500px" lay-url="#editforms"  lay-event="edit" >{:__('编辑')}</a>
+    <a class="layui-table-text" data-title="{:__('编辑')} {{d.title}}" data-area="500px" data-url="#editforms"  lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-callback="auth" lay-area="300px" lay-title="{:__('访问权限')}" lay-url="#authForms" lay-offset="8%" lay-event="auth">{:__('权限')}</a>
+    <a class="layui-table-text" callback="auth" data-area="300px" data-title="{:__('访问权限')}" data-url="#authForms" data-offset="8%" lay-event="auth">{:__('权限')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-callback="cate" lay-area="300px" lay-title="{:__('栏目权限')}" lay-url="#cateForms" lay-offset="8%" lay-event="cate" >{:__('栏目')}</a>
+    <a class="layui-table-text" callback="cate" data-area="300px" data-title="{:__('栏目权限')}" data-url="#cateForms" data-offset="8%" lay-event="cate" >{:__('栏目')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.admingroup/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" data-url="{:url('/system.admingroup/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 
 
@@ -178,7 +178,7 @@
             form.on("submit(submitPage)",function(post){
                 // 获取提交地址
                 var pageThat = jquery(this), _form = pageThat.parents('form'), 
-                _pageUrl = _form.attr("action") || pageThat.attr('lay-url');
+                _pageUrl = _form.attr("action") || pageThat.data('url');
                 pageThat.attr("disabled",true);
                 if (typeof(_pageUrl) === 'undefined') {
                     layer.msg('缺少URL属性','error');
@@ -239,7 +239,7 @@
             form.on("submit(submitPage)",function(post){
                 // 获取提交地址
                 var pageThat = jquery(this), _form = pageThat.parents('form'), 
-                _pageUrl = _form.attr("action") || pageThat.attr('lay-url');
+                _pageUrl = _form.attr("action") || pageThat.data('url');
                 pageThat.attr("disabled",true);
                 if (typeof(_pageUrl) === 'undefined') {
                     layer.msg('缺少URL属性','error');
@@ -274,11 +274,11 @@
         // 同步加载函数
         var _ajax = function (action,type,classd) {
             var func = '{:url("/system.admin/authorizeInterface")}';
-            return admin.event.getAjaxData(func,{ 
+            return admin.event.ajax(func,{ 
                 action : action,
                 type   : type,
                 class  : classd
-            })
+            },false)
         }
 
     });

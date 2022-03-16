@@ -74,7 +74,7 @@
                     <!-- // 默认搜索 -->
                     <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit><i class="layui-icon layui-icon-search"></i>{:__('搜索')}</button>
                     <!-- // 打开添加页面 -->
-                    <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加')}{:__('管理员')}" lay-callback="edits" lay-area="690px" lay-url="#adminforms" >
+                    <button class="layui-btn icon-btn" lay-open="" data-title="{:__('添加')}{:__('管理员')}" callback="edits" data-area="690px" data-url="#adminforms" >
                         <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                     </button>
                 </div>
@@ -188,20 +188,20 @@
 
 <!-- // 列表编辑框 -->
 <script type="text/html" id="tableBar"> 
-    <a class="layui-table-text" lay-title="{:__('编辑')} {{d.name}}" lay-callback="edits" lay-url="#adminforms" lay-area="690px" lay-event="edit" >{:__('编辑')}</a>
+    <a class="layui-table-text" data-title="{:__('编辑')} {{d.name}}" callback="edits" data-url="#adminforms" data-area="690px" lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-title="{:__('访问授权')}" 
-        lay-callback="rulecates" lay-url="#authForms" lay-area="300px" lay-offset="8%" lay-event="rules" >{:__('权限')}</a>
+    <a class="layui-table-text" data-title="{:__('访问授权')}" 
+        callback="rulecates" data-url="#authForms" data-area="300px" data-offset="8%" lay-event="rules" >{:__('权限')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-title="{:__('栏目授权')}" 
-        lay-callback="rulecates" lay-url="#authForms" lay-area="300px" lay-offset="8%" lay-event="cates" >{:__('栏目')}</a>
+    <a class="layui-table-text" data-title="{:__('栏目授权')}" 
+        callback="rulecates" data-url="#authForms" data-area="300px" data-offset="8%" lay-event="cates" >{:__('栏目')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.admin/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" data-url="{:url('/system.admin/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 
 <!-- // 列表状态栏 -->
 <script type="text/html" id="userStatus">
-    <input type="checkbox" lay-filter="switchStatus" lay-url="{:url('/system.admin/status')}" value="{{d.id}}" lay-skin="switch"
+    <input type="checkbox" lay-filter="switchStatus" data-url="{:url('/system.admin/status')}" value="{{d.id}}" lay-skin="switch"
      {{d.status==1?'checked':''}}  />
 </script>
 
@@ -398,11 +398,11 @@
         // 同步加载函数
         var _ajax = function (action,type,classd) {
             var func = '{:url("/system.admin/authorizeInterface")}';
-            return admin.event.getAjaxData(func,{ 
+            return admin.event.ajax(func,{ 
                 action : action,
                 type   : type,
                 class  : classd
-            })
+            },false)
         }
     });
 </script>

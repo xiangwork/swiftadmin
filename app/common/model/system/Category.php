@@ -13,10 +13,6 @@ use app\common\library\Content as ContentLibrary;
 class Category extends Model
 {
     use SoftDelete;
-    protected $deleteTime = 'delete_time';
-
-    // 自动写入时间戳字段
-    protected $autoWriteTimestamp = 'int';
     
     // 定义时间戳字段名
     protected $createTime = 'createtime';
@@ -26,56 +22,6 @@ class Category extends Model
     {
         return $this->hasOne(Channel::class,'id','cid');
     }
-
-    /**
-     * 数据写入前
-     * @access  public
-     * @param   object
-     * @return  void
-     */
-    public static function onBeforeWrite($data)
-    {}
-
-    /**
-     * 数据新增前
-     * @access  public
-     * @param   object 
-     * @return  void
-     */
-    public static function onBeforeInsert($data)
-    {}
-
-    /**
-     * 数据新增后
-     * @param   object  
-     * @return  string
-     */
-    public static function onAfterInsert($data)
-    {}
-
-    /**
-     * 数据更新前
-     * @param   object 
-     * @return  string
-     */
-    public static function onBeforeUpdate($data)
-    {}    
-
-    /**
-     * 数据更新后
-     * @param   object 
-     * @return  string
-     */
-    public static function onAfterUpdate($data)
-    {}
-
-    /**
-     * 数据写入后
-     * @param   object
-     * @return  string
-     */
-    public static function onAfterWrite($data)
-    {}
     
     /**
      * 获取无限极分类
@@ -91,7 +37,6 @@ class Category extends Model
 		// 获取字段
         $field = isset($param['field']) ? $param['field'] : '*';
         
-
         if (trim($field) != '*') {
             $field = explode(',',$field);
             if (!array_search('id' , $field)) {

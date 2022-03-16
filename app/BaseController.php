@@ -10,6 +10,8 @@ declare (strict_types = 1);
 // | Author: 权栈 <coolsec@foxmail.com> Apache 2.0 License Code
 // +----------------------------------------------------------------------
 namespace app;
+
+use app\common\library\ResultCode;
 use think\App;
 use think\Validate;
 use think\Response;
@@ -67,7 +69,12 @@ abstract class BaseController
 
     // 初始化
     protected function initialize()
-    {}
+    {
+        // 获取全局站点
+        foreach (saenv('site') as $key => $value) {
+            $this->app->view->assign($key,$value);
+        }
+    }
 
     /**
      * 验证数据
@@ -265,48 +272,31 @@ abstract class BaseController
         }
     }
 
-	/**
-     * 获取初始化字段数组
+    /**
+     * 获取模型字段集
      * @access protected
-     * @return array|string|true
-     * @throws ValidateException
-     */	
-	protected function getField($controller = null) 
+     * @param object|null $model
+     * @return void
+     */
+	protected function getTableFields(object $model = null) 
 	{
-		
-		$controller = $controller ?? \strtolower(request()->Controller());
-		if (($begin = strrchr($controller,'.'))) {
-			$controller = \str_replace('.','',$begin);
-		}
-		
-		if (!preg_match("/^[a-zA-Z0-9]+$/", $controller)) {
-			return false;
-		}
-		
-		$fieldArray = config('sysfield.'.$controller);	
+        $this->model = $model ? $model : $this->model;
 
-		if (!empty($fieldArray)) {
-			foreach ($fieldArray as $key => $val) {
-				$fieldArray[$key] = '';
-			}
-			
-		}else {
-			return $this->error('未获取到数据,请刷新缓存！');
-		}
-		
-        if (isset($fieldArray['createtime'])) {
-            unset($fieldArray['createtime']);
+        $tableFields = $this->model->getTableFields();
+
+        if (!empty($tableFields) && is_array($tableFields)) {
+            foreach ($tableFields as $key => $value) {
+
+                $filter = ['updatetime','createtime','delete_time'];
+                if (!in_array($value,$filter)) {
+                    $tableFields[$value] = '';
+                }
+               
+                unset($tableFields[$key]);
+            }
         }
 
-        if (isset($fieldArray['updatetime'])) {
-            unset($fieldArray['updatetime']);
-        }
-
-        if (isset($fieldArray['delete_time'])) {
-            unset($fieldArray['delete_time']);
-        }
-
-		return $fieldArray;
+        return $tableFields;
 	}
 
     /**
@@ -318,7 +308,12 @@ abstract class BaseController
      */
 	public function throwError(string $msg = 'not found!', int $code = 404) 
     {
-		abort($code,$msg);
+        if(request()->isAjax()) {
+            return json(ResultCode::AUTH_ERROR);
+        }
+        else {
+            abort($code,$msg);
+        }
 	}
 
     /**

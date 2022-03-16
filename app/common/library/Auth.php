@@ -1,5 +1,6 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
 // +----------------------------------------------------------------------
 // | swiftAdmin 极速开发框架 [基于ThinkPHP6开发]
 // +----------------------------------------------------------------------
@@ -13,34 +14,23 @@ namespace app\common\library;
 
 use think\facade\Db;
 use app\common\library\ResultCode;
-use app\common\model\system\AdminAccess;
 use app\common\model\system\ApiCondition;
 use app\common\model\system\User as UserModel;
-use app\common\model\system\Category as CategoryModel;
-use app\common\model\system\Admin as AdminModel;
-use app\common\model\system\AdminRules as AdminRulesModel;
-use app\common\model\system\AdminGroup as AdminGroupModel;
 
 /**
- * 系统全局鉴权类
+ * 会员鉴权常量
  */
 const AUTH     = 1;
 const ALLM     = 2;
 const DISABLE  = 2;
 
-class Auth 
+class Auth
 {
     /**
      * 数据库实例
      * @var object
      */
     protected $model = null;
-
-    /**
-     * 管理员数据
-     * @var array
-     */
-    private $admin = null;
 
     /**
      * token令牌
@@ -73,25 +63,6 @@ class Auth
     public $params = [];
 
     /**
-     * 用户组id
-     * @var array
-     */
-    public $groupIDs = [];
-
-
-    /**
-     * 分组标记
-     * @var array
-     */
-    public $authGroup = '_admin_group_auth';
-
-    /**
-     * 用户私有标记
-     * @var array
-     */
-    public $authPrivate = '_admin_private_auth';
-
-    /**
      * 保活时间
      * @var string
      */
@@ -102,8 +73,8 @@ class Auth
      * @var array
      */
     protected $method = [
-        '0'=>'GET',
-        '1'=>'POST'
+        '0' => 'GET',
+        '1' => 'POST'
     ];
 
     /**
@@ -123,7 +94,6 @@ class Auth
      */
     public function __construct($config = [])
     {
-        $this->admin = session('AdminLogin');
         $this->request = \think\facade\Request::instance();
     }
 
@@ -145,324 +115,19 @@ class Auth
     }
 
     /**
-     * 检查权限
-     * @param string|array  $name   	    需要验证的规则列表,支持逗号分隔的权限规则或索引数组
-     * @param int           $admin_id       认证用户的id
-     * @param int           $type 			认证类型
-     * @param string        $mode 			执行check的模式
-     * @param string        $relation 		如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
-     * @return bool               	        通过验证返回true;失败返回false
-     */
-    public function checkAuths($name, $admin_id = 0, $type = 1, $mode = 'url', $relation = 'or') 
-    {
-        // 转换格式
-        if (is_string($name)) {
-            $name = strtolower($name);
-            if (strpos($name, ',') !== false) {
-                $name = explode(',', $name);
-            } else {
-                $name = [$name];
-            }
-        }
-        
-        $authList = [];
-        if ('url' == $mode) { // 解析URL参数
-            $REQUEST = unserialize(strtolower(serialize($this->request->param())));
-        }
-
-        foreach ($this->getAuthList($admin_id) as $auth) {
-
-            // 非鉴权接口
-            $router = $auth['router'];
-            if (in_array($router, $name) && $auth['auth'] == 0) {
-                $authList[] = $router;
-                continue;
-            }
-
-            // 校验正则模式
-            if (!empty($auth['condition'])) {
-                $rule = $condition = '';
-                $user = $this->getUserInfo();
-                $command = preg_replace('/\{(\w*?)\}/', '$user[\'\\1\']', $rule);
-                
-                @(eval('$condition=(' . $command . ');'));
-                if ($condition) {
-                    $authList[] = $router;
-                }
-            }
-
-            // URL参数模式
-            $query = preg_replace('/^.+\?/U', '', $router);
-            if ('url' == $mode && $query != $router) {
-                parse_str($query, $param);
-                $intersect = array_intersect_assoc($REQUEST, $param);
-                $router = preg_replace('/\?.*$/U', '', $router); 
-                if (in_array($router, $name) && $intersect == $param) {
-                    $authList[] = $router;
-                }
-            }else {
-                if (in_array($router, $name)) { 
-                    $authList[] = $router;
-                }
-            }
-        }
-
-        $authList = array_unique($authList);
-        if ('or' == $relation && !empty($authList)) {
-            return true;
-        }
-
-        $authdiff = array_diff($name, $authList);
-        if ('and' == $relation && empty($authdiff)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * 获取权限节点
-     * @param  int      $admin_id       管理员id
-     * @param  string   $type           节点类型
-     * @return array
-     */
-    public function getAuthNodes($admin_id = null, string $type = 'rules')
-    {
-        // 私有节点
-        $authGroup = $authPrivate = [];
-        $admin_id = $admin_id ?? $this->admin['id'];
-        $authnodes = AdminAccess::where('admin_id',$admin_id)->find();
-        if (!empty($authnodes[$type])) {
-            $authPrivate = explode(',', $authnodes[$type]);
-        }
-        
-        // 用户组节点
-        if (!empty($authnodes['group_id'])) {
-            $groupnodes = AdminGroupModel::whereIn('id',$authnodes['group_id'])->select()->toArray();
-            foreach ($groupnodes as $value) {
-                $nodes = !empty($value[$type]) ? explode(',', $value[$type]) : [];
-                $authGroup = array_unique(array_merge($authGroup, $nodes));
-                $authPrivate = array_unique(array_merge($authPrivate, $nodes));
-            }
-        }
-
-        // 返回数据集
-        $array[$this->authGroup] = $authGroup ?? [];
-        $array[$this->authPrivate] = $authPrivate ?? [];
-        return $array;
-    }
-
-    /**
-     * 获取权限菜单
-     * @access  public
-     * @return  JSON|Array
-     */
-    public function getAuthMenus()
-    {
-        // 查找节点
-        $where[] = ['status','=','normal'];
-        $auth_nodes = $this->getAuthNodes();
-        $list = $this->getAuthList($this->admin['id'] ,$auth_nodes);
-
-        // 循环处理数据
-        foreach ($list as $key => $value) {
-            $list[$key]['title'] = __($value['title']);
-           
-            if ($value['router'] != '#') {
-                $list[$key]['router'] = (string)url($value['router']);
-            }
-
-
-            $auth_nodes['everycate'] = $value['router'] == 'everycate' ? true : false;
-            $auth_nodes['privateauth'] = $value['router'] == 'privateauth' ? true : false;
-        }
-
-        if ($this->superAdmin()) {
-            $auth_nodes['supersadmin'] = true;
-        }
-
-        $auth_nodes['_admin_auth_menus_'] = list_to_tree($list);
-        return json_encode($auth_nodes,JSON_UNESCAPED_UNICODE);
-    }
-
-    /**
-     * 查询权限列表
-     * @param  int      $admin_id   用户id
-     * @param  array    $nodes      已获取节点
-     * @return mixed
-     */
-    public function getAuthList($admin_id = 0, array $nodes = []) 
-    {
-        // 查找节点
-        $where[] = ['status','=','normal'];
-        if (!$this->superAdmin()) {
-            $auth_nodes = !empty($nodes) ? $nodes : $this->getAuthNodes($admin_id);
-            return AdminRulesModel::where(function ($query) use ($where,$auth_nodes) {
-                if (empty($auth_nodes[$this->authPrivate])) {
-                    $where[] = ['auth','=','0'];
-                    $query->where($where);
-                }else {
-                    $where[] = ['id','in',$auth_nodes[$this->authPrivate ]];
-                    $query->where($where)->whereOr('auth','0');
-                }
-            })->order('sort asc')->select()->toArray();
-        }
-        
-        return AdminRulesModel::where($where)->order('sort asc')->select()->toArray();
-    }
-
-    /**
-     * 查询权限节点
-     * @access public
-     * @param mixed|null $type
-     * @param mixed|null $class
-     * @return \think\response\Json
-     */
-    public function getRuleCatesTree($type = null, $class = null, $tree = true)
-    {
-        
-        $list  = [];
-        if (is_array($type) && $type) {
-            $class = $type['class'] ?? $this->authGroup;
-            $type  = $type['type'] ?? 'rules';
-        }
-
-        $class = $class != $this->authGroup ? $this->authPrivate : $class;
-        $auth_nodes = $this->getAuthNodes($this->admin['id'], $type);
-        if ($type && $type == 'rules') {
-
-            $where[] = ['status','=','normal'];
-            if (!$this->superAdmin()) {
-                $list = AdminRulesModel::where(function ($query) use ($where,$auth_nodes,$class) {
-                    if (empty($auth_nodes[$class])) {
-                        $where[] = ['auth','=','0'];
-                        $query->where($where);
-                    }else {
-                        $where[] = ['id','in',$auth_nodes[$class]];
-                        $query->where($where)->whereOr('auth','0');
-                    }
-                })->order('sort asc')->select()->toArray();
-            }
-            else {
-                $list = AdminRulesModel::where($where)->order('sort asc')->select()->toArray();
-            }
-        } else {
-            if (!$this->superAdmin()) {
-                if (!empty($auth_nodes[$class])) {
-                    $list = CategoryModel::field('id,cid,pid,title,access')->whereIn('id',$auth_nodes[$class])->where('status',1)->select()->toArray();
-                }
-            }
-            else {
-                $list = CategoryModel::field('id,cid,pid,title,access')->where('status',1)->select()->toArray();
-            }
-        }
-
-        return $tree ? ($list ? json_encode(list_to_tree($list)) : json_encode([])) : $list;
-    }
-
-    /**
-     * 校验节点 避免越权
-     * @access public
-     * @param mixed|null $rules
-     * @param string|null $type
-     * @param string|null $class
-     * @return bool
-     **/
-    public function checkRuleCatesNode($rules = null, string $type = null, string $class = null)
-    {
-        if (!$this->superAdmin() && !empty($rules)) {
-            $type   = !empty($type) ? $type :'rules';
-            $class  = !empty($class) ? $class : $this->authGroup;
-            $class  = $class != $this->authGroup ? $this->authPrivate : $class;
-            $auth_nodes = $this->getAuthNodes($this->admin['id'], $type);
-            $differ = array_unique(array_merge($rules, $auth_nodes[$class]));
-            if (count($differ) > count($auth_nodes[$class])) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-    
-    /**
-     * 超级管理员
-     * @access      public
-     * @return      bool
-     */
-    public function superAdmin() 
-    {
-        $groupIDs = AdminModel::field('group_id')->find($this->admin['id']);
-        $groupIDs = explode(',',$groupIDs['group_id']);
-        $this->groupIDs = $groupIDs;
-        if ($this->admin['id'] == 1 || array_search(1,$groupIDs)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * 管理组分级鉴权
-     * @param array $groupIDs 
-     * @return bool
-     */
-    public function checkGroupAuth(array $groupIDs = [])
-    {
-        if ($this->superAdmin()) {
-            return true;
-        }
-
-        // 查询数据
-        $list = AdminGroupModel::select()->toArray();
-        foreach ($list as $value) {
-            // 循环处理组PID
-            if (in_array($value['id'], $groupIDs)) {
-                foreach ($this->groupIDs as $id) {
-                    $self = list_search($list,['id'=>$id]);
-                    if (!empty($self) && 
-                        ($value['pid'] < $self['id'] || $value['pid'] == $self['pid']) ) {
-                        return false;
-                    }
-                }
-            }
-        }
-        
-        return true;
-    }
-
-    /**
-     * 获取用户信息
-     * @param mixed|null $admin_id
-     * @return bool
-     */
-    public function getUserInfo($admin_id = null) 
-    {
-
-        $admin_id = $admin_id ?? $this->admin['id'];
-        static $userinfo = [];
-
-        $user = Db::name('admin');
-
-        // 获取用户表主键
-        $_pk = is_string($user->getPk()) ? $user->getPk() : 'id';
-        if (!isset($userinfo[$admin_id])) {
-            $userinfo[$admin_id] = $user->where($_pk, $admin_id)->find();
-        }
-
-        return $userinfo[$admin_id];
-    }
-
-    /**
      * API权限验证
      * @param string|null $class
      * @return bool
      */
-    public function checkAPI(string $class = null) {
-        
+    public function checkAPI(string $class = null)
+    {
+
         // 请求参数
         $this->params = input();
-        if ((!isset($this->params['app_id']) 
-            || !isset($this->params['app_secret'])) 
-            && !isset($this->params['token'])) {
+        if ((!isset($this->params['app_id'])
+                || !isset($this->params['app_secret']))
+            && !isset($this->params['token'])
+        ) {
             $this->setError(ResultCode::PARAMERROR);
             return false;
         }
@@ -471,12 +136,12 @@ class Auth
         $this->classHash = sha1($class);
         $restful = system_cache($this->classHash);
         if (empty($restful)) {
-            $restful = Db::name('api')->where('class',$class)->find();
-            system_cache($this->classHash, $restful,saenv('cache_time'));
+            $restful = Db::name('api')->where('class', $class)->find();
+            system_cache($this->classHash, $restful, saenv('cache_time'));
         }
 
         // 校验请求方式
-        if (!$this->checkMethod($restful)) {
+        if (!$this->validMethods($restful)) {
             return false;
         }
 
@@ -493,26 +158,27 @@ class Auth
                 }
                 $this->params = $data;
             }
-            
-            if (!$this->params['app_id'] 
-                || !$this->params['app_secret']) {
+
+            if (
+                !$this->params['app_id']
+                || !$this->params['app_secret']
+            ) {
                 $this->setError(ResultCode::LACKPARAME);
                 return false;
             }
 
             // 默认走普通流程
             $list = $this->getAPIAuthList();
-            if (!$nodes = list_search($list,['class'=>$class])) {
+            if (!$nodes = list_search($list, ['class' => $class])) {
                 $this->setError(ResultCode::AUTH_ERROR);
                 return false;
             }
-           
+
             // 判断余量
             if (!$this->dayCeilingSeconds($nodes)) {
                 return false;
             }
-        }
-        else if ($restful['status'] == DISABLE) {
+        } else if ($restful['status'] == DISABLE) {
             $this->setError(ResultCode::API_DISABLE);
             return false;
         }
@@ -526,12 +192,14 @@ class Auth
      * @param  array    $restful     当前接口数据
      * @return bool
      */
-    protected function checkMethod(array $restful = []) 
+    protected function validMethods(array $restful = [])
     {
-        if ($restful['method'] !== ALLM 
-            && $this->method[$restful['method']] !== request()->method()) {
-                $this->setError(ResultCode::METHOD_INVALID);
-                return false;
+        if (
+            $restful['method'] !== ALLM
+            && $this->method[$restful['method']] !== request()->method()
+        ) {
+            $this->setError(ResultCode::METHOD_INVALID);
+            return false;
         }
 
         return true;
@@ -542,22 +210,22 @@ class Auth
      * @access protected
      * @return array
      */
-    protected function getAPIAuthList() 
+    protected function getAPIAuthList()
     {
         // 读取节点缓存
         $where['app_id'] = $this->params['app_id'];
         $where['app_secret'] = $this->params['app_secret'];
-        $this->nodeHash = sha1(implode('.',$where));
+        $this->nodeHash = sha1(implode('.', $where));
         $list = system_cache($this->nodeHash);
 
-        if (empty($list)) { 
-            $list = Db::view('user','id')
-                      ->view('api_access','*','api_access.user_id=user.id')
-                      ->view('api','class','api.id=api_access.api_id')
-                      ->where([
-                          'user.app_id'=>$this->params['app_id'],
-                          'user.app_secret'=>$this->params['app_secret'],
-                        ])->select()->toArray();
+        if (empty($list)) {
+            $list = Db::view('user', 'id')
+                ->view('api_access', '*', 'api_access.user_id=user.id')
+                ->view('api', 'class', 'api.id=api_access.api_id')
+                ->where([
+                    'user.app_id' => $this->params['app_id'],
+                    'user.app_secret' => $this->params['app_secret'],
+                ])->select()->toArray();
             // 修改后请清理缓存
             if ($list) {
                 system_cache($this->nodeHash, $list, saenv('cache_time'));
@@ -567,23 +235,23 @@ class Auth
         return $list ?? [1];
     }
 
-   /**
+    /**
      * 接口其他限制
      * @access protected 
      * @param  array    $result     当前接口规则
      * @return bool
      */
-    protected function dayCeilingSeconds(array $result = []) 
+    protected function dayCeilingSeconds(array $result = [])
     {
         // 查询规则
-        $access = md5($this->params['app_id'].$result['class']);
-        if ($result['day'] || $result['ceiling'] || $result['seconds'] ) {
-            $condition = ApiCondition::where('hash',$access)->find();
+        $access = md5($this->params['app_id'] . $result['class']);
+        if ($result['day'] || $result['ceiling'] || $result['seconds']) {
+            $condition = ApiCondition::where('hash', $access)->find();
             if (empty($condition)) {
                 $condition = [
-                    'day'=> 0,
-                    'seconds'=> time(),
-                    'ceiling'=> 0,
+                    'day' => 0,
+                    'seconds' => time(),
+                    'ceiling' => 0,
                 ];
             }
         }
@@ -595,7 +263,7 @@ class Auth
         }
 
         // 调用间隔/秒
-        if ($result['seconds'] && (time()-$condition['seconds']) <= $result['seconds']) {
+        if ($result['seconds'] && (time() - $condition['seconds']) <= $result['seconds']) {
             $this->setError(ResultCode::API_SPEED_INVALID);
             return false;
         }
@@ -608,35 +276,33 @@ class Auth
 
         try {
 
-            if ($result['day'] || $result['ceiling'] || $result['seconds'] ) {
+            if ($result['day'] || $result['ceiling'] || $result['seconds']) {
 
                 $condition['day'] += 1;
                 $condition['ceiling'] += 1;
                 $condition['seconds'] = time();
                 if (is_object($condition)) {
-                    
+
                     // 次日初始化
                     $daytime = strtotime($condition['createtime']);
-                    if(date('Ymd', $daytime) != date('Ymd')) { 
-                        $condition['day'] = 1; 
+                    if (date('Ymd', $daytime) != date('Ymd')) {
+                        $condition['day'] = 1;
                     }
-                    
+
                     // 更新数据
                     $condition->save();
-                }
-                else {
+                } else {
 
                     // 创建新规则
                     $condition['hash'] = $access;
                     ApiCondition::create($condition);
-                }                
+                }
             }
-
         } catch (\Throwable $th) {
             $this->setError($th->getMessage());
             return false;
         }
-        
+
         return true;
     }
 
@@ -646,33 +312,38 @@ class Auth
      * @param string $pwd
      * @return bool
      */
-    public function login(string $nickname = '', string $pwd = '') {
+    public function login(string $nickname = '', string $pwd = '')
+    {
 
-        if(filter_var($nickname, FILTER_VALIDATE_EMAIL)){
-            $where[] = ['email','=',htmlspecialchars(trim($nickname))];
-        }else{
-            $where[] = ['mobile','=',htmlspecialchars(trim($nickname))];
+        if (filter_var($nickname, FILTER_VALIDATE_EMAIL)) {
+            $where[] = ['email', '=', htmlspecialchars(trim($nickname))];
+        } else {
+            $where[] = ['mobile', '=', htmlspecialchars(trim($nickname))];
         }
 
-        $where[] = ['pwd','=',hash_pwd($pwd)];
         $this->userInfo = UserModel::where($where)->find();
+
         if (!empty($this->userInfo)) {
-            if($this->userInfo['status'] != 1) { 
+
+            if ($this->userInfo->pwd != member_encrypt($pwd, $this->userInfo->salt)) {
+                $this->setError('用户名或密码错误');
+            }
+
+            if ($this->userInfo['status'] != 1) {
                 $this->setError('用户异常或未审核，请联系管理员');
                 return false;
             }
 
             // 更新登录数据
-            $this->userInfo['logintime'] = time(); 
+            $this->userInfo['logintime'] = time();
             $this->userInfo['loginip'] = request()->ip();
             $this->userInfo['logincount'] = $this->userInfo['logincount'] + 1;
             if ($this->userInfo->save()) {
-                $this->setloginState($this->userInfo,false);
+                $this->setloginState($this->userInfo->toArray(), false);
                 return true;
             }
-        }
-        else {
-            $this->setError('用户名或密码错误');
+        } else {
+            $this->setError('您登录的用户不存在');
             return false;
         }
     }
@@ -682,20 +353,20 @@ class Auth
      * @param string 
      * @return bool
      */
-    public function isLogin() 
+    public function isLogin()
     {
         $token = cookie('token');
         if (empty($token)) {
             $token = request()->request('token');
         }
-   
+
         if (!$token) {
             return false;
         }
-        
+
         $array = $this->checkToken($token);
         if (!empty($array)) {
-            $this->token = $token; 
+            $this->token = $token;
 
             // 只缓存用户id
             $this->userInfo = $array;
@@ -713,9 +384,9 @@ class Auth
     public function setloginState(array $array = null, $token = false)
     {
         $this->token = $token ? cookie('token') : $this->buildToken($array);
-        cookie('uid',$array['id'],$this->keepTime);
-        cookie('token',$this->token,$this->keepTime);
-        cookie('nickname',$array['nickname'],$this->keepTime);
+        cookie('uid', $array['id'], $this->keepTime);
+        cookie('token', $this->token, $this->keepTime);
+        cookie('nickname', $array['nickname'], $this->keepTime);
         $this->setActiveState(is_object($array) ? $array : $array);
     }
 
@@ -724,10 +395,11 @@ class Auth
      * @param   array $array
      * @return  bool
      */
-    public function setActiveState(array $array = []) {
+    public function setActiveState(array $array = [])
+    {
         $tag = md5((string)$array['id']);
         \think\facade\Cache::tag($tag)->clear();
-        \think\facade\Cache::tag($tag)->set($this->token,$array,$this->keepTime);
+        \think\facade\Cache::tag($tag)->set($this->token, $array, $this->keepTime);
     }
 
     /**
@@ -736,7 +408,7 @@ class Auth
      * @param  array    $array     用户参数
      * @return string   
      */
-    protected function buildToken($array = []) 
+    protected function buildToken($array = [])
     {
         $this->token = md5(create_rand(16));
         return $this->token;
@@ -748,7 +420,7 @@ class Auth
      * @param  string       $token       用户token
      * @return array|string   
      */
-    public function checkToken(string $token = null) 
+    public function checkToken(string $token = null)
     {
         $token = ($token ?? input('token/s')) ?? '';
         return \think\facade\Cache::get($token) ?? false;
@@ -760,16 +432,17 @@ class Auth
      * @param  array    $array     用户参数
      * @return string   
      */
-    public function buildSign($uid = 0, $time = 0) {
+    public function buildSign($uid = 0, $time = 0)
+    {
 
         $sign = [
             'ip' => request()->ip(),
-            'auth_key'=> saenv('auth_key'),
-            'time'=> $time,
-            'uid'=> $uid,
+            'auth_key' => saenv('auth_key'),
+            'time' => $time,
+            'uid' => $uid,
         ];
 
-        return sha1(implode('#',$sign));
+        return sha1(implode('#', $sign));
     }
 
     /**
@@ -778,15 +451,15 @@ class Auth
      * @param  string       $token       用户token
      * @return array|string   
      */
-    public function checkSign(string $sign = null, $uid = 0, int $time = 0) 
+    public function checkSign(string $sign = null, $uid = 0, int $time = 0)
     {
         $check = [
             'ip' => request()->ip(),
-            'auth_key'=> saenv('auth_key'),
-            'time'=> $time,
+            'auth_key' => saenv('auth_key'),
+            'time' => $time,
         ];
 
-        return sha1(implode('#',$check)) == $sign ? true : false;
+        return sha1(implode('#', $check)) == $sign ? true : false;
     }
 
     /**
@@ -806,5 +479,4 @@ class Auth
     {
         $this->_error = $error;
     }
-
 }

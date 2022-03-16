@@ -95,11 +95,7 @@
                             placeholder="请上传站点LOGO图" class="layui-input logo">
                         </div>
                         <button type="button" 
-                            class="layui-btn layui-btn-normal" 
-                            lay-upload=""
-                            lay-input="logo" 
-                            lay-images="imgsrc" 
-                            lay-data="{url: '/upload/logo'}" > 
+                            class="layui-btn layui-btn-normal" lay-upload="logo" data-url="/upload/logo" callback="test" > 
                             <i class="layui-icon layui-icon-upload"></i>{:__('上传图片')}
                         </button>
                     </div>
@@ -108,7 +104,7 @@
                         <div class="layui-input-block">
                             <div class="layui-upload-logo">
                                 <dl>
-                                <dt> <img class="imgsrc" src="{$config.site.site_logo}" alt="{:__('站点LOGO')}" ></dt>
+                                <dt> <img class="logo" src="{$config.site.site_logo}" alt="{:__('站点LOGO')}" ></dt>
                                 <dd class="layui-badge" onclick="javascript:layer.msg('好像没写代码！','error')" >{:__('删除')}</dd>
                                 </dl>
                             </div>
@@ -122,14 +118,40 @@
                          </div> 
                          <div class="layui-form-mid layui-word-aux">* {:__('网站HTTP/HTTPS地址，结尾必需加斜杆 /。')}</div>                     
                      </div>  
-     
+                     
                      <div class="layui-form-item">
-                        <label class="layui-form-label">{:__('安装路径')}</label>
-                        <div class="layui-input-inline" >
-                             <input type="text" name="site[site_path]" autocomplete="off" value="{$config.site.site_path}" class="layui-input">
-                         </div> 
-                         <div class="layui-form-mid layui-word-aux">* {:__('网站安装路径，一般不需要修改，结尾必需加斜杆 /。')}</div>                     
-                     </div>  
+
+                        <label class="layui-form-label">{:__('手机版')}</label>
+                        <div class="layui-input-inline">
+                            <input type="radio" name="site[site_state]"  data-display="mobile" lay-filter="radioStatus"
+                            value="1" title="{:__('开启')}"  <if condition="$config['site']['site_state'] eq 1 "> checked </if> >
+                            <input type="radio" name="site[site_state]"  data-display="mobile" lay-filter="radioStatus"
+                            value="0" title="{:__('关闭')}"  <if condition="$config['site']['site_state'] eq 0 "> checked </if>>
+                        </div>    
+                        <div class="layui-form-mid layui-word-aux">* {:__('是否开启手机版模式')}</div>           
+                    </div>
+
+                     <div class="mobile" <eq name="$config['site']['site_state']" value="0" > style="display:none;" </eq> >
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{:__('手机版类型')}</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" name="site[site_type]" style="clear: both;" 
+                                value="1" title="{:__('自适应')}" <if condition="$config['site']['site_type'] eq '1'"> checked </if> >
+                                <input type="radio" name="site[site_type]"
+                                value="0" title="{:__('独立域名')}"  <if condition="$config['site']['site_type'] eq '0'"> checked </if>>
+                            </div>    
+                            <div class="layui-form-mid layui-word-aux">* {:__('代码自适应请配置手机版模板，域名则会主动跳转')}</div> 
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{:__('手机版域名')}</label>
+                            <div class="layui-input-inline" >
+                                 <input type="text" name="site[site_mobile]" autocomplete="off" value="{$config.site.site_mobile}" class="layui-input">
+                             </div> 
+                             <div class="layui-form-mid layui-word-aux">* {:__('手机版域名，留空为代码自适应')}</div>                     
+                         </div>  
+                    </div> 
      
                      <div class="layui-form-item">
                         <label class="layui-form-label">{:__('备案信息')}</label>
@@ -198,12 +220,12 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">{:__('全文检索功能')}</label>
                         <div class="layui-input-inline">
-                            <input type="radio" name="fulltext[search_status]"  lay-display="fulltext" lay-filter="radioStatus"
+                            <input type="radio" name="fulltext[search_status]"  data-display="fulltext" lay-filter="radioStatus"
                             value="1" title="{:__('开启')}"  <if condition="$config['fulltext']['search_status'] eq 1 "> checked </if> >
-                            <input type="radio" name="fulltext[search_status]"  lay-display="fulltext" lay-filter="radioStatus"
+                            <input type="radio" name="fulltext[search_status]"  data-display="fulltext" lay-filter="radioStatus"
                             value="0" title="{:__('关闭')}"  <if condition="$config['fulltext']['search_status'] eq 0 "> checked </if>>
                         </div>    
-                        <div class="layui-form-mid layui-word-aux">* {:__('适用于为用户提供丰富的检索结果展示！')}</div>           
+                        <div class="layui-form-mid layui-word-aux"> <font color="red">* {:__('如果你无全文检索服务器，请勿开启！！')}</font> </div>           
                     </div>
                     
                     <div class="fulltext" <eq name="$config['fulltext']['search_status']" value="0" > style="display:none;" </eq> >
@@ -222,30 +244,30 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">{:__('用户管理日志')}</label>
                         <div class="layui-input-inline">
-                            <input type="radio" name="logs[admin_log_status]"   
-                            value="1" title="开启"  <if condition="$config['logs']['admin_log_status'] eq 1 "> checked </if> >
-                            <input type="radio" name="logs[admin_log_status]"   
-                            value="0" title="关闭"  <if condition="$config['logs']['admin_log_status'] eq 0 "> checked </if>>
+                            <input type="radio" name="logs[system_alogs]"   
+                            value="1" title="开启"  <if condition="$config['logs']['system_alogs'] eq 1 "> checked </if> >
+                            <input type="radio" name="logs[system_alogs]"   
+                            value="0" title="关闭"  <if condition="$config['logs']['system_alogs'] eq 0 "> checked </if>>
                         </div>    
                         <div class="layui-form-mid layui-word-aux">* {:__('记录用户管理后台操作日志')}</div>           
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">{:__('系统错误日志')}</label>
                         <div class="layui-input-inline">
-                            <input type="radio" name="logs[system_log_status]"
-                            value="1" title="开启"  <if condition="$config['logs']['system_log_status'] eq 1 "> checked </if> >
-                            <input type="radio" name="logs[system_log_status]"   
-                            value="0" title="关闭"  <if condition="$config['logs']['system_log_status'] eq 0 "> checked </if>>
+                            <input type="radio" name="logs[system_exception]"
+                            value="1" title="开启"  <if condition="$config['logs']['system_exception'] eq 1 "> checked </if> >
+                            <input type="radio" name="logs[system_exception]"   
+                            value="0" title="关闭"  <if condition="$config['logs']['system_exception'] eq 0 "> checked </if>>
                         </div>    
-                        <div class="layui-form-mid layui-word-aux"><font color="red">* </font>{:__('系统全局错误异常记录，建议开启监测')}</div>           
+                        <div class="layui-form-mid layui-word-aux"><font color="red">* {:__('系统全局错误异常记录，建议开启监测')}</font></div>           
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">{:__('清理非本站链接')}</label>
                         <div class="layui-input-inline">
-                            <input type="radio" name="site[site_notlink]"
-                            value="1" title="开启"  <if condition="$config['site']['site_notlink'] eq 1 "> checked </if> >
-                            <input type="radio" name="site[site_notlink]"   
-                            value="0" title="关闭"  <if condition="$config['site']['site_notlink'] eq 0 "> checked </if>>
+                            <input type="radio" name="site[site_clearLink]"
+                            value="1" title="开启"  <if condition="$config['site']['site_clearLink'] eq 1 "> checked </if> >
+                            <input type="radio" name="site[site_clearLink]"   
+                            value="0" title="关闭"  <if condition="$config['site']['site_clearLink'] eq 0 "> checked </if>>
                         </div>    
                         <div class="layui-form-mid layui-word-aux"><font color="red">* </font>{:__('开启后发送内容自动清理非本站链接')}</div>           
                     </div>
@@ -263,9 +285,9 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">{:__('缓存开关')}</label>
                         <div class="layui-input-inline">
-                            <input type="radio" name="cache[cache_status]" lay-display="cache_status" lay-filter="radioStatus"
+                            <input type="radio" name="cache[cache_status]" data-display="cache_status" lay-filter="radioStatus"
                             value="1" title="开启"  <if condition="$config['cache']['cache_status'] eq 1 "> checked </if> >
-                            <input type="radio" name="cache[cache_status]" lay-display="cache_status" lay-filter="radioStatus"
+                            <input type="radio" name="cache[cache_status]" data-display="cache_status" lay-filter="radioStatus"
                             value="0" title="关闭"  <if condition="$config['cache']['cache_status'] eq 0 "> checked </if>>
                         </div>    
                         <div class="layui-form-mid layui-word-aux">* {:__('开启数据库缓存会提高网站性能！')}</div>           
@@ -275,7 +297,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">{:__('缓存方式')}</label>
                             <div class="layui-input-inline" > 
-                               <select name="cache[cache_type]" lay-display="cache_type" lay-disable="file" lay-filter="selectStatus" class="ctype" >                
+                               <select name="cache[cache_type]" data-display="cache_type" data-disable="file" lay-filter="selectStatus" class="ctype" >                
                                  <option value="file" <if condition="$config['cache']['cache_type'] eq 'file'">selected</if>  >file</option>
                                  <option value="redis" <if condition="$config['cache']['cache_type'] eq 'redis'">selected</if>   >redis</option>
                                  <option value="memcached" <if condition="$config['cache']['cache_type'] eq 'memcached'">selected</if> >memcached</option>
@@ -330,8 +352,8 @@
                                 </div>
                                 <button type="button" class="layui-btn layui-btn-primary" 
                                 lay-ajax="" 
-                                lay-url="{:url('/index/testCache')}" 
-                                lay-object="type:ctype,host:chost,port:cport,user:cuser,pass:cpass" >{:__('测试连接')}</button>
+                                data-url="{:url('/index/testCache')}" 
+                                data-object="type:ctype,host:chost,port:cport,user:cuser,pass:cpass" >{:__('测试连接')}</button>
                             </div>
                         </div>
                     </div>
@@ -393,7 +415,7 @@
                     <div class="layui-form-item ">
                        <label class="layui-form-label">{:__('FTP附件')}</label>
                         <div class="layui-input-inline" >
-                            <select name="upload[upload_ftp]" lay-display="upload_ftp" lay-filter="selectStatus">
+                            <select name="upload[upload_ftp]" data-display="upload_ftp" lay-filter="selectStatus">
                                 <option value="1" <eq name="$config['upload']['upload_ftp']" value="1" > selected="" </eq> >{:__('开启')}</option>
                                 <option value="0" <eq name="$config['upload']['upload_ftp']" value="0" > selected="" </eq> >{:__('关闭')}</option>
                             </select>
@@ -433,8 +455,8 @@
                         </div>
                         <button type="button" class="layui-btn layui-btn-primary" 
                             lay-ajax="" 
-                            lay-url="{:url('/index/testFtp')}" 
-                            lay-object="host:ftp_host,port:ftp_port,user:ftp_user,pass:ftp_pass"
+                            data-url="{:url('/index/testFtp')}" 
+                            data-object="host:ftp_host,port:ftp_port,user:ftp_user,pass:ftp_pass"
                             >{:__('测试连接')}</button>
                     </div>
     
@@ -461,7 +483,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">{:__('存储设置')}</label>
                             <div class="layui-input-inline" >
-                                <select name="cloud[status]" lay-display="layui-cloud-oss" lay-filter="selectStatus" >
+                                <select name="cloud[status]" data-display="layui-cloud-oss" lay-filter="selectStatus" >
                                     <option value="1" <eq name="$config['cloud']['status']" value="1" > selected="" </eq> >{:__('开启')}</option>
                                     <option value="0" <eq name="$config['cloud']['status']" value="0" > selected="" </eq> >{:__('关闭')}</option>
                                 </select>
@@ -473,7 +495,7 @@
                             <div class="layui-form-item">
                                 <label class="layui-form-label">{:__('存储类型')}</label>
                                 <div class="layui-input-inline" >
-                                    <select name="cloud[type]"  lay-selector="aliyun,qcloud" lay-filter="selectStatus" >
+                                    <select name="cloud[type]"  data-selector="aliyun,qcloud" lay-filter="selectStatus" >
                                         <option value="aliyun" <eq name="$config['cloud']['type']" value="aliyun" > selected="" </eq> >{:__('阿里云OSS')}</option>
                                         <option value="qcloud" <eq name="$config['cloud']['type']" value="qcloud" > selected="" </eq> >{:__('腾讯云COS')}</option>
                                     </select>
@@ -580,7 +602,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">{:__('微缩图')}</label>
                             <div class="layui-input-inline">
-                                <select name="upload[upload_thumb]" lay-display="upload_thumb" lay-filter="selectStatus" >
+                                <select name="upload[upload_thumb]" data-display="upload_thumb" lay-filter="selectStatus" >
                                 <option value="1" <eq name="$config['upload']['upload_thumb']" value="1"> selected="" </eq> >{:__('开启')}</option>
                                 <option value="0" <eq name="$config['upload']['upload_thumb']" value="0"> selected="" </eq> >{:__('关闭')}</option>
                                 </select>
@@ -603,7 +625,7 @@
                         <div class="layui-form-item ">
                         <label class="layui-form-label">{:__('水印设置')}</label>
                             <div class="layui-input-inline">
-                                <select name="upload[upload_water]"  lay-display="upload_water" lay-filter="selectStatus" >
+                                <select name="upload[upload_water]"  data-display="upload_water" lay-filter="selectStatus" >
                                     <option value="1" <eq name="$config['upload']['upload_water']" value="1"> selected="" </eq> >{:__('开启')}</option>
                                     <option value="0" <eq name="$config['upload']['upload_water']" value="0"> selected="" </eq> >{:__('关闭')}</option>
                                 </select>
@@ -642,14 +664,14 @@
                                 <input type="text" name="upload[upload_water_color]" 
                                 placeholder="{:__('文字颜色')}" value="{$config['upload']['upload_water_color']}" class="layui-input upload_water_color" >
                             </div>
-                            <div class="picker" lay-colorpicker="upload_water_color" lay-value="{$config['upload']['upload_water_color']}" ></div>
+                            <div class="picker" lay-colorpicker="upload_water_color" data-value="{$config['upload']['upload_water_color']}" ></div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">{:__('透明度')}</label>
                             <div class="layui-input-inline">
                                 <div 
                                 lay-slider="upload_water_pct"
-                                lay-value="{$config['upload']['upload_water_pct']}"
+                                data-value="{$config['upload']['upload_water_pct']}"
                                 style="margin-top: 15px; margin-left: 3px;"  ></div>
                                 <input type="hidden" 
                                     name="upload[upload_water_pct]" 
@@ -661,11 +683,9 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">{:__('水印图片')}</label>
                             <div class="layui-input-inline" >
-                            <input type="text" name="upload[upload_water_img]" 
-                                placeholder="水印图片" value="{$config['upload']['upload_water_img']}" class="layui-input upload_water_img" >
+                            <input type="text" name="upload[upload_water_img]"placeholder="水印图片" value="{$config['upload']['upload_water_img']}" class="layui-input upload_water_img" >
                             </div>
-                            <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="upload_water_img"
-                            lay-data="{url: '{:url('/upload/upload')}'}" 
+                            <button type="button" class="layui-btn layui-btn-normal" lay-upload="upload_water_img" data-url="/upload/file" 
                              >{:__('上传图片')}</button>                            
                         </div>
 
@@ -831,10 +851,10 @@
                                          <div class="layui-form-mid layui-word-aux">
                                              <a href="javascript:void(0)" class="layui-color-blue"
                                              lay-open=""
-                                             lay-url="{:url('/tpl/showTpl')}" 
-                                             lay-title="邮件模板{:__('')}" 
-                                             lay-area="500px,260px" 
-                                             lay-offset="30%"
+                                             data-url="{:url('/tpl/showTpl')}" 
+                                             data-title="邮件模板{:__('')}" 
+                                             data-area="500px,260px" 
+                                             data-offset="30%"
                                              >[{:__('点击编辑')}]</a>
                                          </div>
                                      </div> 
@@ -892,8 +912,8 @@
                                     </div>
                                     <button type="button" class="layui-btn layui-btn-normal" 
                                     lay-ajax=""
-                                    lay-url="{:url('/index/testEmail')}"
-                                    lay-object="smtp_host:smtp_host,smtp_port:smtp_port,smtp_name:smtp_name,smtp_user:smtp_user,smtp_pass:smtp_pass,smtp_test:smtp_test"
+                                    data-url="{:url('/index/testEmail')}"
+                                    data-object="smtp_host:smtp_host,smtp_port:smtp_port,smtp_name:smtp_name,smtp_user:smtp_user,smtp_pass:smtp_pass,smtp_test:smtp_test"
                                     ><i class="layui-icon layui-icon-email"></i>
                                         {:__('测试发送')}</button>
                                 </div>
@@ -1065,14 +1085,14 @@
                                     <div class="layui-input-inline">
                                         <input type="text" name="payface[alipay][alipay_public_cert_path]" value="{$config.payface.alipay.alipay_public_cert_path}" class="layui-input cert_client">
                                     </div>
-                                    <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="cert_client">{:__('上传支付宝公钥证书')}</button>
+                                    <button type="button" class="layui-btn layui-btn-normal" lay-upload="cert_client" >{:__('上传支付宝公钥证书')}</button>
                                 </div> 
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">alipay_root_cert_path</label>
                                     <div class="layui-input-inline">
                                         <input type="text" name="payface[alipay][alipay_root_cert_path]" value="{$config.payface.alipay.alipay_root_cert_path}" class="layui-input cert_key">
                                     </div>
-                                   <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="cert_key">{:__('上传支付宝根证书')}</button>
+                                   <button type="button" class="layui-btn layui-btn-normal" lay-upload="cert_key" >{:__('上传支付宝根证书')}</button>
                                 </div>              
 
                                 <!-- // 微信支付开始 -->
@@ -1140,14 +1160,14 @@
                                     <div class="layui-input-inline">
                                         <input type="text" name="payface[wechat][mch_secret_cert]" value="{$config.payface.wechat.mch_secret_cert}" class="layui-input wxcert_client">
                                     </div>
-                                    <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="wxcert_client">{:__('上传V3私钥证书')}</button>
+                                    <button type="button" class="layui-btn layui-btn-normal" lay-upload="wxcert_client" >{:__('上传V3私钥证书')}</button>
                                 </div> 
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">商户公钥证书</label>
                                     <div class="layui-input-inline">
                                         <input type="text" name="payface[wechat][mch_public_cert_path]" value="{$config.payface.wechat.mch_public_cert_path}" class="layui-input wxcert_key">
                                     </div>
-                                   <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="wxcert_key">{:__('上传V3公钥证书')}</button>
+                                   <button type="button" class="layui-btn layui-btn-normal" lay-upload="wxcert_key">{:__('上传V3公钥证书')}</button>
                                 </div>  
 
                               </div>
@@ -1488,7 +1508,7 @@
                 <div class="layui-form-item layui-layout-admin" style="display: block;">
                     <div class="layui-input-block">
                         <div class="layui-footer" id="layui-footer-btn">
-                            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="submitIframe">{:__('立即提交')}</button>
+                            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="submitIframe" type="button">{:__('立即提交')}</button>
                             <button type="reset" class="layui-btn layui-btn-primary">{:__('重置')}</button>
                         </div>
                     </div>
@@ -1504,13 +1524,15 @@
 <include file="/public/footer" />
 
 <script>
-    layui.use(['form','jquery','layedit'], function () {
+    layui.use(['form','jquery','layedit','admin'], function () {
  
         var form = layui.form;
+        var admin = layui.admin;
         var jquery = layui.jquery;
         // 渲染富文本编辑器
         var layedit = layui.layedit;
         var layindex = layedit.build('site_notice', {height: 110,color: '#ffffff'});     
+
         // 异步验证表单
         form.verify({
             siteClose: function(value) { 

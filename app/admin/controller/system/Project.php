@@ -51,7 +51,7 @@ class Project extends AdminController
             return $this->error();
         }
 
-        $data = $this->getField(); // 生成默认数据
+        $data = $this->getTableFields(); // 生成默认数据
         $data['app_id'] = '1000000'+ $this->model->onlyTrashed()->count() + 1;
         $data['app_key'] = create_rand(32);
         return view('',['data'=> $data]);

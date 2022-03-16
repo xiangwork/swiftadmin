@@ -71,7 +71,7 @@
 
     <div class="layui-footer" style="text-align: center;">
         <button class="layui-btn layui-btn-primary" type="button"  sa-event="closeDialog" >取消</button>
-        <button class="layui-btn layui-btn-normal" lay-filter="submitIframe" lay-submit>提交</button>
+        <button class="layui-btn layui-btn-normal" lay-filter="submitIframe" type="button" lay-submit>提交</button>
     </div>
     </form>
 </div>
@@ -135,7 +135,6 @@
                 };
             },
             done: function (elem, data) {
-                console.log(data);
                 elem.val(data.data[0].class);
                 layui.$('input[name=api_id]').val(data.data[0].id);
             }

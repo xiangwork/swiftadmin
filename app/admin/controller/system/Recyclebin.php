@@ -62,7 +62,7 @@ class Recyclebin extends AdminController
 			Db::startTrans();
 			try {
                 $list = $this->model->onlyTrashed()->where(
-                    $this->beforeWhere()
+                    $this->buildBeforeWhere()
                     )->select();
                 foreach ($list as $key => $item) {
                     $this->status += $item->restore();
@@ -96,12 +96,12 @@ class Recyclebin extends AdminController
 			try {
 
                 $list = $this->model->onlyTrashed()->where(
-                    $this->beforeWhere()
+                    $this->buildBeforeWhere()
                     )->select();
                 foreach ($list as $key => $item) {
                     $item['delete_force'] = time();
                     $table = Channel::getChannelList($item['cid'])['table'];
-                    Db::name('content_'.$table)->where('content_id',$item->id)->delete();
+                    Db::name('content_'.$table)->where('aid',$item->id)->delete();
                     $this->status += $item->force()->delete();
                 }
     

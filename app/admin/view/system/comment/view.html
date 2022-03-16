@@ -25,7 +25,7 @@
 
         <div class="layui-footer layui-form-item layui-center "  >
             <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('取消')}</button>
-            <button class="layui-btn" lay-filter="submitIframe"  lay-submit>{:__('提交')}</button>
+            <button class="layui-btn" lay-filter="submitIframe" type="button"  lay-submit>{:__('提交')}</button>
         </div>
         </form>
 
@@ -36,15 +36,15 @@
 
 <!-- // 列表状态栏 -->
 <script type="text/html" id="columnStatus">
-    <input type="checkbox" lay-filter="switchStatus" lay-url="{:url('/system.comment/status')}" value="{{d.id}}" lay-skin="switch"
+    <input type="checkbox" lay-filter="switchStatus" data-url="{:url('/system.comment/status')}" value="{{d.id}}" lay-skin="switch"
      {{d.status==1?'checked':''}}  />
 </script>
 
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar"> 
-    <a class="layui-table-text" lay-title="{:__('查看评论')}" lay-area="80%,82%" lay-url="{:url('/system.comment/view')}?id={{d.id}}" lay-event="edit">{:__('查看')}</a>
+    <a class="layui-table-text" data-title="{:__('查看评论')}" data-area="80%,82%" data-url="{:url('/system.comment/view')}?id={{d.id}}" lay-event="edit">{:__('查看')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.comment/del')}?id={{d.id}}" lay-event="del">{:__('删除')}</a>
+    <a class="layui-table-text" data-url="{:url('/system.comment/del')}?id={{d.id}}" lay-event="del">{:__('删除')}</a>
 </script>
 
 <include file="/public/footer" />

@@ -12,11 +12,11 @@ class Menus {
 
     /**
      * 创建菜单
-     * @param array  $initMenu
+     * @param array  $MenusArr
      * @param string $note
      * @param mixed  $parent 父类的name或pid
      */
-    public static function create($initMenu = [], $note , $parent = 0)
+    public static function create($MenusArr = [], $note = '' , $parent = 0)
     {
         if (!is_numeric($parent)) {
             $parentRule = AdminRules::getByTitle($parent);
@@ -27,8 +27,8 @@ class Menus {
        
         $allow = array_flip(['title', 'router', 'alias', 'type', 'icons', 'note', 'status','update']);
 
-        foreach ($initMenu as $value) {
-            
+        foreach ($MenusArr as $key => $value) {
+
             // 子分类数据
             $children = isset($value['children']) && $value['children'] ? true : false;
             $data = array_intersect_key($value, $allow);
@@ -43,6 +43,7 @@ class Menus {
                 $data['alias'] = $data['router'];
             }
             else {
+
                 $data['alias'] = substr(str_replace('/',':',$data['router']),1);
             }
 
@@ -51,11 +52,8 @@ class Menus {
             $data['sort'] = AdminRules::count() + 1;
             
             // 查询当前菜单
-            $menu = AdminRules::where([
-                    'note'=> $data['note'],
-                    'router'=>$data['router'],
-                ])->find();
-
+            $menu = AdminRules::where(['note'=> $data['note'],'router'=>$data['router']])->find();
+            
             // 新建当前菜单项
             if (empty($menu)) {
                 $menu = AdminRules::create($data);
@@ -108,7 +106,6 @@ class Menus {
      */
     public static function export($name)
     {
-
         $menuList = AdminRules::where('note',$name)->select()->toArray();
         return list_to_tree($menuList);
     }
@@ -126,7 +123,6 @@ class Menus {
         }
 
         AdminRules::destroy($ids,true);
-
         return true;
     }
 

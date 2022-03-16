@@ -14,6 +14,7 @@ namespace app\common\library;
 use think\facade\Event;
 use app\common\library\Ftp;
 use app\common\library\Images as ImagesModel;
+use app\common\model\system\Attachment;
 use system\Http;
 
 /**
@@ -166,6 +167,9 @@ class Upload
             return  $this->error($th->getMessage());
         }
 
+        $fileInfo = $file->getFileInfo();
+        $filesize = $file->getSize();
+    
         // 文件信息过滤器
         if (!$this->fileFilter($file)) {
             $this->setError($this->_error);
@@ -184,6 +188,17 @@ class Upload
         
         $this->resource = $this->filepath .'/'. $this->filename;
 
+        $attachment = [
+            'filename' => $file->getOriginalName(), // 保存原始文件名
+            'filesize' => $file->getSize(),
+            'url' => '/'.$this->resource,
+            'suffix' => $file->extension(),
+            'mimetype' => $file->getMime() ,
+            'user_id' => cookie('uid') ?? 0,
+            'sha1' => $file->hash(),
+        ];
+
+    
         // 移动上传文件
         if (!$file->move($this->filepath, $this->filename)) {
             $this->setError('请检查服务器读写权限！');
@@ -208,105 +223,10 @@ class Upload
                 $this->Images->thumb($this->filepath, $this->filename, $this->config, $avatar);
             } 
         }
+ 
+        Attachment::create($attachment);
         
 		return $this->success('文件上传成功！','/'.$this->resource);   
-    }
-
-
-    /**
-     * 文件下载函数
-     */
-    public function download($urls = null, bool $hosts = false)
-    {
-        if (!$urls) {
-            return false;
-        }
-
-        if (!is_array($urls)) {
-            $urls = explode(',',$urls);
-        }
-
-        $images = [];
-        foreach ($urls as $key => $url) {
-
-            //  解码地址
-            $field  = $url;
-            $url    = urldecode($url);
-            $url    = htmlspecialchars_decode($url);
-            $host = parse_url($url, PHP_URL_HOST);
-            if ($host) {
-                $host = explode('.',$host);
-                $count = count($host);
-                $host  = $count > 1 ? $host[$count - 2] . '.' . $host[$count - 1] : $host[0];
-            }
-
-            // 过滤本站链接
-            $domain = request()->rootDomain();
-
-            // 是否强制下载
-            if (($host && $host !== $domain) || ($host && $hosts)) {
-
-                // 检测请求头
-                $heads = @get_headers($url, true);
-                if (empty($heads)) {
-                    continue;
-                } 
-                else if (!stristr($heads[0], "200") 
-                    && !stristr($heads[0], "301") 
-                    && !stristr($heads[0], "302") 
-                    && !stristr($heads[0], "304")) 
-                {
-                    continue;
-                }
-
-                // 获取跳转后的URL地址
-                if (stristr($heads[0], "302")) {
-                    $url = $heads['Location'];
-                    $heads = @get_headers($url, true);
-                }
-
-                // 从缓冲区读取
-                ob_start();
-                $context = stream_context_create(
-                    array('http' => array(
-                        'follow_location' => false
-                    ))
-                );
-
-                readfile($url, false, $context);
-                $content = ob_get_contents();
-                if (empty($content) || strlen($content) <= 300) {
-                    $content = Http::get($url);
-                }
-                
-                ob_end_clean();
-                $this->filename = uniqid().'.'.strtolower('jpg');
-                $this->filepath = $this->config['upload_path'].'/images/'.date($this->config['upload_style']); 
-                $this->resource = $this->filepath .'/'. $this->filename;
-                if (!write_file($this->resource,$content)) {
-                    continue;
-                }
-  
-                // 写入文件
-                if (!write_file($this->resource,$content)) {
-                    continue;
-                }
-                if ($this->config['upload_water'] && !strstr($heads['0']['Content-Type'],'gif')) {
-                    $this->Images->waterMark($this->resource,$this->config);
-                }
-                if ($this->config['upload_thumb'] && $key <= 0 && !strstr($heads['0']['Content-Type'],'gif')){
-                    $this->Images->thumb($this->filepath, $this->filename, $this->config);
-                }
-
-                $images[$field] = '/'.$this->resource;
-                // 上传阿里云/FTP空间
-                if (!$this->uploadOss() || !$this->uploadFtp()) {
-                    throw new \Exception('上传云OSS或FTP空间失败');
-                }
-            }
-        }
-
-        return $images;
     }
 
     protected function uploadOss()
@@ -424,7 +344,7 @@ class Upload
         }
 
         // 非空自动增加HTTP前缀
-        $prefix = get_upload_Http_Perfix();
+        $prefix = cdn_Prefix();
         if (!empty($prefix)) {
             $url = $prefix.$url;
         }

@@ -25,7 +25,7 @@
                     <!-- // 默认搜索 -->
                     <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit><i class="layui-icon layui-icon-search"></i>{:__('搜索')}</button>
                     <!-- // 添加数据页面 -->
-                    <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加友链')}" lay-area="600px" lay-url="#editforms" >
+                    <button class="layui-btn icon-btn" lay-open="" data-title="{:__('添加友链')}" data-area="600px" data-url="#editforms" >
                         <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                     </button>
                 </div>
@@ -44,17 +44,6 @@
     <form class="layui-form layui-form-fixed" lay-filter="editforms" >
     <input type="text" name="id" hidden="">
     <div class="layui-form-item">
-        <label class="layui-form-label"><font color="red">* </font>{:__('友链类型')}</label>
-        <div class="layui-input-inline">
-            <select name="type">
-                <option value="">请选择</option>
-                <salibs:dictionary id="vo" value="friendlink" >
-                <option value="{$vo.value}">{$vo.name}</option>
-                </salibs:dictionary>  
-            </select>
-        </div>
-    </div>    
-    <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('友链名称')}</label>
         <div class="layui-input-block">
             <input name="title" placeholder="{:__('友链名称')}" type="text" class="layui-input" lay-verify="required" />
@@ -71,7 +60,7 @@
         <div class="layui-input-inline" style="width: 322px">
             <input name="logo" placeholder="{:__('友链logo')}" type="text" class="layui-input logo" />
         </div>
-        <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="logo">{:__('上传图片')}</button>
+        <button type="button" class="layui-btn layui-btn-normal" lay-upload="logo" >{:__('上传图片')}</button>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('友链地址')}</label>
@@ -89,15 +78,15 @@
 
 <!-- // 列表状态栏 -->
 <script type="text/html" id="columnStatus">
-    <input type="checkbox" lay-filter="switchStatus" lay-url="{:url('/system.friendlink/status')}" value="{{d.id}}" lay-skin="switch"
+    <input type="checkbox" lay-filter="switchStatus" data-url="{:url('/system.friendlink/status')}" value="{{d.id}}" lay-skin="switch"
      {{d.status==1?'checked':''}}  />
 </script>
 
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar"> 
-    <a class="layui-table-text" lay-title="{:__('编辑友链')}" lay-area="600px" lay-url="#editforms" lay-event="edit">{:__('编辑')}</a>
+    <a class="layui-table-text" data-title="{:__('编辑友链')}" data-area="600px" data-url="#editforms" lay-event="edit">{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.friendlink/del')}?id={{d.id}}" lay-event="del">{:__('删除')}</a>
+    <a class="layui-table-text" data-url="{:url('/system.friendlink/del')}?id={{d.id}}" lay-event="del">{:__('删除')}</a>
 </script>
 
 <include file="/public/footer" />

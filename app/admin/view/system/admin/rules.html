@@ -25,7 +25,7 @@
                         lay-filter="treeSearch" lay-submit><i class="layui-icon layui-icon-search"></i>{:__('搜索')}
                         </button>
                         <!-- // 打开添加页面 -->
-                        <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加节点')}" lay-callback="add" lay-disable="true" lay-area="680px" lay-url="#editforms" >
+                        <button class="layui-btn icon-btn" lay-open="" data-title="{:__('添加节点')}" callback="add" data-disable="true" data-area="680px" data-url="#editforms" >
                             <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                         </button>
                         <button class="layui-btn layui-btn-primary icon-btn" id="expandAll" ><i class="layui-icon layui-icon-templeate-1"></i>{:__('展开全部')}</button>
@@ -70,7 +70,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('菜单图标')}</label>
         <div class="layui-input-inline">
-            <input name="icons" placeholder="{:__('请选择菜单图标')}" id="iconHhysFad" type="text" class="layui-input"  />
+            <input name="icons" placeholder="{:__('请选择菜单图标')}" id="iconPicker" type="text" class="layui-input"  />
         </div>
         <label class="layui-form-label">{:__('菜单类型')}</label>
         <div class="layui-input-inline" style="white-space: nowrap;">
@@ -109,26 +109,25 @@
 
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar"> 
-    <!-- 注意，添加的回调函数里面 增加了lay-disable="true"属性，也就是不会执行form.val方法 -->
-    <a class="layui-table-text" lay-title="{:__('添加菜单')}" lay-url="#editforms" 
-        lay-area="668px" lay-callback="add" lay-disable="true" lay-event="add" >{:__('添加')}</a>
+    <!-- 注意，添加的回调函数里面 增加了data-disable="true"属性，也就是不会执行form.val方法 -->
+    <a class="layui-table-text" data-title="{:__('添加菜单')}" data-url="#editforms" 
+        data-area="668px" callback="add" data-disable="true" lay-event="add" >{:__('添加')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-title="{:__('编辑菜单')}" lay-area="668px" lay-url="#editforms" lay-event="edit" lay-callback="edit" >{:__('编辑')}</a>
+    <a class="layui-table-text" data-title="{:__('编辑菜单')}" data-area="668px" data-url="#editforms" lay-event="edit" callback="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.adminrules/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" data-url="{:url('/system.adminrules/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 
 <include file="/public/footer" />
-<script src="__STATICADMIN__module/xmselect/xmselect.js"></script>
 <script>
-    layui.use(['admin','form','treetable','iconHhysFa'], function () {
+    layui.use(['admin','form','treetable','iconPicker'], function () {
 
         var jquery = layui.jquery;
         var admin = layui.admin;
         var form = layui.form;
         var table = layui.table;
         var treetable = layui.treetable;
-        var iconHhysFa = layui.iconHhysFa;
+        var iconPicker = layui.iconPicker;
         var tableURL = "{:url('/system.adminrules/index')}";
 
         
@@ -277,15 +276,15 @@
         // 渲染图标元素
         var draIcon = function() {
 
-            iconHhysFa.render({
-                elem: '#iconHhysFad',
+            iconPicker.render({
+                elem: '#iconPicker',
                 type: 'fontClass',
                 search: true,
                 cellWidth: "19%",
                 page: true,
                 limit: 12, 
                 click: function(data) { // 点击回调
-                    jquery('#iconHhysFad').val(data.icon);
+                    jquery('#iconPicker').val(data.icon);
                 },
                 success: function(d) {  // 渲染成功后的回调
                     //console.log(d);

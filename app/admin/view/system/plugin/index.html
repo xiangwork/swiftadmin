@@ -11,34 +11,34 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">插件分类：</label>
 					<div class="layui-input-block" name="type">
-						<span class="layui-plugin-select active first" lay-value="">全部</span>
-						<span class="layui-plugin-select" lay-value="1">完整应用</span>
-						<span class="layui-plugin-select" lay-value="2">SEO优化</span>
-						<span class="layui-plugin-select" lay-value="3">开发测试</span>
-						<span class="layui-plugin-select" lay-value="4">小程序</span>
-						<span class="layui-plugin-select" lay-value="5">管理增强</span>
-						<span class="layui-plugin-select" lay-value="6">信息安全</span>
-						<span class="layui-plugin-select" lay-value="7">接口整合</span>
-						<span class="layui-plugin-select" lay-value="8">辅助增强</span>
-						<span class="layui-plugin-select" lay-value="9">扩展程序</span>
-						<span class="layui-plugin-select" lay-value="10">未归类</span>
+						<span class="layui-plugin-select active first" data-value="">全部</span>
+						<span class="layui-plugin-select" data-value="1">完整应用</span>
+						<span class="layui-plugin-select" data-value="2">SEO优化</span>
+						<span class="layui-plugin-select" data-value="3">开发测试</span>
+						<span class="layui-plugin-select" data-value="4">小程序</span>
+						<span class="layui-plugin-select" data-value="5">管理增强</span>
+						<span class="layui-plugin-select" data-value="6">信息安全</span>
+						<span class="layui-plugin-select" data-value="7">接口整合</span>
+						<span class="layui-plugin-select" data-value="8">辅助增强</span>
+						<span class="layui-plugin-select" data-value="9">扩展程序</span>
+						<span class="layui-plugin-select" data-value="10">未归类</span>
 					</div>
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label">标签选项：</label>
 					<div class="layui-input-block" name="pay">
 						<span class="layui-plugin-select active first">全部</span>
-						<span class="layui-plugin-select" lay-value="1">免费</span>					
-						<span class="layui-plugin-select" lay-value="2">收费</span>
+						<span class="layui-plugin-select" data-value="1">免费</span>					
+						<span class="layui-plugin-select" data-value="2">收费</span>
 						<div class="layui-divider layui-divider-vertical"></div>
 						<span name="label">
-							<span class="layui-plugin-select layui-hot" lay-value="hot">热门</span>
-							<span class="layui-plugin-select" lay-value="official">官方</span>
+							<span class="layui-plugin-select layui-hot" data-value="hot">热门</span>
+							<span class="layui-plugin-select" data-value="official">官方</span>
 						</span>
 						<div class="layui-divider layui-divider-vertical"></div>
 						<span name="label">
-							<button type="button" class="layui-btn layui-btn-xs" lay-value="install">已安装插件</button>
-							<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-value="cache">更新插件缓存</button>
+							<button type="button" class="layui-btn layui-btn-xs" data-value="install">已安装插件</button>
+							<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" data-value="cache">更新插件缓存</button>
 						</span>
 
 						<div class="layui-inline">
@@ -67,23 +67,23 @@
 	{{# if(d.install) { }}
 		{{# if(d.config) { }}
 			<a class="layui-table-text" 
-			lay-title="{:__('配置插件')}" 
-			lay-area="{{d.area}}" 
-			lay-maxmin="true"
-			lay-url="{:url('/system.plugin/config')}?name={{d.name}}" lay-event="edit" >{:__('配置')}</a>
+			data-title="{:__('配置插件')}" 
+			data-area="{{d.area}}" 
+			data-maxmin="true"
+			data-url="{:url('/system.plugin/config')}?name={{d.name}}" lay-event="edit" >{:__('配置')}</a>
 			<div class="layui-divider layui-divider-vertical"></div>
 		{{# } }}
 		{{# if(d.upgrade) { }}
 			<span class="layui-upgrade-elem">
 			<a class="layui-table-text upgrade" 
-			lay-url="{:url('/system.plugin/config')}?name={{d.name}}" >{:__('升级')}<span class="layui-badge-dot"></span></a>
+			data-url="{:url('/system.plugin/config')}?name={{d.name}}" >{:__('升级')}<span class="layui-badge-dot"></span></a>
 			<div class="layui-divider layui-divider-vertical"></div>
 			</span>
 		{{# } }}
 		
-		<a class="layui-table-text uninstall" style="color:red" lay-url="{:url('/system.plugin/uninstall')}?name={{d.name}}" >{:__('卸载')}</a>
+		<a class="layui-table-text uninstall" style="color:red" data-url="{:url('/system.plugin/uninstall')}?name={{d.name}}" >{:__('卸载')}</a>
 	{{# } else { }}
-	    <a class="layui-table-text install" lay-url="{:url('/system.plugin/install')}?name={{d.name}}" >{:__('安装')}</a>
+	    <a class="layui-table-text install" data-url="{:url('/system.plugin/install')}?name={{d.name}}" >{:__('安装')}</a>
 		{{# if(d.demourl) { }}
 		<div class="layui-divider layui-divider-vertical"></div>
 		<a class="layui-table-text" target="_blank" href="{{d.demourl}}" >{:__('演示')}</a>
@@ -114,12 +114,12 @@
                 {type: 'checkbox', width:45},
                 {field: 'id', align: 'center',templet:function(d){
                 	if (typeof plugins[d.name] != 'undefined') {
-                		var html = '<a href="/plugin/'+ d.name +'" target="_blank" lay-tips='+ d.name +' lay-offset="1" lay-color="#1890ff">';
+                		var html = '<a href="/plugin/'+ d.name +'" target="_blank" lay-tips='+ d.name +' data-offset="1" lay-color="#1890ff">';
                 			html += '<i class="layui-icon layui-icon-home" style="color:#1890ff;"></i></a>';
                 		return html;
                 	}
                 	else {
-                		return '<i class="layui-icon layui-icon-home" lay-tips='+ d.name +' lay-offset="1" ></i>';
+                		return '<i class="layui-icon layui-icon-home" lay-tips='+ d.name +' data-offset="1" ></i>';
                 	}
                 }, width: 80,  title: '前台'},
                 {field: 'title', align: 'left',width:200,templet:function(d){
@@ -142,7 +142,7 @@
                 	var html = '',item = plugins[d.name];
                 	if (typeof item != 'undefined') {
                 		html += '<input type="checkbox" lay-filter="pluginStatus"';
-            			html += 'lay-url="{:url(\'/system.plugin/status\')}" lay-skin="switch" value="'+d.name+'"'; 
+            			html += 'data-url="{:url(\'/system.plugin/status\')}" lay-skin="switch" value="'+d.name+'"'; 
             			if (item.status) {
             				html += 'checked';
             			}
@@ -156,22 +156,22 @@
                 	var html = '',item = plugins[d.name];
                 	if (typeof item != 'undefined') {
                 		if (item.config) {
-							html += '<a class="layui-table-text" lay-title="{:__(\'配置插件\')}" lay-area="' + item.area+' "';
-							html += 'lay-maxmin="true" lay-url="{:url(\'/system.plugin/config/\')}name/' +d.name+'" lay-event="edit" >{:__(\'配置\')}</a>';
+							html += '<a class="layui-table-text" data-title="{:__(\'配置插件\')}" data-area="' + item.area+' "';
+							html += 'data-maxmin="true" data-url="{:url(\'/system.plugin/config/\')}name/' +d.name+'" lay-event="edit" >{:__(\'配置\')}</a>';
 							html += '<div class="layui-divider layui-divider-vertical"></div>';
                 		}
                 		if (d.version > item.version) {
                 			html += '<span class="layui-upgrade-elem">';
-							html += '<a class="layui-table-text upgrade" lay-url="{:url(\'/system.plugin/config/\')}name/' +d.name+'" >{:__(\'升级\')}';
+							html += '<a class="layui-table-text upgrade" data-url="{:url(\'/system.plugin/config/\')}name/' +d.name+'" >{:__(\'升级\')}';
 							html += '<span class="layui-badge-dot"></span></a>';
                 			html += '</span>';
                 			html += '<div class="layui-divider layui-divider-vertical"></div>';
                 		}
                 		html += '<a class="layui-table-text uninstall" style="color:red"';
-                		html += ' lay-url="{:url(\'/system.plugin/uninstall/\')}name/'+d.name+'" >{:__(\'卸载\')}</a>';
+                		html += ' data-url="{:url(\'/system.plugin/uninstall/\')}name/'+d.name+'" >{:__(\'卸载\')}</a>';
                 	}
                 	else {
-                		html += '<a class="layui-table-text install" lay-url="{:url(\'/system.plugin/install/\')}name/'+d.name+'" >{:__(\'安装\')}</a>';
+                		html += '<a class="layui-table-text install" data-url="{:url(\'/system.plugin/install/\')}name/'+d.name+'" >{:__(\'安装\')}</a>';
 	    				if (d.demourl) {
 	    					html += '<div class="layui-divider layui-divider-vertical"></div>';
 	    					html += '<a class="layui-table-text" target="_blank" href="'+d.demourl +'" >{:__(\'演示\')}</a>';

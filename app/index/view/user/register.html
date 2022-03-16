@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SwiftAdmin 用户注册</title>
+<include file="public:header">
+</head>
+<body>
+
+<div class="layui-fluid">
+	<form class="layui-form layui-form-fixed" action="/user/register" method="post" >
+		<div class="layui-form-item">
+		<label class="layui-form-label">用户帐号</label>
+		<div class="layui-input-block">
+		  <input type="text" id="name" name="nickname" autocomplete="off" placeholder="请输入帐号" class="layui-input" value="admin">
+		</div>
+		</div>
+		<div class="layui-form-item">
+		<label class="layui-form-label">密码</label>
+		<div class="layui-input-block">
+		  <input type="password" id="pwd" name="pwd" autocomplete="off" placeholder="请输入密码" class="layui-input" value="admin888">
+		</div>
+		</div>
+		<div class="layui-form-item" style="display: none;">
+		<label class="layui-form-label">确认密码</label>
+		<div class="layui-input-block">
+		  <input type="password" id="repwd"  name="repwd" autocomplete="off" placeholder="请输入确认密码" class="layui-input" value="admin888"  >
+		</div>
+		</div>
+		<div class="layui-form-item">
+		<label class="layui-form-label">邀请码</label>
+		<div class="layui-input-block">
+		  <input type="text" id="code" name="code" autocomplete="off" class="layui-input" value="admin888" >
+		</div>
+		</div>
+		<div class="layui-form-item">
+		<label class="layui-form-label">邮箱地址</label>
+		<div class="layui-input-block">
+		  <input type="text" id="email" name="email" autocomplete="off" placeholder="请输入邮箱" class="layui-input" value="one@swiftadmin.net" >
+		</div>
+		</div>
+		<div class="layui-footer" style="text-align: center;">
+		  	<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		 	<button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="submitIframe">立即提交</button>
+		</div>				
+	</form>					
+</div>
+</html>

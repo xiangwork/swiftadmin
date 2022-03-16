@@ -7,7 +7,7 @@
             <div class="layui-form">
                 <div class="layui-inline" >
                     <!-- // 添加数据页面 -->
-                    <button class="layui-btn icon-btn" lay-open="" lay-callback="edit" lay-title="{:__('添加导航')}" lay-area="600px" lay-url="#editforms" >
+                    <button class="layui-btn icon-btn" lay-open="" callback="edit" data-title="{:__('添加导航')}" data-area="600px" data-url="#editforms" >
                         <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                     </button>
                 </div>
@@ -54,15 +54,15 @@
 
 <!-- // 列表状态栏 -->
 <script type="text/html" id="columnStatus">
-    <input type="checkbox" lay-filter="switchStatus" lay-url="{:url('/system.navmenu/status')}" value="{{d.id}}" lay-skin="switch"
+    <input type="checkbox" lay-filter="switchStatus" data-url="{:url('/system.navmenu/status')}" value="{{d.id}}" lay-skin="switch"
      {{d.status==1?'checked':''}}  />
 </script>
 
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar"> 
-    <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-callback="edit" lay-area="600px" lay-url="#editforms" lay-event="edit" >{:__('编辑')}</a>
+    <a class="layui-table-text" data-title="{:__('编辑')} {{d.title}}" callback="edit" data-area="600px" data-url="#editforms" lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.navmenu/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" data-url="{:url('/system.navmenu/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 <include file="/public/footer" />
 <script src="__STATICADMIN__module/xmselect/xmselect.js"></script>

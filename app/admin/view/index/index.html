@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>SwiftAdmin 后台管理开发框架</title>
-<link href="favicon.ico" rel="icon">
+<link href="/favicon.ico" rel="icon">
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -11,14 +11,19 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
 <link href="__STATICADMIN__layui/css/layui.css?{:config('app.version')}" rel="stylesheet" type="text/css" />
-<link href="__STATICADMIN__css/style.css?{:config('app.version')}" rel="stylesheet" type="text/css" />
+<link href="__STATICADMIN__css/style.css?{:config('app.version')}?v=<php> echo rand(100,100000);</php>" rel="stylesheet" type="text/css" />
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <script>
-  /*全局接口定义*/
+	var _meystack_global = {
+		app: "{$app|default='admin.php'}",
+		controller: "{$controller|default='index'}",
+		action: "{$action|default='index'}",
+		api: "{:config('app.api_url')}"
+	};
 </script>
 <body class="layui-layout-body" >
 <div class="layui-layout layui-layout-admin">
@@ -37,23 +42,29 @@
             </a>
           </li>
           <!-- // 多系统模式下元素 -->
-          <div class="layui-nav-head"><ul class="layui-nav layui-nav-top" lay-filter="lay-top-menu"></ul></div>
+          <div class="layui-nav-head"><ul class="layui-nav layui-nav-top" lay-filter="lay-side-menu"></ul></div>
         </ul>
 
         <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
           
-          <li class="layui-nav-item" lay-unselect>
-            <a href="javascript:;" sa-event="message" lay-text="{:__('消息中心')}" lay-url="{:url('/system.admin/message',[],false)}">
-              <i class="layui-icon layui-icon-notice"></i>  
-              <!-- 如果有新消息，则显示小圆点 -->
-              <span class="layui-badge-dot"></span>
-            </a>
-          </li>
-
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="javascript:;" sa-event="fullscreen" title="{:__('全屏')}" >
               <i class="layui-icon layui-icon-screen-full"></i>
             </a>
+          </li>
+          
+          <li class="layui-nav-item layui-hide-xs" >
+            <a id="language" href="javascript:;" title="{:__('语言')}" >
+              <i class="layui-icon layui-icon-website"></i>
+            </a>
+          </li>
+          <li class="layui-nav-item" lay-unselect>
+            <a href="javascript:;" sa-event="message" lay-text="{:__('消息中心')}" data-url="{:url('/system.admin/message',[],false)}">
+              <i class="layui-icon layui-icon-notice"></i>  
+              <!-- 如果有新消息，则显示小圆点 -->
+              <span class="layui-badge-dot"></span>
+            </a>
+
           </li>
           <li class="layui-nav-item" lay-unselect>
             <a href="javascript:;">
@@ -62,16 +73,16 @@
             </a>
             <!-- 后台的个人中心主页 -->
             <dl class="layui-nav-child" id="userHome" style="text-align: center;">
-              <dd><a sa-event="tabs" lay-url="{:url('/system.admin/center',[],false)}" lay-title="{:__('用户中心')}" >{:__('个人资料')}</a></dd>
-              <dd><a sa-event="pwd" lay-url="{:url('/system.admin/pwd',[],false)}" >{:__('修改密码')}</a></dd>
-              <dd><a class="layui-system-clear" lay-url="{:url('/system.admin/clear/type/',[],false)}" >{:__('清除缓存')}</a></dd>
+              <dd><a sa-event="tabs" data-url="{:url('/system.admin/center',[],false)}" data-title="{:__('用户中心')}" >{:__('个人资料')}</a></dd>
+              <dd><a sa-event="pwd" data-url="{:url('/system.admin/pwd',[],false)}" >{:__('修改密码')}</a></dd>
+              <dd><a id="clearCache" data-url="{:url('/system.admin/clear',[],false)}" >{:__('清除缓存')}</a></dd>
               <hr>
-              <dd><a sa-event="logout" lay-url="{:url('/login/logout',[],false)}"  >{:__('退出')}</a></dd>
+              <dd><a sa-event="logout" data-url="{:url('/login/logout',[],false)}"  >{:__('退出')}</a></dd>
             </dl>
           </li>
           
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
-            <a href="javascript:;" sa-event="theme" lay-url="{:url('/system.admin/theme',[],false)}" ><i class="layui-icon layui-icon-more-vertical"></i></a>
+            <a href="javascript:;" sa-event="theme" data-url="{:url('/system.admin/theme',[],false)}" ><i class="layui-icon layui-icon-more-vertical"></i></a>
           </li>
           <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
             <a href="javascript:;" sa-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
@@ -87,7 +98,7 @@
             <h1>Swift Admin Pro</h1>
           </div>
           <!-- // 侧边菜单 -->
-          <ul class="layui-nav layui-nav-tree arrow2" lay-shrink="all" lay-filter="lay-side-menu" lay-accordion="true" lay-statichtml="false" ></ul>
+          <ul class="layui-nav layui-nav-tree" lay-shrink="all" lay-filter="lay-side-menu" lay-accordion="true" lay-statichtml="false" ></ul>
         </div>
       </div>
       <!-- 内容主体区域 -->
@@ -97,26 +108,55 @@
         <span class="layui-layout-right" style="margin-right: 10px;">Build {:config('app.version')}</span>
       </div>
       <!-- // 全局获取数据接口 -->
-      <authorize id="authorize" lay-url="{:url('/system.admin/authorizeInterface')}"></authorize>
+      <authorize id="authorize" data-url="{:url('/system.admin/authorizeInterface')}"></authorize>
 </div>
 <script src="__STATICADMIN__layui/layui.js?{:config('app.version')}"></script>
 <script src="__STATICADMIN__js/common.js?{:config('app.version')}"></script>
 <script>
-  layui.use(['admin','mousewheel'],function(){
-      var jquery = layui.jquery;
+  layui.use(['admin','mousewheel','dropdown'],function(){
+      var $ = layui.jquery;
       var admin = layui.admin;
+      var dropdown = layui.dropdown;
       var mousewheel = layui.mousewheel;
      
-      // 初始化函数
-      admin.loading({
+      // 入口函数
+      admin.render({
           title:'{:__("主页")}',
-          urls:"{:url('/index/console')}"
+          url:"{:url('/index/console')}"
+      },{menu:$('#authorize').data('url')});
+
+      // 国际化语言
+      dropdown.render({
+        elem: '#language'
+        ,trigger: 'hover'
+        ,data: [{
+          title: 'English'
+          ,rd: 'en-us'
+          ,id: 'en'
+        },{
+          title: '中文'
+          ,rd: 'zh-cn'
+          ,id: 'zh'
+        }],click: function(obj){
+
+          // 避免重复
+          var lang = admin.getStorage('language');
+          if (lang == obj.id) {
+            return false;
+          }
+          $.get("{:url('/system.admin/language')}?l="+obj.rd,function(params) {
+            admin.setStorage('language',obj.id);
+            admin.changeI18n(obj.id);
+            // 重载页面
+            location.reload();
+          })
+        }
       });
 
       // 实现横向滚动
-      jquery('.layui-nav-head').on('mousewheel', function (event) {
-          jquery(this).stop();
-          jquery(this).animate({'scrollLeft': jquery(this).scrollLeft() - event.deltaFactor * event.deltaY * 2}, 80);
+      $('.layui-nav-head').on('mousewheel', function (event) {
+        $(this).stop();
+        $(this).animate({'scrollLeft':  $(this).scrollLeft() - event.deltaFactor * event.deltaY * 2}, 80);
           event.stopPropagation();
           event.preventDefault();
       });

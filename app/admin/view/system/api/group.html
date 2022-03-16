@@ -22,7 +22,7 @@
             <div class="layui-form-item">
             <div class="layui-inline" >
                 <!-- // 打开添加页面 -->
-                <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加分组')}" lay-area="500px" lay-url="#editforms" lay-callback="group" >
+                <button class="layui-btn icon-btn" lay-open="" data-title="{:__('添加分组')}" data-area="500px" data-url="#editforms" callback="group" >
                     <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                 </button>         
             </div>
@@ -84,9 +84,9 @@
 
 <!-- // 列表编辑框 -->
 <script type="text/html" id="tableBar"> 
-    <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-url="#editforms" lay-area="500px" lay-callback="group" lay-event="edit" >{:__('编辑')}</a>
+    <a class="layui-table-text" data-title="{:__('编辑')} {{d.title}}" data-url="#editforms" data-area="500px" callback="group" lay-event="edit" >{:__('编辑')}</a>
 	<div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.api/groupDel')}?app_id={$app_id}&id={{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" data-url="{:url('/system.api/groupDel')}?app_id={$app_id}&id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 <include file="/public/footer" />
 <script src="__STATICADMIN__module/xmselect/xmselect.js"></script>

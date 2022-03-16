@@ -54,12 +54,13 @@ class User extends AdminController
             $where[]=['status','=',$status];
             $count = $this->model->where($where)->count();
             $page = ($count <= $limit) ? 1 : $page;
-            $list = $this->model->where($where)->order("id asc")->limit($limit)->page($page)->select()->toArray();
+            $list = $this->model->where($where)->order("id asc")->limit($limit)->page($page)->select();
 
             // 循环处理数据
             foreach ($list as $key => $value) {
+                $value->hidden(['pwd', 'salt']);
                 $list[$key]['region'] = query_client_ip( $list[$key]['loginip']); 
-                $result = list_search($this->userGroup,['id'=>$value['group_id']]);
+                $result = list_search($this->userGroup,['id'=> $value['group_id']]);
                 if (!empty($result)) {
                     $list[$key]['group'] = $result['title'];
                 }
@@ -127,11 +128,6 @@ class User extends AdminController
                 if($this->model->where($whereEmail)->find()) {
                     return $this->error('该用户邮箱已经存在！');
                 }
-            }
-
-            // 修改密码
-            if (!empty($data) && $data['pwd'] != $post['pwd']) {
-                $post['pwd'] = hash_pwd($post['pwd']);
             }
 
             if ($this->model->update($post)) {

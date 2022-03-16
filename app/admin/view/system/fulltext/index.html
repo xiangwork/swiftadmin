@@ -25,7 +25,7 @@
                     <!-- // 默认搜索 -->
                     <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit><i class="layui-icon layui-icon-search"></i>{:__('搜索')}</button>
                     <!-- // 添加数据页面 -->
-                    <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加索引')}" lay-area="695px" lay-url="#editforms" >
+                    <button class="layui-btn icon-btn" lay-open="" data-title="{:__('添加索引')}" data-area="695px" data-url="#editforms" >
                         <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                     </button>
                 </div>
@@ -46,7 +46,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><font color="red">* </font>{:__('索引类型')}</label>
         <div class="layui-input-inline">
-            <select name="type" lay-verify="required" lay-disabled>
+            <select name="type" lay-verify="required" data-disabled>
                 <option value="">请选择</option>
                 <option value="XunSearch">XunSearch</option>
                 <option value="ElasticSearch">ElasticSearch</option>
@@ -81,7 +81,7 @@
     <!-- // 配置字段 -->
     <div class="layui-footer layui-form-item layui-center "  >
         <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('取消')}</button>
-        <button class="layui-btn" lay-add="{:url('/system.fulltext/add')}" lay-edit="{:url('/system.fulltext/edit')}" lay-filter="submitPage"  lay-submit>{:__('提交')}</button>
+        <button class="layui-btn" lay-filter="submitPage"  lay-submit>{:__('提交')}</button>
     </div>
     </form>
 </div>
@@ -89,12 +89,12 @@
 
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar"> 
-    <a class="layui-table-text" lay-title="{:__('编辑索引')}" lay-area="695px" lay-url="#editforms" lay-event="edit">{:__('编辑')}</a>
+    <a class="layui-table-text" data-title="{:__('编辑索引')}" data-area="695px" data-url="#editforms" lay-event="edit">{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-open="" lay-title="{:__('编辑字段')}" lay-area="850px,680px" 
-    lay-url="{:url('/system.fulltext/field')}?id={{d.id}}&type={{d.type}}" >{:__('字段')}</a>
+    <a class="layui-table-text" lay-open="" data-title="{:__('编辑字段')}" data-area="850px,680px" 
+    data-url="{:url('/system.fulltext/fields')}?id={{d.id}}&type={{d.type}}" >{:__('字段')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.fulltext/del')}?id={{d.id}}&type={{d.type}}" lay-event="del">{:__('删除')}</a>
+    <a class="layui-table-text" data-url="{:url('/system.fulltext/del')}?id={{d.id}}&type={{d.type}}" lay-event="del">{:__('删除')}</a>
 </script>
 
 <include file="/public/footer" />

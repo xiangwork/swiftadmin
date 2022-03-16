@@ -96,10 +96,10 @@ class Admin extends AdminController
                 }
 
                 $authnodes = $this->auth->getAuthNodes($value['id']);
-                $list[$key]['rules'] = $authnodes[$this->auth->authPrivate];
+                $list[$key][AUTHRULES] = $authnodes[$this->auth->authPrivate];
 
-                $authnodes = $this->auth->getAuthNodes($value['id'], 'cates');
-                $list[$key]['cates'] = $authnodes[$this->auth->authPrivate];
+                $authnodes = $this->auth->getAuthNodes($value['id'], AUTHCATES);
+                $list[$key][AUTHCATES] = $authnodes[$this->auth->authPrivate];
             }
 
             return $this->success('查询成功', null, $list, $count);
@@ -133,7 +133,7 @@ class Admin extends AdminController
             }
 
             // 管理员加密
-            $post['pwd'] = hash_pwd($post['pwd']);
+            $post['pwd'] = encryption($post['pwd']);
             $post['createip'] = request()->ip();
             $data = $this->model->create($post);
             if (!is_empty($data->id)) {
@@ -172,7 +172,7 @@ class Admin extends AdminController
                 // 修改密码
                 $data = $this->model->find($id);
                 if (!empty($data) && $data['pwd'] != $post['pwd']) {
-                    $post['pwd'] = hash_pwd($post['pwd']);
+                    $post['pwd'] = encryption($post['pwd']);
                 }
 
                 if ($this->model->update($post)) {
@@ -202,7 +202,7 @@ class Admin extends AdminController
      */
     public function editCates()
     {
-        return $this->_update_RuleCates('cates');
+        return $this->_update_RuleCates(AUTHCATES);
     }
 
     /**
@@ -211,7 +211,7 @@ class Admin extends AdminController
      * @param       string          $type  规则
      * @return      mixed|array
      */
-    protected function _update_RuleCates($type = 'rules')
+    protected function _update_RuleCates($type = AUTHRULES)
     {
         if (request()->isPost()) {
 
@@ -266,7 +266,7 @@ class Admin extends AdminController
             }
         }
 
-        $this->throwError('无权访问！', 403);
+        $this->throwError('无权访问！', 401);
     }
 
     /**
@@ -428,11 +428,11 @@ class Admin extends AdminController
 
             // 查找数据
             $where[] = ['id', '=', $this->admin['id']];
-            $where[] = ['pwd', '=', hash_pwd($pwd)];
+            $where[] = ['pwd', '=', encryption($pwd)];
             $result = $this->model->where($where)->find();
 
             if (!empty($result)) {
-                $this->model->where($where)->update(['pwd' => hash_pwd($post['pass'])]);
+                $this->model->where($where)->update(['pwd' => encryption($post['pass'])]);
                 $this->success('更改密码成功！');
             } else {
                 $this->error('原始密码输入错误');

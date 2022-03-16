@@ -12,7 +12,6 @@ declare (strict_types = 1);
 
 namespace app\index\controller;
 
-
 use app\HomeController;
 use app\common\model\system\Content;
 

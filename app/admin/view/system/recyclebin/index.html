@@ -22,19 +22,19 @@
                             <i class="layui-icon layui-icon-refresh"></i>
                         </button>
                         <button class="layui-btn layui-btn-sm icon-btn" 
-                            lay-batch="lay-tableList" lay-url="{:url('/system.recyclebin/restore')}">
+                            lay-batch="lay-tableList" data-url="{:url('/system.recyclebin/restore')}">
                             {:__('还原')}
                         </button>
                         <button class="layui-btn layui-btn-sm icon-btn" 
-                            lay-batch="lay-tableList" lay-url="{:url('/system.recyclebin/destroy')}" >
+                            lay-batch="lay-tableList" data-url="{:url('/system.recyclebin/destroy')}" >
                             {:__('销毁')}
                         </button>
                         <button class="layui-btn layui-btn-sm icon-btn" 
-                            lay-ajax="" lay-table="lay-tableList" lay-url="{:url('/system.recyclebin/restore')}" >
+                            lay-ajax="" data-table="lay-tableList" data-url="{:url('/system.recyclebin/restore')}" >
                             {:__('一键还原')}
                         </button>
                         <button class="layui-btn layui-btn-sm layui-btn-danger icon-btn" 
-                            lay-ajax="" lay-table="lay-tableList" lay-url="{:url('/system.recyclebin/destroy')}" >
+                            lay-ajax="" data-table="lay-tableList" data-url="{:url('/system.recyclebin/destroy')}" >
                             {:__('清空回收站')}
                         </button>
                     </div>
@@ -59,10 +59,10 @@
 
 <!-- // 列表编辑框 -->
 <script type="text/html" id="tableBar"> 
-    <a class="icon-btn" lay-url="{:url('/system.recyclebin/restore')}?id={{d.id}}" lay-event="ajax" >
+    <a class="icon-btn" data-url="{:url('/system.recyclebin/restore')}?id={{d.id}}" lay-event="ajax" >
         <i class="layui-icon layui-icon-refresh-3" style="font-size: 13px;margin-right: 2px"></i>{:__('还原')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="icon-btn" lay-url="{:url('/system.recyclebin/destroy')}?id={{d.id}}" lay-event="del" ><i class="layui-icon layui-icon-close"></i>{:__('销毁')}</a>
+    <a class="icon-btn" data-url="{:url('/system.recyclebin/destroy')}?id={{d.id}}" lay-event="del" ><i class="layui-icon layui-icon-close"></i>{:__('销毁')}</a>
 </script>
 
 <include file="/public/footer" />

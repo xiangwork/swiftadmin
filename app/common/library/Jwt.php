@@ -3,7 +3,7 @@
 namespace app\common\library;
 
 /**
- * Jwt验证类
+ * Jwt简易验证类
  *
  */
 class Jwt 
@@ -26,9 +26,7 @@ class Jwt
      * class constructor.
      */
     public function __construct()
-    {
-
-    }
+    {}
 
     /**
      * 初始化

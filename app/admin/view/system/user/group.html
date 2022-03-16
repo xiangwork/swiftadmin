@@ -25,7 +25,7 @@
                 <!-- // 默认搜索 -->
                 <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit><i class="layui-icon layui-icon-search"></i>{:__('搜索')}</button>
                 <!-- // 打开添加页面 -->
-                <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加会员组')}" lay-area="500px" lay-url="#editforms" >
+                <button class="layui-btn icon-btn" lay-open="" data-title="{:__('添加会员组')}" data-area="500px" data-url="#editforms" >
                     <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                 </button>
             </div>
@@ -83,9 +83,9 @@
 
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar">
-    <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-area="500px" lay-url="#editforms"  lay-event="edit" >{:__('编辑')}</a>
+    <a class="layui-table-text" data-title="{:__('编辑')} {{d.title}}" data-area="500px" data-url="#editforms"  lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.usergroup/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" data-url="{:url('/system.usergroup/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 
 

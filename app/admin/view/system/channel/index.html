@@ -21,7 +21,7 @@
                 </button>
 
                 <!-- // 添加数据页面 -->
-                <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加模型')}" lay-area="580px,300px" lay-url="#editforms" >
+                <button class="layui-btn icon-btn" lay-open="" data-title="{:__('添加模型')}" data-area="580px,300px" data-url="#editforms" >
                     <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                 </button>
 
@@ -72,9 +72,9 @@
 
 <!-- // 列表编辑框 -->
 <script type="text/html" id="tableBar"> 
-    <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-area="580px,300px" lay-url="#editforms" lay-event="edit" >{:__('编辑')}</a>
+    <a class="layui-table-text" data-title="{:__('编辑')} {{d.title}}" data-area="580px,300px" data-url="#editforms" lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.channel/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" data-url="{:url('/system.channel/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 <include file="/public/footer" />
 <script>

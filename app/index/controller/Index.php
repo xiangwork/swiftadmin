@@ -17,6 +17,8 @@ class Index extends HomeController
 {
     public function index()
     {
+        // $links = [];
+
         return $this->view();
     }
 }

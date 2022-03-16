@@ -33,7 +33,7 @@
             <!-- // 底部操作 -->
             <notempty name="$list['msg']">
             <div class="layui-message-footer">
-            <a href="javascript:;" class="clear" lay-type="msg">{:__('清空通知')}</a><span>|</span><a href="javascript:;" class="more">{:__('查看更多')}</a>
+            <a href="javascript:;" class="clear" data-type="msg">{:__('清空通知')}</a><span>|</span><a href="javascript:;" class="more">{:__('查看更多')}</a>
             </div>
             </notempty>
         </div>
@@ -60,7 +60,7 @@
             </div>  
             <notempty name="$list['msg']">
             <div class="layui-message-footer">
-        <a href="javascript:;" class="clear"lay-type="comment">{:__('清空私信')}</a><span>|</span><a href="javascript:;" class="more">{:__('查看更多')}</a>
+        <a href="javascript:;" class="clear"data-type="comment">{:__('清空私信')}</a><span>|</span><a href="javascript:;" class="more">{:__('查看更多')}</a>
             </div>
             </notempty>
         </div>
@@ -90,7 +90,7 @@
             </div>  
             <notempty name="$list['things']">
             <div class="layui-message-footer">
-            <a href="javascript:;" class="clear" lay-type="things">{:__('清空待办')}</a><span>|</span><a href="javascript:;" class="more">{:__('查看更多')}</a>
+            <a href="javascript:;" class="clear" data-type="things">{:__('清空待办')}</a><span>|</span><a href="javascript:;" class="more">{:__('查看更多')}</a>
             </div>
             </notempty>
         </div>
@@ -112,7 +112,7 @@
 
         // 清空消息点击事件
         $('.clear').click(function (obj) {
-            var that = $(this), typeElem = that.attr('lay-type');
+            var that = $(this), typeElem = that.data('type');
             var findElem = $('#' + typeElem);
 
             // 删除元素

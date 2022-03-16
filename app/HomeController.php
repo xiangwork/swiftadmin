@@ -135,11 +135,6 @@ class HomeController extends BaseController
                 return $this->error('请登录后访问','/');
             }
         }
-
-        // 获取站点数据
-        foreach (saenv('site') as $key => $value) {
-            $this->app->view->assign($key,$value);
-        }
     }
 
     /**

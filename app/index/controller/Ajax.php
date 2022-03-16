@@ -14,6 +14,7 @@ namespace app\index\controller;
 
 use app\common\model\system\Tags;
 use app\HomeController;
+use think\facade\Db;
 
 /**
  * Ajax控制器

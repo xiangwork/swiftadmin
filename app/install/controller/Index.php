@@ -210,7 +210,7 @@ class Index extends BaseController
 
                 // 修改初始化密码
                 if ($key == ($recordCount-1)) {
-                    $pwd = hash_pwd($mysqlInfo['pwd']);
+                    $pwd = member_encrypt($mysqlInfo['pwd']);
                     mysqli_query($sqlConnect,"UPDATE {$mysqlInfo['prefix']}admin SET pwd='{$pwd}' where id = 1");   
                 }
 

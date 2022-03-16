@@ -39,7 +39,7 @@ class Category extends AdminController
 
         // 获取用户权限
         $userGroup = json_encode(UserGroup::select()->toArray());
-        $cateGory = $this->auth->getrulecatestree('cates','private');
+        $cateGory = $this->auth->getRuleCatesTree(AUTHCATES,$this->auth->authPrivate);
         $this->app->view->assign([
             'cateGory'=>$cateGory,
             'UserGroup'=>$userGroup
@@ -121,9 +121,7 @@ class Category extends AdminController
 			return $this->error(); 
         }
 
-		return view('',[
-            'data'=> $this->getField(),
-		]);
+		return view('',['data'=> $this->getTableFields()]);
     }
 
     /**
@@ -131,7 +129,6 @@ class Category extends AdminController
      */
     public function edit() 
     {
-
         $id = input('id/d');
         $data = $this->model->find($id);
         if (request()->isPost()) {

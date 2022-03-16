@@ -1,6 +1,6 @@
 	<div class="layui-container" >
 		<div class="layui-logo">
-			<a href="/"><img src="/static/admin/images/logo.png" alt="logo" height="26">SwiftAdmin</a>
+			<a href="/"><img src="/static/system/images/logo.png" alt="logo" height="26">SwiftAdmin</a>
 		</div>
 
 		<ul class="layui-nav">
@@ -16,8 +16,8 @@
 		<div class="layui-nav layui-hide-xs fr" id="login">
 			<notempty name="$user.id"> <li class="layui-nav-item"><a class="" href="/user/index" >会员中心</a></li> <else/>
 
-			<li class="layui-nav-item"><a href="javascript:;" onclick="layer.msg('自行开发','warning');" >注册</a></li>
-			<li class="layui-nav-item"><a href="javascript:;" onclick="layer.msg('自行开发','error');" >登录</a></li>
+			<li class="layui-nav-item"><a href="javascript:;" lay-open lay-title="用户注册" lay-area="500px,390px" lay-url="/user/register" >注册</a></li>
+			<li class="layui-nav-item"><a href="javascript:;" lay-open lay-title="用户登录" lay-area="500px,390px" lay-url="/user/login" >登录</a></li>
 			</notempty>
 		</div>
 	</div>

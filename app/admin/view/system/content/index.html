@@ -75,14 +75,10 @@
                     </button>
                     <!-- // 打开添加页面 -->
                     <button class="layui-btn icon-btn layui-btn-add" 
-                        lay-open lay-title="{:__('请选择栏目')}" lay-area="300px,560px" 
-                        lay-url="#content" lay-callback="category" lay-value="{:url('/system.content/add')}" >
+                        lay-open data-area="100%,100%" data-url="{:url('/system.content/add')}" >
                         <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                     </button>
-                    <button class="layui-btn icon-btn" 
-                        lay-open lay-title="{:__('请选择栏目')}" lay-area="300px,560px" 
-                        lay-url="#content" lay-callback="category" lay-value="{:url('/system.content/move')}" >
-                        <i class="layui-icon layui-icon-transfer "></i>{:__('批量移动')}
+                    <button class="layui-btn icon-btn" onclick="alert('移动完成')" ><i class="layui-icon layui-icon-transfer "></i>{:__('批量移动')}
                     </button>
                 </div>
                 </div>
@@ -93,36 +89,34 @@
             <table id="lay-tableList" lay-filter="lay-tableList"></table>        
         </div>
     </div>
-
 </div>
-<!-- // 请选择栏目 -->
-<script type="text/html" id="content">
-    <div class="layui-card-body" style="margin-top: 10px;">
-        <div id="category"></div>
-    </div>
-</script>
+
 <!-- // 列表状态栏 -->
 <script type="text/html" id="status">
-    <input type="checkbox" lay-filter="switchStatus" lay-url="{:url('/system.content/status')}?cid={{d.cid}}" value="{{d.id}}" lay-skin="switch"
+    <input type="checkbox" lay-filter="switchStatus" data-url="{:url('/system.content/status')}?cid={{d.cid}}" value="{{d.id}}" lay-skin="switch"
      {{d.status==1?'checked':''}}  />
 </script>
+
 <!-- // 列表编辑框 -->
 <script type="text/html" id="tableBar"> 
     <a class="layui-table-text"
-    lay-url="{:url('/system.content/edit')}?cid={{d.cid}}&pid={{d.pid}}&id={{d.id}}" lay-maxmin="true" lay-area="100%,100%" lay-event="edit" >{:__('编辑')}</a>
+    data-url="{:url('/system.content/edit')}?cid={{d.cid}}&pid={{d.pid}}&id={{d.id}}" data-maxmin="true" data-area="100%,100%" lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.content/del')}?cid={{d.cid}}&pid={{d.pid}}&id={{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" data-url="{:url('/system.content/del')}?cid={{d.cid}}&pid={{d.pid}}&id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
+
+
 <include file="/public/footer" />
 <script>
-    layui.use(['admin','tree'], function () {
+    layui.use(['admin','tree','table'], function () {
 
         var admin = layui.admin;
         var tree = layui.tree;
         var table = layui.table; 
-        var jquery = layui.jquery;
+        var $ = layui.jquery;
         var tableURL = "{:url('/system.content/index')}";
         var authURL  = '{:url("/system.admin/authorizeInterface")}';
+        var categoryList = {:htmlspecialchars_decode($categoryList)};
 
         // 数据表格
         var isTable = table.render({
@@ -161,7 +155,7 @@
             ]]
             ,done: function(res, curr, count) {
                 if (!res.data || res.code == 101) {
-                    jquery('.layui-table-page').remove();
+                    $('.layui-table-page').remove();
                 }
             }
         })
@@ -169,16 +163,12 @@
         // 重载数据表格
         tree.render({
             elem: '#tree',
-            data: admin.event.getAjaxData(authURL,{ 
-                action : 'getrulecatestree',
-                type   : 'cates',
-                class  : 'private'
-            })
+            data: categoryList
             ,onlyIconControl: true
             ,click: function (event) {
-                param = '?' + jquery.param({
+                param = '?' + $.param({
+                    'pid': event.data.id,
                     'cid': event.data.cid,
-                    'pid': event.data.id
                 });
 
                 table.reload('lay-tableList', {
@@ -186,54 +176,10 @@
                     where: {}
                 });
 
-                var that = jquery('.layui-btn-add');
-                that.attr('lay-area','100%,100%');
-                that.removeAttr('lay-title lay-callback');
-                that.attr('lay-url',that.attr('lay-value') + param);
+                var that = $('.layui-btn-add');
+                var url = $(that).data('url').split('?')[0];
+                that.attr('data-url',url + param);
             }          
         })
-
-        // 添加栏目回调
-        admin.callback.category = function(clickthis,colletction,config) {
-
-            tree.render({
-                elem: '#category',
-                data: admin.event.getAjaxData(authURL,{ 
-                    action : 'getrulecatestree',
-                    type   : 'cates',
-                    class  : 'private'
-                })
-                ,onlyIconControl: true
-                ,click: function (event) {
-
-                    param = '?' + jquery.param({
-                        'cid': event.data.cid,
-                        'pid': event.data.id
-                    });
-
-                    // 重载地址参数
-                    var url = clickthis.attr('lay-value');
-                    if (url.indexOf('move') == -1) {
-                        clickthis.attr('lay-url',url + param);
-                        clickthis.attr('lay-area','100%,100%');
-                        clickthis.removeAttr('lay-title lay-callback');
-                        parent.layui.jquery(clickthis).trigger('click');
-                    } else {
-
-                        // 模拟元素点击
-                        var batchthis = jquery('#batch');
-                        if (!batchthis.length) {
-                            var html = '<div id="batch" lay-batch="lay-tableList" lay-field="cid"></div>';
-                            jquery(clickthis).parent().append(html);
-                            batchthis = jquery('#batch');
-                        }
-
-                        batchthis.attr('lay-url',url+'?destpid='+event.data.id);
-                        batchthis.trigger('click');
-                    }
-                    layui.layer.close(colletction.index);               
-                }          
-            })
-        }
     })
 </script>

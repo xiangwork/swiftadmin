@@ -9,6 +9,7 @@ use think\exception\HttpResponseException;
 use think\exception\ValidateException;
 use think\Response;
 use Throwable;
+use app\common\model\system\Systemlog;
 
 /**
  * 应用异常处理类
@@ -50,9 +51,25 @@ class ExceptionHandle extends Handle
      */
     public function render($request, Throwable $e): Response
     {
-        // 添加自定义异常处理机制
+
+        if ($e instanceof \Throwable) {
+
+            if (saenv('system_exception') && !empty($e->getMessage())) {
+                
+                // 写入异常日志
+                $expLogs = system_exception_logs();
+                $expLogs['type'] = 1;
+                $expLogs['file'] = $e->getFile();
+                $expLogs['line'] = $e->getLine();
+                $expLogs['error'] = $e->getMessage();
+
+                Systemlog::write($expLogs);
+            }
+        }
 
         // 其他错误交给系统处理
         return parent::render($request, $e);
     }
+
+
 }

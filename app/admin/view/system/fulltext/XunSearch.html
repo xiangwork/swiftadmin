@@ -39,7 +39,7 @@
     $field_tokenizer = ['default'=>'default','full'=>'full','none'=>'none','split'=>'split','xlen'=>'xlen','xstep'=>'xstep',];
 </php>
 <div class="layui-fluid">
-    <form class="layui-form" action="{:url('/system.fulltext/field')}">
+    <form class="layui-form" action="{:url('/system.fulltext/fields')}">
     <gt name="$data.id" value="0"><input type="text" name="id" value="{$data.id}" hidden=""></gt>
     <fieldset class="layui-elem-field">
         <legend>项目信息</legend>
@@ -154,7 +154,7 @@
             <div style="margin-left: 15px;">
                 <button type="button" class="layui-btn layui-btn-xs layui-btn-add">添加</button>
                 <button type="reset" class="layui-btn layui-btn-xs layui-btn-danger">重置</button>
-                <button class="layui-btn layui-btn-xs" lay-submit="" lay-filter="submitIframe">立即提交</button>
+                <button class="layui-btn layui-btn-xs" lay-submit="" lay-filter="submitIframe" type="button">立即提交</button>
             </div>
         </div>
       </fieldset>

@@ -25,7 +25,7 @@
                 <button class="layui-btn icon-btn" lay-filter="treeSearch" lay-submit><i class="layui-icon layui-icon-search"></i>{:__('搜索')}</button>
                 <!-- // 打开添加页面 -->
                 <button class="layui-btn icon-btn" 
-                    lay-open="" lay-title="{:__('新增部门')}" lay-callback="edit" lay-area="680px" lay-url="#editforms" >
+                    lay-open="" data-title="{:__('新增部门')}" callback="edit" data-area="680px" data-url="#editforms" >
                     <i class="layui-icon layui-icon-add-1"></i>{:__('新增')}
                 </button>
             </div>
@@ -104,9 +104,9 @@
 
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar"> 
-    <a class="layui-table-text" lay-title="{:__('编辑')}" lay-area="668px" lay-url="#editforms" lay-event="edit" lay-callback="edit" >{:__('编辑')}</a>
+    <a class="layui-table-text" data-title="{:__('编辑')}" data-area="668px" data-url="#editforms" lay-event="edit" callback="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.department/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" data-url="{:url('/system.department/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 
 <include file="/public/footer" />

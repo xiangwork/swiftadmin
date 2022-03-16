@@ -21,7 +21,7 @@
 		        <div class="layui-input-inline" style="width: 306px">
 		            <input name="logo" type="text" class="layui-input pic" value="{$data.logo}"  lay-verify="required" />
 		        </div>
-		        <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="pic">{:__('上传图片')}</button>
+		        <button type="button" class="layui-btn layui-btn-normal" lay-upload="pic" >{:__('上传图片')}</button>
             </div>  
             <div class="layui-form-item">
                 <label class="layui-form-label">应用ID</label>
@@ -46,7 +46,7 @@
 
         <div class="layui-footer" style="text-align: center;">
             <button class="layui-btn layui-btn-primary" type="button"  sa-event="closeDialog" >取消</button>
-            <button class="layui-btn layui-btn-normal" lay-filter="submitIframe" lay-submit>提交</button>
+            <button class="layui-btn layui-btn-normal" lay-filter="submitIframe" type="button" lay-submit>提交</button>
         </div>
     </form>
 </div>

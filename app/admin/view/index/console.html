@@ -144,15 +144,15 @@
                     title="菜鸟学院 - 免费基础编程教学">菜鸟学院 ❤️</a>
                     <a href="https://www.yingtwo.com" class="workplace-action" target="_blank"
                     title="高性价比云服务器">云服务器 <span class="layui-badge" style="height: 11px;line-height:11px;font-size:10px;" >HOT</span></a>
-                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.seoer/index',[],false)}"
+                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" data-url="{:url('/system.seoer/index',[],false)}"
                     title="SEO优化">SEO优化</a>
-                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.rewrite/index',[],false)}"
+                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" data-url="{:url('/system.rewrite/index',[],false)}"
                     title="URL生成">URL生成</a>
-                    <a href="javascript:;" class="workplace-action" sa-event="tabs" lay-url="{:url('/system.friendlink/index',[],false)}"
+                    <a href="javascript:;" class="workplace-action" sa-event="tabs" data-url="{:url('/system.friendlink/index',[],false)}"
                     title="友情链接">友情链接 </a>
-                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.adwords/index',[],false)}" 
+                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" data-url="{:url('/system.adwords/index',[],false)}" 
                     title="广告管理">广告管理</a>
-                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" lay-url="{:url('/system.dictionary/index',[],false)}"
+                    <a href="javascript:;" class="workplace-action"  sa-event="tabs" data-url="{:url('/system.dictionary/index',[],false)}"
                     title="字典管理">字典管理</a>
                 </ul>
             </div>
@@ -161,67 +161,80 @@
     </div>
   </div>
    
-  <div class="layui-row layui-col-space10">
-   <div class="layui-col-md2">
-            <div class="layui-card smallblock" sa-event="tabs" lay-url="{:url('/system.user/index',[],false)}" lay-title="{:__('会员管理')}" >
-                <div class="layui-card-body" >
-                    <div class="layui-small-block">
-                        <div><i class="layui-icon layui-icon-user"></i></div>
-                        <div class="layui-small-block-title" >用户</div>
+  <div class="layui-row layui-col-space10" style="margin-bottom: 0;">
+
+      <div class="layui-col-md4">
+        <div class="layui-row layui-col-space10" style="margin-bottom: 5px;">
+          <div class="layui-col-xs6 layui-col-sm6">
+              <div class="layui-card smallblock" sa-event="tabs" data-url="{:url('/system.user/index',[],false)}" data-title="{:__('会员管理')}" >
+                  <div class="layui-card-body" >
+                      <div class="layui-small-block">
+                          <div><i class="layui-icon layui-icon-user"></i></div>
+                          <div class="layui-small-block-title" >用户</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="layui-col-xs6 layui-col-sm6">
+              <div class="layui-card smallblock" sa-event="tabs" data-url="{:url('/index/analysis',[],false)}" data-title="{:__('分析页')}" >
+                  <div class="layui-card-body">
+                      <div class="layui-small-block">
+                          <div><i class="layui-icon layui-icon-chart " style="color: #b0e689"></i></div>
+                          <div class="layui-small-block-title">分析</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-md4">
+        <div class="layui-row layui-col-space10" style="margin-bottom: 5px;">
+          <div class="layui-col-xs6 layui-col-sm6">
+              <div class="layui-card smallblock" sa-event="tabs" data-url="{:url('/index/monitor',[],false)}" data-title="{:__('监控页')}" >
+                  <div class="layui-card-body">
+                      <div class="layui-small-block">
+                          <div><i class="layui-icon layui-icon-chart-screen" style="color: #fe9c6e"></i></div>
+                          <div class="layui-small-block-title">监控</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="layui-col-xs6 layui-col-sm6">
+              <div class="layui-card smallblock" sa-event="tabs" data-url="{:url('/system.category/index',[],false)}" data-title="{:__('栏目管理')}" >
+                  <div class="layui-card-body">
+                      <div class="layui-small-block">
+                          <div><i class="layui-icon layui-icon-template-1" style="color: #b37eeb"></i></div>
+                          <div class="layui-small-block-title">内容</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          </div>
+        </div>
+        <div class="layui-col-md4" >
+          <div class="layui-row layui-col-space10" style="margin-bottom: 5px;">
+            <div class="layui-col-xs6 layui-col-sm6">
+                <div class="layui-card smallblock" sa-event="tabs" data-url="{:url('/system.systemlog/index',[],false)}" data-title="{:__('操作日志')}" >
+                    <div class="layui-card-body">
+                        <div class="layui-small-block">
+                            <div><i class="layui-icon layui-icon-list" style="color: #88e4de" ></i></div>
+                            <div class="layui-small-block-title">日志</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="layui-col-md2">
-            <div class="layui-card smallblock" sa-event="tabs" lay-url="{:url('/index/analysis',[],false)}" lay-title="{:__('分析页')}" >
-                <div class="layui-card-body">
-                    <div class="layui-small-block">
-                        <div><i class="layui-icon layui-icon-chart " style="color: #b0e689"></i></div>
-                        <div class="layui-small-block-title">分析</div>
+            <div class="layui-col-xs6 layui-col-sm6">
+                <div class="layui-card smallblock" sa-event="tabs" data-url="{:url('/index/basecfg',[],false)}" data-title="{:__('基本设置')}" >
+                    <div class="layui-card-body">
+                        <div class="layui-small-block">
+                            <div><i class="layui-icon layui-icon-set-sm" style="color: #ffc069"></i></div>
+                            <div class="layui-small-block-title">设置</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="layui-col-md2">
-            <div class="layui-card smallblock" sa-event="tabs" lay-url="{:url('/index/monitor',[],false)}" lay-title="{:__('监控页')}" >
-                <div class="layui-card-body">
-                    <div class="layui-small-block">
-                        <div><i class="layui-icon layui-icon-chart-screen" style="color: #fe9c6e"></i></div>
-                        <div class="layui-small-block-title">监控</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="layui-col-md2">
-            <div class="layui-card smallblock" sa-event="tabs" lay-url="{:url('/system.category/index',[],false)}" lay-title="{:__('栏目管理')}" >
-                <div class="layui-card-body">
-                    <div class="layui-small-block">
-                        <div><i class="layui-icon layui-icon-template-1" style="color: #b37eeb"></i></div>
-                        <div class="layui-small-block-title">内容</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="layui-col-md2">
-            <div class="layui-card smallblock" sa-event="tabs" lay-url="{:url('/system.systemlog/index',[],false)}" lay-title="{:__('操作日志')}" >
-                <div class="layui-card-body">
-                    <div class="layui-small-block">
-                        <div><i class="layui-icon layui-icon-list" style="color: #88e4de" ></i></div>
-                        <div class="layui-small-block-title">日志</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="layui-col-md2">
-            <div class="layui-card smallblock" sa-event="tabs" lay-url="{:url('/index/basecfg',[],false)}" lay-title="{:__('基本设置')}" >
-                <div class="layui-card-body">
-                    <div class="layui-small-block">
-                        <div><i class="layui-icon layui-icon-set-sm" style="color: #ffc069"></i></div>
-                        <div class="layui-small-block-title">设置</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+          </div>
+      </div>
   </div>
    
   <div class="layui-row layui-col-space10">
@@ -542,9 +555,10 @@
 
 <script>
 
-    layui.use(['admin','carousel'], function () {
+    layui.use(['carousel'], function () {
 
         var carousel = layui.carousel;
+
         //建造实例
         carousel.render({
             elem: '#carousel'

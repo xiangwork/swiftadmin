@@ -138,7 +138,7 @@
             <div class="layui-card">
                 <div class="layui-card-body" style="padding: 25px;">
                     <div class="text-center layui-text">
-                        <div class="user-info-head" id="imgHead" lay-upload lay-images="imgHead" lay-data="{url: '/upload/avatar?auth_key={:saenv('auth_key')}'}" lay-callback="imgHead">
+                        <div class="user-info-head" id="imgHead" lay-upload="imgHead" data-url="/upload/avatar?auth_key={:saenv('auth_key')}" callback="imgHead">
                             <img src="{$data.face}" class="imgHead" />
                         </div>
                         <h2 style="padding-top: 20px;">{$data.nickname|default='没有昵称'}</h2>
@@ -221,7 +221,7 @@
                                     </div>
                                     <div class="layui-form-item">
                                         <div class="layui-input-block">
-                                            <button class="layui-btn" lay-filter="submitIframe" lay-submit>{:__('更新基本信息')}</button>
+                                            <button class="layui-btn" lay-filter="submitIframe" type="button" lay-submit>{:__('更新基本信息')}</button>
                                         </div>
                                     </div>
                                 </form>

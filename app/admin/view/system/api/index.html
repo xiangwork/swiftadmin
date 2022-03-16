@@ -53,7 +53,7 @@
                     <!-- // 默认搜索 -->
                     <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit><i class="layui-icon layui-icon-search"></i>{:__('搜索')}</button>
                     <!-- // 打开添加页面 -->
-                    <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加接口')}" lay-area="690px" lay-url="#editforms"  lay-callback="edits" >
+                    <button class="layui-btn icon-btn" lay-open="" data-title="{:__('添加接口')}" data-area="690px" data-url="#editforms"  callback="edits" >
                         <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                     </button>
                     <!-- // 打开接口文档页面 -->
@@ -172,14 +172,14 @@
 
 <!-- // 列表编辑框 -->
 <script type="text/html" id="tableBar">
-    <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" lay-callback="edits" lay-url="#editforms" lay-area="690px" lay-event="edit" >{:__('编辑')}</a>
+    <a class="layui-table-text" data-title="{:__('编辑')} {{d.title}}" callback="edits" data-url="#editforms" data-area="690px" lay-event="edit" >{:__('编辑')}</a>
 	<div class="layui-divider layui-divider-vertical"></div>
     <a class="layui-table-text dropdown-btn" data-id="{{d.id}}" >{:__('更多')} <i class="layui-icon layui-icon-down" style="font-size:12px;top: -1px" ></i></a>
 </script>
 
 <!-- // 列表状态栏 -->
 <script type="text/html" id="authStatus">
-    <input type="checkbox" lay-filter="switchStatus" lay-url="{:url('/system.api/status')}" value="{{d.id}}" lay-skin="switch"
+    <input type="checkbox" lay-filter="switchStatus" data-url="{:url('/system.api/status')}" value="{{d.id}}" lay-skin="switch"
      {{d.status==1?'checked':''}}  />
 </script>
 

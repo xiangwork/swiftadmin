@@ -45,18 +45,16 @@
 						<div class="layui-form-item">
 							<label class="layui-form-label">{:__('图集状态')}</label>
 							<div class="layui-input-block">
-							    <input type="checkbox" value="1" name="attribute[]" lay-skin="primary" <in name="1" value="$data.attribute">checked=""</in> title="头条">
-							    <input type="checkbox" value="2" name="attribute[]" lay-skin="primary" <in name="2" value="$data.attribute">checked=""</in> title="推荐">
-							    <input type="checkbox" value="3" name="attribute[]" lay-skin="primary" <in name="3" value="$data.attribute">checked=""</in> title="幻灯">
-							    <input type="checkbox" value="4" name="attribute[]" lay-skin="primary" <in name="4" value="$data.attribute">checked=""</in> title="滚动">
-							    <input type="checkbox" value="5" name="attribute[]" lay-skin="primary" <in name="5" value="$data.attribute">checked=""</in> title="图文">
-							    <input type="checkbox" value="6" name="attribute[]" lay-skin="primary" <in name="6" value="$data.attribute">checked=""</in> title="跳转">
+								<salibs:dictionary id="vo" value="cattr" >
+									<input type="checkbox" value="{$vo.value}" name="attribute[]" lay-skin="primary" 
+									<in name="$vo['value']" value="$data.attribute">checked=""</in> title="{$vo.name}">
+                                </salibs:dictionary>  
 							</div>                                         
 						</div>
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('关键TAG')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" id="seo_keywords" name="seo_keywords" placeholder="{:__('请输入SEO关键词')}" value="{$data.images.seo_keywords}" class="layui-input">
+		                        <input type="text" id="keywords" lay-tags=""  name="keywords" placeholder="{:__('请输入SEO关键词')}" value="{$data.keywords}" class="layui-input">
 		                    </div>                                          
 		                </div>
 		                <div class="layui-form-item">
@@ -65,7 +63,7 @@
 		                        <input type="text" name="image" lay-image-hover="" 
 		                        placeholder="{:__('请上传图集封面')}" value="{$data.image}" class="layui-input image">
 		                    </div>   
-		                    <button type="button" class="layui-btn" lay-upload="" lay-input="image" >{:__('上传封面')}</button>
+		                    <button type="button" class="layui-btn" lay-upload="image"  >{:__('上传封面')}</button>
 		                </div> 
 
 		                <div class="layui-form-item layui-form-item-fixed">
@@ -76,25 +74,26 @@
 									<img src="{$vo.src}" lay-image-hover >
 									<input type="text" name="album[{$key}][src]" class="layui-hide" value="{$vo.src}" >
 									<input type="text" name="album[{$key}][title]" class="layui-input" value="{$vo.title}" placeholder="图片简介">
-									<span class="layui-badge layui-badge-red" onclick="layui.jquery(this).parent().remove();">删除</span>
+									<span class="layui-badge layui-badge-red" onclick="layui.$(this).parent().remove();">删除</span>
 								</div>
 								</volist>
 
 								<div class="layui-input-inline">
-				                	<div class="layui-upload-drag" lay-upload lay-callback="images">
+									<!-- // 多图上传 -->
+				                	<div class="layui-upload-drag" lay-upload="album" data-type="multiple">
 									  <i class="layui-icon layui-icon-upload"></i>
 									  <p>点击上传，或将文件拖拽到此处</p>
-									  <div class="layui-hide" >
-									  </div>
+									  <div class="layui-hide"></div>
 									</div>
 								</div>
+
 							</div>
 		                </div>	
 
 		                <div class="layui-form-item" >
 		                    <label class="layui-form-label">{:__('图集内容')}</label>
 		                    <div class="layui-input-block">
-		                        <textarea id="content" class="layui-hide" name="content" type="layui-textarea" >{$data.images.content}</textarea>
+		                        <textarea id="content" lay-editor="" class="layui-hide" name="content" type="layui-textarea" >{$data.images.content}</textarea>
 		                    </div>
 		                </div>
                     </div>
@@ -114,14 +113,14 @@
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('SEO标题')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <input type="text" name="seo_title" placeholder="{:__('请输入SEO标题')}" value="{$data.images.seo_title}" class="layui-input">
+		                        <input type="text" name="seotitle" placeholder="{:__('请输入SEO标题')}" value="{$data.seotitle}" class="layui-input">
 		                    </div>                                          
 		                </div>
 
 		                <div class="layui-form-item">
 		                    <label class="layui-form-label" >{:__('SEO简介')}</label>
 		                    <div class="layui-input-inline wid650">
-		                        <textarea name="seo_description" placeholder="{:__('请输入SEO描述信息')}" class="layui-textarea" >{$data.images.seo_description}</textarea>
+		                        <textarea name="description" placeholder="{:__('请输入SEO描述信息')}" class="layui-textarea" >{$data.description}</textarea>
 		                    </div>                                          
 		                </div>
 
@@ -144,12 +143,12 @@
 		                    <label class="layui-form-label">{:__('推荐星级')}</label>
 		                    <div class="layui-input-inline">
 		                        <input class="stars" type="text" name="stars" value="{$data.stars}"  hidden="" >
-		                        <div lay-stars="ones" lay-value="{$data.stars}" lay-class="stars" lay-theme="#1890ff" ></div>
+		                        <div lay-rate="stars" data-value="{$data.stars}" data-class="stars" data-theme="#1890ff" ></div>
 		                    </div>
 		                    <label class="layui-form-label">{:__('标题颜色')}</label>
 		                    <div class="layui-input-inline">
 		                        <input class="color" type="text" name="color" value="{$data.color}"  hidden="" >
-		                        <div class="picker" lay-colorpicker="color" lay-value ="{$data.color}" ></div>
+		                        <div class="picker" lay-colorpicker="color" data-value ="{$data.color}" ></div>
 		                    </div>
 		                </div>	
 
@@ -233,33 +232,23 @@
     
         <div class="layui-footer layui-form-footer" >
             <button class="layui-btn layui-btn-primary" type="button" sa-event="closeDialog">{:__('取消')}</button>
-            <button class="layui-btn" lay-filter="submitIframe" lay-submit lay-reload="false" >{:__('提交')}</button>
+            <button class="layui-btn" lay-filter="submitIframe" type="button" lay-submit reload="false" >{:__('提交')}</button>
         </div>
     </form>
 </div>
 <include file="/public/footer" />
-<script src="__STATICADMIN__module/xmselect/xmselect.js"></script>
-<script src="/static/js/tinymce/tinymce.min.js"></script>
 <script>
-	var grouplist = {$UserGroup|raw};
-	var categorylist = {$cateGory|raw};
-</script>
-<script>
-    layui.use(['admin','content','tags'], function () {
+    layui.use(['admin','content'], function () {
 
         var jquery = layui.jquery;
         var admin = layui.admin;
         var content = layui.content;
-        var isTags = tags.render({
-            elem: '#seo_keywords',
-            url: '/ajax/getTags',
-            done: function(key,all) {}
-        });
+		var groupList = {:htmlspecialchars_decode($UserGroup)};
+		var categoryList = {:htmlspecialchars_decode($categoryList)};
 
         // 常规元素渲染
-		content.tinymce('content');
-		content.xmselect('pid',categorylist,[{$data.pid}],false);
-		content.xmselect('access',grouplist,[{$data.access}]);
+		content.xmselect('pid',categoryList,[{$data.pid}],false);
+		content.xmselect('access',groupList,[{$data.access}]);
 
         // 上传回调函数
         admin.callback.images = function(clickthis,colletction,config) {
@@ -271,7 +260,7 @@
         		html += '<img src="'+res.url+'" lay-image-hover >';
         		html += '<input type="text" name="album['+index+'][src]" class="layui-hide" value="'+res.url+'">';
         		html += '<input type="text" name="album['+index+'][title]" class="layui-input" placeholder="图片简介">';
-        		html += '<span class="layui-badge layui-badge-red" onclick="layui.jquery(this).parent().remove();">删除</span></div>';
+        		html += '<span class="layui-badge layui-badge-red" onclick="layui.$(this).parent().remove();">删除</span></div>';
         		clickthis.parent().before(html);
         	}
         }

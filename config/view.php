@@ -26,8 +26,12 @@ return [
     'taglib_pre_load' => 'app\common\taglib\Salibs',
     'tpl_replace_string' => [
         '__STATIC__'=>'/static/',
-        '__STATICADMIN__'=>'/static/admin/',
-        '__JS__' => '/static/javascript',
-        '__ADMINIMAGES__' => '/static/admin/images',
+        '__STATICJS__'=>'/static/js/',
+        '__STATICCSS__'=>'/static/css/',
+        '__STATICIMAGES__'=>'/static/images/',
+        '__STATICADMIN__'=>'/static/system/',
+        '__ADMINIMAGES__' => '/static/system/images/',
+        '__ADMINPLUGIN__' => '/static/system/plugin/',
+        '__HOMEPLUGIN__' => '/static/plugin/',
         ]
 ];

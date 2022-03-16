@@ -38,6 +38,13 @@ class XunSearch
     // 查询规则
     public array $_where = [];
 
+    /**
+     * 必选字段
+     *
+     * @var array
+     */
+    public  array $_mustbeFields = ['id', 'title', 'content', 'status'];
+
     // 搜索匹配数
     private int $_count = 0;
 
@@ -160,6 +167,17 @@ class XunSearch
             throw new \Exception('主键型非唯一性或为空');
         }
 
+        /**
+         * 强选项字段
+         */
+        $field_name = array_flip($properties['field_name']);
+
+        foreach ($this->_mustbeFields as $key) {
+            if (!array_key_exists($key, $field_name)) {
+                throw new \Exception('The lack of necessary key values');
+            }
+        }
+
         $fields = $this->parXunSearch($properties);
 
         try {
@@ -240,29 +258,23 @@ class XunSearch
     }
 
     /**
-     * 添加索引
+     * 更新文档
+     *
      * @param array $data
+     * @param boolean $juetUpdate
      * @return void
      */
-    public function create(array $data = [])
+    public function save(array $data = [], $juetUpdate = false)
     {
         if (is_array($data) && $this->_status) {
-            $document = new \XSDocument();
-            $document->setFields($this->htmlDeleteXml($data));
-            $this->_client->index->add($document);
-        }
-    }
 
-    /**
-     * 更新索引
-     * @param array|null $data
-     * @return void
-     */
-    public function update(array $data = [])
-    {
-        if (is_array($data) && $this->_status) {
             $document = new \XSDocument();
-            $document->setFields($this->htmlDeleteXml($data));
+            if (isset($data['content']) && $data['content']) {
+                $data['content'] = msubstr($data['content'], -1);
+                $data['content'] = preg_replace('/&[a-z]{1,5};/',"",$data['content']);
+            }
+
+            $document->setFields($data);
             $this->_client->index->update($document);
         }
     }
@@ -277,52 +289,6 @@ class XunSearch
         if (!empty($id) && $this->_status) {
             $this->_client->index->del($id);
         }
-    }
-
-    /**
-     * 清理HTML标签
-     *
-     * @param array $data
-     * @return void
-     */
-    public function htmlDeleteXml(array $data = [])
-    {
-        if ($this->_index == 'content') {
-            $fields = ['id','cid','pid','access'];
-            foreach ($fields as $key) {
-                if (!array_key_exists($key,$data)) {
-                    throw new \Exception('The lack of necessary key values');
-                }
-            }
-        }
-        
-        if (is_array($data) && isset($data['content'])) {
-            $data['content'] = strip_tags_clear($data['content']);
-        }
-
-        return $this->queryTimestamp($data);
-    }
-
-    /**
-     * 格式化时间戳
-     *
-     * @param array $data
-     * @return void
-     */
-    private function queryTimestamp(array $data = [])
-    {
-        if (!empty($data) && is_array($data)) {
-            // TP6-BUG
-            if (isset($data['createtime'])) {
-                $data['createtime'] = date('Y-m-d H:i:s',time());
-            }
-
-            if (isset($data['updatetime'])) {
-                $data['updatetime'] = date('Y-m-d H:i:s',time());
-            }
-        }
-
-        return $data;
     }
 
     /**
@@ -356,7 +322,7 @@ class XunSearch
         // 限定支持WHERE条件
         foreach ($this->_where as $key => $item) {
             list($field,$symbol,$value) = $item;
-            if (array_search($field,['id','pid','cid','access'])) {
+            if (array_search($field,['id','pid','cid','status'])) {
                 switch ($symbol) {
                     case '<':
                     case '<=':
@@ -373,11 +339,15 @@ class XunSearch
             }
         }
 
-        // 查询索引
+        // 查询时间
         $search_begin = microtime(true);
+
+        // 默认条件
+        $this->_client->search->addRange('status',1,1);
         $XSDocuments  = $this->_client->search->search();
         $this->_count = $this->_client->search->getLastCount();
         foreach ($XSDocuments as $key => $doc) {
+
             if ($this->_highlight_field) {
                 foreach ($this->_highlight_field as $word) {
                     if (array_key_exists($word,$this->_app_field)) {
@@ -385,6 +355,7 @@ class XunSearch
                     }
                 }
             }
+
             // 遍历数组
             foreach ($doc as $field => $value) {
                 $list[$key][$field] = $value;
@@ -392,7 +363,9 @@ class XunSearch
         }
 
         $this->_seconds =  sprintf("%.4f",microtime(true) - $search_begin);
-        return isset($list) ? $list : [];
+
+        return ['data'=> $list, 'count' => $this->_count, 'seconds'=> $this->_seconds, 'total' => $this->_client->search->dbTotal, 'byte'=> '0'];
+
     }
 
     /**
@@ -493,7 +466,7 @@ class XunSearch
      */
     public function setFuzzy(bool $status = false)
     {
-        $this->_client->setFuzzy($status);
+        $this->_client->search->setFuzzy($status);
         return $this;
     }
 

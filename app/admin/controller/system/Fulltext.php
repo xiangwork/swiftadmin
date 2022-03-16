@@ -107,7 +107,7 @@ class Fulltext extends AdminController
      * @param string $type
      * @return void
      */
-    public function field(int $id = 0, string $type = 'XunSearch')
+    public function fields(int $id = 0, string $type = 'XunSearch')
     {   
         if (!$id) {
             return $this->error('未找到索引项目');

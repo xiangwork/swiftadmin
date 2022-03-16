@@ -15,7 +15,7 @@
                 <!-- // 默认搜索 -->
                 <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit><i class="layui-icon layui-icon-search"></i>{:__('搜索')}</button>
                 <!-- // 打开添加页面 -->
-                <button class="layui-btn icon-btn" lay-open="" lay-title="{:__('添加信息')}" lay-area="762px,430px" lay-url="{:url('/system.company/add')}" >
+                <button class="layui-btn icon-btn" lay-open="" data-title="{:__('添加信息')}" data-area="762px,430px" data-url="{:url('/system.company/add')}" >
                     <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                 </button>
             </div>
@@ -30,13 +30,11 @@
 
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar">
-    <a class="layui-table-text" lay-title="{:__('编辑')} {{d.title}}" 
-        lay-area="762px,430px" lay-url="{:url('/system.company/edit')}?id={{d.id}}"  lay-event="edit" >{:__('编辑')}</a>
+    <a class="layui-table-text" data-title="{:__('编辑')} {{d.title}}" 
+        data-area="762px,430px" data-url="{:url('/system.company/edit')}?id={{d.id}}"  lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text" lay-url="{:url('/system.company/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text" data-url="{:url('/system.company/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
-
-
 <include file="/public/footer" />
 <script>
     layui.use(['table'], function () {

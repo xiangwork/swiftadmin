@@ -24,9 +24,9 @@ return [
 
 	// 自定义页面abort抛出异常
 	'http_exception_template'    =>  [
-        403 =>  public_path() . 'static/admin/error/403.html',
-		404 =>  public_path() . 'static/admin/error/404.html',
-		500 =>  public_path() . 'static/admin/error/500.html',
+        401 =>  app_path() . 'view/error/401.html',
+		404 =>  app_path() . 'view/error/404.html',
+		500 =>  app_path() . 'view/error/500.html',
     ],
 
     // 默认跳转页面

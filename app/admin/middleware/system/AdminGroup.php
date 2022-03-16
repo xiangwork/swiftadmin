@@ -11,7 +11,7 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 
 namespace app\admin\middleware\system;
-use app\common\library\Auth;
+use app\admin\library\Auth;
 use app\common\library\ResultCode;
 
 class AdminGroup

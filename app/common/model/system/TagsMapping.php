@@ -18,44 +18,46 @@ class TagsMapping extends Pivot
      * @param string $type
      * @return void
      */
-    public static function writeMapID(int $id = 0,string|array $tags = '', string $type = 'content_id')
+    public static function writeRelation(int $id = 0,mixed $tags = '', string $type = 'aid')
     {
         if (!$tags) {
             return false;
         }
 
         if (!is_array($tags)) {
-            $tags = explode(',',$tags);
+            $tags = explode(',',(string)$tags);
         }
 
-        // 自动写入标签
-        $tagsList = Tags::queryTagsID($tags);
-        $mapsList = self::where($type,$id)->select()->toArray();
-        if (!empty($mapsList)) {
-            $mapsList = array_column($mapsList,'tag_id');
-        }   
+        // 写入标签
+        $tagsList = Tags::queryTagsRelation($tags);
+        $mapsList = self::where($type, $id)->select()->toArray();
 
-        $mapsID = [];
-        foreach ($tagsList as $key => $value) {
- 
-            if (array_search($value['id'],$mapsList) !== false) {
+        if (!empty($mapsList)) {
+            $mapsList = array_column($mapsList, 'tag_id');
+        }
+        
+        $mapArray = [];
+        foreach ($tagsList as $key => $tag) {
+
+            // 是否已经存在
+            if (in_array($tag['id'], $mapsList)) {
                 unset($mapsList[$key]);
-            }
-            else {
-                $mapsID[$key][$type] = $id;
-                $mapsID[$key]['tag_id'] = $value['id'];
+            } else {
+                $mapArray[$key] = [
+                    $type => $id,
+                    'tag_id' => $tag['id'],
+                ];
             }
         }
+        
 
-        if (!empty($mapsID)) {
-            (new self())->saveAll($mapsID);
+        if (!empty($mapArray)) {
+            (new self())->saveAll($mapArray);
         }
 
+        // 删除冗余关联
         if (!empty($mapsList)) {
-            self::where([
-                [$type,'=',$id],
-                ['tag_id','in',$mapsList]
-            ])->delete();
+            self::where([[$type, '=', $id],['tag_id', 'in', $mapsList]])->delete();
         }
 
         return true;

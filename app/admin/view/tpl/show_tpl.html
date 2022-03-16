@@ -18,7 +18,7 @@
                         <td>{$key}</td>
                         <td>{$vo.name}</td>
                         <td>{$vo.path}</td>
-                        <td><a href="javascript:void(0)" class="editTpl"lay-url="{:url('/tpl/editTpl')}?p={$vo.param}" >编辑</a></td>
+                        <td><a href="javascript:void(0)" class="editTpl"data-url="{:url('/tpl/editTpl')}?p={$vo.param}" >编辑</a></td>
                     </tr></volist>
                 </tbody>
             </table>
@@ -35,14 +35,13 @@
    
         // 提交数据
         $('.editTpl').on('click',function(){
-            var url = $(this).attr('lay-url');
+            var url = $(this).data('url');
             top.layer.open({
                 type:2
                 ,area: ['80%','80%']
                 ,title: '编辑模板'
                 ,content: url
                 ,success: function() {
-                    // console.log(this);
                 }
             })
         })

@@ -26,7 +26,7 @@ class UploadFile extends Validate
 			'fileExt' => 'txt,doc,xls,ppt,docx,xlsx,pptx'],
 		'files'=>[
 			'fileSize' => 419430400,
-			'fileExt' => 'exe,dll,sys,so,dmg,iso,zip,rar,7z,sql,pem']
+			'fileExt' => 'exe,dll,sys,so,dmg,iso,zip,rar,7z,sql,pem,pdf,psd']
 		];
     /**
      * 定义错误信息

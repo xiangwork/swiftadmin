@@ -36,7 +36,7 @@
                 </button>
 
                 <!-- // 打开添加页面 -->
-                <button class="layui-btn icon-btn" lay-open="" lay-area="100%,100%" lay-offset="0px" lay-maxmin="true" lay-url="{:url('/system.category/add')}" >
+                <button class="layui-btn icon-btn" lay-open="" data-area="100%,100%" data-offset="0px" data-maxmin="true" data-url="{:url('/system.category/add')}" >
                     <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
                 </button>
             </div>
@@ -52,16 +52,16 @@
 
 <!-- // 列表状态栏 -->
 <script type="text/html" id="columnStatus">
-    <input type="checkbox" lay-filter="switchStatus" lay-url="{:url('/system.category/status')}" value="{{d.id}}" 
+    <input type="checkbox" lay-filter="switchStatus" data-url="{:url('/system.category/status')}" value="{{d.id}}" 
     lay-skin="switch" {{d.status==1?'checked':''}}  />
 </script>
  
 <!-- // 列表工具栏 -->
 <script type="text/html" id="tableBar"> 
-    <a class="layui-table-text" lay-area="100%,100%" lay-offset="0px" lay-maxmin="true"
-        lay-url="{:url('/system.category/edit')}?id={{d.id}}" lay-event="edit" >{:__('编辑')}</a>
+    <a class="layui-table-text" data-area="100%,100%" data-offset="0px" data-maxmin="true"
+        data-url="{:url('/system.category/edit')}?id={{d.id}}" lay-event="edit" >{:__('编辑')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <a class="layui-table-text"  lay-url="{:url('/system.category/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
+    <a class="layui-table-text"  data-url="{:url('/system.category/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
 <include file="/public/footer" />
 <script>

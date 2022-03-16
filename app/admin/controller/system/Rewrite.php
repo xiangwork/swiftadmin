@@ -88,7 +88,7 @@ class Rewrite extends AdminController
         }
 
         // 获取用户权限
-        $cateGory = $this->auth->getrulecatestree('cates','private');
+        $cateGory = $this->auth->getRuleCatesTree(AUTHCATES);
         $this->app->view->assign(['cateGory'=>$cateGory]);
     }
 

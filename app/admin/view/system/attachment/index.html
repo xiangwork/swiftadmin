@@ -1,0 +1,121 @@
+<include file="/public/header" />
+<div class="layui-fluid">
+    <div class="layui-card">
+        <!-- // 默认操作按钮 -->
+        <div class="layui-card-header layadmin-card-header-auto ">
+            <div class="layui-form">
+                <div class="layui-form-item">
+
+                    <div class="layui-inline">
+                        <div class="layui-input-inline ">
+                            <select name="status">
+                                <option value="">{:__('按状态查看')}</option>
+                                <option value="2">{:__('已审核')}</option>
+                                <option value="1">{:__('未审核')}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <div class="layui-input-inline ">
+                            <input name="filename" class="layui-input" type="text" placeholder="{:__('关键字查询')}" />
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <!-- // 默认搜索 -->
+                        <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit><i
+                                class="layui-icon layui-icon-search"></i>{:__('搜索')}</button>
+                        <!-- // 打开添加页面 -->
+                        <button class="layui-btn icon-btn" lay-open="" data-title="{:__('添加附件')}"
+                           data-url="#addforms">
+                            <i class="layui-icon layui-icon-add-1"></i>{:__('添加')}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- // 创建数据表实例 -->
+        <table id="lay-tableList" lay-filter="lay-tableList"></table>
+    </div>
+</div>
+
+<!-- // 添加编辑附件 -->
+<script type="text/html" id="addforms">
+    <div class="layui-fluid layui-bg-white" >
+     
+        <div class="layui-form-item">
+            <label class="layui-form-label">{:__('附件地址')}</label>
+            <div class="layui-input-inline" style="width: 322px">
+                <input name="pic" placeholder="{:__('附件地址')}" type="text" class="layui-input pic" />
+            </div>
+            <button type="button" class="layui-btn layui-btn-normal" lay-upload="pic" >{:__('上传附件')}</button>
+        </div>
+      
+        <div class="layui-footer layui-form-item layui-center"  >
+            <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('提交')}</button>
+        </div>
+        </form>
+    </div>
+</script>
+
+<!-- // 添加编辑附件 -->
+<script type="text/html" id="editforms">
+    <div class="layui-fluid layui-bg-white" >
+        <form class="layui-form layui-form-fixed" action="{:url('/system.attachment/edit')}"  lay-filter="editforms" >
+        <input type="text" name="id"  hidden="">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><font color="red">* </font>{:__('附件名称')}</label>
+            <div class="layui-input-block">
+                <input name="filename" placeholder="{:__('请输入附件名称')}" type="text" class="layui-input"   lay-verify="required" />
+            </div>
+        </div>
+        <div class="layui-footer layui-form-item layui-center"  >
+            <button class="layui-btn layui-btn-primary" type="button" sa-event="closePageDialog" >{:__('取消')}</button>
+            <button class="layui-btn" lay-filter="submitPage"  lay-submit>{:__('提交')}</button>
+        </div>
+        </form>
+    </div>
+</script>
+
+<!-- // 列表工具栏 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-table-text" data-title="{:__('编辑附件')}" data-area="600px" data-url="#editforms" lay-event="edit">{:__('编辑')}</a>
+    <div class="layui-divider layui-divider-vertical"></div>
+    <a class="layui-table-text" data-url="{:url('/system.attachment/del')}?id={{d.id}}" lay-event="del">{:__('删除')}</a>
+</script>
+
+<include file="/public/footer" />
+<script>
+    layui.use(['table', 'admin'], function () {
+
+        var admin = layui.admin;
+        var table = layui.table;
+        /*
+         * 初始化表格
+        */
+        var isTable = table.render({
+            elem: "#lay-tableList"
+            , url: "{:url('/system.attachment/index')}"
+            , page: true
+            , limit: 18
+            , cols: [[
+                { type: 'checkbox', width: 45 },
+                { field: 'id', align: 'center', sort: true, width: 80, title: 'ID' },
+                { field: 'filename', align: 'left', title: '{:__("名称")}' },
+                {
+                    field: 'url', align: 'left', align: 'center', width: 180, templet: function (d) {
+                        return '<a href="' + d.url + '" target="_blank" ><img class="filesuffix" src="' + admin.utils.filesuffix(d.url) + '"></a>';
+                    },
+                    title: '{:__("预览")}'
+                },
+                { field: 'filesize', align: 'left', title: '{:__("大小")}' },
+                { field: 'suffix', align: 'left', title: '{:__("后缀")}' },
+                { field: 'mimetype', align: 'left', title: '{:__("Mime类型")}' },
+                { field: 'createtime', align: 'center', width: 180, title: '{:__("创建时间")}' },
+                { align: 'center', toolbar: '#tableBar', width: 160, title: '{:__("操作")}' },
+            ]]
+        })
+
+    })
+</script>

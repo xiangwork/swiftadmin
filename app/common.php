@@ -12,6 +12,12 @@ use app\common\model\system\Category;
 // 全局系统常量
 const REWRITE  =  1;
 const STATICS  =  2;
+
+// 权限常量
+const AUTHCATES = 'cates';
+const AUTHRULES = 'rules';
+
+// 命名空间
 const NAMESPACELIBRARY 		= '\\app\\common\\library\\';
 const NAMESPACEMODELSYSTEM	= '\\app\\common\\model\\system\\';
 // +----------------------------------------------------------------------
@@ -22,11 +28,11 @@ if (!function_exists('read_file'))
     /**
      * 获取文件内容
      * @param  string $file 文件路径
-     * @return content
+     * @return mixed content
      */	
 	function read_file($file){
-		return @file_get_contents($file);
-	}	
+		return !is_file($file)?'':@file_get_contents($file);
+	}
 }
 
 if (!function_exists('arr2file')) {
@@ -258,7 +264,7 @@ if (!function_exists('msubstr')) {
 	function msubstr($str, $start = 0, $length = 100, $charset="utf-8", $suffix=true)
 	{
 		
-		$str = strip_tags_clear($str);
+		$str = mystrip_tags($str);
 
 		// 直接返回
 		if ($start == -1) {
@@ -287,25 +293,25 @@ if (!function_exists('msubstr')) {
 	}
 }
 
-if (!function_exists('strip_tags_clear')) {
+if (!function_exists('mystrip_tags')) {
     /**
      * 格式化HTML标签
      * @return string
      */
-	function strip_tags_clear(string $str = null) {
+	function mystrip_tags(string $str = '') {
 		$str = preg_replace('/<[^>]+>/','',preg_replace("/[\r\n\t ]{1,}/",' ',delNt(strip_tags($str)))); 
 		$str = preg_replace('/&(\w{4});/i','',$str);
 		return $str;
 	}
 }
 
-if (!function_exists('get_upload_Http_Perfix')) {
+if (!function_exists('cdn_Prefix')) {
 
     /**
      * 获取远程图片前缀
      * @return string
      */
-	function get_upload_Http_Perfix() {
+	function cdn_Prefix() {
 		return saenv('upload_http_prefix');
 	}
 }
@@ -319,10 +325,11 @@ if (!function_exists('http_images_url')) {
     function http_images_url($content = null, $url = null)
     {
         if (!empty($content)) {
+
 			if (empty($url)) {
 
 				if (saenv('upload_ftp') || saenv('cloud.status')) {
-					$url = get_upload_Http_Perfix();
+					$url = cdn_Prefix();
 				}
 				else {
 
@@ -330,6 +337,7 @@ if (!function_exists('http_images_url')) {
 					$url = request()->domain();
 				}
 			}
+			
             $pregRule = "/<img(.*?)src(\s*)=(\s*)[\'|\"]\/(.*?(?:[\.jpg|\.jpeg|\.png|\.gif|\.bmp|\.ico|\.webp]))[\'|\"](.*?)[\/]?(\s*)>/i";
 			$content  = preg_replace($pregRule, '<img${1}src="'.$url.'/${4}"${5}/>', $content);
         }
@@ -456,7 +464,7 @@ if (!function_exists('format_bytes')) {
      * @param string $delimiter 分隔符
      * @return string
      */
-    function format_bytes($size, $delimiter = '')
+    function format_bytes($size, $delimiter = ' ')
     {
         $units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB');
         for ($i = 0; $size >= 1024 && $i < 6; $i++) {
@@ -961,10 +969,10 @@ if (!function_exists('search_model')) {
      *
      * @return mixed
      */
-    function search_model(string $searchmodel = null)
+    function search_model(string $searchType = null)
     {
-		$searchmodel = $searchmodel ?? saenv('search_model');
-        return NAMESPACELIBRARY . $searchmodel;
+		$searchType = $searchType ?? saenv('search_model');
+        return NAMESPACELIBRARY . $searchType;
     }
 }
 
@@ -1478,11 +1486,13 @@ if (!function_exists('get_adwords')) {
 	}
 }
 
-if (!function_exists('get_system_logs')) {
+if (!function_exists('system_exception_logs')) {
+
 	/**
 	 * 返回封装数据
 	 */
-	function get_system_logs()
+
+	function system_exception_logs()
 	{
 		$array['module'] = app()->http->getName();
 		$array['controller'] = Request::controller(true);
@@ -1594,13 +1604,13 @@ if (!function_exists('ajax_return')) {
 // +----------------------------------------------------------------------
 // | 数据加密函数开始
 // +----------------------------------------------------------------------
-if (!function_exists('hash_pwd')) {
+if (!function_exists('member_encrypt')) {
     /**
      * hash - 密码加密
      */
-	function hash_pwd($string)
+	function member_encrypt($pwd, $salt = 'swift', $encrypt = 'md5')
 	{
-		return hash_hmac("sha256", $string, 'elSXm2rH7z7DqfJ964lMNisNl2MBHMp2');
+		return $encrypt($pwd . $salt);
 	}
 }
 
@@ -1608,7 +1618,7 @@ if (!function_exists('cookies_encrypt')) {
 	// COOKIES加密
 	function cookies_encrypt($data, $key='', $char='')
 	{	
-		$key = empty($key) ? '!1@9#8$3' : $key;
+		$key = empty($key) ? '!1@2#6$3' : $key;
 		$key  = hash("sha256", $key);
 		$x  = 0;
 		$str = '';
@@ -1849,14 +1859,14 @@ if (!function_exists('check_auth')) {
 	/**
 	 * 权限判断
 	 */
-	function check_auth($urls, $action = '', $attr = 'lay-url') 
+	function check_auth($urls, $action = '', $attr = 'data-url') 
 	{
 		$macth = [];
 		$judge = false;
 		$urls = (string)url($urls);
 		$urls = str_replace('.html','',$urls);
 		if (preg_match('/\/\w+.php(\/.*?\/.*?\w+[^\/\?]+)/',$urls, $macth)) {
-			$judge = app\common\library\Auth::instance()->checkAuths($macth[1]);
+			$judge = app\admin\library\Auth::instance()->checkAuths($macth[1]);
 		}
 		
 		echo !$judge ? 'lay-noauth' : $attr .'="'.$urls.'"' . $action;

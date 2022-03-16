@@ -13,10 +13,6 @@ use think\model\concern\SoftDelete;
 class UserInvitecode extends Model
 {
     use SoftDelete;
-    protected $deleteTime = 'delete_time';
-    
-    // 自动写入时间戳字段
-    protected $autoWriteTimestamp = 'int';
     
     // 定义时间戳字段名
     protected $createTime = 'createtime';

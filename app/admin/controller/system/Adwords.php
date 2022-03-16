@@ -77,7 +77,7 @@ class Adwords extends AdminController
         }
  
         return view('',[
-            'data'=> $this->getField()
+            'data'=> $this->getTableFields()
         ]);
     }
 

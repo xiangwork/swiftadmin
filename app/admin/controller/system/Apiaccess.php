@@ -99,7 +99,7 @@ class Apiaccess extends AdminController
             return $this->error();   
         }
 
-        $data = $this->getField(); 
+        $data = $this->getTableFields(); 
         return view('',['data'=> $data]);
 
     }

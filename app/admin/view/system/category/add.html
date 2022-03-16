@@ -1,6 +1,6 @@
 <include file="/public/header" />
 <!-- // 重定位style -->
-<link href="__STATICADMIN__css/content.css?" rel="stylesheet" type="text/css" />
+<link href="__STATICADMIN__css/content.css" rel="stylesheet" type="text/css" />
 <div class="layui-fluid">
     <form class="layui-form layui-card" >
 
@@ -74,7 +74,7 @@
                             <div class="layui-input-inline wid650" >
                                 <input name="image" type="text" class="layui-input pic" value="{$data.image}" placeholder="请上传或直接粘贴图片地址"/>
                             </div>
-                            <button type="button" class="layui-btn layui-btn-normal" lay-upload="" lay-input="pic">{:__('上传图片')}</button>
+                            <button type="button" class="layui-btn layui-btn-normal" lay-upload="pic" >{:__('上传图片')}</button>
                         </div>
                         <div class="layui-form-item"> 
                                 <label class="layui-form-label">{:__('标&emsp;题')}</label>
@@ -109,10 +109,10 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label" >{:__('投稿选项')}</label>
                             <div class="layui-input-inline" >
-                                 <input type="radio" name="contribute"   
-                                 value="1" title="是"  <if condition="$data['contribute'] eq 1 "> checked </if> >
-                                 <input type="radio" name="contribute"   
-                                 value="0" title="否" <if condition="$data['contribute'] eq '' "> checked </if> >
+                                <input type="radio" name="contribute" title="是" <eq name="$data['contribute']"
+                                value="1">checked="" </eq> value="1">
+                                <input type="radio" name="contribute" title="否" <eq name="$data['contribute']"
+                                value="0">checked="" </eq> value="0" >
                             </div>   
                             <div class="layui-form-mid layui-word-aux">* {:__('是否开启会员投稿支持！')}</div>                
                         </div> 
@@ -120,10 +120,12 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label" >{:__('是否单页面')}</label>
                             <div class="layui-input-inline" >
-                                 <input type="radio" name="single"   
-                                 value="1" title="是"  <if condition="$data['single'] eq 1 "> checked </if> >
-                                 <input type="radio" name="single"   
-                                 value="0" title="否" <if condition="$data['single'] eq '' "> checked </if> >
+
+                                <input type="radio" name="single" title="是" <eq name="$data['single']"
+                                value="1">checked="" </eq> value="1">
+                                <input type="radio" name="single" title="否" <eq name="$data['single']"
+                                value="0">checked="" </eq> value="0" >
+
                             </div>   
                             <div class="layui-form-mid layui-word-aux">* {:__('当前栏目是否为单页面形式')}</div>                
                         </div> 
@@ -145,7 +147,7 @@
 
                     <div class="layui-tab-item">
                         <blockquote class="layui-elem-quote">说明：栏目内容是替代原来栏目单页模型的一种灵活方式，可在模板中使用标签调用内容，通常用户企业简介等！</blockquote>
-                        <textarea id="content" name="content" />{$data.content}</textarea>
+                        <textarea id="content" lay-editor name="content" />{$data.content}</textarea>
                     </div>
               </div>
           </div>
@@ -153,7 +155,7 @@
     
         <div class="layui-footer layui-form-footer">
             <button class="layui-btn layui-btn-primary" type="button" sa-event="closeDialog">{:__('取消')}</button>
-            <button class="layui-btn" lay-filter="submitIframe" lay-submit>{:__('提交')}</button>
+            <button class="layui-btn" lay-filter="submitIframe" type="button" lay-submit>{:__('提交')}</button>
         </div>
     </form>
 </div>

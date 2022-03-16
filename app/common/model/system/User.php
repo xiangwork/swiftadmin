@@ -13,10 +13,6 @@ use think\model\concern\SoftDelete;
 class User extends Model
 {
     use SoftDelete;
-    protected $deleteTime = 'delete_time';
-    
-    // 自动写入时间戳字段
-    protected $autoWriteTimestamp = 'int';
     
     // 定义时间戳字段名
     protected $createTime = 'createtime';
@@ -38,7 +34,6 @@ class User extends Model
         return $this->hasOne(UserGroup::class,'id','group_id');
     }
 
-
     /**
      * 关联评论列表
      *
@@ -52,13 +47,38 @@ class User extends Model
 
     /**
      * 注册会员前
-     * @param   array  $data
-     * @return string
+     * @param  object  $data
+     * @return object 
      */
     public static function onBeforeInsert($data)
     {
-        if (!empty($data['pwd'])) {
-            $data['pwd'] = hash_pwd($data['pwd']);
+        return self::changePassWord($data);
+    }
+
+    /**
+     * 更新会员前
+     * @param  object  $data
+     * @return object 
+     */
+    public static function onBeforeUpdate($data)
+    {
+        return self::changePassWord($data);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param object $data
+     * @return void
+     */
+    public static function changePassWord($data)
+    {
+        if (!empty($data->pwd)) {
+            $salt = create_rand();
+            $data->pwd = member_encrypt($data->pwd,$salt);
+            $data->salt = $salt;
+        } else {
+            unset($data->pwd);
         }
 
         return $data;
@@ -66,7 +86,7 @@ class User extends Model
 
     /**
      * 注册会员后
-     * @param   array  $data
+     * @param   object  $data
      * @return string
      */
     public static function onAfterInsert($data)
@@ -74,7 +94,7 @@ class User extends Model
 
     /**
      * 更新会员数据
-     * @param   array  $data
+     * @param   object  $data
      * @return string
      */
     public static function onAfterUpdate($data)
@@ -104,7 +124,7 @@ class User extends Model
             $value = letter_avatar($data['nickname']);
         }
 
-        $prefix = get_upload_Http_Perfix();
+        $prefix = cdn_Prefix();
         if (!empty($prefix) && $value) {
             if (!strstr($value,'data:image')) { 
                 return $prefix.$value;
