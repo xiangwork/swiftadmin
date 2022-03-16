@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ## 前言
 > 基于ThinkPHP6版本开发， 学习本手册有利于您快速的掌握本框架的开发架构！
 <div align="center">
@@ -431,4 +430,3 @@ git clone https://gitee.com/meystack/swiftadmin.git ./src && cd src && composer 
 	</tr>
 </table>
 <code>您的捐助和购买域名授权服务，将会是SAPHP/SACMS开源项目得到更快更好的发展！</code>
->>>>>>> 6e9a81d4332519398910acab319c666f9dd029c8
