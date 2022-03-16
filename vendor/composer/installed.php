@@ -1,11 +1,11 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '6f57b0bda419ddbb2841d8db1bae3f1e3ae2180f',
+        'reference' => NULL,
         'name' => 'topthink/think',
         'dev' => true,
     ),
@@ -266,12 +266,12 @@
             'dev_requirement' => false,
         ),
         'topthink/think' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '6f57b0bda419ddbb2841d8db1bae3f1e3ae2180f',
+            'reference' => NULL,
             'dev_requirement' => false,
         ),
         'topthink/think-captcha' => array(

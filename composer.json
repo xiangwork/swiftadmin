@@ -20,19 +20,19 @@
         }        
     ],
     "require": {
-        "php": ">=7.3",
+        "php": ">=7.2.5",
         "topthink/framework": "^6.0.0",
         "topthink/think-orm": "^2.0",
         "topthink/think-multi-app": "^1.0",
+        "topthink/think-trace": "^1.4",
         "topthink/think-image": "^1.0",
         "topthink/think-view": "^1.0",
         "topthink/think-captcha": "^3.0",
         "phpmailer/phpmailer": "^6.6",
-        "overtrue/pinyin": "^4.0",
-        "elasticsearch/elasticsearch": "^7.11",
-        "firebase/php-jwt": "^6.0",
         "meystack/plugin": "^1.0",
-        "topthink/think-trace": "^1.4"
+        "overtrue/pinyin": "^4.0",
+        "firebase/php-jwt": "^6.0",
+        "elasticsearch/elasticsearch": "^7.17"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2"
