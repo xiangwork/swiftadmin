@@ -57,7 +57,6 @@ class Admin extends AdminController
             $post = input();
             $page = input('page/d') ?? 1;
             $limit = input('limit/d') ?? 10;
-            $limit = input('limit/d') ?? 10;
             $status = !empty($post['status']) ? $post['status'] - 1 : 1;
 
             // 生成查询条件

@@ -464,7 +464,6 @@ class Salibs extends TagLib {
 				\$_DIC_DATA = \app\common\model\system\Dictionary::queryDiction(\$params,'id',false);
 				\$where['pid'] = \$_DIC_DATA['id'];
 			}
-
 			\$_DIC_LIST = \app\common\model\system\Dictionary::queryDiction(\$where);
 			foreach (\$_DIC_LIST as \$key => {$id}):
 		?>
