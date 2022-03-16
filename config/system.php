@@ -21,7 +21,7 @@ return [
   'file' => '',
   'auth' => [
     'auth_code' => '38nfCIlkqNMI2',
-    'auth_key' => 'WS3hi5Xe0Wx7rXkx',
+    'auth_key' => 'wMRkfKO4Lr37HTJQ',
   ],
   'fulltext' => [
     'search_status' => '0',
