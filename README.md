@@ -21,7 +21,7 @@
 <b>管理账号  admin admin888 </b><br/>
 <b>测试账号  ceshi admin888 </b>如正式运营环境请删除测试账号;<br/>
 
-<b>开发环境：Windows服务器版 PhpStorm Apache MySQL5.7 PHP >= 7.4 支持PHP8  [最低支持PHP7.4]</b><br/>
+<b>开发环境：Windows服务器版 PhpStorm Apache MySQL5.7 PHP >= 7.3 支持PHP8  [最低支持PHP7.3]</b><br/>
 
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-Apache-blue.svg" alt="swiftadmin"></a>
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/ThinkPHP-6LTS-brightgreen.svg" alt="thinkphp"></a>
