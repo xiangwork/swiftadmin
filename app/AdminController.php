@@ -196,7 +196,7 @@ class AdminController extends BaseController
 
 		// 分配前端变量
 		$this->app->view->assign([
-			'app' => $app,
+			'app' => request()->root(),
 			'controller' => $this->controller,
 			'action' => $this->action,
 			'AdminLogin' => $this->admin
