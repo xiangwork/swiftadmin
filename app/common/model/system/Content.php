@@ -184,7 +184,7 @@ class Content extends Model
 
                 // 写入关联表数据
                 $values['id'] = (int)$data->id;
-                $values['createime'] = time();
+                $values['createtime'] = time();
                 $data->$table()->save($values);
             }
         }
