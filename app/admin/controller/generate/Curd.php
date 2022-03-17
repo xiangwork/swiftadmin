@@ -935,12 +935,8 @@ class Curd extends AdminController
 
         array_pop($array);
         $type == 'controller' && $this->getTemplatePath($name);
-        $appNamespace = "app\\{$module}\\$type" . ($array ? "\\" . implode("\\", $array) : "");
+        $appNamespace = "app".DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$type . ($array ? "\\" . implode("\\", $array) : "");
         $parseFile = root_path() . $appNamespace . DIRECTORY_SEPARATOR . $parseName . '.php';
-
-        // dump($parseName);
-        // dump($appNamespace);
-        // dump($parseFile);
 
         return [$parseName, $appNamespace, $parseFile];
     }
