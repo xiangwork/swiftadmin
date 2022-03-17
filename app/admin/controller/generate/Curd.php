@@ -456,7 +456,7 @@ class Curd extends AdminController
                     foreach ($replace as $key => $value) {
                         $master = str_replace("{%$key%}", $value, $master);
                     }
-
+                    echo($file);die();
                     write_file($file, $master);
                 }
 
@@ -935,9 +935,9 @@ class Curd extends AdminController
 
         array_pop($array);
         $type == 'controller' && $this->getTemplatePath($name);
-        $appNamespace = "app".DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$type . ($array ? "\\" . implode("\\", $array) : "");
+        $appNamespace = "app\\{$module}\\$type" . ($array ? "\\" . implode("\\", $array) : "");
         $parseFile = root_path() . $appNamespace . DIRECTORY_SEPARATOR . $parseName . '.php';
-
+        $parseFile = str_replace('\\','/',$parseFile);
         return [$parseName, $appNamespace, $parseFile];
     }
 
