@@ -25,7 +25,7 @@ class Security
    * @var array
    */
   public $argvs = [
-    '?s=index/think',
+    'index/think',
     'call_user_func_array',
     'vars[0]',
     'file_put_contents',

@@ -33,7 +33,9 @@
         "overtrue/pinyin": "^4.0",
         "firebase/php-jwt": "^6.0",
         "ext-json": "*",
-        "elasticsearch/elasticsearch": "^7.17"
+        "elasticsearch/elasticsearch": "^7.17",
+        "ext-pdo": "*",
+        "ext-iconv": "*"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2"

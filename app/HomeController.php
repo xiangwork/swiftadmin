@@ -11,7 +11,6 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 namespace app;
 
-use app\BaseController;
 use app\common\library\Auth;
 
 // 前台全局控制器基类

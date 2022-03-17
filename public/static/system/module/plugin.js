@@ -3,7 +3,9 @@ layui.define(function (exports) {
 
     var jquery = layui.jquery;
     var table = layui.table, flow = layui.flow;
-    var form = layui.form,lang = layui.admin.lang;
+    var form = layui.form,lang = function (str) {
+        return str;
+    };
     var apiUrl = 'aHR0cHM6Ly9hcGkuc3dpZnRhZG1pbi5uZXQ=';
     var baseUrl = window.location.href.split("://")[1],
         _begin = baseUrl.indexOf('/'),
@@ -50,7 +52,7 @@ layui.define(function (exports) {
                     }
                     
                     // 初始化菜单项
-                    layui.admin.saPHPInit(true);
+                    // layui.admin.saPHPInit(true);
 
                 }else {
 
@@ -161,7 +163,7 @@ layui.define(function (exports) {
                     }
                     delete  window.plugins[name];
                     jquery(elems).find('td:last').children('div').html(html);
-                    layui.admin.saPHPInit(true);
+                    // layui.admin.saPHPInit(true);
                 }else {
                     layer.msg(res.msg,'error');
                 }
@@ -294,7 +296,7 @@ layui.define(function (exports) {
             success: function (res) {
                 layer.msg(res.msg);
                 window.plugins[data.id].status = data.status;
-                top.layui.admin.saPHPInit(true);
+                // top.layui.admin.saPHPInit(true);
             }
         }
         ,data = {

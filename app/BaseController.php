@@ -31,7 +31,7 @@ abstract class BaseController
 
     /**
      * 应用实例
-     * @var \think\App
+     * @var App
      */
     protected $app;
 
@@ -83,7 +83,7 @@ abstract class BaseController
      * @param  string|array $validate 验证器名或者验证规则数组
      * @param  array        $message  提示信息
      * @param  bool         $batch    是否批量验证
-     * @return array|string|true
+     * @return bool|true
      * @throws ValidateException
      */
     protected function validate(array $data, $validate, array $message = [], bool $batch = false)
@@ -119,7 +119,7 @@ abstract class BaseController
      * @param array $post
      * @param string $valiclass
      * @param string $valiscene
-     * @return void
+     * @return bool
      */
     protected function autoPostValidate(array $post, $valiclass = '', $valiscene = '')
     {
@@ -253,7 +253,7 @@ abstract class BaseController
      * @param  htmlpath         生成路径
      * @param  templateFile     模板地址
      * @param  suffix           文件后缀
-     * @return void
+     * @return bool
      */
     protected function buildHtml(string $htmlfile = null,string $htmlpath = null, string $templateFile = null,$suffix = 'html') 
     {

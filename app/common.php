@@ -28,7 +28,7 @@ if (!function_exists('read_file'))
     /**
      * 获取文件内容
      * @param  string $file 文件路径
-     * @return mixed content
+     * @return false|string content
      */	
 	function read_file($file){
 		return !is_file($file)?'':@file_get_contents($file);
@@ -40,17 +40,17 @@ if (!function_exists('arr2file')) {
      * 数组写入文件
      * @param  string $file  文件路径
      * @param  array  $array 数组数据 
-     * @return content
+     * @return void
      */	
 	function arr2file($file, $array='') 
 	{
 		if(is_array($array)){
-			$cont = var_exports($array,true);
+			$cont = var_exports($array);
 		} else{
 			$cont = $array;
 		}
 		$cont = "<?php\nreturn $cont;";
-		write_file($file, $cont);
+		return write_file($file, $cont);
 	}
 }
 
@@ -59,17 +59,17 @@ if (!function_exists('arr2router')) {
      * 数组写入路由文件
      * @param  string $file  	文件路径
      * @param  array  $string 	字符串数据 
-     * @return content
+     * @return void
      */	
 	function arr2router($file, $array = []) 
 	{
 		if(is_array($array)){
-			$cont = var_exports($array,true);
+			$cont = var_exports($array);
 		} else{
 			$cont = $array;
 		}
 		$cont = "<?php\nuse think\\facade\\Route;\n\n$cont";
-		write_file($file, $cont);
+		return write_file($file, $cont);
 	}
 }
 if (!function_exists('var_exports')) {
@@ -88,7 +88,7 @@ if (!function_exists('var_exports')) {
 			"/([ ]*)(\'[^\']+\') => ([\[\'])/" => '$1$2 => $3',
 		];
 		$export = preg_replace(array_keys($patterns), array_values($patterns), $export);
-		if ((bool)$return) return $export; else echo $export;
+		if ($return) return $export; else echo $export;
 	}
 }
 if (!function_exists('write_file')) {
@@ -96,7 +96,7 @@ if (!function_exists('write_file')) {
      * 数据写入文件
      * @param  string  $file    文件路径
      * @param  string  $content 文件数据 
-     * @return content
+     * @return false|int
      */		
 	function write_file($file, $content='') 
 	{
@@ -245,7 +245,7 @@ if (!function_exists('strtoJs')) {
     /**
      * 转换成JS
      * @param  string $str 字符串 
-     * @return bool   $mark 标记/直接返回转移代码
+     * @return array|string|string[]   $mark 标记/直接返回转移代码
      */		
 	function strtoJs($str, $mark = true)
 	{
@@ -390,7 +390,7 @@ if (!function_exists('pinyin')) {
      * @param string $str  需要转换的汉子
      * @param bool   $abbr 是否只要首字母
      * @param bool   $trim 是否清除空格
-     * @return bool
+     * @return array|string|string[]
      */
     function pinyin($str, $abbr = false, $first = false, $trim = true)
     {
@@ -565,7 +565,7 @@ if (!function_exists('hide_str')) {
         } elseif ($type == 3) {
             $array = explode($glue, $string);
             if (isset($array[1])) {
-                $array[1] = hide_str($array[1], $bengin, $len, 0);
+                $array[1] = hide_str($array[1], $bengin, $len);
             }
             $string = implode($glue, $array);
         } elseif ($type == 4) {
@@ -623,7 +623,8 @@ if (!function_exists('check_user_third')) {
      * @param mixed $type
 	 * @param int $id	 
      * @return array
-     */	
+     * @noinspection PhpReturnDocTypeMismatchInspection
+     */
 	function check_user_third($type, $id = 0) 
 	{
 		if (!$id || !$type) {
@@ -642,10 +643,13 @@ if (!function_exists('check_user_third')) {
 if (!function_exists('mysql_content')) {
     /**
      * 公共类查询函数
-     * @param  array $param 查询参数
-     * @param  bool  $admin 调用标记	 
+     * @param array $param 查询参数
+     * @param string $paging
      * @return array
-     */	
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
 	function mysql_content($param, string $paging = ''){
 
 		// 检查参数
@@ -662,7 +666,7 @@ if (!function_exists('mysql_content')) {
 		
 		$table = Channel::getChannelList(null,$table);
 		if (empty($table)) {
-			throw new \Exception('There is no table');
+			throw new Exception('There is no table');
 		}
 
 		$param['cid'] = $table['id'];
@@ -891,7 +895,7 @@ if (!function_exists('saenv')) {
 
 					// 父类数据
 					$parent = $config;
-					$recursive = function(&$base,&$key) use (&$recursive,&$config) {
+					$recursive = function($base, &$key) use (&$recursive,&$config) {
 						foreach ($base as $value) {
 							if (is_array($value)) {
 								
@@ -966,7 +970,7 @@ if (!function_exists('search_model')) {
     /**
      * 获取搜索模式
      *
-     * @return mixed
+     * @return string
      */
     function search_model(string $searchType = null)
     {
@@ -1366,7 +1370,7 @@ if (!function_exists('max_page')) {
 			$totalPages = (int)ceil($totalPages/$limit);
 		}
 
-		return $totalPages > $maxPages ? $maxPages : $totalPages;
+		return min($totalPages, $maxPages);
 	}
 }
 if (!function_exists('get_page')) {
@@ -1690,7 +1694,9 @@ if (!function_exists('query_client_ip')) {
     /**
      * 查询访客IP
      * @return string
-     */		
+     * @throws Exception
+     * @throws Exception
+     */
 	function query_client_ip($ip, $ips = [])
 	{
 		if (!empty($ip) || filter_var($ip, FILTER_VALIDATE_IP)) {
@@ -1808,7 +1814,7 @@ if (!function_exists('safe_field_model')) {
 						return $validate->getError();
 					}
 				}
-			} catch (\Throwable $th) {
+			} catch (Throwable $th) {
 				return $th->getMessage();
 			}
 		}
@@ -1842,7 +1848,7 @@ if (!function_exists('safe_validate_model')) {
 						return $validate->getError();
 					}
 				}
-			} catch (\Throwable $th) {
+			} catch (Throwable $th) {
 				return $th->getMessage();
 			}
 		}

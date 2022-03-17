@@ -52,7 +52,7 @@ class ExceptionHandle extends Handle
     public function render($request, Throwable $e): Response
     {
 
-        if ($e instanceof \Throwable) {
+        if ($e instanceof Throwable) {
 
             if (saenv('system_exception') && !empty($e->getMessage())) {
                 

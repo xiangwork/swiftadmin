@@ -12,10 +12,14 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 namespace app;
 
+use Exception;
+use PDOException;
 use think\facade\Db;
 use think\facade\Session;
 use app\admin\library\Auth;
-use app\common\model\system\Systemlog;
+use Throwable;
+use function implode;
+use function is_numeric;
 
 // 后台全局控制器基类
 class AdminController extends BaseController
@@ -67,12 +71,6 @@ class AdminController extends BaseController
 	 * @var int
 	 */
 	public $status = false;
-
-	/**
-	 * 错误消息
-	 * @var string
-	 */
-	public $error = null;
 
 	/**
 	 * 管理员信息
@@ -247,10 +245,10 @@ class AdminController extends BaseController
 			try {
 				$this->status = $this->model->create($post);
 				Db::commit();
-			} catch (\PDOException $e) {
+			} catch (PDOException $e) {
 				Db::rollback();
 				return $this->error($e->getMessage());
-			} catch (\Throwable $th) {
+			} catch (Throwable $th) {
 				Db::rollback();
 				return $this->error($th->getMessage());
 			}
@@ -292,10 +290,10 @@ class AdminController extends BaseController
 			try {
 				$this->status = $this->model->update($post);
 				Db::commit();
-			} catch (\PDOException $e) {
+			} catch (PDOException $e) {
 				Db::rollback();
 				return $this->error($e->getMessage());
-			} catch (\Throwable $th) {
+			} catch (Throwable $th) {
 				Db::rollback();
 				return $this->error($th->getMessage());
 			}
@@ -334,17 +332,17 @@ class AdminController extends BaseController
 
 					// 过滤字段
 					if (isset($item->isSystem) && $item->isSystem) {
-						throw new \Exception('禁止删除系统级字段');
+						throw new Exception('禁止删除系统级字段');
 					}
 
 					$this->status += $item->delete();
 				}
 
 				Db::commit();
-			} catch (\PDOException $e) {
+			} catch (PDOException $e) {
 				Db::rollback();
 				return $this->error($e->getMessage());
-			} catch (\Throwable $th) {
+			} catch (Throwable $th) {
 				Db::rollback();
 				return $this->error($th->getMessage());
 			}
@@ -377,10 +375,10 @@ class AdminController extends BaseController
 			try {
 				$this->status = $this->model->where($where)->update(['status' => input('status/d')]);
 				Db::commit();
-			} catch (\PDOException $e) {
+			} catch (PDOException $e) {
 				Db::rollback();
 				return $this->error($e->getMessage());
-			} catch (\Throwable $th) {
+			} catch (Throwable $th) {
 				Db::rollback();
 				return $this->error($th->getMessage());
 			}
@@ -418,8 +416,8 @@ class AdminController extends BaseController
 	 * 获取查询参数
 	 *
 	 * @param array $searchFields
-	 * @return void
-	 */
+	 * @return array|false
+     */
 	protected function buildSelectParams(array $searchFields = [])
 	{
 		$params = request()->param();
@@ -571,10 +569,10 @@ class AdminController extends BaseController
 	{
 		$ids = input('id') ?? 'all';
 		if (is_array($ids) && !empty($ids)) {
-			$where[] = ['id', 'in', \implode(',', $ids)];
+			$where[] = ['id', 'in', implode(',', $ids)];
 		} else if ($ids == 'all') {
 			$where[] = ['id', '<>', 'null'];
-		} else if (\is_numeric($ids)) {
+		} else if (is_numeric($ids)) {
 			$where[] = ['id', '=', $ids];
 		}
 
