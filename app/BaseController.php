@@ -265,7 +265,7 @@ abstract class BaseController
         $htmlfile = $htmlpath . $htmlfile . '.' . $suffix; 
 
         // 写入静态文件
-        if(write_file($htmlfile, $content) === false) {
+        if(write_file($htmlfile, $content) == false) {
             return false;
         } else {
             return true;
@@ -280,7 +280,7 @@ abstract class BaseController
      */
 	protected function getTableFields(object $model = null) 
 	{
-        $this->model = $model ? $model : $this->model;
+        $this->model = $model ?? $this->model;
 
         $tableFields = $this->model->getTableFields();
 

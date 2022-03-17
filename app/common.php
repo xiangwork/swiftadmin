@@ -299,9 +299,8 @@ if (!function_exists('mystrip_tags')) {
      * @return string
      */
 	function mystrip_tags(string $str = '') {
-		$str = preg_replace('/<[^>]+>/','',preg_replace("/[\r\n\t ]{1,}/",' ',delNt(strip_tags($str)))); 
-		$str = preg_replace('/&(\w{4});/i','',$str);
-		return $str;
+		$str = preg_replace('/<[^>]+>/','',preg_replace("/[\r\n\t ]{1,}/",' ',delNt(strip_tags($str))));
+        return preg_replace('/&(\w{4});/i','',$str);
 	}
 }
 
@@ -823,7 +822,7 @@ if (!function_exists('mysql_content')) {
 				$totalPages = $maxPages;
 			}
 
-			$paging = $paging ? $paging : get_list_url($list[0]['pid']);
+			$paging = $paging ?: get_list_url($list[0]['pid']);
 			$paging = get_page($page,$totalPages,$paging);
 
 			// 分配页码变量
@@ -1242,8 +1241,7 @@ if (!function_exists('letter_avatar')) {
         $color = "#ffffff";
         $first = mb_strtoupper(mb_substr($text, 0, 1));
         $src = base64_encode('<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="100" width="100"><rect fill="' . $bg . '" x="0" y="0" width="100" height="100"></rect><text x="50" y="50" font-size="50" text-copy="fast" fill="' . $color . '" text-anchor="middle" text-rights="admin" alignment-baseline="central">' . $first . '</text></svg>');
-        $value = 'data:image/svg+xml;base64,' . $src;
-        return $value;
+        return 'data:image/svg+xml;base64,' . $src;
     }
 }
 
@@ -1415,9 +1413,7 @@ if (!function_exists('get_page')) {
 		
 		// 祛除首页地址
 		$linkPage = str_replace('planUrl','page',$linkPage);
-		$linkPage = str_replace('list_1.html','',$linkPage);
-		
-		return $linkPage;
+        return str_replace('list_1.html','',$linkPage);
 	}
 }
 

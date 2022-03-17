@@ -160,7 +160,7 @@ try {
 	}
 
 	// scws multi
-	if ($scws_multi !== null && $scws_multi !== true) {
+	if ($scws_multi !== null && $scws_multi != true) {
 		$index->setScwsMulti($scws_multi);
 		if (!empty($source)) {
 			$scws_multi = null;
@@ -205,7 +205,7 @@ try {
 			}
 			echo "\n";
 		} else {
-			if ($file === true || !file_exists($file)) {
+			if ($file == true || !file_exists($file)) {
 				echo "错误：请正确指定要替换的自定义词库文件路径 (" . strval($file) . ")\n";
 			} else {
 				$content = file_get_contents($file);

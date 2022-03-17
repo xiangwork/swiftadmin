@@ -94,7 +94,7 @@ class Index extends AdminController
             $config = config('system');
             unset($config['variable']);
             $config = array_merge($config, $post);
-            if (arr2file('../config/system.php', $config) === false) {
+            if (arr2file('../config/system.php', $config) == false) {
                 return $this->error('保存失败，请重试!');
             }
 

@@ -216,7 +216,7 @@ try {
 		$syn = XSUtil::getOpt(null, 'synonym');
 		if ($syn !== null) {
 			$search->setAutoSynonyms();
-			if ($syn !== true) {
+			if ($syn != true) {
 				$search->setSynonymScale(floatval($syn));
 			}
 		}

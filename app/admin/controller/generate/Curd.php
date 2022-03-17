@@ -134,7 +134,7 @@ class Curd extends AdminController
      * 禁止CURD操作
      * @var array
      */
-    protected array $protectTable = [
+    protected $protectTable = [
         "admin",
         "admin_access",
         "admin_group",
@@ -456,7 +456,7 @@ class Curd extends AdminController
                     foreach ($replace as $key => $value) {
                         $master = str_replace("{%$key%}", $value, $master);
                     }
-                    echo($file);die();
+ 
                     write_file($file, $master);
                 }
 
@@ -786,14 +786,14 @@ class Curd extends AdminController
         foreach ($methods as $method) {
 
             if (!in_array($method, $this->filterMethod)) {
-                $outsMethod .= <<<Eof
+                $outsMethod .= <<<EOD
                     
                     public function $method()
                     {
                         return view();
                     }
                     
-                Eof;
+EOD;
             }
         }
 
@@ -806,7 +806,7 @@ class Curd extends AdminController
      * @param mixed $relation
      * @return void
      */
-    protected function getrelationMethodList(mixed $relation = [])
+    protected function getrelationMethodList($relation = [])
     {
         $relationString = PHP_EOL;
         if (!empty($relation) && !is_array($relation)) {

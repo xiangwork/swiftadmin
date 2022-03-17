@@ -136,7 +136,7 @@ class Rewrite extends AdminController
             $post = input();
             $config = config('system');
             $config = array_merge($config, $post);
-            if (arr2file('../config/system.php', $config) === false) {
+            if (arr2file('../config/system.php', $config) == false) {
                 return $this->error('保存失败，请重试!');
             }
 
