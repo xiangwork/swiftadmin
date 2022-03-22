@@ -308,6 +308,9 @@ class Content extends Model
      */
     public static function setAttributeAttr($attribute, $data) 
     {
+        if(empty($attribute)){
+                  return;
+         }
         $pattern = "/<img.*?src=\"(.*?)\"/i";
         if (preg_match($pattern,$data['content'],$match)) {
             $attribute = array_merge($attribute,[5]);
