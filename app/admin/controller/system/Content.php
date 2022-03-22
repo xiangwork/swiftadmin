@@ -214,7 +214,10 @@ class Content extends AdminController
                 if ($this->autoPostValidate($post, get_class($this->model))) {
                     return $this->error($this->errorMsg);
                 }
-
+                //修复属性为空时候
+                if(empty($post['attribute'])){
+                    $post['attribute']='';
+                }
                 $this->model->update($post);
             } catch (\Throwable $th) {
                 return $this->error($th->getMessage());
