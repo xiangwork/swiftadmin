@@ -60,13 +60,14 @@
             ,url: "{:url('{%controller%}index')}"
             ,toolbar: '#tableButton'
             ,defaultToolbar: ['filter', 'exports', 'print','search']
+            ,cellMinWidth: 160
             ,page: true
             ,limit: 18
             ,cols: [[
                 {type: 'checkbox', width:45},
                 {field: 'id', align: 'center',sort: true,width: 80, title: 'ID'},
                 {%colsListArr%}
-                {align: 'center', toolbar: '#tableBar', width:150, fixed: 'right', title: '{:__("操作")}'},
+                {align: 'center', toolbar: '#tableBar', width:160, fixed: 'right', title: '{:__("操作")}'},
             ]]
         })
 

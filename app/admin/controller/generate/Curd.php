@@ -559,7 +559,6 @@ class Curd extends AdminController
                 }
             }
 
-            $colsLine[] = "width: 160";
             $colsLine[] = "title:'$colsTitle'";
             $colsListArr[$key] = '{' . implode(',', $colsLine) . '}';
         }
