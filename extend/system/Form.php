@@ -73,7 +73,7 @@ class FormBuilder
      *
      * @var boolean
      */
-    protected bool $formtype = true;
+    protected $formtype = true;
 
     /**
      * 类构造函数
@@ -215,7 +215,7 @@ class FormBuilder
      */
     public function textarea(array $data = [])
     {
-        $value = $this->formtype ? '{$data.' . $data['name'] . '}"' : '';
+        $value = $this->formtype ? '{$data.' . $data['name'] . '}' : '';
         return '<textarea class="layui-textarea"' . $this->attributes($data) . ' >' . $value . '</textarea>';
     }
 
@@ -258,7 +258,7 @@ class FormBuilder
      * @param array $options
      * @return void
      */
-    public function validOptions($options = [])
+    public function validOptions(array $options = [])
     {
         if (!is_array($options) || !$options) {
             throw new \Exception("Options is Empty", 1);

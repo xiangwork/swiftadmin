@@ -493,7 +493,7 @@ class Curd extends AdminController
                 }
 
                 // 是否写入菜单
-                $data['create'] && Menus::create([$this->menus], $table);
+                $data['create'] && Menus::create([$this->menus], $table, $data['pid']);
 
                 // 状态更改为已完成
                 $data->save(['status' => 1]);
@@ -746,7 +746,7 @@ class Curd extends AdminController
         $writeRules = [
             'title' => $data['title'],
             'router'   => $data['controller'],
-            'icons'    => $data['icon'] ?? '',
+            'icons'    => $data['icons'] ?? '',
             'pid'      => $data['pid'],
             'auth'     => $data['auth'],
         ];

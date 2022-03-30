@@ -9,13 +9,12 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 // | Author: 权栈 <coolsec@foxmail.com>  Apache 2.0 License Code
 // +----------------------------------------------------------------------
-namespace app\api\Controller;
+namespace app\api\controller;
 use app\ApiController;
 
 /**
  * API接口前端示例文件
  */
-
 class Index extends ApiController
 {
     // 首页展示

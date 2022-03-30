@@ -112,7 +112,7 @@ if (!function_exists('mkdirss')) {
     /**
      * 递归创建文件夹
      * @param  string  $file    文件路径
-     * @param  intval  $mode    文件夹权限 
+     * @param  int  $mode    文件夹权限
      * @return bool
      */		
 	function mkdirss($path,$mode=0777) 
@@ -1338,14 +1338,14 @@ if (!function_exists('get_list_url')) {
 
 		// 如果是数字则检索
 		if (is_numeric($param)) {
-			$param = list_search($listElems,['id'=>$param]);
+			$param = list_search((array)$listElems,['id'=>$param]);
 		}
 
 		// 子分类列表页
 		if (!strstr($listStyle,'[sublist]')) {
 			$listUrl = '/'.$param['pinyin'];
 		} else {
-			$parent = list_search($listElems,['id'=>$param['pid']]);
+			$parent = list_search((array)$listElems,['id'=>$param['pid']]);
 			$listUrl = '/'.$parent['pinyin'].'/'.$param['pinyin'];
 		}
 

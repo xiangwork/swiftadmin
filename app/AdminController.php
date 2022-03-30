@@ -17,6 +17,7 @@ use PDOException;
 use think\facade\Db;
 use think\facade\Session;
 use app\admin\library\Auth;
+use think\middleware\AllowCrossDomain;
 use Throwable;
 use function implode;
 use function is_numeric;
@@ -175,7 +176,6 @@ class AdminController extends BaseController
 			return $this->redirect(url('/login')->suffix(false));
 		}
 
-		$app = strtolower(request()->root());
 		$this->controller = request()->controller(true);
 		$this->action  = request()->action(true);
 		$this->method = '/' . $this->controller . '/' . $this->action;

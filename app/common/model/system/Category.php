@@ -35,7 +35,7 @@ class Category extends Model
     public static function getListCate($pid = 0, $cid = 0, array $param = [], &$array=[], $blank=0, $level = 0)
     {
 		// 获取字段
-        $field = isset($param['field']) ? $param['field'] : '*';
+        $field = $param['field'] ?? '*';
         
         if (trim($field) != '*') {
             $field = explode(',',$field);
@@ -45,9 +45,9 @@ class Category extends Model
             $field = implode(',',$field);
         }
 
-        $order = isset($param['order']) ? $param['order'] : 'id asc';
+        $order = $param['order'] ?? 'id asc';
         $limit = isset($param['order']) && $level < 1 ? $param['limit'] : 1000;
-        $status = isset($param['status']) ? $param['status'] : '2';
+        $status = $param['status'] ?? '2';
 
 		$result = self::where(function($query) use ($pid,$cid,$status) {
     
@@ -85,7 +85,7 @@ class Category extends Model
         }
 
         $array = self::field($field)->select()->toArray();
-		if (is_array($array) && !empty($array)) {
+		if (!empty($array)) {
 			return list_to_tree($array);
 		}
 	}

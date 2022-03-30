@@ -1204,7 +1204,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
 
                 // 文件上传函数
                 var uploadFiles = {
-                    file: function (res, name) {
+                    normal: function (res, name) {
                         $('input.' + name).prop('value', res.url);
                         $('img.' + name).prop('src', res.url);
                         // $('input[name="'+name+'"]').next('img').prop('src',res.url);

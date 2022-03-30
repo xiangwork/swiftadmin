@@ -11,9 +11,13 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
 use app\AdminController;
+use app\common\library\Email;
+use app\common\library\Ftp;
+use think\facade\Cache;
 use think\facade\Db;
 use think\cache\driver\Redis;
 use think\cache\driver\memcached;
+use Throwable;
 
 class Index extends AdminController
 {
@@ -45,7 +49,7 @@ class Index extends AdminController
         
         $database = config('database.default');
         if ($database == 'mysql' || $database == 'mysqli') {
-            $mysqlver = db::query('select version()');
+            $mysqlver = Db::query('select version()');
             if (is_array($mysqlver)) {
                 $system['mysql_version'] = $database.' '.$mysqlver[0]['version()'];
             }
@@ -122,13 +126,13 @@ class Index extends AdminController
             $parse['CACHE']['DRIVER'] = $config['cache']['cache_type'];
             $parse['CACHE']['HOSTNAME'] = $config['cache']['cache_host'];
             $parse['CACHE']['HOSTPORT'] = $config['cache']['cache_port'];
-            $parse['CACHE']['SELECT']   = $config['cache']['cache_select'] >= 1 ? $config['cache']['cache_select']  : 1;
+            $parse['CACHE']['SELECT']   = max($config['cache']['cache_select'], 1);
             $parse['CACHE']['USERNAME'] = $config['cache']['cache_user'];
             $parse['CACHE']['PASSWORD'] = $config['cache']['cache_pass'];
     
             $content = parse_array_ini($parse);
             if (write_file($env,$content)) {
-                \think\facade\Cache::set('redis-system',$config);
+                Cache::set('redis-system',$config);
                 return $this->success('保存成功!');
             }
         }
@@ -140,7 +144,7 @@ class Index extends AdminController
     public function testFtp() 
     {
         if (request()->isPost()) {
-            if (\app\common\library\Ftp::instance()->ftpTest(input())) {
+            if (Ftp::instance()->ftpTest(input())) {
                 return $this->success('上传测试成功！');
             }
         }
@@ -154,7 +158,7 @@ class Index extends AdminController
     public function testEmail() 
     {
         if (request()->isPost()) {
-            $info = \app\common\library\Email::instance()->testEMail(input());
+            $info = Email::instance()->testEMail(input());
             $info === true ? $this->success('测试邮件发送成功！') : $this->error($info);
         }
     }
@@ -184,7 +188,7 @@ class Index extends AdminController
                } else {
                    $drive = new Memcached($options);
                }
-            } catch (\Throwable $th) {
+            } catch (Throwable $th) {
                 return $this->error($th->getMessage());
             }
                
@@ -195,5 +199,7 @@ class Index extends AdminController
             }
 
         }
+
+        return false;
     }
 }

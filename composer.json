@@ -32,10 +32,11 @@
         "meystack/plugin": "^1.0",
         "overtrue/pinyin": "^4.0",
         "firebase/php-jwt": "^6.0",
-        "ext-json": "*",
         "elasticsearch/elasticsearch": "^7.17",
+        "ext-json": "*",
         "ext-pdo": "*",
-        "ext-iconv": "*"
+        "ext-iconv": "*",
+        "ext-gd": "*"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2"
