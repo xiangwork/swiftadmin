@@ -57,8 +57,9 @@ class Content extends AdminController
         // 实例化模型
         $this->model = new ContentModel();
 
-        // 获取栏目权限
-        $this->categoryList = $this->auth->getRuleCatesTree(AUTHCATES, 'pri', false);
+        // 获取栏目权限，此处需要有分类树
+        $categoryList = $this->auth->getRuleCatesTree(AUTHCATES, 'pri');
+        $this->categoryList = json_decode($categoryList,true);
 
         // 获取模型参数
         $this->parentId = input('pid/d') ?? $this->categoryList[0]['id'];
@@ -214,7 +215,10 @@ class Content extends AdminController
                 if ($this->autoPostValidate($post, get_class($this->model))) {
                     return $this->error($this->errorMsg);
                 }
-
+                //修复属性为空时候
+                if(empty($post['attribute'])){
+                    $post['attribute']='';
+                }
                 $this->model->update($post);
             } catch (\Throwable $th) {
                 return $this->error($th->getMessage());
