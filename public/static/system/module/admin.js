@@ -1044,7 +1044,8 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
             var datetime = $('*[lay-datetime]');
             datetime.each(function (key, obj) {
                 var t = $(obj).data('datetype') || 'datetime',
-                    f = $(obj).data('dateformat') || 'yyyy-MM-dd HH:mm:ss',
+                f = $(obj).data('dateformat') || 'yyyy-MM-dd HH:mm:ss',//格式需要按照laydate的格式
+                    val = $(obj).val() || '',//获取value值
                     r = $(obj).data('range') || false,
                     max = $(obj).data('maxvalue') || '2222-12-31',
                     min = $(obj).data('minvalue') || '1930-01-01';
@@ -1055,6 +1056,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
                     , range: r
                     , max: max
                     , min: min
+                    , value:val
                     , format: f
                     , done: function (value, date, end_date) {
                         console.log(value, date, end_date);
@@ -1225,8 +1227,8 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
                         console.log(index);
                         var html = '<div class="layui-input-inline">';
                         html += '<img src="' + res.url + '" >';
-                        html += '<input type="text" name="album[' + index + '][src]" class="layui-hide" value="' + res.url + '">';
-                        html += '<input type="text" name="album[' + index + '][title]" class="layui-input" placeholder="图片简介">';
+                        html += '<input type="text" name="' + name + '[' + index + '][src]" class="layui-hide" value="' + res.url + '">';
+                        html += '<input type="text" name="' + name + '[' + index + '][title]" class="layui-input" placeholder="图片简介">';
                         html += '<span class="layui-badge layui-badge-red" onclick="layui.$(this).parent().remove();">删除</span></div>';
                         $(elem).parent().before(html);
 
