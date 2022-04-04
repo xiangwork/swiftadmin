@@ -53,74 +53,27 @@ class User extends HomeController
      */
     public function register()
     {
-        // 判断是否开启注册
-        if (!saenv('user_status')) {
-            return $this->error('暂未开放注册！');
-        }
-
         if (request()->isPost()) {
 
-            // 验证数据
+            // 获取参数
             $post = input('post.');
-            $post  = safe_field_model($post,get_class($this->model));
+            $post = safe_field_model($post,get_class($this->model));
 
             if (!is_array($post)) {
                 return $this->error($post);
             }
 
-            // 禁止批量注册
-            $where[] = ['createip', '=', ip2long(request()->ip())];
-            $where[] = ['createtime', '>', linux_extime(1)];
-            $total = $this->model->where($where)->select();
+            // 邮箱 手机 等验证流程 暂时没时间测试，代码还没写
+            // 你可以先自行实现这块的代码
 
-            if (!empty($total) && (count($total) >= saenv('user_register_second'))) {
-                return $this->error('当日注册量已达到上限');
+            if (!$this->auth->register($post)) {
+                return $this->error($this->auth->getError());
             }
 
-            // 过滤用户信息
-            if (isset($post['name']) && UserModel::getByName($post['name'])) {
-                return $this->error('当前用户名已被占用！');
-            }
-            if (isset($post['email']) && UserModel::getByEmail($post['email'])) {
-                return $this->error('当前邮箱已被占用！');
-            }
-            if (isset($post['mobile']) && UserModel::getByMobile($post['mobile'])) {
-                return $this->error('当前手机号已被占用！');
-            }
+            return $this->success('注册成功', (string)url("/user/index"));
 
-            // 开始注册
-            $registerType = saenv('user_register_style');
-            if ($registerType == 'normal') {
-            } else if ($registerType == 'mobile') {  // 手机验证
-                
-                // 需要自己配置模板
-                return $this->error('手机验证码失效！');
-                
-            } else if ($registerType == 'regcode') { // 激活码模式
-
-                if (!UserInvitecode::check($post['code'])) {
-                    return $this->error('激活码无效！');
-                }
-
-                // 注册回调事件
-                Event::listen("register_success", function ($code) {
-                    UserInvitecode::del($code);
-                });
-            }
-
-            if ($result = $this->model->create($post)) {
-
-                // 注册成功
-                Event::trigger("register_success", $post['code']);
-
-                $this->auth->setloginState($result, false);
-                return $this->success('注册成功', cookie('referer'));
-            }
-
-            return $this->error('用户注册失败，请联系管理员！');
         }
 
-        $this->setHttpRefrer();
         return view();
     }
 
@@ -131,7 +84,6 @@ class User extends HomeController
     {
         if (request()->isPost()) {
 
-            // 获取参数
             $nickname = input('nickname/s');
             $password = input('pwd/s');
 
@@ -139,11 +91,10 @@ class User extends HomeController
                 return $this->error($this->auth->getError());
             }
 
-            return $this->success('登录成功', cookie('referer'));
+            return $this->success('登录成功', (string)url('/'));
         }
 
-        $this->setHttpRefrer();
-        return view('');
+        return view();
     }
 
     /**
@@ -325,7 +276,6 @@ class User extends HomeController
             $result = $this->model->find($this->userId);
             $result->avatar = $filename['url'] . '?' . create_rand(12);
             if ($result->save()) {
-                $this->auth->setloginState($result->toArray(), true);
                 return json($filename);
             }
         }
@@ -366,7 +316,7 @@ class User extends HomeController
             $difftime = time() - $valicode['time'];
             if (($difftime / 60) <= saenv('user_valitime')) {
                 if ($result->save(['valicode' => '', 'status' => 1])) {
-                    $this->auth->setloginState($result);
+                    $this->auth->returnToken($result);
                     $this->redirect('/');
                 }
             }

@@ -1,5 +1,6 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
 // +----------------------------------------------------------------------
 // | swiftAdmin 极速开发框架 [基于ThinkPHP6开发]
 // +----------------------------------------------------------------------
@@ -14,25 +15,25 @@ namespace app;
 use app\common\library\Auth;
 
 // 前台全局控制器基类
-class HomeController extends BaseController 
+class HomeController extends BaseController
 {
     /**
      * 数据库实例
      * @var object
      */
-	public $model = null;
+    public $model = null;
 
     /**
      * 是否验证
      * @var bool
      */
-	public $isValidate = true;
+    public $isValidate = true;
 
     /**
      * 验证场景
      * @var string
      */
-	public $scene = '';
+    public $scene = '';
 
     /**
      * 控制器/类名
@@ -50,19 +51,19 @@ class HomeController extends BaseController
      * 操作状态
      * @var int
      */
-	public $status = false;
+    public $status = false;
 
     /**
      * 错误消息
      * @var string
      */
-	public $error = null;
+    public $error = null;
 
     /**
      * 接口权限
      * @var object
      */
-	public $auth = null;
+    public $auth = null;
 
     /**
      * 用户登录ID
@@ -86,28 +87,28 @@ class HomeController extends BaseController
      * 禁止登录重复
      * @var array
      */
-	public $repeatLogin = ['login','register'];
+    public $repeatLogin = ['login', 'register'];
 
     /**
      * 非鉴权方法
      * @var array
      */
-	public $noNeedLogin = ['index','home'];
+    public $noNeedLogin = ['index', 'home'];
 
     /**
      * 获取地址类型
      * @var string
      */
-	public $Urltype = null;
+    public $Urltype = null;
 
     /**
      * 跳转URL地址
      * @var string
      */
-	public $JumpUrl = '/user/index';
+    public $JumpUrl = '/user/index';
 
-	// 初始化函数
-    public function initialize() 
+    // 初始化函数
+    public function initialize()
     {
         parent::initialize();
 
@@ -119,19 +120,18 @@ class HomeController extends BaseController
         $this->controller = request()->controller(true);
 
         // 是否验证登录器
-        if($this->auth->isLogin()) {
-            $this->userId = $this->auth->userInfo['id']; 
+        if ($this->auth->isLogin()) {
+            $this->userId = $this->auth->userInfo['id'];
             $this->userInfo = $this->auth->userInfo;
- 
-            if(in_array($this->action,$this->repeatLogin)) {
+
+            if (in_array($this->action, $this->repeatLogin)) {
                 $this->redirect($this->JumpUrl);
             }
 
-            $this->app->view->assign('user',$this->auth->userInfo);
-        }
-        else { // 非鉴权方法
-            if ($this->needLogin && !in_array($this->action,$this->noNeedLogin)) {
-                return $this->error('请登录后访问','/');
+            $this->app->view->assign('user', $this->auth->userInfo);
+        } else { // 非鉴权方法
+            if ($this->needLogin && !in_array($this->action, $this->noNeedLogin)) {
+                return $this->error('请登录后访问', '/');
             }
         }
     }
@@ -139,15 +139,17 @@ class HomeController extends BaseController
     /**
      * 视图过滤
      *
-     * @return void
+     * @return string
      */
     public function view($template = '', array $argc = [])
     {
-        return view($template,$argc)->filter(function($content) {
+        return view($template, $argc)->filter(function ($content) {
+
             if (saenv('compression_page')) {
-                $content = preg_replace('/\s+/i',' ',$content);
+                $content = preg_replace('/\s+/i', ' ', $content);
             }
-        	return $content;
+
+            return $content;
         });
     }
 
@@ -156,39 +158,8 @@ class HomeController extends BaseController
      * @access public
      * @return void        
      */
-	public function logOut() {
-        cookie('uid', NULL);
-        cookie('token', NULL);
-        cookie('nickname', NULL);
-		$this->redirect('/');
-	}
-
-	/**
-     * 设置注册来源
-     */
-	public function setHttpRefrer() {
-		if (isset($_SERVER["HTTP_REFERER"])) {
-
-			if (strstr($_SERVER["HTTP_REFERER"],'setpwd')) {
-				return false;
-            }
-            
-			$referer = parse_url($_SERVER["HTTP_REFERER"]);
-            if($referer['host'] == saenv('site_url') ){
-				cookie('referer',$_SERVER["HTTP_REFERER"], 604800);
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	/**
-     * 清空注册来源
-     */
-	public function refereTonull() {
-		cookie('referer',null);
-	}
-
-
-
+    public function logOut()
+    {
+        return $this->auth->logOut();
+    }
 }

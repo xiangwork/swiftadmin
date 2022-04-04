@@ -118,7 +118,7 @@ class AdminGroup extends AdminController
 					'rules'=>implode(',',$rules)
 				];
 
-				if (!$this->auth->checkRuleCatesNode($rules)) {
+				if (!$this->auth->checkRuleOrCateNodes($rules)) {
 					return $this->error('没有权限！');
 				}
 
@@ -147,7 +147,7 @@ class AdminGroup extends AdminController
 					'cates'=>implode(',',$cates)
 				];
 
-				if (!$this->auth->checkRuleCatesNode($cates,AUTHCATES)) {
+				if (!$this->auth->checkRuleOrCateNodes($cates,AUTHCATES)) {
 					return $this->error('没有权限！');
 				}
 

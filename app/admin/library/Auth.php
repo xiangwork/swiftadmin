@@ -102,7 +102,7 @@ class Auth
      * @param string        $relation 		如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
      * @return bool               	        通过验证返回true;失败返回false
      */
-    public function checkAuths($name, $admin_id = 0, $type = 1, $mode = 'url', $relation = 'or') 
+    public function check($name, $admin_id = 0, $type = 1, $mode = 'url', $relation = 'or') 
     {
         // 转换格式
         if (is_string($name)) {
@@ -175,7 +175,7 @@ class Auth
      * @param  string   $type           节点类型
      * @return array
      */
-    public function getAuthNodes($admin_id = null, string $type = AUTHRULES)
+    public function getRulesNode($admin_id = null, string $type = AUTHRULES)
     {
         // 私有节点
         $authGroup = $authPrivate = [];
@@ -206,11 +206,11 @@ class Auth
      * @access  public
      * @return  JSON|Array
      */
-    public function getAuthMenus()
+    public function getRulesMenu()
     {
         // 查找节点
         $where[] = ['status','=','normal'];
-        $auth_nodes = $this->getAuthNodes();
+        $auth_nodes = $this->getRulesNode();
         $list = $this->getAuthList($this->admin['id'] ,$auth_nodes);
 
         // 循环处理数据
@@ -241,7 +241,7 @@ class Auth
         // 查找节点
         $where[] = ['status','=','normal'];
         if (!$this->superAdmin()) {
-            $auth_nodes = !empty($nodes) ? $nodes : $this->getAuthNodes($admin_id);
+            $auth_nodes = !empty($nodes) ? $nodes : $this->getRulesNode($admin_id);
             return AdminRulesModel::where(function ($query) use ($where,$auth_nodes) {
                 if (empty($auth_nodes[$this->authPrivate])) {
                     $where[] = ['auth','=','0'];
@@ -273,7 +273,7 @@ class Auth
         }
         
         $class = $class != $this->authGroup ? $this->authPrivate : $class;
-        $auth_nodes = $this->getAuthNodes($this->admin['id'], $type);
+        $auth_nodes = $this->getRulesNode($this->admin['id'], $type);
         if ($type && $type == AUTHRULES) {
 
             $where[] = ['status','=','normal'];
@@ -315,14 +315,13 @@ class Auth
      * @param string|null $class
      * @return bool
      **/
-    public function checkRuleCatesNode($rules = null, string $type = null, string $class = 'pri')
+    public function checkRuleOrCateNodes($rules = null, string $type = null, string $class = 'pri')
     {
         if (!$this->superAdmin() && !empty($rules)) {
             $type   = !empty($type) ? $type : AUTHRULES;
             $class  = !empty($class) ? $class : $this->authGroup;
             $class  = $class != $this->authGroup ? $this->authPrivate : $class;
-            $auth_nodes = $this->getAuthNodes($this->admin['id'], $type);
-            halt($auth_nodes);
+            $auth_nodes = $this->getRulesNode($this->admin['id'], $type);
             $differ = array_unique(array_merge($rules, $auth_nodes[$class]));
             if (count($differ) > count($auth_nodes[$class])) {
                 return false;
@@ -353,7 +352,7 @@ class Auth
      * @param array $groupIDs 
      * @return bool
      */
-    public function checkGroupAuth(array $groupIDs = [])
+    public function checkRulesForGroup(array $groupIDs = [])
     {
         if ($this->superAdmin()) {
             return true;

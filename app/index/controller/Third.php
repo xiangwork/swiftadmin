@@ -91,7 +91,7 @@ class Third extends HomeController
             $array['loginip'] = request()->ip();
             $array['logincount'] = $result['logincount'] + 1;
             if (User::update($array)) {
-                $this->auth->setloginState($result,false);
+                $this->auth->returnToken($result);
                 $this->refreshStatus();
             }
         }
@@ -125,10 +125,12 @@ class Third extends HomeController
 
             // 注册第三方数据
             if (isset($third) && is_array($third)) {
+
                 if (UserThird::create($third)) {
-                    $this->auth->setloginState($result,false);
+                    $this->auth->returnToken($result);
                     $this->refreshStatus();
                 }
+                
             }
         }
     }

@@ -98,14 +98,7 @@ class User extends Model
      * @return string
      */
     public static function onAfterUpdate($data)
-    {
-        if (Auth::instance()->isLogin()) {
-            $data = self::getById($data['id']);
-            if (Auth::instance()->userInfo->id == $data['id']) {
-                Auth::instance()->setactiveState($data);
-            }
-        }
-    }
+    {}
     
     /**
      * 获取头像

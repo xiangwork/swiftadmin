@@ -33,7 +33,7 @@ class Admin
                 $group_id = input('group_id/s');
                 $group_id = !empty($group_id) ? $group_id.','.$data['group_id'] : $data['group_id'];
                 $group_id = array_unique(explode(',',$group_id));
-                if (!Auth::instance()->checkGroupAuth($group_id)) {
+                if (!Auth::instance()->checkRulesForGroup($group_id)) {
                     return json(ResultCode::AUTH_ERROR);
                 }
             }

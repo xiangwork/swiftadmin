@@ -30,7 +30,7 @@ class AdminGroup
           
           $id = input('id');
           if (!empty($id) && $id >= 1) {
-            if (!Auth::instance()->checkGroupAuth((array)$id)) {
+            if (!Auth::instance()->checkRulesForGroup((array)$id)) {
               return json(ResultCode::AUTH_ERROR);
             }    
           }  

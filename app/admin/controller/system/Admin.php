@@ -94,10 +94,10 @@ class Admin extends AdminController
                     $list[$key]['group'] = list_sort_by($list[$key]['group'], 'id');
                 }
 
-                $authnodes = $this->auth->getAuthNodes($value['id']);
+                $authnodes = $this->auth->getRulesNode($value['id']);
                 $list[$key][AUTHRULES] = $authnodes[$this->auth->authPrivate];
 
-                $authnodes = $this->auth->getAuthNodes($value['id'], AUTHCATES);
+                $authnodes = $this->auth->getRulesNode($value['id'], AUTHCATES);
                 $list[$key][AUTHCATES] = $authnodes[$this->auth->authPrivate];
             }
 
@@ -219,11 +219,11 @@ class Admin extends AdminController
 
             if (!empty($admin_id) && $admin_id > 0) {
 
-                $access = $this->auth->getAuthNodes($admin_id, $type);
+                $access = $this->auth->getRulesNode($admin_id, $type);
                 $rules  = array_diff($rules, $access[$this->auth->authGroup]);
 
                 // 权限验证
-                if (!$this->auth->checkRuleCatesNode($rules, $type, $this->auth->authPrivate)) {
+                if (!$this->auth->checkRuleOrCateNodes($rules, $type, $this->auth->authPrivate)) {
                     return $this->error('没有权限!');
                 }
 
@@ -231,7 +231,7 @@ class Admin extends AdminController
                 $differ = array_diff($access[$this->auth->authPrivate], $access[$this->auth->authGroup]);
                 $current = [];
                 if (!$this->auth->superAdmin()) {
-                    $current = $this->auth->getAuthNodes();
+                    $current = $this->auth->getRulesNode();
                     $current = array_diff($differ, $current[$this->auth->authPrivate]);
                 }
 
@@ -259,7 +259,7 @@ class Admin extends AdminController
     {
         $action = request()->param('action/s');
         if (request()->isAjax()) {
-            $action = $action ?? 'getAuthMenus';
+            $action = $action ?? 'getRulesMenu';
             if (is_callable(array($this->auth, $action))) {
                 return call_user_func(array($this->auth, $action), input());
             }

@@ -119,7 +119,7 @@ class Auth
      * @param string|null $class
      * @return bool
      */
-    public function checkAPI(string $class = null)
+    public function checkApi(string $class = null)
     {
 
         // 请求参数
@@ -141,7 +141,7 @@ class Auth
         }
 
         // 校验请求方式
-        if (!$this->validMethods($restful)) {
+        if (!$this->checkMothod($restful)) {
             return false;
         }
 
@@ -168,14 +168,14 @@ class Auth
             }
 
             // 默认走普通流程
-            $list = $this->getAPIAuthList();
+            $list = $this->getApiRuleList();
             if (!$nodes = list_search($list, ['class' => $class])) {
                 $this->setError(ResultCode::AUTH_ERROR);
                 return false;
             }
 
             // 判断余量
-            if (!$this->dayCeilingSeconds($nodes)) {
+            if (!$this->checkCallLimit($nodes)) {
                 return false;
             }
         } else if ($restful['status'] == DISABLE) {
@@ -192,7 +192,7 @@ class Auth
      * @param  array    $restful     当前接口数据
      * @return bool
      */
-    protected function validMethods(array $restful = [])
+    protected function checkMothod(array $restful = [])
     {
         if (
             $restful['method'] !== ALLM
@@ -210,7 +210,7 @@ class Auth
      * @access protected
      * @return array
      */
-    protected function getAPIAuthList()
+    protected function getApiRuleList()
     {
         // 读取节点缓存
         $where['app_id'] = $this->params['app_id'];
@@ -241,7 +241,7 @@ class Auth
      * @param  array    $result     当前接口规则
      * @return bool
      */
-    protected function dayCeilingSeconds(array $result = [])
+    protected function checkCallLimit(array $result = [])
     {
         // 查询规则
         $access = md5($this->params['app_id'] . $result['class']);
@@ -307,6 +307,59 @@ class Auth
     }
 
     /**
+     * 用户注册
+     *
+     * @param array $post
+     * @return void
+     */
+    public function register(array $post)
+    {
+
+        if (!saenv('user_status')) {
+            $this->setError('暂未开放注册！');
+            return false;
+        }
+
+        // 禁止批量注册
+        $where[] = ['createip', '=', ip2long(request()->ip())];
+        $where[] = ['createtime', '>', linux_extime(1)];
+        $totalMax = UserModel::where($where)->count();
+
+        if ($totalMax >= saenv('user_register_second')) {
+            $this->setError('当日注册量已达到上限');
+            return false;
+        }
+
+        // 过滤用户信息
+        if (isset($post['nickname']) && UserModel::getByNickname($post['nickname'])) {
+            $this->setError('当前用户名已被占用！');
+            return false;
+        }
+
+        if (isset($post['email']) && UserModel::getByEmail($post['email'])) {
+            $this->setError('当前邮箱已被占用！');
+            return false;
+        }
+
+        if (isset($post['mobile']) && UserModel::getByMobile($post['mobile'])) {
+            $this->setError('当前手机号已被占用！');
+            return false;
+        }
+
+        try {
+
+           $this->userInfo = UserModel::create($post);
+           $this->returnToken($this->userInfo);
+
+        } catch (\Throwable $th) {
+            $this->setError($th->getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * 用户检测登录
      * @param string $name
      * @param string $pwd
@@ -314,7 +367,7 @@ class Auth
      */
     public function login(string $nickname = '', string $pwd = '')
     {
-
+        // 支持邮箱或手机登录
         if (filter_var($nickname, FILTER_VALIDATE_EMAIL)) {
             $where[] = ['email', '=', htmlspecialchars(trim($nickname))];
         } else {
@@ -329,19 +382,21 @@ class Auth
                 $this->setError('用户名或密码错误');
             }
 
-            if ($this->userInfo['status'] != 1) {
+            if (!$this->userInfo['status']) {
                 $this->setError('用户异常或未审核，请联系管理员');
                 return false;
             }
 
             // 更新登录数据
-            $this->userInfo['logintime'] = time();
-            $this->userInfo['loginip'] = request()->ip();
-            $this->userInfo['logincount'] = $this->userInfo['logincount'] + 1;
+            $this->userInfo->logintime = time();
+            $this->userInfo->loginip = request()->ip();
+            $this->userInfo->logincount++;
+
             if ($this->userInfo->save()) {
-                $this->setloginState($this->userInfo->toArray(), false);
+                $this->returnToken($this->userInfo, false);
                 return true;
             }
+
         } else {
             $this->setError('您登录的用户不存在');
             return false;
@@ -355,21 +410,19 @@ class Auth
      */
     public function isLogin()
     {
-        $token = cookie('token');
-        if (empty($token)) {
-            $token = request()->request('token');
-        }
+        $token = $this->getToken();
 
         if (!$token) {
             return false;
         }
 
-        $array = $this->checkToken($token);
-        if (!empty($array)) {
-            $this->token = $token;
+        $uid = $this->checkToken($token);
 
-            // 只缓存用户id
-            $this->userInfo = $array;
+        if (!empty($uid)) {
+
+            $this->token = $token;
+            $this->userInfo = UserModel::find($uid);
+
             return true;
         }
 
@@ -377,89 +430,62 @@ class Auth
     }
 
     /**
-     * 设置用户登录状态
-     * @param array  $array
+     * 退出登录
+     *
+     * @return void
+     */
+    public function logout()
+    {
+        cookie('uid', null);
+        cookie('token', null);
+        cookie('nickname', null);
+    }
+
+    /**
+     * 
+     * 返回前端令牌
+     * @param object  $array
      * @return bool
      */
-    public function setloginState(array $array = null, $token = false)
+    public function returnToken(object $user = null, $token = false)
     {
-        $this->token = $token ? cookie('token') : $this->buildToken($array);
-        cookie('uid', $array['id'], $this->keepTime);
+        $this->token = $token ? $this->getToken() : $this->buildToken($user->id);
+        cookie('uid', $user->id, $this->keepTime);
         cookie('token', $this->token, $this->keepTime);
-        cookie('nickname', $array['nickname'], $this->keepTime);
-        $this->setActiveState(is_object($array) ? $array : $array);
+        cookie('nickname',$user->nickname, $this->keepTime);
+        \think\facade\Cache::set($this->token, $user->id, $this->keepTime);
     }
 
     /**
-     * 设置状态
-     * @param   array $array
-     * @return  bool
-     */
-    public function setActiveState(array $array = [])
-    {
-        $tag = md5((string)$array['id']);
-        \think\facade\Cache::tag($tag)->clear();
-        \think\facade\Cache::tag($tag)->set($this->token, $array, $this->keepTime);
-    }
-
-    /**
-     * 返回一个token
+     * 生成token
      * @access protected
-     * @param  array    $array     用户参数
-     * @return string   
+     * @return mixed   
      */
-    protected function buildToken($array = [])
+    protected function buildToken(mixed $id)
     {
-        $this->token = md5(create_rand(16));
-        return $this->token;
+        return md5(create_rand(16) . $id);
+    }
+
+    /**
+     * 获取token
+     *
+     * @return string
+     */
+    public function getToken()
+    {
+       return request()->header('token', input('token', cookie('token')));
     }
 
     /**
      * 校验token
      * @access protected
      * @param  string       $token       用户token
-     * @return array|string   
+     * @return bool
      */
     public function checkToken(string $token = null)
     {
-        $token = ($token ?? input('token/s')) ?? '';
-        return \think\facade\Cache::get($token) ?? false;
-    }
-
-    /**
-     * 生成签名
-     * @access protected
-     * @param  array    $array     用户参数
-     * @return string   
-     */
-    public function buildSign($uid = 0, $time = 0)
-    {
-
-        $sign = [
-            'ip' => request()->ip(),
-            'auth_key' => saenv('auth_key'),
-            'time' => $time,
-            'uid' => $uid,
-        ];
-
-        return sha1(implode('#', $sign));
-    }
-
-    /**
-     * 校验签名
-     * @access protected
-     * @param  string       $token       用户token
-     * @return array|string   
-     */
-    public function checkSign(string $sign = null, $uid = 0, int $time = 0)
-    {
-        $check = [
-            'ip' => request()->ip(),
-            'auth_key' => saenv('auth_key'),
-            'time' => $time,
-        ];
-
-        return sha1(implode('#', $check)) == $sign ? true : false;
+        $userId = \think\facade\Cache::get($token);
+        return $userId ?? false;
     }
 
     /**

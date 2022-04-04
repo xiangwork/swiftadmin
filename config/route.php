@@ -12,6 +12,8 @@ return [
     'url_common_param'      => true,
     // 是否开启路由延迟解析
     'url_lazy_route'        => false,
+    // 开启路由缓存
+    'route_check_cache'     => true,
     // 是否强制使用路由
     'url_route_must'        => false,
     // 合并路由规则

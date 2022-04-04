@@ -183,7 +183,7 @@ class AdminController extends BaseController
 		// 校验权限
 		$this->auth = Auth::instance();
 		if (!in_array($this->method, $this->noNeedLogin)) {
-			if (!$this->auth->SuperAdmin() && !$this->auth->checkAuths($this->method, $this->admin['id'])) {
+			if (!$this->auth->SuperAdmin() && !$this->auth->check($this->method, $this->admin['id'])) {
 				if (request()->isAjax()) {
 					return $this->error('没有权限!');
 				} else {
