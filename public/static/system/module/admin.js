@@ -977,7 +977,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
      */
     admin._validauthURL = function (othis, make) {
 
-        var curl = $(othis).data('url');
+        var curl = $(othis).attr('data-url');
         if (typeof curl == 'undefined') {
             layer.msg(i18n.prop('url undefined'), 'error');
             throw 'lay-ajax url undefined';
