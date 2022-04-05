@@ -1324,10 +1324,10 @@ if (!function_exists('get_list_url')) {
 	/**
 	 * 获取列表页地址
 	 *
-	 * @param array $param
+	 * @param mixed $param
 	 * @return void
 	 */
-	function get_list_url(array $param = [])
+	function get_list_url(mixed $param)
 	{
 		if (!$param) {
 			return false;
@@ -1338,18 +1338,18 @@ if (!function_exists('get_list_url')) {
 
 		// 如果是数字则检索
 		if (is_numeric($param)) {
-			$param = list_search((array)$listElems,['id'=>$param]);
+			$param = list_search($listElems, ['id' => (int)$param]);
 		}
 
 		// 子分类列表页
-		if (!strstr($listStyle,'[sublist]')) {
-			$listUrl = '/'.$param['pinyin'];
+		if (!strstr($listStyle, '[sublist]')) {
+			$listUrl = '/' . $param['pinyin'];
 		} else {
-			$parent = list_search((array)$listElems,['id'=>$param['pid']]);
-			$listUrl = '/'.$parent['pinyin'].'/'.$param['pinyin'];
+			$parent = list_search($listElems, ['id' => (int)$param['pid']]);
+			$listUrl = '/' . $parent['pinyin'] . '/' . $param['pinyin'];
 		}
 
-		$listUrl = $listUrl.'/list_page.html';
+		$listUrl = $listUrl . '/list_page.html';
 
 		return saenv('url_domain') ? saenv('site_http') . $listUrl : $listUrl;
 	}
