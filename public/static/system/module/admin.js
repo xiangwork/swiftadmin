@@ -1199,7 +1199,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
                 var that = $(this),
                     name = $(elem).attr('lay-upload') || undefined,
                     url = $(elem).data('url') || '/upload/file',
-                    type = $(elem).data('type') || 'file',
+                    type = $(elem).data('type') || 'normal',
                     size = $(elem).data('size') || 102400,
                     accept = $(elem).data('accept') || 'file',
                     callback = $(elem).attr('callback') || undefined;
