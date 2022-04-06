@@ -77,14 +77,14 @@
             ,cols: [[
                 {type: 'checkbox', width:45},
                 {field: 'id', align: 'center',sort: true,width: 80,  title: 'ID'},
-                {field: 'title', align: 'left',templet:function(d){
+                {field: 'name', align: 'left',templet:function(d){
                     var left = d._level * 32;
                     var html = '<div style="padding-left:'+ left + 'px;">';
                         html += '<a href="'+d.readurl+'" target="_blank" >';
                         if (d._level >= 1) {
                             html += '|-';
                         }
-                        html += d.title + '</a>';
+                        html += d.name + '</a>';
                         html += ' </div>';
                     return html
                 }, title: '{:__("名称")}'},

@@ -4,6 +4,7 @@ declare (strict_types = 1);
 namespace app\install\controller;
 use think\facade\Cache;
 use app\BaseController;
+use system\Random;
 
 class Index extends BaseController
 {   
@@ -120,7 +121,7 @@ class Index extends BaseController
 
         // 修改加密KEY
         $config = config('system');
-        $config['auth']['auth_key'] = create_rand(16);
+        $config['auth']['auth_key'] = Random::alpha(16);
         arr2file('../config/system.php',$config);
 
         return view();

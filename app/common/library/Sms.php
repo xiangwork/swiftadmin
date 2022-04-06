@@ -16,6 +16,7 @@ use think\facade\Event;
 use system\sms\Alisms;
 use system\sms\Tensms;
 use app\common\model\system\UserValidate;
+use system\Random;
 
 /**
  * 短信息类
@@ -125,7 +126,7 @@ class Sms
             // 是否自动设置参数
             if ($config[$type][$method]['auto']) {
                 $this->autoPrarms = true;
-                $this->params = array(create_rand(4,true));
+                $this->params = array(Random::number(4));
             }
 
             // 判断类型并设置时间限制
@@ -266,7 +267,12 @@ class Sms
         foreach ($this->phone as $key => $value) {
     
             $first = substr($value,0,3);
-            $find = list_search_value($this->numberHeader,$first);
+
+            foreach ($this->numberHeader as $index => $elem) {
+                if (stripos($elem,$first)) {
+                    $find = $elem;
+                }
+            }
             
             // 正则匹配
             $match = preg_match('/^[0-9]{11}$/',$value);

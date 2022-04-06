@@ -5,6 +5,7 @@ namespace app\common\model\system;
 use think\Model;
 use app\common\library\Auth;
 use app\common\library\Content;
+use system\Random;
 use think\model\concern\SoftDelete;
 
 /**
@@ -74,7 +75,7 @@ class User extends Model
     public static function changePassWord($data)
     {
         if (!empty($data->pwd)) {
-            $salt = create_rand();
+            $salt = Random::alpha(8);
             $data->pwd = member_encrypt($data->pwd,$salt);
             $data->salt = $salt;
         } else {

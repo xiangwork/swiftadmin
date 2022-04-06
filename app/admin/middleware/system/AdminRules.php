@@ -28,13 +28,28 @@ class AdminRules
    */
   public function handle($request, \Closure $next)
   {
-    
-    if (saenv('system_alogs')) {
-			$array = system_exception_logs();
-			$array['type'] = 2;
-			Systemlog::write($array);
-		}
 
+    if (saenv('system_alogs')) {
+      $array = [
+        'module'        => app()->http->getName(),
+        'controller'    => $request->controller(true),
+        'action'        => $request->action(true),
+        'params'        => serialize($request->param),
+        'method'        => $request->method,
+        'url'           => $request->baseUrl,
+        'ip'            => $request->ip,
+        'name'          => session('AdminLogin.name'),
+      ];
+
+      if (empty($array['name'])) {
+        $array['name'] = 'system';
+      }
+
+      $array['type'] = 2;
+      Systemlog::write($array);
+    }
+
+    // 全局过滤系统属性
     if ($request->isPost()) {
       $where[] = ['id', '=', input('id/d')];
       $where[] = ['isSystem', '=', 1];

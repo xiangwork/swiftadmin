@@ -14,6 +14,7 @@ namespace app\index\controller;
 
 use app\HomeController;
 use app\common\model\system\Content;
+use system\Random;
 
 class Gold extends HomeController
 {
@@ -38,7 +39,7 @@ class Gold extends HomeController
                     $array['golder'] = $result['golder']+1;
                     $result->where('id',$param['id'])->update($array);
                     // 设置COOKIE
-                    cookie($cookieName,create_rand(10),today_seconds());
+                    cookie($cookieName,Random::alpha(10),today_seconds());
                 } 
 
             } catch (\Throwable $th) {

@@ -2,6 +2,8 @@
 
 namespace app\common\library;
 
+use system\Random;
+
 /**
  * FTP上传类
  *
@@ -116,7 +118,7 @@ class Ftp
 			try{
 				// 开启被动模式
 				ftp_pasv($connect,TRUE); 
-				$folder = create_rand(10);
+				$folder = Random::alpha(16);
 				if(ftp_mkdir($connect,$folder)){
 
 					// 读取测试文件

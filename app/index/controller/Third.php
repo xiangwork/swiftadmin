@@ -16,6 +16,7 @@ use app\HomeController;
 use app\common\library\Auth;
 use app\common\model\system\User;
 use app\common\model\system\UserThird;
+use system\Random;
 
 /**
  * 社会化登录
@@ -101,7 +102,7 @@ class Third extends HomeController
 			$local['nickname'] = $nickname;
 			$local['avatar'] = $userInfos['userinfo']['avatar'];	
             if (User::getByNickname($nickname)) {
-                $local['nickname'] .= create_rand(6);
+                $local['nickname'] .= Random::alpha(3);
             }
             
             $local['group_id'] = 1;

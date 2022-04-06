@@ -15,6 +15,7 @@ namespace app\index\controller;
 use app\HomeController;
 use app\common\library\ResultCode;
 use app\common\library\Upload as Uploadlib;
+use system\Random;
 
 /**
  * 文件上传
@@ -96,7 +97,7 @@ class Upload extends HomeController
             if (!empty($uploadFiles)) {
 
                 // 随机后缀
-                $uploadFiles['url'] .= create_rand(12);            
+                $uploadFiles['url'] .= Random::alpha(8);            
                 return json($uploadFiles);
             }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace app;
 
 use think\db\exception\DataNotFoundException;
@@ -55,9 +56,23 @@ class ExceptionHandle extends Handle
         if ($e instanceof Throwable) {
 
             if (saenv('system_exception') && !empty($e->getMessage())) {
-                
+
                 // 写入异常日志
-                $expLogs = system_exception_logs();
+                $expLogs = [
+                    'module'        => app()->http->getName(),
+                    'controller'    => $request->controller(true),
+                    'action'        => $request->action(true),
+                    'params'        => serialize($request->param),
+                    'method'        => $request->method,
+                    'url'           => $request->baseUrl,
+                    'ip'            => $request->ip,
+                    'name'          => session('AdminLogin.name'),
+                ];
+
+                if (empty($expLogs['name'])) {
+                    $expLogs['name'] = 'system';
+                }
+
                 $expLogs['type'] = 1;
                 $expLogs['file'] = $e->getFile();
                 $expLogs['line'] = $e->getLine();
@@ -70,6 +85,4 @@ class ExceptionHandle extends Handle
         // 其他错误交给系统处理
         return parent::render($request, $e);
     }
-
-
 }

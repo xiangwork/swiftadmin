@@ -86,7 +86,7 @@ class Api extends AdminController
             $post = input();
 
             if (is_empty($post['hash'])) {
-                $post['hash'] = strtolower(create_rand(10));
+                $post['hash'] = strtolower(Random::alpha(16));
             }
 
             if ($this->model->create($post)) {

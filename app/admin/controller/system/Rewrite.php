@@ -175,7 +175,7 @@ class Rewrite extends AdminController
                 }
     
                 $route .= '<id>';
-                if ($item->single) {
+                if ($item->pages) {
                     $routers .= "Route::rule('".$item['pinyin']."$','category/index')";
                     $routers .= "->append(['dir'=>'".$item['pinyin']."'])->ext('html');".PHP_EOL;
                 }
@@ -268,7 +268,7 @@ class Rewrite extends AdminController
                 // 清理模板转义
                 $this->template = str_replace('\\','/',$this->template);
 
-                if ($detail->single) {
+                if ($detail->pages) {
                     $this->filePath = public_path();
                 } else {
                     $this->filePath = str_replace(saenv('site_http'),public_path(),$detail->readurl);
@@ -276,7 +276,7 @@ class Rewrite extends AdminController
                 }
 
                 $this->app->view->assign('detail',$detail->toArray());
-                $this->buildHtml($detail->single ? $detail->pinyin :'index',$this->filePath,$this->template);
+                $this->buildHtml($detail->pages ? $detail->pinyin :'index',$this->filePath,$this->template);
 
                 $totalPages = Config::get('total.Pages');
                 if (!empty($totalPages) && $totalPages >= 1) {

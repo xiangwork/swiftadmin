@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace app\common\library;
 
 use PHPMailer\PHPMailer\PHPMailer;
+use system\Random;
 
 /**
  * 邮件发送类
@@ -184,7 +185,7 @@ class Email
      */
     public function captcha(string $email, string $code = null, string $event ="default") 
     {
-        $code = $code ?? create_rand(4,true);
+        $code = $code ?? Random::alpha(4);
         $array['code'] = $code;
         $array['event'] = $event;
         $array['email'] = $email;

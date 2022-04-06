@@ -40,7 +40,7 @@
                             <div class="layui-form-item"> 
                                 <label class="layui-form-label">{:__('栏目名称')}</label>
                                 <div class="layui-input-inline">
-                                    <input name="title"  type="text" class="layui-input" value="{$data.title}"  lay-verify="required"
+                                    <input name="name"  type="text" class="layui-input" value="{$data.name}"  lay-verify="required"
                                      placeholder="{:__('请填写栏目名称')}"/>
                                 </div>
                             </div>
@@ -68,7 +68,6 @@
                             </div>
                         </div>
 
-
                         <div class="layui-form-item"> 
                             <label class="layui-form-label">{:__('栏目图片')}</label>
                             <div class="layui-input-inline wid650" >
@@ -79,20 +78,20 @@
                         <div class="layui-form-item"> 
                                 <label class="layui-form-label">{:__('标&emsp;题')}</label>
                                 <div class="layui-input-inline wid650">
-                                    <input name="seo_title" type="text" class="layui-input" value="{$data.seo_title}"  placeholder="{:__('请填写SEO标题')}" />
+                                    <input name="title" type="text" class="layui-input" value="{$data.title}"  placeholder="{:__('请填写SEO标题')}" />
                                 </div>
                             </div>
                         <div class="layui-form-item"> 
                             <label class="layui-form-label">{:__('关键字')}</label>
                             <div class="layui-input-inline wid650">
-                                <input name="seo_keywords" type="text" class="layui-input" value="{$data.seo_keywords}" placeholder="{:__('请填写SEO关键字')}"/>
+                                <input name="keywords" type="text" class="layui-input" value="{$data.keywords}" placeholder="{:__('请填写SEO关键字')}"/>
                             </div>
                         </div>
 
                         <div class="layui-form-item"> 
                             <label class="layui-form-label">{:__('描&emsp;述')}</label>
                             <div class="layui-input-inline wid650">
-                                <textarea  name="seo_description" style="height: 50px;" class="layui-textarea" placeholder="{:__('请填写SEO描述信息')}" >{$data.seo_description}</textarea>
+                                <textarea  name="description" style="height: 50px;" class="layui-textarea" placeholder="{:__('请填写SEO描述信息')}" >{$data.description}</textarea>
                             </div>
                         </div>
 
@@ -121,9 +120,9 @@
                             <label class="layui-form-label" >{:__('是否单页面')}</label>
                             <div class="layui-input-inline" >
 
-                                <input type="radio" name="single" title="是" <eq name="$data['single']"
+                                <input type="radio" name="pages" title="是" <eq name="$data['pages']"
                                 value="1">checked="" </eq> value="1">
-                                <input type="radio" name="single" title="否" <eq name="$data['single']"
+                                <input type="radio" name="pages" title="否" <eq name="$data['pages']"
                                 value="0">checked="" </eq> value="0" >
 
                             </div>   

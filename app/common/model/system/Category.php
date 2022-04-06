@@ -225,7 +225,7 @@ class Category extends Model
         }
 
         $urlStyle = saenv('category_style');
-        $readUrl = !$data['single']?'/'.$data['pinyin'].'/':'/'.$data['pinyin'].'.html';
+        $readUrl = !$data['pages']?'/'.$data['pinyin'].'/':'/'.$data['pinyin'].'.html';
         if (strstr($urlStyle,'[sublist]') && $data['pid'] != 0) {
             $parentClass = list_search(self::getListCache(),['id' => $data['pid']]);
             if (!empty($parentClass)) {

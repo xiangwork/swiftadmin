@@ -59,7 +59,11 @@ class User extends AdminController
             // 循环处理数据
             foreach ($list as $key => $value) {
                 $value->hidden(['pwd', 'salt']);
-                $list[$key]['region'] = query_client_ip( $list[$key]['loginip']); 
+
+                $region = \app\common\library\Ip2Region::instance()->memorySearch($list[$key]['loginip']);
+                $region = explode('|',$region['region']);
+
+                $list[$key]['region'] = $region;
                 $result = list_search($this->userGroup,['id'=> $value['group_id']]);
                 if (!empty($result)) {
                     $list[$key]['group'] = $result['title'];

@@ -1,13 +1,7 @@
 <?php
 
 // 全局应用公共文件
-use think\facade\Db;
 use think\facade\Cache;
-use think\facade\Config;
-use think\facade\Request;
-use app\common\model\system\Content;
-use app\common\model\system\Channel;
-use app\common\model\system\Category;
 
 // 全局系统常量
 const REWRITE  =  1;
@@ -72,6 +66,7 @@ if (!function_exists('arr2router')) {
 		return write_file($file, $cont);
 	}
 }
+
 if (!function_exists('var_exports')) {
 	/**
      * 数组语法(方括号)
@@ -264,7 +259,8 @@ if (!function_exists('msubstr')) {
 	function msubstr($str, $start = 0, $length = 100, $charset="utf-8", $suffix=true)
 	{
 		
-		$str = mystrip_tags($str);
+		$str = preg_replace('/<[^>]+>/','',preg_replace("/[\r\n\t ]{1,}/",' ',delNt(strip_tags($str))));
+        $str = preg_replace('/&(\w{4});/i','',$str);
 
 		// 直接返回
 		if ($start == -1) {
@@ -290,17 +286,6 @@ if (!function_exists('msubstr')) {
 			$fix='...';
 		}
 		return $suffix ? $slice.$fix : $slice;
-	}
-}
-
-if (!function_exists('mystrip_tags')) {
-    /**
-     * 格式化HTML标签
-     * @return string
-     */
-	function mystrip_tags(string $str = '') {
-		$str = preg_replace('/<[^>]+>/','',preg_replace("/[\r\n\t ]{1,}/",' ',delNt(strip_tags($str))));
-        return preg_replace('/&(\w{4});/i','',$str);
 	}
 }
 
@@ -345,45 +330,6 @@ if (!function_exists('http_images_url')) {
     }
 }
 
-if (!function_exists('letter_first')) {
-    /**
-     * 生成首字母前缀
-     * @param  string $str 字符串 
-     * @return string
-     */		
-	function letter_first($string)
-	{
-		$firstchar_ord=ord(strtoupper($string[0])); 
-		if (($firstchar_ord>=65 and $firstchar_ord<=91)or($firstchar_ord>=48 and $firstchar_ord<=57)) return $string[0]; 
-		$s=iconv("UTF-8","gb2312", $string); 
-		$asc=ord($s[0])*256+ord($s[1])-65536; 
-		if($asc>=-20319 and $asc<=-20284)return "A";
-		if($asc>=-20283 and $asc<=-19776)return "B";
-		if($asc>=-19775 and $asc<=-19219)return "C";
-		if($asc>=-19218 and $asc<=-18711)return "D";
-		if($asc>=-18710 and $asc<=-18527)return "E";
-		if($asc>=-18526 and $asc<=-18240)return "F";
-		if($asc>=-18239 and $asc<=-17923)return "G";
-		if($asc>=-17922 and $asc<=-17418)return "H";
-		if($asc>=-17417 and $asc<=-16475)return "J";
-		if($asc>=-16474 and $asc<=-16213)return "K";
-		if($asc>=-16212 and $asc<=-15641)return "L";
-		if($asc>=-15640 and $asc<=-15166)return "M";
-		if($asc>=-15165 and $asc<=-14923)return "N";
-		if($asc>=-14922 and $asc<=-14915)return "O";
-		if($asc>=-14914 and $asc<=-14631)return "P";
-		if($asc>=-14630 and $asc<=-14150)return "Q";
-		if($asc>=-14149 and $asc<=-14091)return "R";
-		if($asc>=-14090 and $asc<=-13319)return "S";
-		if($asc>=-13318 and $asc<=-12839)return "T";
-		if($asc>=-12838 and $asc<=-12557)return "W";
-		if($asc>=-12556 and $asc<=-11848)return "X";
-		if($asc>=-11847 and $asc<=-11056)return "Y";
-		if($asc>=-11055 and $asc<=-10247)return "Z";
-		return 0;//null
-	}	
-}
-
 if (!function_exists('pinyin')) {
     /**
      * 获取拼音
@@ -408,50 +354,6 @@ if (!function_exists('pinyin')) {
 
 		return $trim ? str_replace(' ','',$string) : $string;
 		
-    }
-}
-
-if (!function_exists('is_email')) {
-    /**
-     * 判断邮箱
-     * @param string $str 要验证的邮箱地址
-     * @return bool
-     */
-    function is_email($str)
-    {
-        return preg_match("/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/", $str);
-    }
-}
-
-if (!function_exists('is_mobile')) {
-    /**
-     * 判断手机号
-     * @param string $num 要验证的手机号
-     * @return bool
-     */
-    function is_mobile($num)
-    {
-        return preg_match("/^1(3|4|5|6|7|8|9)\d{9}$/", $num);
-    }
-}
-
-if (!function_exists('regname_filter')) {
-    /**
-     * 判断用户名
-     * @param string $value 要验证的用户名
-     * @return bool
-     */
-    function regname_filter($value)
-	{
-        // 屏蔽注册的用户名
-		$reg_notallow = saenv('user_reg_notallow');
-		$reg_notallow = explode(',',$reg_notallow);
-		foreach ($reg_notallow as $k => $v) {
-			if ($value == $v) { /*不合法返回true*/
-				return false;
-			}
-		}
-		return true;
     }
 }
 
@@ -483,37 +385,6 @@ if (!function_exists('check_nav_active')) {
         $url = str_replace('.','/',ltrim($url, '/'));
 		$requestUrl = str_replace('.','/',$requestUrl);
         return $requestUrl === $url ? $classname : '';
-    }
-}
-
-
-if (!function_exists('check_menu_active')) {
-    /**
-     * 检测前台菜单导航是否高亮
-     */
-    function check_menu_active($vo,$detail ,$classname = 'active')
-    {
-		if (empty($vo) || empty($detail)) {
-			return false;
-		}
-
-		// 如果存拼音则判断
-		if (isset($vo['pinyin']) && isset($detail['pinyin']) ) {
-			if ($vo['pinyin'] == $detail['pinyin']) {
-				return $classname;
-			}
-			else {
-
-				// 如果是内容页
-				if (isset($detail['category'])) {
-					if ($vo['pinyin'] == $detail['category']['pinyin']) {
-						return $classname;
-					}
-				}
-			}
-		}
-
-		return false;
     }
 }
 
@@ -589,258 +460,6 @@ if (!function_exists('hide_str')) {
         }
         return $string;
     }
-}
-
-if (!function_exists('create_rand')) {
-    /**
-     * 生成随机字符串
-     * @param  intval $length 字符串长度
-     * @return string
-     */
-	function create_rand($length = 10,$flag = false)
-	{ 
-		$str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';//62个字符 
-		if ($flag) {
-			$str = '123456789';
-		}
-		$strlen = 62; 
-		while($length > $strlen){ 
-			$str .= $str; 
-			$strlen += 62; 
-		} 
-		$str = str_shuffle($str); 
-		return substr($str,0,$length); 
-	} 
-}
-
-// +----------------------------------------------------------------------
-// | MYSQL调用函数开始
-// +----------------------------------------------------------------------
-
-if (!function_exists('check_user_third')) {
-    /**
-     * 获取第三方登录
-     * @param mixed $type
-	 * @param int $id	 
-     * @return array
-     * @noinspection PhpReturnDocTypeMismatchInspection
-     */
-	function check_user_third($type, $id = 0) 
-	{
-		if (!$id || !$type) {
-			return false;
-		}
-		
-		if (\app\common\model\system\UserThird::where('user_id',$id)->getByType($type)) {
-			return true;
-		}
-		return false;
-
-	}
-}
-
-
-if (!function_exists('mysql_content')) {
-    /**
-     * 公共类查询函数
-     * @param array $param 查询参数
-     * @param string $paging
-     * @return array
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
-     */
-	function mysql_content($param, string $paging = ''){
-
-		// 检查参数
-		if (!is_array($param)) { 
-			$param = parse_tag($param);
-		}
-		
-        // 获取参数
-		$field = !empty($param['field']) ? $param['field'] : '*';	
-		$limit = !empty($param['limit']) ? $param['limit'] : '10';
-		$table = !empty($param['table']) ? $param['table'] : 'article';
-		$order = !empty($param['order']) ? $param['order'] : 'id desc';
-
-		
-		$table = Channel::getChannelList(null,$table);
-		if (empty($table)) {
-			throw new Exception('There is no table');
-		}
-
-		$param['cid'] = $table['id'];
-		$page = Config::get('param.page');
-		if (empty($page) || $page == null) {
-			$page = request()->param('page/d') ?? 1;
-		}
-
-		// 优先从缓存调用
-		if(is_numeric($page) && $page <= 2 && saenv('url_model') !== STATICS) {
-			$data_cache_name = implode(',',$param).saenv('auth_key');
-			$data_cache_content = system_cache($data_cache_name);
-			if($data_cache_content) {
-				return $data_cache_content;
-			}
-		}
-        
-		// 根据参数生成查询条件
-		$where = array();
-		if (!empty($param['status'])) {
-			if($param['status'] == 1){
-				$where[]=['status','=','1'];
-			}elseif($param['status'] == 2){
-				$where[]=['status','=','0'];
-			}		
-		}	
-		
-		if (!empty($param['ids'])) {
-			$ids = explode(',',trim($param['ids']));
-			if (count($ids)>1) {
-				$where[] = ['id','in',$ids];
-			}else{
-				$where[] = ['id','in',$param['ids']];
-			}
-		}
-
-		if (!empty($param['pid'])) {
-			$pids = explode(',',trim($param['pid']));
-			if (count($pids)>1) {
-				$where[] = ['pid','in',$pids];
-			}else{
-				$where[] = ['pid','in',$param['pid']];
-			}
-		}
-		
-		if(!empty($param['desc'])){
-			if($param['desc'] == 1){
-				$where[] = ['seo_description','<>',''];
-			}
-		}		
-
-		if(!empty($param['thumb'])){
-			$where[] = ['thumb','<>',''];
-		}
-			
-		if(!empty($param['banner'])){
-			$where[] = ['banner','<>',''];
-		}   
-
-		if (!empty($param['year'])) {
-			$year = explode(',',$param['year']);
-			if (count($year) > 1) {
-				$where[] = ['year','between',$year[0].','.$year[1]];
-			}else{ 
-				$where[] = ['year','=',$param['year']];
-			}
-		}
-
-		if (!empty($param['class'])) {
-			$where[] = ['class','like','%'.$param['class'].'%'];
-		}	
-		if (!empty($param['marks'])) {
-			$where[] = ['marks','like','%'.$param['marks'].'%'];
-		}
-		if (!empty($param['actor'])) {
-			$where[] = ['actor','like','%'.$param['actor'].'%'];
-		}
-		if (!empty($param['director'])) {
-			$where[] = ['director','like','%'.$param['director'].'%'];
-		}
-		if (!empty($param['play'])) {
-			$where[] = ['play','like','%'.$param['play'].'%'];
-		}
-
-		if (!empty($param['day'])) {
-			$where[] = ['createtime','>=',linux_extime($param['day'])];
-		}
-		if (!empty($param['stars'])) {
-			$where[] = ['stars','=',$param['stars']];
-		}
-		if (!empty($param['user_id'])) {
-			$where[] = ['user_id','=',$param['user_id']];
-		}
-		if (!empty($param['letter'])) {
-			$where[] = ['letter','=',$param['letter']];
-		}
-
-		if (!empty($param['hits'])) {
-			$hits = explode(',',$param['hits']);
-			if (count($hits) > 1) {
-				$where[] = ['hits','between',$hits[0].','.$hits[1]];
-			}else{
-				$where[] = ['hits','>',$param['hits']];
-			}
-		}
-		if (!empty($param['up'])) {
-			$up = explode(',',$param['up']);
-			if (count($up)>1) {
-				$where[] = ['up','between',$up[0].','.$up[1]];
-			}else{
-				$where[] = ['up','>',$up[0]];
-			}
-		}
-		if (!empty($param['down'])) {
-			$down = explode(',',$param['down']);
-			if (count($down)>1) {
-				$where[] = ['down','between',$down[0].','.$down[1]];
-			}else{
-				$where[] = ['down','>',$down[0]];
-			}
-		}
-		if (!empty($param['gold'])) {
-			$gold = explode(',',$param['gold']);
-			if (count($gold) > 1) {
-				$where[] = ['gold','between',$gold[0].','.$gold[1]];
-			}else{
-				$where[] = ['gold','>',$gold[0]];
-			}
-		}
-		if (!empty($param['golder'])) {
-			$golder = explode(',',$param['golder']);
-			if (count($golder)>1) {
-				$where[] = ['golder','between',$golder[0].','.$golder[1]];
-			}else{
-				$where[] = ['golder','>',$golder[0]];
-			}
-		}
-
-		if (!empty($param['wd'])) {
-			$where[] = ['title','like','%'.$param['wd'].'%'];
-		}
-
-		if (!empty($param['author'])) {
-			$where[] = ['author','like','%'.$param['author'].'%'];
-		}
-
-		// 查询总数
-		$count = Content::where($where)->count('id');
-        $list = Content::with(['category',$table['table']])->where($where)->order($order)->field($field)->limit($limit)->page($page)->select()->toArray();
-
-        // 分页调用
-        if (isset($param['page']) && !empty($list)) {
-
-			$maxPages   = saenv('max_page');
-            $totalPages = ceil($count/$limit);
-			if (!empty($maxPages) && $totalPages > $maxPages) {
-				$totalPages = $maxPages;
-			}
-
-			$paging = $paging ?: get_list_url($list[0]['pid']);
-			$paging = get_page($page,$totalPages,$paging);
-
-			// 分配页码变量
-			config::set(['Pages'=>$totalPages],'total');
-        }
-
-		// 设置缓存 
-		$paging = $count ? $paging : PHP_EOL;
-		if(is_numeric($page) && $page <= 2) {
-			system_cache($data_cache_name,['data'=>$list,'pages'=>$paging,'total'=>$count],saenv('cache_time'));
-		}
-	
-		return ['data'=>$list,'pages'=>$paging,'total'=>$count];
-	}
 }
 
 // +----------------------------------------------------------------------
@@ -979,37 +598,6 @@ if (!function_exists('search_model')) {
     }
 }
 
-if (!function_exists('parse_tag')) {
-    /**
-     * 生成参数列表,以数组形式返回
-     * @param  string $tag 字符串
-     * @return array
-     */	
-	function parse_tag($tag = '')
-	{
-		if(is_array($tag)) { 
-			return $tag;
-		}
-
-		$param = array(); //标签解析
-		$array = explode(';', $tag);
-
-		foreach ($array as $key => $val){
-			if (!empty($val)) {
-				$temp = explode(':',trim($val));
-				if (!empty($temp[1])) {
-					$param[$temp[0]] = $temp[1];
-				}	
-			}
-		}
-		
-		if(!isset($param['status'])) { // 默认只查询已审核的
-			$param['status'] = 1;
-		}
-		return $param;
-	}	
-}
-
 if (!function_exists('parse_array_ini')) {
     /**
      * 解析数组到ini文件
@@ -1073,24 +661,6 @@ if (!function_exists('list_search')) {
 	}
 }
 
-if (!function_exists('list_search_value')) {
-    /**
-     * 查找一个二维数组的值
-     * @param  array  $list      原始数据
-     * @return array
-     */		
-	function list_search_value($list, $condition) 
-	{
-		foreach ($list as $key => $value) {
-			if (stripos($value,$condition)) {
-				return $value;
-			}
-		}
-
-		return false;
-	}
-}
-
 if (!function_exists('list_to_tree')) {
     /**
      * 根据ID和PID返回一个树形结构
@@ -1102,12 +672,14 @@ if (!function_exists('list_to_tree')) {
 		// 创建Tree
 		$tree = $refer = array();
 		if(is_array($list)) {
+
 			// 创建基于主键的数组引用
 			foreach ($list as $key => $data) {
 				$refer[$data[$id]] = &$list[$key];
 			}
 
 			foreach ($list as $key => $data) {
+
 				// 判断是否存在parent
 				$parentId = $data[$pid];
 				if ($level == $parentId) {
@@ -1122,30 +694,6 @@ if (!function_exists('list_to_tree')) {
 		}
 		
 		return $tree;
-	}
-}
-
-if (!function_exists('tree_to_list')) {
-    /**
-     * 根据ID和PID返回一个数组结构
-     * @param  array  $tree    多位数组 
-     * @return array
-     */	
-	function tree_to_list($tree, $child = 'children', $order = 'id', &$list = array())
-	{
-		if (is_array($tree)) {
-			$refer = array();
-			foreach ($tree as $key => $value) {
-				$reffer = $value;
-				if (isset($reffer[$child])) {
-					unset($reffer[$child]);
-					tree_to_list($value[$child], $child, $order, $list);
-				}
-				$list[] = $reffer;
-			}
-			$list = list_sort_by($list, $order, $sortby = 'asc');
-		}
-		return $list;
 	}
 }
 
@@ -1209,22 +757,6 @@ if (!function_exists('is_empty')) {
             return true;
         }
 
-        return false;
-    }
-}
-
-if (!function_exists('is_notempty')) {
-    /**
-     * 判断变量是否不为空
-     * @param array|string $value 要判断的值
-     * @return bool
-     */
-    function is_notempty($value)
-    {
-		if (isset($value) && $value) {
-			return $value;
-		}
-       
         return false;
     }
 }
@@ -1301,229 +833,13 @@ if (!function_exists('hsv2rgb')) {
     }
 }
 
-if (!function_exists('reply_anti')) {
-	/**
-	 * 过滤脏话
-	 */
-	function reply_anti($content) 
-	{
-		$words = saenv('user_replace');
-		$words = str_replace(array(',','/','|','，'),',',$words);
-		$words = explode(',',$words);
-
-		if (!empty($words) && is_array($words)) {
-			foreach ($words as $k => $v) {
-				$content = str_replace($v,'**',$content);
-			}
-		}
-		return $content;
-	}
-}
-
-if (!function_exists('get_list_url')) {
-	/**
-	 * 获取列表页地址
-	 *
-	 * @param mixed $param
-	 * @return void
-	 */
-	function get_list_url(mixed $param)
-	{
-		if (!$param) {
-			return false;
-		}
-
-		$listStyle = saenv('list_style');
-		$listElems = Category::getListCache();
-
-		// 如果是数字则检索
-		if (is_numeric($param)) {
-			$param = list_search($listElems, ['id' => (int)$param]);
-		}
-
-		// 子分类列表页
-		if (!strstr($listStyle, '[sublist]')) {
-			$listUrl = '/' . $param['pinyin'];
-		} else {
-			$parent = list_search($listElems, ['id' => (int)$param['pid']]);
-			$listUrl = '/' . $parent['pinyin'] . '/' . $param['pinyin'];
-		}
-
-		$listUrl = $listUrl . '/list_page.html';
-
-		return saenv('url_domain') ? saenv('site_http') . $listUrl : $listUrl;
-	}
-}
-
-if (!function_exists('max_page')) {
-	/**
-	 * 获取最大页
-	 *
-	 * @param integer $maxPages
-	 * @param integer $totalPages
-	 * @param integer $limit
-	 * @return void
-	 */
-	function max_page(int $maxPages = 0, int $totalPages = 0, int $limit = 0)
-	{	
-		if (!empty($limit)) {
-			$totalPages = (int)ceil($totalPages/$limit);
-		}
-
-		return min($totalPages, $maxPages);
-	}
-}
-if (!function_exists('get_page')) {
-
-	/**
-	 * 获取分页地址v2
-	 * @param mixed 		$currentPage	当前页
-	 * @param mixed 		$totalPages		总页码
-	 * @param mixed 		$pageUrl		分页地址
-	 * @param int 			$halfPer		分页侧边长度
-	 * @param mixed|null 	$linkPage		返回分页地址
-	 * @return string
-	 */
-	function get_page($currentPage, $totalPages, $pageUrl, $halfPer = 3, $linkPage = null)
-	{
-		$planUrl = 'page=page';
-		$pageUrl = strtolower($pageUrl);
-		if (strstr($pageUrl,$planUrl)) {
-			$pageUrl = str_replace($planUrl,'planUrl=page',$pageUrl);
-		}
-
-		if ($currentPage <= 1) {
-			$linkPage .= '<em>首页</em><em>上一页</em>';
-		}
-		else {
-			$linkPage .= '<a href="'.str_replace('page',1,$pageUrl).'" class="first">首页</a>';
-			$linkPage .= '<a href="'.str_replace('page',($currentPage-1),$pageUrl).'" class="prev">上一页</a>';
-		}
-
-		// 中间页码
-		for($i = $currentPage - $halfPer, $i > 1 || $i=1, 
-			$j = $currentPage + $halfPer, 
-			$j < $totalPages || $j = $totalPages; $i < (int)$j+1; $i++){
-			$linkPage .= ($i == $currentPage)?'<span>'.$i.'</span>':'<a href="'.str_replace('page',$i,$pageUrl).'">'.$i.'</a>'; 
-		}
-
-		// 当前页码小于总数
-		if ($currentPage < $totalPages) {
-			$linkPage .= '<a href="'.str_replace('page',($currentPage + 1),$pageUrl).'" class="next">下一页</a>';
-			$linkPage .= '<a href="'.str_replace('page',$totalPages,$pageUrl).'" class="end">尾页</a>';
-		}else {
-			$linkPage .= '<em>下一页</em><em>尾页</em>';
-		}
-		
-		// 祛除首页地址
-		$linkPage = str_replace('planUrl','page',$linkPage);
-        return str_replace('list_1.html','',$linkPage);
-	}
-}
-
-if (!function_exists('array_filter_callback')) {
-    /**
-     * array_filter 回调函数，只过滤空值
-     * @param mixed $val 需要过滤的值
-     * @return bool
-     */
-    function array_filter_callback($val)
-    {
-        if ($val === '' || $val === 'NULL' || $val === null || $val === ' ') {
-            return false;
-        }
-        return true;
-    }
-}
-
-if (!function_exists('parse_attr')) {
-    /**
-     * 配置值解析成数组
-     * @param string $value 配置值
-     * @return array|string
-     */
-    function parse_attr($value = '')
-    {
-        if (is_array($value)) {
-            return $value;
-        }
-        $array = preg_split('/[,;\r\n]+/', trim($value, ",;\r\n"));
-        if (strpos($value, ':')) {
-            $value  = array();
-            foreach ($array as $val) {
-                list($k, $v) = explode(':', $val);
-                $value[$k]   = $v;
-            }
-        } else {
-            $value = $array;
-        }
-        return $value;
-    }
-}
-
 if (!function_exists('get_adwords')) {
 	/**
 	 * 获取广告代码
 	 */
 	function get_adwords($id,$charset = 'utf8')
 	{
-		$data_cache_name = hash('sha256',$id.'_ADWORDS');
-		$data_cache_content = system_cache($data_cache_name);
-
-		if (empty($data_cache_content)) {
-			$data_cache_content = Db::name('adwords')->where('alias',$id)->find();
-			system_cache($data_cache_name,$data_cache_content,saenv('cache_time'));
-		}
-		
-		// 过期则不展现
-		if ($data_cache_content['expirestime'] >= time()) {
-			if (saenv('url_model') == 2) {
-				return '<script type="text/javascript" src="/static/adwords/'.$id.'.js" charset="'.$charset.'"></script>';
-			}else {
-				echo $data_cache_content['content'];
-			}
-		}
-	}
-}
-
-if (!function_exists('system_exception_logs')) {
-
-	/**
-	 * 返回封装数据
-	 */
-
-	function system_exception_logs()
-	{
-		$array['module'] = app()->http->getName();
-		$array['controller'] = Request::controller(true);
-		$array['action'] = Request::action(true);
-		$array['params'] = serialize(Request::param());
-		$array['method'] = Request::method(); 
-		$array['url'] = Request::baseUrl(); 
-		$array['ip'] = Request::ip();
-		$array['name'] = session('AdminLogin.name');
-
-		if (empty($array['name'])) {
-			$array['name'] = 'system';
-		}
-		
-		return $array;
-	}
-}
-
-if (!function_exists('clear_api_cache')) {
-    /**
-     * 清理用户API权限缓存
-     */
-	function clear_api_cache($token = null)
-	{
-		if (is_array($token)) {
-			$token['app_id'] = $token['user.app_id'] ?? $token['app_id'];
-			$token['app_id'] = $token['user.app_id'] ?? $token['app_id'];
-
-			$token = $token['app_id'].'.'.$token['app_secret'];
-		}
-		system_cache(md5($token),null);
+		// TODO..
 	}
 }
 
@@ -1544,8 +860,10 @@ if (!function_exists('check_referer_origin')) {
                 header('HTTP/1.1 403 Forbidden');
                 exit;
             }
+
             header('Access-Control-Allow-Credentials: true');
             header('Access-Control-Max-Age: 86400');
+			
             if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
                 if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
                     header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
@@ -1615,10 +933,17 @@ if (!function_exists('member_encrypt')) {
 }
 
 if (!function_exists('cookies_encrypt')) {
-	// COOKIES加密
+	/**
+	 * COOKIES加密
+	 *
+	 * @param [type] $data
+	 * @param string $key
+	 * @param string $char
+	 * @return void
+	 */
 	function cookies_encrypt($data, $key='', $char='')
 	{	
-		$key = empty($key) ? '!1@2#6$3' : $key;
+		$key = empty($key) ? '!pass' : $key;
 		$key  = hash("sha256", $key);
 		$x  = 0;
 		$str = '';
@@ -1639,10 +964,17 @@ if (!function_exists('cookies_encrypt')) {
 }
 
 if (!function_exists('cookies_decrypt')) {
-	// COOKIES解密
+	/**
+	 * COOKIES解密
+	 *
+	 * @param [type] $data
+	 * @param string $key
+	 * @param string $char
+	 * @return void
+	 */
 	function cookies_decrypt($data, $key='', $char='')
 	{
-		$key = empty($key) ? '!1@9#8$3' : $key;
+		$key = empty($key) ? '!pass' : $key;
 		$key  = hash("sha256", $key);
 		$x = 0; $str = '';
 		$data = base64_decode($data);
@@ -1665,56 +997,6 @@ if (!function_exists('cookies_decrypt')) {
 		return $str;
 	}
 }
-
-// +----------------------------------------------------------------------
-// | 网络IP函数开始
-// +----------------------------------------------------------------------
-if (!function_exists('get_client_ip')) {
-    /**
-     * 获取访客IP
-     * @return string
-     */		
-	function get_client_ip()
-	{
-	   if (getenv("HTTP_CLIENT_IP") && strcasecmp(getenv("HTTP_CLIENT_IP"), "unknown"))
-		   $ip = getenv("HTTP_CLIENT_IP");
-	   else if (getenv("HTTP_X_FORWARDED_FOR") && strcasecmp(getenv("HTTP_X_FORWARDED_FOR"), "unknown"))
-		   $ip = getenv("HTTP_X_FORWARDED_FOR");
-	   else if (getenv("REMOTE_ADDR") && strcasecmp(getenv("REMOTE_ADDR"), "unknown"))
-		   $ip = getenv("REMOTE_ADDR");
-	   else if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], "unknown"))
-		   $ip = $_SERVER['REMOTE_ADDR'];
-	   else
-		   $ip = "unknown";
-	   return htmlspecialchars($ip, ENT_QUOTES);
-	}
-}
-
-if (!function_exists('query_client_ip')) {
-    /**
-     * 查询访客IP
-     * @return string
-     * @throws Exception
-     * @throws Exception
-     */
-	function query_client_ip($ip, $ips = [])
-	{
-		if (!empty($ip) || filter_var($ip, FILTER_VALIDATE_IP)) {
-			$ip = \app\common\library\Ip2Region::instance()->memorySearch($ip);
-			$ip = explode('|',$ip['region']);
-			foreach ($ip as $value) {
-				if ($value != '0') {
-					$ips []= $value;
-				}
-			}
-
-			$ips = array_unique($ips);
-			$ips = implode(' ',$ips);
-			return trim(str_replace('中国','',$ips));
-		}
-	}
-}
-
 
 // +----------------------------------------------------------------------
 // | 时间相关函数开始
@@ -1854,24 +1136,6 @@ if (!function_exists('safe_validate_model')) {
 		}
 
 		return $data;
-	}
-}
-
-if (!function_exists('check_auth')) {
-	/**
-	 * 权限判断
-	 */
-	function check_auth($urls, $action = '', $attr = 'data-url') 
-	{
-		$macth = [];
-		$judge = false;
-		$urls = (string)url($urls);
-		$urls = str_replace('.html','',$urls);
-		if (preg_match('/\/\w+.php(\/.*?\/.*?\w+[^\/\?]+)/',$urls, $macth)) {
-			$judge = app\admin\library\Auth::instance()->check($macth[1]);
-		}
-		
-		echo !$judge ? 'lay-noauth' : $attr .'="'.$urls.'"' . $action;
 	}
 }
 

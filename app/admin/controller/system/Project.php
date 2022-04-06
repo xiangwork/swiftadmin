@@ -14,6 +14,7 @@ namespace app\admin\controller\system;
 
 use app\AdminController;
 use app\common\model\system\Project as ProjectModel;
+use system\Random;
 
 class Project extends AdminController
 {
@@ -53,7 +54,7 @@ class Project extends AdminController
 
         $data = $this->getTableFields(); // 生成默认数据
         $data['app_id'] = '1000000'+ $this->model->onlyTrashed()->count() + 1;
-        $data['app_key'] = create_rand(32);
+        $data['app_key'] = Random::alpha(16);
         return view('',['data'=> $data]);
     }
 	

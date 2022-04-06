@@ -16,6 +16,7 @@ use think\facade\Db;
 use app\common\library\ResultCode;
 use app\common\model\system\ApiCondition;
 use app\common\model\system\User as UserModel;
+use system\Random;
 
 /**
  * 会员鉴权常量
@@ -463,7 +464,7 @@ class Auth
      */
     protected function buildToken(mixed $id)
     {
-        return md5(create_rand(16) . $id);
+        return md5(Random::alpha(16) . $id);
     }
 
     /**

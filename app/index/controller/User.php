@@ -20,6 +20,7 @@ use app\common\library\Email;
 use app\common\library\Upload;
 use app\common\model\system\UserInvitecode;
 use app\common\model\system\User as UserModel;
+use system\Random;
 
 class User extends HomeController
 {
@@ -169,7 +170,7 @@ class User extends HomeController
             $data = array();
             $data['id'] = $id;
             $data['app_id'] = '10000' + $id;
-            $data['app_secret'] = create_rand(32);
+            $data['app_secret'] = Random::alpha(32);
 
             if ($this->model->update($data)) {
                 return $this->success();
@@ -274,7 +275,7 @@ class User extends HomeController
             }
 
             $result = $this->model->find($this->userId);
-            $result->avatar = $filename['url'] . '?' . create_rand(12);
+            $result->avatar = $filename['url'] . '?' . Random::alpha(12);
             if ($result->save()) {
                 return json($filename);
             }

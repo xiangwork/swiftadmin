@@ -3,13 +3,10 @@
 declare(strict_types=1);
 
 namespace app\common\model\system;
-
 use app\common\model\system\Channel;
-use app\admin\controller\system\Rewrite;
 use think\Model;
 use think\model\concern\SoftDelete;
 use app\common\library\Content as ContentLibrary;
-use think\facade\Db;
 use WordAnalysis\Analysis;
 
 /**
@@ -50,7 +47,7 @@ class Content extends Model
      */
     public function article()
     {
-        return $this->hasOne(ContentArticle::class, 'id', 'id');
+        return $this->hasOne(ContentArticle::class, 'id', 'id')->bind(['content']);
     }
 
     /**
@@ -60,7 +57,7 @@ class Content extends Model
      */
     public function images()
     {
-        return $this->hasOne(ContentImages::class, 'id', 'id');
+        return $this->hasOne(ContentImages::class, 'id', 'id')->bind(['album','content']);
     }
 
     /**
@@ -71,7 +68,20 @@ class Content extends Model
 
     public function soft()
     {
-        return $this->hasOne(ContentSoft::class, 'id', 'id');
+        return $this->hasOne(ContentSoft::class, 'id', 'id')->bind([
+            'file_url',
+            'file_code',
+            'file_size',
+            'file_ext',
+            'file_type',
+            'file_language',
+            'file_env',
+            'file_auth',
+            'file_author',
+            'file_website',
+            'file_downtotal',
+            'content'
+        ]);
     }
 
     /**
@@ -81,7 +91,13 @@ class Content extends Model
      */
     public function product()
     {
-        return $this->hasOne(ContentProduct::class, 'id', 'id');
+        return $this->hasOne(ContentProduct::class, 'id', 'id')->bind([
+            'album',
+            'price',
+            'discount',
+            'inventory',
+            'content'
+        ]);
     }
 
     /**
@@ -91,7 +107,29 @@ class Content extends Model
      */
     public function video()
     {
-        return $this->hasOne(ContentVideo::class, 'id', 'id');
+        return $this->hasOne(ContentVideo::class, 'id', 'id')->bind([
+            'alias',
+            'desc',
+            'class',
+            'marks',
+            'actor',
+            'banner',
+            'director',
+            'area',
+            'language',
+            'year',
+            'continu',
+            'total',
+            'play',
+            'server',
+            'note',
+            'url',
+            'isfilm',
+            'filmtime',
+            'minutes',
+            'weekday',
+            'content'
+        ]);
     }
 
     /**
@@ -193,10 +231,6 @@ class Content extends Model
         if (saenv('search_status')) {
             search_model()::instance()->index('content')->save($data->toArray());
         }
-
-        
-        
-
     }
 
     /**
@@ -308,9 +342,6 @@ class Content extends Model
      */
     public static function setAttributeAttr($attribute, $data) 
     {
-        if(empty($attribute)){
-                  return;
-         }
         $pattern = "/<img.*?src=\"(.*?)\"/i";
         if (preg_match($pattern,$data['content'],$match)) {
             $attribute = array_merge($attribute,[5]);
