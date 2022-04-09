@@ -131,9 +131,7 @@ class User extends HomeController
             return $this->error();
         }
 
-        return view('', [
-            'data' => $this->auth->userInfo
-        ]);
+        return view();
     }
 
     /**
@@ -195,9 +193,7 @@ class User extends HomeController
             return $this->error();
         }
 
-        return view('', [
-            'data' => $this->auth->userInfo
-        ]);
+        return view();
     }
 
     /**
