@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>SwiftAdmin 用户登录</title>
-<include file="public:header">
+<include file="public:header" />
 </head>
 <body>
 
@@ -17,23 +17,22 @@
 		</span>
 	</div>
 	<form class="layui-form layui-form-fixed" action="/user/login" method="post" >
-
-
 		<div class="layui-form-item">
 		<label class="layui-form-label">用户帐号</label>
 		<div class="layui-input-block">
-		  <input type="text" id="name" name="nickname" lay-verify="title" autocomplete="off" placeholder="请输入邮箱地址" class="layui-input" value="one@swiftadmin.net">
+		  <input type="text" id="name" name="nickname" lay-verify="required|email" placeholder="请输入邮箱或手机号" class="layui-input" value="one@swiftadmin.net">
 		</div>
 		</div>
 		<div class="layui-form-item">
 		<label class="layui-form-label">密码</label>
 		<div class="layui-input-block">
-		  <input type="password" id="pwd" name="pwd" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input" value="admin888">
+		  <input type="password" id="pwd" name="pwd"  placeholder="请输入密码" class="layui-input" value="admin888">
 		</div>
 		</div>
 		<div class="layui-form-item" style="margin-top: 22px;text-align: center;">
-			<button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="submitIframe">立即提交</button>
+
 			<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			<button type="submit" class="layui-btn" lay-submit="" lay-filter="submitIframe">立即登录</button>
 		</div>				
 	</form>								
 </div>

@@ -1,54 +1,332 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>用户中心</title>
-<include file="public:header" />
+    <meta charset="UTF-8">
+    <title>控制台 | {$site_name}</title>
+    <include file="user:include"/>
 </head>
 <body>
-<div id="header" class="layui-bg-cyan">
-	<div class="layui-container">
-		<div class="fl">
-			<li class="nav-item"><a href="/" class="nav-link">返回</a></li>
-		</div>
-		<div class="fr">
-			<li class="nav-item"><a href="/user/index" class="nav-link"><img src="{$data.avatar}" alt="{$data.nickname}">{$data.nickname|default=$data.name}</a>
-		</div>
-	</div>
-</div>
-<div id="content">
-	<div class="layui-clear" ></div>
-	<div class="layui-container">
-		<div class="layui-row layui-col-space30">
-			<div class="layui-col-md3">
-				<div id="ss"></div>
-				<div class="layui-card">
-					<div class="layui-card-header layui-bg-cyan">导航</div>
-					<div class="layui-card-body" id="userNav">
-						<include file="/user/userNav">
-					</div>	
-				</div>		   
-		    </div>
-		    <div class="layui-col-md9">
+<div class="layui-layout layui-layout-admin">
+    <include file="user:header"/>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <include file="user:userNav"/>
+        </div>
+    </div>
 
-				<div class="layui-card" >
-					<div class="layui-card-header layui-bg-cyan">会员中心</div>
-					<div class="layui-card-body" style="overflow:hidden;">
-						<div class="layui-col-md3">
-							<img src="{$data.avatar}" alt="" width="100" height="100">
-						</div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div id="content">
+            <div class="layui-row layui-col-space20">
 
-						<div class="layui-user-desc layui-col-md9">
-							<h1>{$data.nickname}</h1>
-							<p> <span>用户邮箱</span>{$data.email}  <span>登录IP：</span>{$data.loginip} </p>
-							<p> <span>加入时间：</span>{$data.createtime}  <span>上次登录：</span>{$data.logintime} </p>
-						</div>
-					</div>
-				</div>
-			</div>		    			
-		</div>
-	</div>
+                <div class="layui-col-md9">
+
+                    <div class="layui-card">
+                        <div class="layui-card-body goindex">
+                            <div class="tips"> Hi，🍓 <span class="regular"> 下午好，今天是你加入的第 {$user.createtime|distance_day} 天～</span></div>
+                            <div class="images fr">
+                                <img src="/static/images/logo.png?v1" class="logo">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="profile" class="layui-card">
+                        <div class="layui-card-body">
+                            <h2>个人信息</h2>
+
+                            <div class="clear">
+                                <div class="layui-col-md3">
+                                    <div class="contract-title">手机</div>
+                                    <div class="contract-detail">+86 {$user.mobile}
+                                        <i class="layui-icon layui-icon-edit" title="编辑" lay-open lay-title="修改手机"
+                                           lay-url="#mobile" lay-area="430px,300px"></i>
+                                    </div>
+                                </div>
+
+                                <div class="layui-col-md3">
+                                    <div class="contract-title">微信号</div>
+                                    <div class="contract-detail">{$user.qq}</div>
+                                </div>
+
+                                <div class="layui-col-md3">
+                                    <div class="contract-title">办公室邮箱</div>
+                                    <div class="contract-detail">{$user.email}
+                                        <i class="layui-icon layui-icon-edit" title="编辑" lay-open lay-title="修改邮箱"
+                                           lay-url="#email" lay-area="430px,300px"></i>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md3">
+                                    <div class="contract-title">登录IP</div>
+                                    <div class="contract-detail">{$user.loginip}</div>
+                                </div>
+                            </div>
+
+                            <div class="clear">
+                                <div class="layui-col-md3">
+                                    <div class="contract-title">登陆次数</div>
+                                    <div class="contract-detail">{$user.logincount}</div>
+                                </div>
+
+                                <div class="layui-col-md3">
+                                    <div class="contract-title">用户组</div>
+                                    <div class="contract-detail">{$user.group.title}</div>
+                                </div>
+
+                                <div class="layui-col-md3">
+                                    <div class="contract-title">积分</div>
+                                    <div class="contract-detail">{$user.score}</div>
+                                </div>
+
+                                <div class="layui-col-md3">
+                                    <div class="contract-title">加入时间</div>
+                                    <div class="contract-detail">{$user.createtime}</div>
+                                </div>
+                            </div>
+
+                            <div class="layui-col-md3">
+                                <div class="contract-title">所在住址</div>
+                                <div class="contract-detail">{$user.address}</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="layui-card">
+                        <div class="layui-card-header">我的帖子</div>
+                        <div class="layui-card-body">
+                            ...
+                        </div>
+                    </div>
+
+                </div>
+                <div class="layui-col-md3">
+
+                    <div id="account" class="layui-card">
+                        <div class="layui-card-body">
+                            <div id="imgHead" class="layui-user-avatar" ><img src="{$user.avatar}" alt="{$user.nickname}"></div>
+                            <div class="nickname">
+                                {$user.nickname}
+                                <span class="edits">
+                                    <i class="layui-icon layui-icon-share" lay-open lay-title="修改昵称" lay-url="#nickname"
+                                       lay-area="380px,200px"></i>
+                                </span>
+                            </div>
+                            <div class="intro">{$user.heart}</div>
+
+                            <div id="thrid" class="layui-input-inline">
+
+                                <if check_user_third(
+                                'qq',$user['id']) >
+                                <a lay-ajax lay-url="{:url('/third/unbind/type/qq')}" title="点击解绑" type="button"
+                                   class="layui-btn  layui-btn-sm"><i
+                                        class="layui-icon layui-icon-login-qq"></i></a>
+                                <else/>
+                                <a data-url="{:url('/third/bind/type/qq')}" title="点击绑定" type="button"
+                                   class="layui-btn layui-btn-sm layui-bind-third"><i
+                                        class="layui-icon layui-icon-login-qq"></i></a>
+                                </if>
+
+                                <if check_user_third(
+                                'weixin',$user['id']) >
+                                <a lay-ajax lay-url="{:url('/third/unbind/type/weixin')}" title="点击解绑" type="button"
+                                   class="layui-btn  layui-btn-sm"><i
+                                        class="layui-icon layui-icon-login-wechat"></i></a>
+                                <else/>
+                                <a data-url="{:url('/third/bind/type/weixin')}" title="点击绑定" type="button"
+                                   class="layui-btn layui-btn-sm layui-bind-third"><i
+                                        class="layui-icon layui-icon-login-wechat"></i></a>
+                                </if>
+
+                                <if check_user_third(
+                                'weibo',$user['id']) >
+                                <a lay-ajax lay-url="{:url('/third/unbind/type/weibo')}" title="点击解绑" type="button"
+                                   class="layui-btn  layui-btn-sm"><i
+                                        class="layui-icon layui-icon-login-weibo"></i></a>
+                                <else/>
+                                <a data-url="{:url('/third/bind/type/weibo')}" title="点击绑定" type="button"
+                                   class="layui-btn layui-btn-sm layui-bind-third"><i
+                                        class="layui-icon layui-icon-login-weibo"></i></a>
+                                </if>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-card">
+                        <div class="layui-card-header">APP KEY</div>
+                        <div id="appkey" class="layui-card-body">
+                            <notempty name="user.app_id">
+                                <div class="layui-form">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">app_id：</label>
+                                        <div class="layui-input-block">
+                                            <div class="layui-form-mid layui-word-aux">{$user.app_id}</div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">app_secret：</label>
+                                        <div class="layui-input-block">
+                                            <div class="layui-form-mid layui-word-aux">{$user.app_secret}</div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <button type="submit" class="layui-btn layui-btn-normal" lay-ajax=""
+                                                lay-url="/user/appid" lay-reload="true">更换APPKEY
+                                        </button>
+                                    </div>
+                                </div>
+                                <else/>
+                                <div class="layui-form">
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <div class="layui-form-mid layui-word-aux">还没有生成appKey,请点击按钮生成！</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <button type="submit" class="layui-btn layui-btn-normal" lay-ajax=""
+                                                lay-url="/user/appid" lay-reload="true">生成APPKEY
+                                        </button>
+                                    </div>
+                                </div>
+                            </notempty>
+                        </div>
+                    </div>
+
+                    <div class="layui-card">
+                        <div class="layui-card-header">已购产品</div>
+                        <div class="layui-card-body">
+                            ...
+                        </div>
+                    </div>
+
+                    <div class="layui-card">
+                        <div class="layui-card-header">小组成员</div>
+                        <div class="layui-card-body">
+                            ...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <include file="user:footer"/>
 </div>
-<include file="public:footer"/>
+
+
+<!-- // 修改邮箱 -->
+<script type="text/html" id="email">
+    <div class="layui-fluid layui-bg-white">
+        <form class="layui-form layui-form-fixed" action="/user/email">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">{:__('邮箱地址')}</label>
+                <div class="layui-input-inline">
+                    <input name="email" placeholder="{:__('请输入邮箱地址')}" type="text" class="layui-input email"
+                           lay-verType="tips" lay-verify="required"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">{:__('验证码')}</label>
+                <div class="layui-input-inline" style="width: 176px;">
+                    <input name="captcha" placeholder="{:__('请输入验证码')}" type="text" class="layui-input"
+                           lay-verType="tips" lay-verify="required" maxlength="10"/>
+                </div>
+                <button class="layui-btn layui-btn-sm " type="button" lay-ajax lay-url="/user/email"
+                        lay-object="email:email,event:event">{:__('获取')}
+                </button>
+            </div>
+            <input type="text" hidden name="event" class="event" value="change">
+            <div class="layui-footer layui-form-item layui-center">
+                <button class="layui-btn layui-btn-primary" type="button" sa-event="closeDialog">{:__('取消')}</button>
+                <button class="layui-btn " lay-filter="submitPage" lay-submit>{:__('提交')}</button>
+            </div>
+
+        </form>
+    </div>
+</script>
+
+<!-- // 修改手机号 -->
+<script type="text/html" id="mobile">
+    <div class="layui-fluid layui-bg-white">
+        <form class="layui-form layui-form-fixed" action="/user/mobile">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{:__('手机号')}</label>
+                <div class="layui-input-inline">
+                    <input name="mobile" placeholder="{:__('请输入号码')}" type="text" class="layui-input mobile"
+                           lay-verType="tips" lay-verify="required"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">{:__('验证码')}</label>
+                <div class="layui-input-inline" style="width: 176px;">
+                    <input name="captcha" placeholder="{:__('请输入验证码')}" type="text" class="layui-input"
+                           lay-verType="tips" lay-verify="required" maxlength="10"/>
+                </div>
+                <button class="layui-btn layui-btn-sm " type="button" lay-ajax lay-url="/user/mobile"
+                        lay-object="mobile:mobile,event:event">{:__('获取')}
+                </button>
+            </div>
+            <input type="text" hidden name="event" class="event" value="change">
+            <div class="layui-footer layui-form-item layui-center">
+                <button class="layui-btn layui-btn-primary" type="button" sa-event="closeDialog">{:__('取消')}</button>
+                <button class="layui-btn " lay-filter="submitPage" lay-submit>{:__('提交')}</button>
+            </div>
+        </form>
+    </div>
+</script>
+
+<!-- // 修改用户昵称 -->
+<script type="text/html" id="nickname">
+    <div class="layui-fluid layui-bg-white">
+        <form class="layui-form layui-form-fixed" action="/user/profile">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{:__('用户昵称')}</label>
+                <div class="layui-input-inline">
+                    <input name="nickname" placeholder="{:__('请输入昵称')}" type="text" class="layui-input"
+                           lay-verType="tips" lay-verify="required"/>
+                </div>
+            </div>
+
+            <input type="text" hidden name="event" class="event" value="change">
+            <div class="layui-footer layui-form-item layui-center">
+                <button class="layui-btn layui-btn-primary" type="button" sa-event="closeDialog">{:__('取消')}</button>
+                <button class="layui-btn " lay-filter="submitPage" lay-submit>{:__('提交')}</button>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script !src="">
+
+    layui.use(['jquery','upload'],function(){
+        var $ = layui.jquery;
+        var upload = layui.upload;
+
+        // 上传头像
+        upload.render({
+            elem: '.layui-user-avatar'
+            ,url: '/user/avatars'
+            ,method: 'post'
+            ,accept: 'file'
+            ,before: function(res) {
+                layer.msg('上传中');
+            },done: function(res, index, upload) {
+                // 上传成功
+                if (res.code == 200) {
+                    layer.msg(res.msg);
+                    $('#imgHead img').attr('src',res.url);
+                } else {
+                    layer.msg(res.msg,'error');
+                }
+            }
+        })
+
+    })
+</script>
+
 </body>
 </html>

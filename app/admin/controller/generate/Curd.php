@@ -269,7 +269,7 @@ class Curd extends AdminController
 
             $data = $this->model->find($id);
 
-            if ($data['status'] && !$data['force']) {
+            if ($data['status'] && !$data['force'] && !$data['delete']) {
                 return $this->error('已经生成非覆盖选项');
             }
 
@@ -511,7 +511,7 @@ class Curd extends AdminController
      *
      * @param array $colsFields
      * @param array $formDesign
-     * @return void
+     * @return string|null
      */
     public function getColsListFields(array $colsFields = [], array $formDesign = [])
     {
@@ -573,7 +573,7 @@ class Curd extends AdminController
      * @param string|null $field
      * @param string|null $type
      * @param string $subTpl
-     * @return void
+     * @return array|false|string|string[]
      */
     public function getFieldAttrArr(string $field = null, string $type = null, string $subTpl = 'change')
     {
@@ -593,7 +593,7 @@ class Curd extends AdminController
      * @param string|null $field
      * @param string|null $type
      * @param array $data
-     * @return void
+     * @return bool
      */
     public function validComponent(string $field = null, string $type = null, array $data = [])
     {
@@ -662,7 +662,7 @@ class Curd extends AdminController
      *
      * @param array $searchArr
      * @param array $formArr
-     * @return void
+     * @return false|string
      */
     public function getadviceSearch(array $searchArr = [], array $formArr = [])
     {
@@ -730,7 +730,7 @@ class Curd extends AdminController
      * 获取菜单函数
      * 
      * @param array $data
-     * @return void
+     * @return array
      */
     protected function getMenuMethods(array $data = [])
     {
@@ -776,7 +776,7 @@ class Curd extends AdminController
      * 获取其他函数
      *
      * @param array $method
-     * @return void
+     * @return string
      */
     protected function getMethodString(array $methods = [])
     {
@@ -802,8 +802,8 @@ EOD;
     /**
      * 获取关联表信息
      * id style KEY
-     * @param mixed $relation
-     * @return void
+     * @param array $relation
+     * @return string
      */
     protected function getrelationMethodList($relation = [])
     {
@@ -855,7 +855,7 @@ Eof;
      * 获取模板文件
      *
      * @param [type] $name
-     * @return void
+     * @return string
      */
     protected function getStubTpl($name)
     {
@@ -868,7 +868,7 @@ Eof;
      * @param [type] $app
      * @param [type] $name
      * @param [type] $table
-     * @return void
+     * @return array
      */
     protected function getControllerData($name, $table)
     {
@@ -881,7 +881,7 @@ Eof;
      * @param [type] $module
      * @param [type] $name
      * @param [type] $table
-     * @return void
+     * @return array
      */
     protected function getModelData($module, $name, $table)
     {
@@ -894,7 +894,7 @@ Eof;
      * @param [type] $module
      * @param [type] $name
      * @param [type] $table
-     * @return void
+     * @return array
      */
     protected function getvalidateData($module, $name, $table)
     {
@@ -944,7 +944,7 @@ Eof;
      * 获取代码模板
      *
      * @param [type] $name
-     * @return void
+     * @return string
      */
     protected function getTemplatePath($name)
     {
@@ -965,9 +965,9 @@ Eof;
      * 移除空文件夹
      * https://www.php.net/manual/zh/class.filesystemiterator.php
      * @param mixed $parseDirs
-     * @return void
+     * @return bool
      */
-    protected function removeEmptyFolder(mixed $parseDirs)
+    protected function removeEmptyFolder( $parseDirs): bool
     {
 
         if (!is_array($parseDirs)) {
@@ -987,6 +987,7 @@ Eof;
                 return false;
             }
         }
+
         return true;
     }
 }

@@ -12,9 +12,7 @@ declare (strict_types = 1);
 
 namespace app\index\controller;
 
-use app\common\model\system\Tags;
 use app\HomeController;
-use think\facade\Db;
 
 /**
  * Ajax控制器
@@ -22,19 +20,11 @@ use think\facade\Db;
  */
 class Ajax extends HomeController
 {
-    /**
-     * 标签调用
-     *
-     * @return void
-     */
-    public function getTags() {	
-		
-        if (request()->isAjax()) {
-            $tag = input('tag');
-            if (!empty($tag)) {
-                $list = Tags::field('name')->where([['name','like','%'.$tag.'%']])->limit(10)->select()->toArray();
-                return $this->success('获取成功',null,$list,count($list));
-            }
-        }
+    // TODO..
+    public function smsSend()
+    {
+        // 从这里去解决就行了
+        // 并且在这里都是原生的
+        // 默认可以走这里的流程去获取即可。
     }
 }

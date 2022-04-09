@@ -9,7 +9,7 @@
 
 <div class="layui-card-body">
     <form action="/user/gbookedit" class="layui-form layui-form-fixed">
-
+        <input type="text" name="id" hidden value="{$data.id}">
         <div class="layui-form-item">
             <label class="layui-form-label">留言板</label>
             <div class="layui-input-block">
@@ -19,7 +19,7 @@
 
         <div class="layui-form-item" style="margin-top: 22px;text-align: center;">
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-            <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="submit">立即提交</button>
+            <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="submitIframe">立即提交</button>
         </div>
     </form>
 </div>

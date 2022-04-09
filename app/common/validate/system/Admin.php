@@ -14,7 +14,6 @@ class Admin extends Validate
      * @var array
      */	
     protected $rule =   [
-		'test_filed' => 'max:255',
         'name'  => 'require|min:2|max:12|chsAlphaNum',
         'pwd|密码'   => 'require|min:6|max:64',
     ];
@@ -32,11 +31,10 @@ class Admin extends Validate
         'name.max'     	    => '用户名不能超过12个字符',
         'name.filters'      => '用户名包含禁止注册字符',
         'name.chsAlphaNum'  => '用户名只能是汉字、字母和数字',		
-		'test_filed.max'     => '测试场景用',
     ];
 	
 	// 测试验证场景
     protected $scene = [
-        'test'  =>  ['test_filed'],
+        'edit'  =>  ['name']
     ];   	
 }

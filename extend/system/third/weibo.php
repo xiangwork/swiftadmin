@@ -29,7 +29,7 @@ class weibo
 
     public function __construct($options = [])
     {
-        if ($config = saenv('social.weibo')) {
+        if ($config = saenv('weibo')) {
             $this->config = array_merge($this->config, $config);
         }
         $this->config = array_merge($this->config, is_array($options) ? $options : []);

@@ -33,16 +33,16 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
     // 对象初始化
     var admin = {
         options: {
-            tplName: 'swiftadmin',  // 数据标识
-            version: '1.1.0',        // 版本
-            moreLabel: true,         // 是否开启多标签
-            cacheTab: true,         // 缓存多标签
-            maxTabNum: 20,          // 最大打开标签
-            TabLists: [],           // 标签缓存
-            style: 'dark',          // 样式
-            theme: 'blue',          // 皮肤
-            layout: 'left',          // 布局操作 // top // 混合模式这三种就行了 // 然后还需要判断，当前是否需要左侧菜单
-            fluid: true,             // 是否内容铺满
+            tplName: 'swiftadmin',      // 数据标识
+            version: '1.1.0',           // 版本
+            moreLabel: true,            // 是否开启多标签
+            cacheTab: true,             // 缓存多标签
+            maxTabNum: 20,              // 最大打开标签
+            TabLists: [],               // 标签缓存
+            style: 'dark',              // 样式
+            theme: 'blue',              // 皮肤
+            layout: 'left',             // 布局操作 // top // 混合模式这三种就行了 // 然后还需要判断，当前是否需要左侧菜单
+            fluid: true,                // 是否内容铺满
             openHeader: true,
             openFooter: true,
 
@@ -621,7 +621,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
         , tabs: function () {
 
             var url = $(this).data("url");
-            var title = $(this).attr("lay-title");
+            var title = $(this).data("title");
             title || (title = $(this).text());
             if (top.layui && top.layui.admin) {
                 top.layui.admin.createElementTabs({
@@ -824,7 +824,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
 
                             // 默认为添加编辑方法
                             if (typeof postUrl == 'undefined') {
-                                postUrl = _meystack_global.app + '/' + _meystack_global.controller + '/' + action;
+                                postUrl = _fr4mework.app + '/' + _fr4mework.controller + '/' + action;
                             }
 
 
@@ -852,7 +852,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
                                     }
                                     else {
 
-                                        layer.msg(res.msg, 'error')
+                                        layer.error(res.msg)
                                         othat.attr("disabled", false);
                                     }
 
@@ -919,7 +919,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
                                 return callback.error(res);
                             }
 
-                            layer.msg(res.msg, 'error');
+                            layer.error(res.msg);
                         }
                     },
                     error: function (res) {
@@ -984,7 +984,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
         }
 
         // 在当前APP里才执行鉴权
-        if (curl.indexOf(_meystack_global.app) !== -1) {
+        if (curl.indexOf(_fr4mework.app) !== -1) {
 
             var route = curl.replace('.html', '');
             route = route.substring(1);
@@ -1160,7 +1160,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
              */
             $(document).on("mouseenter", "*[lay-tips]", function () {
                 var remind = $(this).attr("lay-tips");
-                var tips = $(this).data("offset") || 4;
+                var tips = $(this).data("offset") || 1;
                 var color = $(this).data("color") || '#000';
                 layer.tips(remind, this, {
                     time: -1,
@@ -1198,7 +1198,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
 
                 var that = $(this),
                     name = $(elem).attr('lay-upload') || undefined,
-                    url = $(elem).data('url') || '/upload/file',
+                    url = $(elem).data('url') || _fr4mework.app + '/upload/file',
                     type = $(elem).data('type') || 'normal',
                     size = $(elem).data('size') || 102400,
                     accept = $(elem).data('accept') || 'file',
@@ -1260,7 +1260,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
                         }
                         else {
                             // 错误消息
-                            layer.msg(res.msg, 'error');
+                            layer.error(res.msg);
                         }
                     }
                 })
@@ -1346,7 +1346,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
     }
 
     // 国际化
-    i18n.render(admin.getStorage('language') || '');
+    i18n.render(admin.getStorage('language') || 'zh-CN');
 
     // 执行组件渲染
     for (const key in admin.components) {
@@ -1433,7 +1433,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
                 // 远程回调
                 error: function (res) {
                     $(obj.elem).prop('checked', !obj.elem.checked);
-                    layer.msg(res.msg, 'error');
+                    layer.error(res.msg);
                     form.render('checkbox');
                 }
             }
@@ -1464,9 +1464,9 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
 
         if (_url === false || _url === '') {
             try {
-                var app = _meystack_global.app;
-                var action = _meystack_global.action;
-                var controller = _meystack_global.controller;
+                var app = _fr4mework.app;
+                var action = _fr4mework.action;
+                var controller = _fr4mework.controller;
                 _url = app + '/' + controller + '/' + action;
             } catch (error) {
                 console.warn(error);
@@ -1502,7 +1502,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
                 }
 
             } else {
-                top.layer.msg(res.msg, 'error');
+                top.layer.error(res.msg);
             }
 
         }, 'json');
@@ -1554,7 +1554,7 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
                     layer.msg(res.msg);
                 },
                 error: function (res) {
-                    layer.msg(res.msg, 'error');
+                    layer.error(res.msg);
                 }
             }
             , othis = $(this)
@@ -1921,10 +1921,19 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
 
             if (element.children && element.router == '#') {
 
-                navHtml += '<li class="layui-nav-item ';
-                navHtml += '">';
-                navHtml += '<a href="javascript:;">';
+                if (element.pid != 0
+                    && element.router == '#'
+                    && othis.options.layout == 'hybrid') {
+                    navHtml += '<li class="layui-nav-item ">';
+                }
 
+                if (element.pid != 0 && element.router == '#') {
+                    navHtml += '<dd class="layui-nav-itemed hybrid-item">';
+                } else {
+                    navHtml += '<li class="layui-nav-item">';
+                }
+
+                navHtml += '<a href="javascript:;">';
                 if (element.icons && icon) {
                     navHtml += '<i class="layui-icon ' + element.icons + '"></i>';
                 }
@@ -1932,10 +1941,21 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
                 navHtml += '<cite>' + element.title + '</cite>';
                 navHtml += '<i class="layui-icon layui-icon-down layui-nav-more"></i>';
                 navHtml += '</a>';
+
+
                 navHtml += '<dl class="layui-nav-child">';
                 navHtml += admin.getNavHtml(element.children);
                 navHtml += '</dl>';
-                navHtml += '</li>';
+
+                if (element.pid !== 0 && element.router == '#') {
+                    navHtml += '</dd>';
+
+                    if (othis.options.layout == 'hybrid') {
+                        navHtml += '</li>';
+                    }
+                } else {
+                    navHtml += '</li>';
+                }
             }
             else {
 
@@ -2146,7 +2166,8 @@ layui.define(['jquery', 'i18n', 'element', 'layer', 'form', 'rate', 'table', 'sl
                 var othis = $('.layui-nav li [lay-href="' + Id + '"]');
                 var navBind = $('.layui-nav-tree [lay-href="' + Id + '"]').parents('div').attr('class');
                 if (typeof (navBind) !== "undefined") {
-                    $('[lay-nav-bind="' + navBind).parent('li').addClass('layui-this');
+                    $(othis).parent('li').addClass('layui-this');
+                    $(othis).parents('dd.hybrid-item').addClass('layui-nav-itemed');
                 }
 
                 $("div[class^='swift-admin']").hide();

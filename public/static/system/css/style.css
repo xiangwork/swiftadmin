@@ -1449,7 +1449,6 @@ a {
     right: 5px;
     top: 5px;
     cursor: pointer;
-    width: 25px;
     height: 20px;
     font-size: 10px;
     line-height: 20px;
@@ -2056,7 +2055,7 @@ a {
 }
 
 .layui-side-menu .layui-nav .layui-nav-itemed .layui-nav-child i.layui-icon {
-    position: static;
+    /*position: static;*/
     margin-right: 10px;
 }
 

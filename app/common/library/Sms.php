@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare (strict_types=1);
 // +----------------------------------------------------------------------
 // | swiftAdmin 极速开发框架 [基于ThinkPHP6开发]
 // +----------------------------------------------------------------------
@@ -22,7 +22,7 @@ use system\Random;
  * 短信息类
  *
  */
-class Sms 
+class Sms
 {
 
     /**
@@ -45,19 +45,16 @@ class Sms
     // 手机号码
     protected $phone = [];
 
+    protected $smsType = 'alisms';
+
     // 自动设置参数
     protected $autoPrarms = false;
 
-    /**
-     * @objectValidate
-     */
-    public $objectValidate = null;
-
     // 运行商号段
     protected $numberHeader = [
-        'cmcc'=> '134,135,136,137,138,139,147,150,151,152,157,158,159,172,178,182,183,184,187,188,198',
-        'cdma'=> '130,131,132,155,156,166,175,176,185,186,166',
-        'ccom'=> '133,153,173,177,180,181,189,191,193,199',
+        'cmcc' => '134,135,136,137,138,139,147,150,151,152,157,158,159,172,178,182,183,184,187,188,198',
+        'cdma' => '130,131,132,155,156,166,175,176,185,186,166',
+        'ccom' => '133,153,173,177,180,181,189,191,193,199',
     ];
 
     /**
@@ -67,12 +64,12 @@ class Sms
     public function __construct()
     {
         // 此配置项为数组。
-        if ($snsface = saenv('smsface')) {
-            $this->config = array_merge($this->config, $snsface);
+        if ($this->smsType = saenv('smstype')) {
+            $this->config = array_merge($this->config, saenv($this->smsType));
         }
 
         // 验证类回调操作 1、单手机号 2、自动获取验证码
-        Event::listen("sendsms_success",function($params) {
+        Event::listen("sendsms_success", function ($params) {
             $array['event'] = $this->event;
             $array['code'] = $params['code'];
             $array['mobile'] = $params['mobile'];
@@ -99,15 +96,15 @@ class Sms
     /**
      * 获取变量类型
      */
-    public function __call($method, $arg_array) 
+    public function __call($method, $arg_array)
     {
-        
+
         try {
-            
+
             if (!empty($arg_array[0])) {        // 手机号码
                 $this->phone = $arg_array[0];
             }
-           
+
             if (!empty($arg_array[1])) {        // 事件类型
                 $this->event = $arg_array[1];
             }
@@ -117,14 +114,13 @@ class Sms
             }
 
             // 读取短信模板
-            $type = $this->config['type'];
-            $config = include(root_path()."extend/conf/sms/sms.php");
-            if ($config[$type][$method]['template']) {
-                $template = $config[$type][$method]['template'];
+            $config = include(root_path() . "extend/conf/sms/sms.php");
+            if ($config[$this->smsType][$method]['template']) {
+                $template = $config[$this->smsType][$method]['template'];
             }
 
             // 是否自动设置参数
-            if ($config[$type][$method]['auto']) {
+            if ($config[$this->smsType][$method]['auto']) {
                 $this->autoPrarms = true;
                 $this->params = array(Random::number(4));
             }
@@ -132,14 +128,13 @@ class Sms
             // 判断类型并设置时间限制
             if ($this->autoPrarms) {
                 if (is_array($this->phone)) {
-                    $phone = implode(',',$this->phone);
-                }
-                else {
+                    $phone = implode(',', $this->phone);
+                } else {
                     $phone = $this->phone;
                 }
 
-                $phone = str_replace("+86","",$phone);
-                $result = UserValidate::where("mobile",$phone)->order('id desc')->find();
+                $phone = str_replace("+86", "", $phone);
+                $result = UserValidate::where("mobile", $phone)->order('id desc')->find();
                 if (!empty($result)) {
                     $difftime = time() - strtotime($result['createtime']);
                     if (($difftime / 60) <= saenv('user_valitime')) {
@@ -160,36 +155,35 @@ class Sms
         }
 
         // 消息类型和事件应该区分开来
-        return call_user_func(array(__NAMESPACE__.'\Sms',$type),$template, $method);
+        return call_user_func(array(__NAMESPACE__ . '\Sms', $this->smsType), $template, $method);
     }
 
     /**
      * 腾讯云SMS短信
      */
-    public function tensms($template,$event = null) 
+    public function tensms($template, $event = '')
     {
-
         try {
-    
+
             // 读取配置信息
-            $config = $this->config['tensms'];
+            $config = $this->config;
             $result = Tensms::instance()
                 ->action('SendSms')
                 ->method('POST')
                 ->options([
                     "PhoneNumberSet" => $this->phone,            # 手机号
-                    "TemplateParamSet" =>  $this->params,        # 变量
+                    "TemplateParamSet" => $this->params,        # 变量
                     "TemplateID" => $template,                   # 模板ID
                     "SmsSdkAppid" => $config['app_id'],          # APPID    
-                    "Sign" =>  $config['app_sign']               # 公司签名   
-            ])->request();
-            
+                    "Sign" => $config['app_sign']               # 公司签名
+                ])->request();
+
             $result = $result['Response'];
-            if (isset($result['SendStatusSet']) &&  strtolower($result['SendStatusSet'][0]['Code']) == "ok") {
+            if (isset($result['SendStatusSet']) && strtolower($result['SendStatusSet'][0]['Code']) == "ok") {
                 if ($this->autoPrarms && (count($this->phone) == 1)) {
-                    $this->phone = str_replace("+86","",implode(",",$this->phone));
-                    $this->params = implode(",",$this->params);
-                    Event::trigger("sendsms_success",['code'=>$this->params,'mobile'=>$this->phone]);
+                    $this->phone = str_replace("+86", "", implode(",", $this->phone));
+                    $this->params = implode(",", $this->params);
+                    Event::trigger("sendsms_success", ['code' => $this->params, 'mobile' => $this->phone]);
                 }
 
                 return true;
@@ -198,12 +192,11 @@ class Sms
             // 设置错误信息
             if (isset($result['Error'])) {
                 $this->setError($result['Error']['Message']);
-            }
-            else {
+            } else {
                 $this->setError($result['SendStatusSet'][0]['Message']);
             }
 
-        } catch(\Throwable $th) {
+        } catch (\Throwable $th) {
             $this->setError($th->getMessage());
             return false;
         }
@@ -214,9 +207,9 @@ class Sms
     /**
      * 阿里云短信
      */
-    public function alisms($template,$event = null) 
+    public function alisms($template, $event = null)
     {
-        $config = $this->config['alisms'];
+        $config = $this->config;
         try {
             $result = Alisms::instance()
                 ->action('SendSms')
@@ -228,18 +221,20 @@ class Sms
                     'TemplateCode' => $template,            # 短信模板
                     'TemplateParam' => $this->params,       # 短信参数 JSON格式
                 ])->request();
-                    
+
             if (strtolower($result['Code']) === "ok") {
-                if ($this->autoPrarms) { 
-                    $this->phone = str_replace("+86","",$this->phone);
-                    $this->params = json_decode($this->params,true)['code'];
-                    Event::trigger("sendsms_success",['code'=>$this->params,'mobile'=>$this->phone]);
+
+                if ($this->autoPrarms) {
+                    $this->phone = str_replace("+86", "", $this->phone);
+                    $this->params = json_decode((string)$this->params, true)['code'];
+                    Event::trigger("sendsms_success", ['code' => $this->params, 'mobile' => $this->phone]);
                 }
+
                 return true;
             }
 
             // 设置错误信息
-            $this->setError($result['Message']);              
+            $this->setError($result['Message']);
         } catch (\Throwable $th) {
             $this->setError($th->getMessage());
             return false;
@@ -251,7 +246,7 @@ class Sms
     /**
      * 验证手机号参数
      */
-    public function valiParam($phone, $params) 
+    public function valiParam($phone, $params)
     {
 
         if (empty($phone)) {
@@ -260,26 +255,25 @@ class Sms
 
         // 转换数组
         if (!is_array($phone)) {
-            $this->phone = explode(",",$phone);
+            $this->phone = explode(",", $phone);
         }
 
         // 校验手机号码
         foreach ($this->phone as $key => $value) {
-    
-            $first = substr($value,0,3);
+
+            $first = substr($value, 0, 3);
 
             foreach ($this->numberHeader as $index => $elem) {
-                if (stripos($elem,$first)) {
+                if (stripos($elem, $first)) {
                     $find = $elem;
                 }
             }
-            
+
             // 正则匹配
-            $match = preg_match('/^[0-9]{11}$/',$value);
+            $match = preg_match('/^[0-9]{11}$/', $value);
             if (!empty($find) && !empty($match)) {
-               $this->phone[$key] = "+86".$value;
-            }
-            else {  // TODO..
+                $this->phone[$key] = "+86" . $value;
+            } else {  // TODO..
                 return false;
             }
         }
@@ -288,16 +282,15 @@ class Sms
          * 参数类型
          * 阿里云JSON - 腾讯云Array
          */
-        if ($this->config['type'] === "alisms") {
- 
-            $this->phone = implode(",",$this->phone);
-            
+        if ($this->smsType == "alisms") {
+
+            $this->phone = implode(",", $this->phone);
+
             // 是否自动获取
-            if (!$this->autoPrarms && $params ) {
+            if (!$this->autoPrarms && $params) {
                 $params = json_encode($params);
-            }
-            else if ($params){
-                $params = json_encode(['code'=>$params[0]]);
+            } else if ($params) {
+                $params = json_encode(['code' => $params[0]]);
             }
         }
 
@@ -311,25 +304,33 @@ class Sms
      *
      * @param string $mobile
      * @param string $event
-     * @return void
+     * @return bool
      */
-    public function check(string $mobile, string $event = "default") 
+    public function check(string $mobile, $code = '', string $event = "default")
     {
-        $where['event'] = $event;
-        $where['mobile'] = $mobile;
-        $this->objectValidate = UserValidate::where($where)->order("id","desc")->find();
+        $result = UserValidate::where([
+            ['event','=',$event],
+            ['mobile','=',$mobile],
+            ['status', '=', 1],
+        ])->order("id", "desc")->find();
 
-        if (!empty($this->objectValidate)) {
-            $difftime = time() - strtotime($this->objectValidate['createtime']);
+        if (!empty($result) && $result->code == $code) {
+
+            $result->status = 0;
+            $result->save();
+
+            // 计算间隔期
+            $time = strtotime($result['createtime']);
+            $difftime = time() - $time;
+
             if (($difftime / 60) <= saenv('user_valitime')) {
                 return true;
             }
 
-            // 删除验证码
-            $this->objectValidate->delete();
             $this->setError("当前验证码已过期！");
-        } else {
-            $this->setError("当前手机号不存在");
+        }
+        else {
+            $this->setError("无效验证码");
         }
 
         return false;

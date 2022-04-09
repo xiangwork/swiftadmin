@@ -60,12 +60,12 @@ class ExceptionHandle extends Handle
                 // 写入异常日志
                 $expLogs = [
                     'module'        => app()->http->getName(),
-                    'controller'    => $request->controller(true),
-                    'action'        => $request->action(true),
-                    'params'        => serialize($request->param),
-                    'method'        => $request->method,
-                    'url'           => $request->baseUrl,
-                    'ip'            => $request->ip,
+                    'controller'    => request()->controller(true),
+                    'action'        => request()->action(true),
+                    'params'        => serialize(request()->param()),
+                    'method'        => request()->method(),
+                    'url'           => request()->baseUrl(),
+                    'ip'            => request()->ip(),
                     'name'          => session('AdminLogin.name'),
                 ];
 

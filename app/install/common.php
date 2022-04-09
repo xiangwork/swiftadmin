@@ -131,7 +131,7 @@ if (!function_exists('write_file')) {
   {
 		$dir = dirname($file);
 		if(!is_dir($dir)){
-			mkdirss($dir);
+			mk_dirs($dir);
 		}
 		return @file_put_contents($file, $content);
 	}
@@ -144,8 +144,8 @@ if (!function_exists('encryption')) {
     /**
      * 管理员密码加密
      */
-	function encryption($pwd, $salt = 'sw/ift', $encrypt = 'md5')
+	function encryption($pwd, $encrypt = 'md5')
 	{
-		return $encrypt($pwd . $salt);
+		return $encrypt($pwd);
 	}
 }

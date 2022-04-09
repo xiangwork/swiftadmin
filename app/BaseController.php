@@ -12,6 +12,7 @@ declare (strict_types = 1);
 namespace app;
 
 use app\common\library\ResultCode;
+use app\common\model\system\Config as ConfigModel;
 use think\App;
 use think\Validate;
 use think\Response;
@@ -54,6 +55,12 @@ abstract class BaseController
     protected $middleware = [];
 
     /**
+     * 获取访问来源
+     * @var null
+     */
+    public $referer = null;
+
+    /**
      * 构造方法
      * @access public
      * @param  App  $app  应用对象
@@ -62,6 +69,7 @@ abstract class BaseController
     {
         $this->app     = $app;
         $this->request = $this->app->request;
+        $this->referer = $this->request->header('referer');
 
         // 控制器初始化
         $this->initialize();
@@ -71,8 +79,11 @@ abstract class BaseController
     protected function initialize()
     {
         // 获取全局站点
-        foreach (saenv('site') as $key => $value) {
-            $this->app->view->assign($key,$value);
+        $siteArr = saenv('site', true);
+        if ($siteArr && is_array($siteArr)) {
+            foreach ($siteArr as $key => $value) {
+                $this->app->view->assign($key,$value);
+            }
         }
     }
 
@@ -146,9 +157,9 @@ abstract class BaseController
      * @param  mixed     $data 返回的数据
      * @param  integer   $wait 跳转等待时间
      * @param  array     $header 发送的Header信息
-     * @return void
+     * @return mixed
      */
-    protected function success($msg = '', string $url = null, $data = '', int $count = 0,  int $code = 200, int $wait = 3, array $header = [])
+    protected function success($msg = '', string $url = null, $data = '', int $count = 0,  int $code = 200, int $wait = 3, array $header = []): mixed
     {
         if (is_null($url) && isset($_SERVER["HTTP_REFERER"])) {
             $url = $_SERVER["HTTP_REFERER"];
@@ -186,9 +197,9 @@ abstract class BaseController
      * @param  mixed     $data 返回的数据
      * @param  integer   $wait 跳转等待时间
      * @param  array     $header 发送的Header信息
-     * @return void
+     * @return mixed
      */
-    protected function error($msg = '',  $url = null, $data = '', int $code = 101, int $wait = 3, array $header = [])
+    protected function error($msg = '',  $url = null, $data = '', int $code = 101, int $wait = 3, array $header = []): mixed
     {
         if (is_null($url)) {
             $url = request()->isAjax() ? '' : 'javascript:history.back(-1);';
@@ -221,7 +232,7 @@ abstract class BaseController
      * @param  array|integer  $params 其它URL参数
      * @param  integer        $code http code
      * @param  array          $with 隐式传参
-     * @return void
+     * @return
      */
     protected function redirect($url, $params = [], $code = 302, $with = [])
     {
@@ -241,7 +252,7 @@ abstract class BaseController
      * @access protected
      * @return string
      */
-    protected function getResponseType()
+    protected function getResponseType(): string
     {
         return request()->isJson() || request()->isAjax() ? 'json' : 'html';
     }
@@ -258,9 +269,11 @@ abstract class BaseController
     protected function buildHtml(string $htmlfile = null,string $htmlpath = null, string $templateFile = null,$suffix = 'html') 
     {
         $content = $this->app->view->fetch($templateFile);
+
         if (saenv('compression')) {
             $content = preg_replace('/\s+/i',' ',$content);
         }
+        
         $htmlpath = !empty($htmlpath) ? $htmlpath : './';
         $htmlfile = $htmlpath . $htmlfile . '.' . $suffix; 
 
@@ -304,7 +317,7 @@ abstract class BaseController
      * @access public
      * @param  msg         消息参数
      * @param  code        错误代码
-     * @return void
+     * @return mixed
      */
 	public function throwError(string $msg = 'not found!', int $code = 404) 
     {

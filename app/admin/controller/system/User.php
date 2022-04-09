@@ -58,8 +58,8 @@ class User extends AdminController
 
             // 循环处理数据
             foreach ($list as $key => $value) {
-                $value->hidden(['pwd', 'salt']);
 
+                $value->hidden(['pwd', 'salt']);
                 $region = \app\common\library\Ip2Region::instance()->memorySearch($list[$key]['loginip']);
                 $region = explode('|',$region['region']);
 

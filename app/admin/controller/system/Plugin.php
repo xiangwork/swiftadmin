@@ -15,7 +15,8 @@ namespace app\admin\controller\system;
 use think\facade\Db;
 use think\plugin\Service;
 use app\AdminController;
-use app\common\library\Auth;
+use app\admin\library\Auth;
+use Throwable;
 
 class Plugin extends AdminController
 {
@@ -31,7 +32,7 @@ class Plugin extends AdminController
     {
         parent::initialize();
 	}
-	
+
     /**
      * 获取资源列表
      */
@@ -53,7 +54,7 @@ class Plugin extends AdminController
         return view('',['plugin'=> json_encode($plugin)]);
     }
 
-    public function localPlugin($list, $array = [])
+    public function localPlugin($list, $array = []): array
     {
         foreach ($list as $key => $value) {
             $array[$key]['name'] = $value['name'];
@@ -91,11 +92,11 @@ class Plugin extends AdminController
                 ];
 
                 $data = Service::install($name,$force,$extends) ?? [];
-            } 
+            }
             catch (\think\plugin\PluginException $p) {
                 return ajax_return($p->getMessage(),$p->getData(),$p->getCode());
             }
-            catch (\Throwable $th) {
+            catch (Throwable $th) {
                 return ajax_return($th->getMessage(),null,$th->getCode());
             }
 
@@ -110,7 +111,7 @@ class Plugin extends AdminController
 
 
         if (request()->isPost()) {
-            
+
             $name = input('name/s');
             $token = input('token/s');
             $force = input('force/d');
@@ -132,12 +133,12 @@ class Plugin extends AdminController
             catch (\think\plugin\PluginException $p) {
                 return ajax_return($p->getMessage(),$p->getData(),$p->getCode());
             }
-            catch (\Throwable $th) {
+            catch (Throwable $th) {
                 return ajax_return($th->getMessage(),null,$th->getCode());
             }
 
             return $this->success('插件更新成功',null, $data);
-        }   
+        }
     }
 
     /**
@@ -156,7 +157,7 @@ class Plugin extends AdminController
             if ($config['status']) {
                 return $this->error('请先禁用插件再卸载');
             }
-            
+
             // 获取插件相关数据表
             if (!empty($tables) && is_array($tables)) {
                 $tables = get_plugin_tables($name);
@@ -169,25 +170,22 @@ class Plugin extends AdminController
                 Service::uninstall($name,true);
 
                 // 执行卸载数据库表
-                if ($tables 
-                    && is_array($tables) 
-                    && Auth::instance()->SuperAdmin()) {
+                if ($tables  && is_array($tables) && Auth::instance()->SuperAdmin()) {
 
                     // 删除插件关联表
                     $prefix = env('database.prefix');
                     foreach ($tables as $table) {
 
                         // 忽略非插件标识的表名
-                        if (!preg_match("/^{$prefix}{$name}/", $table)) {
+                        if (!preg_match("/^$prefix$name/", $table)) {
                             continue;
                         }
 
-                        Db::execute("DROP TABLE IF EXISTS `{$table}`");
+                        Db::execute("DROP TABLE IF EXISTS `$table`");
                     }
-                       
                 }
 
-            } catch (\Throwable $th) {
+            } catch (Throwable $th) {
                 return $this->error($th->getMessage());
             }
 
@@ -199,7 +197,7 @@ class Plugin extends AdminController
      * 修改插件配置信息
      */
     public function config() {
-        
+
         $name = input('name/s');
         $plugin = get_plugin_instance($name);
 
@@ -212,10 +210,10 @@ class Plugin extends AdminController
             $post['extends'] = input('extends');
             $post['rewrite'] = input('rewrite');
             $config = array_merge($config,$post);
-            
+
             try {
                 $plugin->setConfig($name,$config);
-            } catch (\Throwable $th) {
+            } catch (Throwable $th) {
                 return $this->error($th->getMessage());
             }
             return $this->success();
@@ -240,7 +238,7 @@ class Plugin extends AdminController
             foreach ($tables as $index => $table) {
 
                 // 忽略非插件标识的表名
-                if (!preg_match("/^{$prefix}{$name}/", $table)) {
+                if (!preg_match("/^$prefix$name/", $table)) {
                     unset($tables[$index]);
                 }
             }
@@ -250,7 +248,7 @@ class Plugin extends AdminController
             }
 
             return $this->error('当前插件无数据表');
-            
+
         }
 
     }
@@ -272,8 +270,8 @@ class Plugin extends AdminController
                     $action = $status == 1 ? 'enable' : 'disable';
                     Service::$action($name, false);
                     $plugin->setConfig($name,['status'=>$status]);
-                    
-                } catch (\Throwable $th) {
+
+                } catch (Throwable $th) {
                     return $this->error($th->getMessage());
                 }
                 return $this->success();

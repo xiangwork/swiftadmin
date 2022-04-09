@@ -28,7 +28,7 @@ class weixin
 
     public function __construct($options = [])
     {
-        if ($config = saenv('social.weixin')) {
+        if ($config = saenv('weixin')) {
             $this->config = array_merge($this->config, $config);
         }
         $this->config = array_merge($this->config, is_array($options) ? $options : []);
@@ -115,6 +115,7 @@ class weixin
                 return $data;
             }
         }
+
         return [];
     }
 

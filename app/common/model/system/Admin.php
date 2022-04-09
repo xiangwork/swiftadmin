@@ -12,8 +12,8 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 namespace app\common\model\system;
 
-use app\common\library\Content;
 use think\Model;
+use app\common\library\Globals;
 
 /**
  * @mixin \think\Model
@@ -75,7 +75,7 @@ class Admin extends Model
      */
     public function setCreateipAttr($ip)
     {
-        return Content::setIPAttr($ip);
+        return Globals::setIPAttr($ip);
     }
 
     /**
@@ -83,7 +83,7 @@ class Admin extends Model
      */
     public function getCreateipAttr($ip)
     {
-        return Content::getIPAttr($ip);
+        return Globals::getIPAttr($ip);
     }
 
     /**
@@ -91,7 +91,7 @@ class Admin extends Model
      */
     public function setLoginipAttr($ip)
     {
-        return Content::setIPAttr($ip);
+        return Globals::setIPAttr($ip);
     }
 
     /**
@@ -99,6 +99,6 @@ class Admin extends Model
      */
     public function getLoginipAttr($ip)
     {
-        return Content::getIPAttr($ip);
+        return Globals::getIPAttr($ip);
     }
 }

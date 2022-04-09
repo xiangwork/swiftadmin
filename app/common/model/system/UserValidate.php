@@ -3,8 +3,8 @@ declare (strict_types = 1);
 
 namespace app\common\model\system;
 
-use app\common\library\Content;
 use think\Model;
+use app\common\library\Globals;
 use think\model\concern\SoftDelete;
 
 /**
@@ -25,7 +25,7 @@ class UserValidate extends Model
      */
     public function setIPAttr($ip)
     {
-        return Content::setIPAttr($ip);
+        return Globals::setIPAttr($ip);
     }
 
     /**
@@ -36,7 +36,7 @@ class UserValidate extends Model
      */
     public function getIPAttr($ip)
     {
-        return Content::getIPAttr($ip);
+        return Globals::getIPAttr($ip);
     }
 
 }

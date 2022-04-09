@@ -30,7 +30,7 @@ class qq
 
     public function __construct($options = [])
     {
-        if ($config = saenv('social.qq')) {
+        if ($config = saenv('qq')) {
             $this->config = array_merge($this->config, $config);
         }
         $this->config = array_merge($this->config, is_array($options) ? $options : []);

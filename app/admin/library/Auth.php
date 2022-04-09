@@ -17,6 +17,7 @@ use app\common\model\system\Admin as AdminModel;
 use app\common\model\system\AdminRules as AdminRulesModel;
 use app\common\model\system\AdminGroup as AdminGroupModel;
 use app\common\model\system\Category as CategoryModel;
+use think\facade\Event;
 
 /**
  * 后台模块验证类
@@ -292,15 +293,27 @@ class Auth
                 $list = AdminRulesModel::where($where)->order('sort asc')->select()->toArray();
             }
         } else {
-            
-            if (!$this->superAdmin()) {
-                if (!empty($auth_nodes[$class])) {
-                    $list = CategoryModel::field($this->authFields)->whereIn('id',$auth_nodes[$class])->where('status',1)->select()->toArray();
-                } 
-            }
 
-            if (empty($list)) {
-                $list = CategoryModel::field($this->authFields)->where('status',1)->select()->toArray();
+            if (!Event::hasListener('cms_category_auth')) {
+                throw new \Exception('请安装CMS');
+            } else {
+
+                if (!$this->superAdmin()) {
+                    if (!empty($auth_nodes[$class])) {
+                        $list = Event::trigger('cms_category_auth',[
+                            'field' => $this->authFields,
+                            'nodes' => $auth_nodes[$class]
+                        ]);
+                    }
+                }
+
+                if (!isset($list[0]['list']) || empty($list[0]['list'])) {
+                    $list = Event::trigger('cms_category_auth',[
+                        'field' => $this->authFields
+                    ]);
+                }
+
+                $list = $list[0]['list'] ?: [];
             }
         }
   

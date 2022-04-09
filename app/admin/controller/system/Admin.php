@@ -77,7 +77,7 @@ class Admin extends AdminController
             $where[] = ['status', '=', $status];
             $count = $this->model->where($where)->count();
             $page = ($count <= $limit) ? 1 : $page;
-            $list = $this->model->where($where)->order("id asc")->limit($limit)->page($page)->select()->toArray();
+            $list = $this->model->where($where)->order("id asc")->withoutField('pwd')->limit($limit)->page($page)->select()->toArray();
 
             // 循环处理数据
             foreach ($list as $key => $value) {
@@ -163,7 +163,7 @@ class Admin extends AdminController
 
                 // 验证数据
                 $post = input('post.');
-                $post = safe_field_model($post, get_class($this->model));
+                $post = safe_field_model($post, get_class($this->model), 'edit');
                 if (!is_array($post)) {
                     return $this->error($post);
                 }
@@ -261,7 +261,12 @@ class Admin extends AdminController
         if (request()->isAjax()) {
             $action = $action ?? 'getRulesMenu';
             if (is_callable(array($this->auth, $action))) {
-                return call_user_func(array($this->auth, $action), input());
+
+                try {
+                    return call_user_func(array($this->auth, $action), input());
+                } catch (\Throwable $t) {
+                    return $this->error($t->getMessage());
+                }
             }
         }
 
@@ -427,7 +432,7 @@ class Admin extends AdminController
 
             // 查找数据
             $where[] = ['id', '=', $this->admin['id']];
-            $where[] = ['pwd', '=', encryption($pwd)];
+//            $where[] = ['pwd', '=', encryption($pwd)];
             $result = $this->model->where($where)->find();
 
             if (!empty($result)) {

@@ -17,5 +17,5 @@ class PluginException extends Exception
         $this->code     = $code;
         $this->data     = $data;
     }
-
+    
 }

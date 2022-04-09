@@ -27,6 +27,7 @@ return [
         'api'        =>  'api',
         '*'          =>  'index',
     ],
+
     // 禁止URL访问的应用列表（自动多应用模式有效）
     'deny_app_list'    => ['common'],
 
@@ -48,7 +49,10 @@ return [
     'error_message'    => '页面错误！请稍后再试～',
 
     // 框架版本
-    'version'          => 'v1.1.0',
+    'version'          => 'v1.1.1',
+
+    // 插件冲突缓存
+    'plugin_mutex'     => true,
 
     // 跨域请求域名
     'cors_domain'      => ['*', '127.0.0.1'],

@@ -23,16 +23,4 @@ class Index extends ApiController
         return ajax_return('Hallo SwiftAdmin APIs');
     }
 
-    // 列表页
-    public function list()
-    {
-        return ajax_return('Hallo SwiftAdmin List APIs');
-    }
-
-    // 节点数据
-    public function nodes()
-    {
-        return ajax_return('Hallo SwiftAdmin Nodes APIs');
-    }
-
 }

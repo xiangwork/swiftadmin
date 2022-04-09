@@ -326,7 +326,7 @@
                             location.reload();
                         });
                     }else {
-                        layer.msg(res.msg,'error');
+                        layer.error(res.msg);
                     }
                 }
             })
@@ -359,7 +359,7 @@
                     
                     }else {
 
-                        layer.msg(res.msg,'error');
+                        layer.error(res.msg);
                         that.prop('disabled', false);
                         $("#captchaImg,#captchaImg2,#captchaImg3").attr('src',captchaUrl+'?rand='+Math.random()).parents('.layui-form-item').show();
                         if (res.data.token) {

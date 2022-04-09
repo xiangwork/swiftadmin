@@ -18,7 +18,7 @@
 <![endif]-->
 </head>
 <script>
-	var _meystack_global = {
+	var _fr4mework = {
 		app: "{$app|default='admin.php'}",
 		controller: "{$controller|default='index'}",
 		action: "{$action|default='index'}",
@@ -119,7 +119,7 @@
       var admin = layui.admin;
       var dropdown = layui.dropdown;
       var mousewheel = layui.mousewheel;
-     
+
       // 入口函数
       admin.render({
           title:'{:__("主页")}',
@@ -131,23 +131,23 @@
         elem: '#language'
         ,trigger: 'hover'
         ,data: [{
-          title: 'English'
-          ,rd: 'en-us'
-          ,id: 'en'
+          title: 'English',
+          symbol: 'en-US'
         },{
-          title: '中文'
-          ,rd: 'zh-cn'
-          ,id: 'zh'
+          title: '中文',
+          symbol: 'zh-CN'
         }],click: function(obj){
 
           // 避免重复
           var lang = admin.getStorage('language');
-          if (lang == obj.id) {
+          if (lang == obj.symbol) {
             return false;
           }
-          $.get("{:url('/system.admin/language')}?l="+obj.rd,function(params) {
-            admin.setStorage('language',obj.id);
-            admin.changeI18n(obj.id);
+          $.get("{:url('/system.admin/language')}?l="+obj.symbol,function(params) {
+
+            admin.changeI18n(obj.symbol);
+            admin.setStorage('language',obj.symbol);
+
             // 重载页面
             location.reload();
           })

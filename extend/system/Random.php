@@ -41,8 +41,7 @@ class RandomClass
      * class constructor.
      */
     public function __construct()
-    {
-    }
+    {}
 
     /**
      * 初始化
@@ -163,23 +162,5 @@ class RandomClass
             return date('Ymd') . substr(implode('', array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
         }
     }
-
-    /**
-     * 获取全球唯一标识
-     * @return string
-     */
-    public static function uuid()
-    {
-        return sprintf(
-            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0x0fff) | 0x4000,
-            mt_rand(0, 0x3fff) | 0x8000,
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff)
-        );
-    }
+    
 }

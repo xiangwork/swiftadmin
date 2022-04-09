@@ -29,7 +29,7 @@ class gitee
 
     public function __construct($options = [])
     {
-        if ($config = saenv('social.gitee')) {
+        if ($config = saenv('gitee')) {
             $this->config = array_merge($this->config, $config);
         }
         $this->config = array_merge($this->config, is_array($options) ? $options : []);

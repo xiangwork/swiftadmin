@@ -1,5 +1,6 @@
 <?php
-declare (strict_types = 1);
+declare (strict_types=1);
+
 namespace app\common\library;
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -9,7 +10,7 @@ use system\Random;
  * 邮件发送类
  *
  */
-class Email 
+class Email
 {
 
     /**
@@ -20,17 +21,13 @@ class Email
     /**
      * @PHPMailer 对象实例
      */
-    protected $mail = []; 
+    protected $mail = [];
 
     /**
-     * @userValidate 验证码对象实例
+     * @vaObject 验证码对象实例
      */
-    public $userValidate = null;
-    
-    /**
-     * @objectValidate
-     */
-    public $objectValidate = null;
+    public $vaObject = null;
+
 
     /**
      * 错误信息
@@ -39,12 +36,12 @@ class Email
 
 
     //默认配置
-    protected $config = [	
-        'smtp_server' => 'smtp.163.com', 				// 服务器地址
-        'smtp_port' => 578, 							// 服务器端口
-        'smtp_user' => 'yourname@163.com', 				// 邮件用户名
-        'smtp_pass' => '123', 	                        // 邮件密码
-        'smtp_name' => '管理员', 					     // 发送邮件显示
+    protected $config = [
+        'smtp_server' => 'smtp.163.com',                // 服务器地址
+        'smtp_port' => 578,                            // 服务器端口
+        'smtp_user' => 'yourname@163.com',                // 邮件用户名
+        'smtp_pass' => '123',                            // 邮件密码
+        'smtp_name' => '管理员',                         // 发送邮件显示
     ];
 
     /**
@@ -60,22 +57,22 @@ class Email
 
         // 创建PHPMailer对象实例
         $this->mail = new PHPMailer();
-        $this->mail->CharSet = 'UTF-8'; 	
+        $this->mail->CharSet = 'UTF-8';
         $this->mail->IsSMTP();
         /**
          * 是否开启调试模式
          */
-		$this->mail->SMTPDebug = $this->config['smtp_debug'];
-		$this->mail->SMTPAuth = true; 
-		$this->mail->SMTPSecure = 'ssl'; 	
-		$this->mail->Host = $this->config['smtp_server'];				 	
-		$this->mail->Port = $this->config['smtp_port'];
-		$this->mail->Username = $this->config['smtp_user'];			
-		$this->mail->Password = trim($this->config['smtp_pass']);	 		
-        $this->mail->SetFrom($this->config['smtp_user'],$this->config['smtp_name']);
+        $this->mail->SMTPDebug = $this->config['smtp_debug'];
+        $this->mail->SMTPAuth = true;
+        $this->mail->SMTPSecure = 'ssl';
+        $this->mail->Host = $this->config['smtp_server'];
+        $this->mail->Port = $this->config['smtp_port'];
+        $this->mail->Username = $this->config['smtp_user'];
+        $this->mail->Password = trim($this->config['smtp_pass']);
+        $this->mail->SetFrom($this->config['smtp_user'], $this->config['smtp_name']);
 
         // 实例化数据库对象
-        $this->userValidate = new \app\common\model\system\UserValidate();
+        $this->vaObject = new \app\common\model\system\UserValidate();
     }
 
     /**
@@ -95,10 +92,10 @@ class Email
 
     /**
      * 设置邮件主题
-     * @param string $subject   邮件主题
+     * @param string $subject 邮件主题
      * @return $this
      */
-    public function Subject($subject) 
+    public function Subject($subject)
     {
         $this->mail->Subject = $subject;
         return $this;
@@ -106,8 +103,8 @@ class Email
 
     /**
      * 设置发件人
-     * @param string $email     发件人邮箱
-     * @param string $name      发件人名称
+     * @param string $email 发件人邮箱
+     * @param string $name 发件人名称
      * @return $this
      */
     public function from($email, $name = '')
@@ -118,11 +115,11 @@ class Email
 
     /**
      * 设置邮件内容
-     * @param string  $body     邮件下方
-     * @param boolean $isHtml   是否HTML格式
+     * @param string $body 邮件下方
+     * @param boolean $isHtml 是否HTML格式
      * @return $this
      */
-    public function MsgHTML($MsgHtml, bool $isHtml = true) 
+    public function MsgHTML($MsgHtml, bool $isHtml = true)
     {
         if ($isHtml) {
             $this->mail->msgHTML($MsgHtml);
@@ -134,8 +131,8 @@ class Email
 
     /**
      * 设置收件人
-     * @param mixed  $email     收件人,多个收件人以,进行分隔
-     * @param string $name      收件人名称
+     * @param mixed $email 收件人,多个收件人以,进行分隔
+     * @param string $name 收件人名称
      * @return $this
      */
     public function to($email, $name = '')
@@ -150,8 +147,8 @@ class Email
 
     /**
      * 添加附件
-     * @param string $path      附件路径
-     * @param string $name      附件名称
+     * @param string $path 附件路径
+     * @param string $name 附件名称
      * @return Email
      */
     public function attachment($path, $name = '')
@@ -159,13 +156,13 @@ class Email
         if (is_file($path)) {
             $this->mail->addAttachment($path, $name);
         }
-        
+
         return $this;
     }
 
     /**
      * 构建Email地址
-     * @param mixed $emails     Email数据
+     * @param mixed $emails Email数据
      * @return array
      */
     protected function buildAddress($emails)
@@ -176,47 +173,65 @@ class Email
             $email = is_numeric($key) ? $value : $key;
             $result[$email] = is_numeric($key) ? "" : $value;
         }
-        
+
         return $result;
     }
 
     /**
      * 发送验证码
      */
-    public function captcha(string $email, string $code = null, string $event ="default") 
+    public function captcha(string $email = '', string $event = "default")
     {
-        $code = $code ?? Random::alpha(4);
-        $array['code'] = $code;
-        $array['event'] = $event;
-        $array['email'] = $email;
+        $code = Random::number();
+        $array = [
+            'code' => $code,
+            'event' => $event,
+            'email' => $email,
+        ];
 
-        // 返回对象实例
-        $this->objectValidate = $this->userValidate->create($array);
+        $this->vaObject->create($array);
 
         // 设置标题
-        $this->to($email)->Subject("验证码")->MsgHTML("验证码为：".$code);
+        $this->to($email)->Subject("验证码")->MsgHTML("验证码为：" . $code);
+
         return $this;
     }
 
     /**
      * 检查验证码
+     * @param string $email
+     * @param string $event
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
-    public function check(string $email, string $event = "default") 
+    public function check(string $email, $code = '', string $event = "default")
     {
+        $result = $this->vaObject->where([
+            ['event', '=', $event],
+            ['email', '=', $email],
+            ['status', '=', 1],
+        ])->order("id", "desc")->find();
 
-        $where['event'] = $event;
-        $where['email'] = $email;
-        $this->objectValidate = $this->userValidate->where($where)->order("id","desc")->find();
-        if (!empty($this->objectValidate)) {
+        if (!empty($result) && $result->code == $code) {
 
-            $difftime = time() - strtotime($this->objectValidate['createtime']);
+            // 验证码失效
+            $result->status = 0;
+            $result->save();
+
+            // 计算间隔期
+            $time = strtotime($result['createtime']);
+            $difftime = time() - $time;
+
             if (($difftime / 60) <= saenv('user_valitime')) {
                 return true;
             }
 
-            // 删除验证码
-            $this->objectValidate->delete();
             $this->setError("当前验证码已过期！");
+
+        } else {
+            $this->setError("无效验证码");
         }
 
         return false;
@@ -261,19 +276,19 @@ class Email
     /**
      * 测试发送
      */
-    public function testEmail($config) 
+    public function testEmail($config)
     {
 
         if (empty($config) || !is_array($config)) {
             return '缺少必要的信息';
         }
 
-        $this->config = array_merge($this->config,$config);
-		$this->mail->Host = $this->config['smtp_server'];				 	
-		$this->mail->Port = $this->config['smtp_port'];
-		$this->mail->Username = $this->config['smtp_user'];			
-		$this->mail->Password = trim($this->config['smtp_pass']);	 		
-        $this->mail->SetFrom($this->config['smtp_user'],$this->config['smtp_name']); 
+        $this->config = array_merge($this->config, $config);
+        $this->mail->Host = $this->config['smtp_server'];
+        $this->mail->Port = $this->config['smtp_port'];
+        $this->mail->Username = $this->config['smtp_user'];
+        $this->mail->Password = trim($this->config['smtp_pass']);
+        $this->mail->SetFrom($this->config['smtp_user'], $this->config['smtp_name']);
         return $this->to($config['smtp_test'])->Subject("测试邮件")->MsgHTML("如果您看到这封邮件，说明测试成功了！")->send();
     }
 

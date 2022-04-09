@@ -112,8 +112,10 @@ layui.define(function (exports) {
             // 3. with language code and country code (eg, Messages_pt_BR.properties)
             if (settings.language.length >= 5) {
                 var longCode = settings.language.substring(0, 5);
+                longCode = longCode.replace('_','-');
                 longFileName = settings.path + file + '_' + longCode + '.properties';
-                fileNames = [defaultFileName, shortFileName, longFileName];
+                // fileNames = [defaultFileName, shortFileName, longFileName];
+                fileNames = [longFileName];
             } else {
                 fileNames = [defaultFileName, shortFileName];
             }
@@ -152,8 +154,8 @@ layui.define(function (exports) {
         }
 
         var value = (namespace) ? $.i18n.map[namespace][key] : $.i18n.map[key];
-        if (value === null) {
-            return '[' + ((namespace) ? namespace + '#' + key : key) + ']';
+        if (value === null || typeof value == 'undefined') {
+            return ((namespace) ? namespace + '#' + key : key);
         }
 
         // Place holder replacement
@@ -514,6 +516,7 @@ layui.define(function (exports) {
             path: layui.cache.base + 'i18n/properties',
             mode: 'map',
             language: type,
+            async : true,
             callback: function () { }
         });
     }

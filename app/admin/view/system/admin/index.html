@@ -108,7 +108,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('密码')}</label>
         <div class="layui-input-inline">
-            <input name="pwd" placeholder="{:__('请输入密码')}" type="password" class="layui-input"  lay-verify="required" />
+            <input name="pwd" placeholder="{:__('无需修改可留空')}" type="password" class="layui-input"  />
         </div>
         <label class="layui-form-label">{:__('邮箱')}</label>
         <div class="layui-input-inline">
@@ -342,7 +342,7 @@
                             layer.close(colletction.index);
                         }
                         else {
-                            layer.msg(res.msg,'error');
+                            layer.error(res.msg);
                         }
 
                 }, 'json');
@@ -356,11 +356,17 @@
 
             var tableThis = colletction.tableThis,
                 event = tableThis.event;
+
+            var rules = _ajax('getrulecatestree',event,'private');
+            if (typeof rules.code != "undefined") {
+                return layer.msg(rules.msg,'info');
+            }
+
             // 创建实例
             tree.render({
                 id: 'authTree',
                 elem: '#authTree',
-                data: _ajax('getrulecatestree',event,'private'),
+                data: rules,
                 showCheckbox: true,
                 checkids: tableThis.data[event].map(Number)
             })
@@ -387,7 +393,7 @@
                             layer.msg(res.msg);
                             layer.close(colletction.index);
                         }else {
-                            layer.msg(res.msg,'error');                         
+                            layer.error(res.msg);                         
                         }
                 }, 'json');
 

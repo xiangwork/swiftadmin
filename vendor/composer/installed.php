@@ -5,38 +5,11 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'ff8b761ad615e5a409de144b4cf216e3f18313f2',
+        'reference' => 'b1b8b0bab74ee9e74f3552ddd16cd88c0779965f',
         'name' => 'topthink/think',
         'dev' => true,
     ),
     'versions' => array(
-        'elasticsearch/elasticsearch' => array(
-            'pretty_version' => 'v7.17.0',
-            'version' => '7.17.0.0',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../elasticsearch/elasticsearch',
-            'aliases' => array(),
-            'reference' => '1890f9d7fde076b5a3ddcf579a802af05b2e781b',
-            'dev_requirement' => false,
-        ),
-        'ezimuel/guzzlestreams' => array(
-            'pretty_version' => '3.0.1',
-            'version' => '3.0.1.0',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../ezimuel/guzzlestreams',
-            'aliases' => array(),
-            'reference' => 'abe3791d231167f14eb80d413420d1eab91163a8',
-            'dev_requirement' => false,
-        ),
-        'ezimuel/ringphp' => array(
-            'pretty_version' => '1.2.0',
-            'version' => '1.2.0.0',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../ezimuel/ringphp',
-            'aliases' => array(),
-            'reference' => '92b8161404ab1ad84059ebed41d9f757e897ce74',
-            'dev_requirement' => false,
-        ),
         'firebase/php-jwt' => array(
             'pretty_version' => 'v6.0.0',
             'version' => '6.0.0.0',
@@ -72,12 +45,6 @@
             'aliases' => array(),
             'reference' => '1afdd860a2566ed3c2b0b4a3de6e23434a79ec85',
             'dev_requirement' => false,
-        ),
-        'guzzlehttp/ringphp' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => '1.2.0',
-            ),
         ),
         'league/flysystem' => array(
             'pretty_version' => '1.1.9',
@@ -193,15 +160,6 @@
             'reference' => '120b605dfeb996808c31b6477290a714d356e822',
             'dev_requirement' => false,
         ),
-        'react/promise' => array(
-            'pretty_version' => 'v2.9.0',
-            'version' => '2.9.0.0',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../react/promise',
-            'aliases' => array(),
-            'reference' => '234f8fd1023c9158e2314fa9d7d0e6a83db42910',
-            'dev_requirement' => false,
-        ),
         'symfony/polyfill-intl-idn' => array(
             'pretty_version' => 'v1.25.0',
             'version' => '1.25.0.0',
@@ -271,7 +229,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'ff8b761ad615e5a409de144b4cf216e3f18313f2',
+            'reference' => 'b1b8b0bab74ee9e74f3552ddd16cd88c0779965f',
             'dev_requirement' => false,
         ),
         'topthink/think-captcha' => array(

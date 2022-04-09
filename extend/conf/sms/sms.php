@@ -29,7 +29,7 @@ return array (
 		'register'=>array(
 			'name'=>'用户注册',
 			'auto'=> true,
-			'template'=>'870540'
+			'template'=>'1361749'
 		),
 		'forgot'=>array(
 			'name'=>'找回密码',

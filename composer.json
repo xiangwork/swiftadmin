@@ -32,7 +32,6 @@
         "meystack/plugin": "^1.0",
         "overtrue/pinyin": "^4.0",
         "firebase/php-jwt": "^6.0",
-        "elasticsearch/elasticsearch": "^7.17",
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-iconv": "*",

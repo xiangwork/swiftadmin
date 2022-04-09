@@ -129,6 +129,7 @@ class HomeController extends BaseController
             }
 
             $this->app->view->assign('user', $this->auth->userInfo);
+
         } else { // 非鉴权方法
             if ($this->needLogin && !in_array($this->action, $this->noNeedLogin)) {
                 return $this->error('请登录后访问', '/');

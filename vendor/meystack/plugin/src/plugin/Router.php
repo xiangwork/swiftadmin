@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 // +----------------------------------------------------------------------
 // | swiftAdmin 极速开发框架 [基于ThinkPHP6开发]
 // +----------------------------------------------------------------------
@@ -10,13 +11,14 @@ declare(strict_types = 1);
 // | Author: 权栈 <coolsec@foxmail.com> MIT License Code
 // +----------------------------------------------------------------------
 namespace think\plugin;
+
 use think\facade\View;
 
 /**
  * 插件路由函数
  * @package think\Router
  */
-class Router 
+class Router
 {
     /**
      * 插件路由器
@@ -28,7 +30,7 @@ class Router
         foreach ($param as &$value) {
             $value = strtolower($value);
         }
-        
+
         // 默认控制器
         $controller = $controller ?? 'index';
         $action = $action ?? 'index';
@@ -45,7 +47,7 @@ class Router
             }
 
             // 执行操作方法
-            $class = get_plugin_class($plugin,'controller',$controller);
+            $class = get_plugin_class($plugin, 'controller', $controller);
             if (!$class) {
                 throw new \think\exception\HttpException(404, __('插件控制器 %s 不存在', $controller));
             }
@@ -56,23 +58,21 @@ class Router
             if (is_callable([$instance, $action])) {
 
                 // 改变视图
-                $path = $pluginInfo['path'].'view'.DIRECTORY_SEPARATOR;
+                $path = $pluginInfo['path'] . 'view' . DIRECTORY_SEPARATOR;
                 View::config(['view_path' => $path]);
-                
+
                 // 执行操作方法
                 $call = [$instance, $action];
-
-            } else { 
+            } else {
 
                 // 操作方法不存在
-                $vars = [get_class($instance).'->'.$action.'()'];
+                $vars = [get_class($instance) . '->' . $action . '()'];
                 throw new \think\exception\HttpException(404, __('插件方法 %s 不存在', $vars));
             }
 
             // 执行插件实例函数
             return call_user_func_array($call, $vars);
-        }
-        else {
+        } else {
             abort(500, __('插件不存在或已被禁用'));
         }
     }

@@ -12,27 +12,11 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 namespace app\common\library;
 
-use think\facade\Db;
-use app\common\library\ResultCode;
-use app\common\model\system\ApiCondition;
-use app\common\model\system\User as UserModel;
 use system\Random;
-
-/**
- * 会员鉴权常量
- */
-const AUTH     = 1;
-const ALLM     = 2;
-const DISABLE  = 2;
+use app\common\model\system\User as UserModel;
 
 class Auth
 {
-    /**
-     * 数据库实例
-     * @var object
-     */
-    protected $model = null;
-
     /**
      * token令牌
      * @var string
@@ -46,37 +30,10 @@ class Auth
     public $userInfo = null;
 
     /**
-     * API类接口
-     * @var string
-     */
-    public $classHash = null;
-
-    /**
-     * API节点
-     * @var string
-     */
-    public $nodeHash = null;
-
-    /**
-     * API参数接口
-     * @var string
-     */
-    public $params = [];
-
-    /**
      * 保活时间
      * @var string
      */
-    protected $keepTime = 2592000;
-
-    /**
-     * 接口访问类型
-     * @var array
-     */
-    protected $method = [
-        '0' => 'GET',
-        '1' => 'POST'
-    ];
+    protected $keepTime = 604800;
 
     /**
      * 错误信息
@@ -96,6 +53,7 @@ class Auth
     public function __construct($config = [])
     {
         $this->request = \think\facade\Request::instance();
+        $this->keepTime = config('cookie.expire');
     }
 
     /**
@@ -113,198 +71,6 @@ class Auth
 
         // 返回实例
         return self::$instance;
-    }
-
-    /**
-     * API权限验证
-     * @param string|null $class
-     * @return bool
-     */
-    public function checkApi(string $class = null)
-    {
-
-        // 请求参数
-        $this->params = input();
-        if ((!isset($this->params['app_id'])
-                || !isset($this->params['app_secret']))
-            && !isset($this->params['token'])
-        ) {
-            $this->setError(ResultCode::PARAMERROR);
-            return false;
-        }
-
-        // 优先缓存读取
-        $this->classHash = sha1($class);
-        $restful = system_cache($this->classHash);
-        if (empty($restful)) {
-            $restful = Db::name('api')->where('class', $class)->find();
-            system_cache($this->classHash, $restful, saenv('cache_time'));
-        }
-
-        // 校验请求方式
-        if (!$this->checkMothod($restful)) {
-            return false;
-        }
-
-        // 接口是否鉴权
-        if ($restful['status'] == AUTH) {
-
-            // 是否token鉴权
-            if ($restful['access'] == ALLM) {
-                $this->token = $this->params['token'] ?? '';
-                $data = $this->checkToken($this->token);
-                if ($data === false) {
-                    $this->setError(ResultCode::TOKEN_INVALID);
-                    return false;
-                }
-                $this->params = $data;
-            }
-
-            if (
-                !$this->params['app_id']
-                || !$this->params['app_secret']
-            ) {
-                $this->setError(ResultCode::LACKPARAME);
-                return false;
-            }
-
-            // 默认走普通流程
-            $list = $this->getApiRuleList();
-            if (!$nodes = list_search($list, ['class' => $class])) {
-                $this->setError(ResultCode::AUTH_ERROR);
-                return false;
-            }
-
-            // 判断余量
-            if (!$this->checkCallLimit($nodes)) {
-                return false;
-            }
-        } else if ($restful['status'] == DISABLE) {
-            $this->setError(ResultCode::API_DISABLE);
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * 访问方式
-     * @access protected
-     * @param  array    $restful     当前接口数据
-     * @return bool
-     */
-    protected function checkMothod(array $restful = [])
-    {
-        if (
-            $restful['method'] !== ALLM
-            && $this->method[$restful['method']] !== request()->method()
-        ) {
-            $this->setError(ResultCode::METHOD_INVALID);
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * 获取权限列表
-     * @access protected
-     * @return array
-     */
-    protected function getApiRuleList()
-    {
-        // 读取节点缓存
-        $where['app_id'] = $this->params['app_id'];
-        $where['app_secret'] = $this->params['app_secret'];
-        $this->nodeHash = sha1(implode('.', $where));
-        $list = system_cache($this->nodeHash);
-
-        if (empty($list)) {
-            $list = Db::view('user', 'id')
-                ->view('api_access', '*', 'api_access.user_id=user.id')
-                ->view('api', 'class', 'api.id=api_access.api_id')
-                ->where([
-                    'user.app_id' => $this->params['app_id'],
-                    'user.app_secret' => $this->params['app_secret'],
-                ])->select()->toArray();
-            // 修改后请清理缓存
-            if ($list) {
-                system_cache($this->nodeHash, $list, saenv('cache_time'));
-            }
-        }
-
-        return $list ?? [1];
-    }
-
-    /**
-     * 接口其他限制
-     * @access protected 
-     * @param  array    $result     当前接口规则
-     * @return bool
-     */
-    protected function checkCallLimit(array $result = [])
-    {
-        // 查询规则
-        $access = md5($this->params['app_id'] . $result['class']);
-        if ($result['day'] || $result['ceiling'] || $result['seconds']) {
-            $condition = ApiCondition::where('hash', $access)->find();
-            if (empty($condition)) {
-                $condition = [
-                    'day' => 0,
-                    'seconds' => time(),
-                    'ceiling' => 0,
-                ];
-            }
-        }
-
-        // API每日上限
-        if ($result['day'] && $condition['day'] >= $result['day']) {
-            $this->setError(ResultCode::DAY_INVALID);
-            return false;
-        }
-
-        // 调用间隔/秒
-        if ($result['seconds'] && (time() - $condition['seconds']) <= $result['seconds']) {
-            $this->setError(ResultCode::API_SPEED_INVALID);
-            return false;
-        }
-
-        // 接口调用总数
-        if ($result['ceiling'] && $condition['ceiling'] >= $result['ceiling']) {
-            $this->setError(ResultCode::CEILING_INVALID);
-            return false;
-        }
-
-        try {
-
-            if ($result['day'] || $result['ceiling'] || $result['seconds']) {
-
-                $condition['day'] += 1;
-                $condition['ceiling'] += 1;
-                $condition['seconds'] = time();
-                if (is_object($condition)) {
-
-                    // 次日初始化
-                    $daytime = strtotime($condition['createtime']);
-                    if (date('Ymd', $daytime) != date('Ymd')) {
-                        $condition['day'] = 1;
-                    }
-
-                    // 更新数据
-                    $condition->save();
-                } else {
-
-                    // 创建新规则
-                    $condition['hash'] = $access;
-                    ApiCondition::create($condition);
-                }
-            }
-        } catch (\Throwable $th) {
-            $this->setError($th->getMessage());
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -379,8 +145,10 @@ class Auth
 
         if (!empty($this->userInfo)) {
 
-            if ($this->userInfo->pwd != member_encrypt($pwd, $this->userInfo->salt)) {
+            $uPwd = encryptPwd($pwd, $this->userInfo->salt);
+            if ($this->userInfo->pwd != $uPwd) {
                 $this->setError('用户名或密码错误');
+                return false;
             }
 
             if (!$this->userInfo['status']) {
@@ -394,7 +162,7 @@ class Auth
             $this->userInfo->logincount++;
 
             if ($this->userInfo->save()) {
-                $this->returnToken($this->userInfo, false);
+                $this->returnToken($this->userInfo);
                 return true;
             }
 
@@ -462,7 +230,7 @@ class Auth
      * @access protected
      * @return mixed   
      */
-    protected function buildToken(mixed $id)
+    protected function buildToken($id = 0)
     {
         return md5(Random::alpha(16) . $id);
     }

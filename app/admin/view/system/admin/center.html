@@ -138,7 +138,7 @@
             <div class="layui-card">
                 <div class="layui-card-body" style="padding: 25px;">
                     <div class="text-center layui-text">
-                        <div class="user-info-head" id="imgHead" lay-upload="imgHead" data-url="/upload/avatar?auth_key={:saenv('auth_key')}" callback="imgHead">
+                        <div class="user-info-head" id="imgHead" lay-upload="imgHead" data-url="{:url('/upload/avatar/')}auth_key={:saenv('auth_key')}" callback="imgHead">
                             <img src="{$data.face}" class="imgHead" />
                         </div>
                         <h2 style="padding-top: 20px;">{$data.nickname|default='没有昵称'}</h2>
@@ -233,14 +233,14 @@
                                     <div class="bd-list-item">
                                         <div class="bd-list-item-content">
                                             <div class="bd-list-item-lable">{:__('密保手机')}</div>
-                                            <div class="bd-list-item-text">{:__('已绑定手机')}：{$data.mobile|hide_str}</div>
+                                            <div class="bd-list-item-text">{:__('已绑定手机')}：{$data.mobile}</div>
                                         </div>
                                         <a class="bd-list-item-oper">{:__('修改')}</a>
                                     </div>
                                     <div class="bd-list-item">
                                         <div class="bd-list-item-content">
                                             <div class="bd-list-item-lable">{:__('密保邮箱')}</div>
-                                            <div class="bd-list-item-text">{:__('已绑定邮箱')}：{$data.email|hide_str}</div>
+                                            <div class="bd-list-item-text">{:__('已绑定邮箱')}：{$data.email}</div>
                                         </div>
                                         <a class="bd-list-item-oper">{:__('修改')}</a>
                                     </div>
@@ -299,7 +299,7 @@
                 })
             }
             else {
-                layer.msg(res.msg,'error');
+                layer.error(res.msg);
             }
         }
 
@@ -347,7 +347,7 @@
                     elem += '</span>';
                     jquery('.layui-badge-list').append(elem);
                 }else {
-                    layer.msg(res.msg,'error');
+                    layer.error(res.msg);
                 }
             })                       
         })
@@ -364,7 +364,7 @@
                 if (res.code == 200) {
                     that.parent('span').remove();
                 }else {
-                    layer.msg(res.msg,'error');
+                    layer.error(res.msg);
                 }
             })             
         })

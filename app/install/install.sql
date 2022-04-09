@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost_3306
+ Source Server         : 49.235.250.38_3306
  Source Server Type    : MySQL
- Source Server Version : 50726
- Source Host           : localhost:3306
+ Source Server Version : 50734
+ Source Host           : 49.235.250.38:3306
  Source Schema         : sademo
 
  Target Server Type    : MySQL
- Target Server Version : 50726
+ Target Server Version : 50734
  File Encoding         : 65001
 
- Date: 16/03/2022 14:11:01
+ Date: 09/04/2022 22:25:10
 */
 
 SET NAMES utf8mb4;
@@ -51,13 +51,13 @@ CREATE TABLE `sa_admin`  (
   INDEX `id`(`id`) USING BTREE,
   INDEX `name`(`name`) USING BTREE,
   INDEX `pwd`(`pwd`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '后台管理员表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '后台管理员表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_admin
 -- ----------------------------
-INSERT INTO `sa_admin` VALUES (1, '1', '2', '3', 'admin', '权栈', '89780c1518385ef45fd8d8256074e8df', 1, 'a:2:{i:3;s:15:\"隔壁帅小伙\";i:4;s:9:\"技术宅\";}', '/upload/avatar/f8e34ec67a2a0233_100x100.jpg', '海阔天空，有容乃大', 'admin@swiftadmin.net', '0310', '15188888888', '高级管理人员', 188, '河北省邯郸市', 2130706433, 1647329152, 3232254977, 1, NULL, 1596682835, 1647399260, NULL);
-INSERT INTO `sa_admin` VALUES (2, '2', '4', '5,6', 'ceshi', '白眉大侠', '89780c1518385ef45fd8d8256074e8df', 1, 'a:3:{i:0;s:6:\"呵呵\";i:1;s:5:\"Think\";i:2;s:12:\"铁血柔肠\";}', '/upload/avatar/a0b923820dcc509a_100x100.png', '吃我一招乾坤大挪移', 'baimei@your.com', '0310', '15188888888', '我原本以为吕布已经天下无敌了，没想到还有比吕布勇猛的，这谁的部将？', 40, '河北省邯郸市廉颇大道110号指挥中心', 2130706433, 1647001149, 3232254977, 1, '违规', 1609836672, 1647001149, NULL);
+INSERT INTO `sa_admin` VALUES (1, '1', '2', '3', 'admin', '权栈', '7fef6171469e80d32c0559f88b377245', 1, 'a:2:{i:3;s:15:\"隔壁帅小伙\";i:4;s:9:\"技术宅\";}', '/static/images/avatar/master.jpg', '海阔天空，有容乃大', 'admin@swiftadmin.net', '0310', '15188888888', '高级管理人员', 199, '河北省邯郸市', 1696378740, 1649514119, 3232254977, 1, NULL, 1596682835, 1649514119, NULL);
+INSERT INTO `sa_admin` VALUES (2, '2', '4', '5,6', 'ceshi', '白眉大侠', '7fef6171469e80d32c0559f88b377245', 1, 'a:3:{i:0;s:6:\"呵呵\";i:1;s:5:\"Think\";i:2;s:12:\"铁血柔肠\";}', '/static/images/avatar/master.png', '成交四海，世界和平', 'baimei@your.com', '0310', '15188888888', '我原本以为吕布已经天下无敌了，没想到还有比吕布勇猛的，这谁的部将？', 40, '河北省邯郸市廉颇大道110号指挥中心', 2130706433, 1647001149, 3232254977, 1, '违规', 1609836672, 1649308446, NULL);
 
 -- ----------------------------
 -- Table structure for sa_admin_access
@@ -71,12 +71,12 @@ CREATE TABLE `sa_admin_access`  (
   PRIMARY KEY (`admin_id`) USING BTREE,
   INDEX `uid`(`admin_id`) USING BTREE,
   INDEX `group_id`(`group_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '组规则表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '组规则表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_admin_access
 -- ----------------------------
-INSERT INTO `sa_admin_access` VALUES (1, '1', NULL, NULL);
+INSERT INTO `sa_admin_access` VALUES (1, '1', '182,183,184,185,186,187,188,189,190', NULL);
 INSERT INTO `sa_admin_access` VALUES (2, '2', '5,12,13,14,15,16,17,31,37,40,85,86,87,88,89,90,91,97,98,99,100,101,102,109,110,111,112,113,114,115,116,117,118,119,120,121', '');
 
 -- ----------------------------
@@ -98,7 +98,7 @@ CREATE TABLE `sa_admin_group`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户组表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户组表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_admin_group
@@ -130,7 +130,7 @@ CREATE TABLE `sa_admin_rules`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
   INDEX `sort`(`sort`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 283 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单权限表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 303 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_admin_rules
@@ -139,32 +139,6 @@ INSERT INTO `sa_admin_rules` VALUES (1, 0, 'Dashboard', '#', '#', 0, NULL, '', 0
 INSERT INTO `sa_admin_rules` VALUES (2, 1, '控制台', '/index/console', 'index:console', 0, NULL, '', 1, '', 0, 'normal', 0, 1621989902, 1621989902, NULL);
 INSERT INTO `sa_admin_rules` VALUES (3, 1, '分析页', '/index/analysis', 'index:analysis', 0, NULL, '', 2, '', 0, 'normal', 0, 1621989902, 1621989902, NULL);
 INSERT INTO `sa_admin_rules` VALUES (4, 1, '监控页', '/index/monitor', 'index:monitor', 0, NULL, '', 3, '', 0, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (5, 0, '内容管理', '#', '#', 0, NULL, '', 4, 'layui-icon-app', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (6, 5, '栏目管理', '/system.category/index', 'system.category:index', 0, NULL, '', 5, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (7, 6, '查看', '/system.category/index', 'system.category:index', 1, NULL, '', 6, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (8, 6, '添加', '/system.category/add', 'system.category:add', 1, NULL, '', 7, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (9, 6, '编辑', '/system.category/edit', 'system.category:edit', 1, NULL, '', 8, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (10, 6, '删除', '/system.category/del', 'system.category:del', 1, NULL, '', 9, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (11, 6, '状态', '/system.category/status', 'system.category:status', 2, NULL, '', 10, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (12, 5, '内容管理', '/system.content/index', 'system.content:index', 0, NULL, '', 11, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (13, 12, '查看', '/system.content/index', 'system.content:index', 1, NULL, '', 12, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (14, 12, '添加', '/system.content/add', 'system.content:add', 1, NULL, '', 13, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (15, 12, '编辑', '/system.content/edit', 'system.content:edit', 1, NULL, '', 14, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (16, 12, '删除', '/system.content/del', 'system.content:del', 1, NULL, '', 15, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (17, 12, '状态', '/system.content/status', 'system.content:status', 1, NULL, '', 16, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (18, 5, '导航管理', '/system.navmenu/index', 'system.navmenu:index', 0, NULL, '', 17, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (19, 18, '查看', '/system.navmenu/index', 'system.navmenu:index', 1, NULL, '', 18, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (20, 18, '添加', '/system.navmenu/add', 'system.navmenu:add', 1, NULL, '', 19, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (21, 18, '编辑', '/system.navmenu/edit', 'system.navmenu:edit', 1, NULL, '', 20, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (22, 18, '删除', '/system.navmenu/del', 'system.navmenu:del', 1, NULL, '', 21, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (23, 18, '状态', '/system.navmenu/status', 'system.navmenu:status', 2, NULL, '', 22, '', 1, 'normal', 0, 1621989902, 1621989902, NULL);
-INSERT INTO `sa_admin_rules` VALUES (24, 0, '运营管理', '#', '#', 0, NULL, '', 23, 'layui-icon-rmb', 1, 'normal', 0, 1621989903, 1621989903, NULL);
-INSERT INTO `sa_admin_rules` VALUES (25, 24, '广告管理', '/system.adwords/index', 'system.adwords:index', 0, NULL, '', 24, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
-INSERT INTO `sa_admin_rules` VALUES (26, 25, '查看', '/system.adwords/index', 'system.adwords:index', 1, NULL, '', 25, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
-INSERT INTO `sa_admin_rules` VALUES (27, 25, '添加', '/system.adwords/add', 'system.adwords:add', 1, NULL, '', 26, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
-INSERT INTO `sa_admin_rules` VALUES (28, 25, '编辑', '/system.adwords/edit', 'system.adwords:edit', 1, NULL, '', 27, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
-INSERT INTO `sa_admin_rules` VALUES (29, 25, '删除', '/system.adwords/del', 'system.adwords:del', 1, NULL, '', 28, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
-INSERT INTO `sa_admin_rules` VALUES (30, 25, '状态', '/system.adwords/status', 'system.adwords:status', 2, NULL, '', 29, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
 INSERT INTO `sa_admin_rules` VALUES (31, 0, '系统管理', '#', '#', 0, NULL, '', 30, 'layui-icon-set-fill', 1, 'normal', 0, 1621989903, 1621989903, NULL);
 INSERT INTO `sa_admin_rules` VALUES (32, 31, '基本设置', '/index/basecfg', 'index:basecfg', 0, NULL, '', 31, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
 INSERT INTO `sa_admin_rules` VALUES (33, 32, '修改配置', '/index/baseset', 'index:baseset', 2, NULL, '', 32, '', 1, 'normal', 0, 1621989903, 1621989903, NULL);
@@ -210,56 +184,6 @@ INSERT INTO `sa_admin_rules` VALUES (81, 77, '删除', '/system.adminrules/del',
 INSERT INTO `sa_admin_rules` VALUES (82, 77, '状态', '/system.adminrules/status', 'system.adminrules:status', 2, NULL, '', 81, NULL, 1, 'normal', 0, 1621989905, 1621989905, NULL);
 INSERT INTO `sa_admin_rules` VALUES (83, 31, '操作日志', '/system.systemlog/index', 'system.systemlog:index', 0, NULL, '', 82, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
 INSERT INTO `sa_admin_rules` VALUES (84, 83, '查询', '/system.systemlog/index', 'system.systemlog:index', 1, NULL, '', 83, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
-INSERT INTO `sa_admin_rules` VALUES (85, 0, 'SEO设置', '#', '#', 0, NULL, '', 84, 'layui-icon-util', 1, 'normal', 0, 1621989905, 1621989905, NULL);
-INSERT INTO `sa_admin_rules` VALUES (86, 85, '网址管理', '/system.rewrite/index', 'system.rewrite:index', 0, NULL, '', 85, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
-INSERT INTO `sa_admin_rules` VALUES (87, 86, '查看', '/system.rewrite/index', 'system.rewrite:index', 1, NULL, '', 86, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
-INSERT INTO `sa_admin_rules` VALUES (88, 86, '编辑', '/system.rewrite/basecfg', 'system.rewrite:basecfg', 1, NULL, '', 87, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
-INSERT INTO `sa_admin_rules` VALUES (89, 86, '生成首页', '/system.rewrite/createindex', 'system.rewrite:createindex', 2, NULL, '', 88, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
-INSERT INTO `sa_admin_rules` VALUES (90, 86, '生成内容', '/system.rewrite/createhtml', 'system.rewrite:createhtml', 2, NULL, '', 89, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
-INSERT INTO `sa_admin_rules` VALUES (91, 86, '网站地图', '/system.rewrite/createmap', 'system.rewrite:createmap', 2, NULL, '', 90, '', 1, 'normal', 0, 1621989905, 1621989905, NULL);
-INSERT INTO `sa_admin_rules` VALUES (97, 85, '标签管理', '/system.tags/index', 'system.tags:index', 0, NULL, '', 96, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
-INSERT INTO `sa_admin_rules` VALUES (98, 97, '查看', '/system.tags/index', 'system.tags:index', 1, NULL, '', 97, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
-INSERT INTO `sa_admin_rules` VALUES (99, 97, '添加', '/system.tags/add', 'system.tags:add', 1, NULL, '', 98, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
-INSERT INTO `sa_admin_rules` VALUES (100, 97, '编辑', '/system.tags/edit', 'system.tags:edit', 1, NULL, '', 99, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
-INSERT INTO `sa_admin_rules` VALUES (101, 97, '删除', '/system.tags/del', 'system.tags:del', 1, NULL, '', 100, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
-INSERT INTO `sa_admin_rules` VALUES (102, 97, '状态', '/system.tags/status', 'system.tags:status', 1, NULL, '', 101, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
-INSERT INTO `sa_admin_rules` VALUES (109, 85, '友情链接', '/system.friendlink/index', 'system.friendlink:index', 0, NULL, '', 108, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
-INSERT INTO `sa_admin_rules` VALUES (110, 109, '查看', '/system.friendlink/index', 'system.friendlink:index', 1, NULL, '', 109, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
-INSERT INTO `sa_admin_rules` VALUES (111, 109, '添加', '/system.friendlink/add', 'system.friendlink:add', 1, NULL, '', 110, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
-INSERT INTO `sa_admin_rules` VALUES (112, 109, '编辑', '/system.friendlink/edit', 'system.friendlink:edit', 1, NULL, '', 111, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
-INSERT INTO `sa_admin_rules` VALUES (113, 109, '删除', '/system.friendlink/del', 'system.friendlink:del', 1, NULL, '', 112, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
-INSERT INTO `sa_admin_rules` VALUES (114, 109, '状态', '/system.friendlink/status', 'system.friendlink:status', 2, NULL, '', 113, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
-INSERT INTO `sa_admin_rules` VALUES (115, 0, '接口管理', '#', '#', 0, NULL, '', 114, 'layui-icon-release', 1, 'normal', 0, 1621989906, 1621989906, NULL);
-INSERT INTO `sa_admin_rules` VALUES (116, 115, '项目管理', '/system.project/index', 'system.project:index', 0, NULL, '', 115, '', 1, 'normal', 0, 1621989906, 1621989906, NULL);
-INSERT INTO `sa_admin_rules` VALUES (117, 116, '查看', '/system.project/index', 'system.project:index', 1, NULL, '', 116, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (118, 116, '添加', '/system.project/add', 'system.project:add', 1, NULL, '', 117, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (119, 116, '编辑', '/system.project/edit', 'system.project:edit', 1, NULL, '', 118, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (120, 116, '删除', '/system.project/del', 'system.project:del', 1, NULL, '', 119, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (121, 116, '状态', '/system.project/status', 'system.project:status', 2, NULL, '', 120, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (122, 115, '接口配置', '/system.api/index', 'system.api:index', 0, NULL, '', 121, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (123, 122, '查看', '/system.api/index', 'system.api:index', 1, NULL, '', 122, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (124, 122, '添加', '/system.api/add', 'system.api:add', 1, NULL, '', 123, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (125, 122, '编辑', '/system.api/edit', 'system.api:edit', 1, NULL, '', 124, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (126, 122, '删除', '/system.api/del', 'system.api:del', 1, NULL, '', 125, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (127, 122, '状态', '/system.api/status', 'system.api:status', 2, NULL, '', 126, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (128, 122, '请求参数', '/system.api/params', 'system.api:params', 2, NULL, '', 127, '', 0, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (129, 122, '添加参数', '/system.api/paramsadd', 'system.api:paramsadd', 1, NULL, '', 128, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (130, 122, '编辑参数', '/system.api/paramsedit', 'system.api:paramsedit', 1, NULL, '', 129, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (131, 122, '删除参数', '/system.api/paramsdel', 'system.api:paramsdel', 2, NULL, '', 130, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (132, 122, '返回参数', '/system.api/restful', 'system.api:restful', 2, NULL, '', 131, '', 0, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (133, 122, '添加返参', '/system.api/restfuladd', 'system.api:restfuladd', 1, NULL, '', 132, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (134, 122, '编辑返参', '/system.api/restfuledit', 'system.api:restfuledit', 1, NULL, '', 133, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (135, 122, '删除返参', '/system.api/restfuldel', 'system.api:restfuldel', 2, NULL, '', 134, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (136, 122, '请求分组', '/system.api/group', 'system.api:group', 2, NULL, '', 135, '', 0, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (137, 122, '添加分组', '/system.api/groupadd', 'system.api:groupadd', 1, NULL, '', 136, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (138, 122, '编辑分组', '/system.api/groupedit', 'system.api:groupedit', 1, NULL, '', 137, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (139, 122, '删除分组', '/system.api/groupdel', 'system.api:groupdel', 2, NULL, '', 138, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (140, 115, '接口鉴权', '/system.apiaccess/index', 'system.apiaccess:index', 0, NULL, '', 139, '', 1, 'normal', 0, 1621989907, 1621989907, NULL);
-INSERT INTO `sa_admin_rules` VALUES (141, 140, '查看', '/system.apiaccess/index', 'system.apiaccess:index', 1, NULL, '', 140, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
-INSERT INTO `sa_admin_rules` VALUES (142, 140, '添加', '/system.apiaccess/add', 'system.apiaccess:add', 1, NULL, '', 141, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
-INSERT INTO `sa_admin_rules` VALUES (143, 140, '编辑', '/system.apiaccess/edit', 'system.apiaccess:edit', 1, NULL, '', 142, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
-INSERT INTO `sa_admin_rules` VALUES (144, 140, '删除', '/system.apiaccess/del', 'system.apiaccess:del', 1, NULL, '', 143, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
-INSERT INTO `sa_admin_rules` VALUES (145, 140, '状态', '/system.apiaccess/status', 'system.apiaccess:status', 2, NULL, '', 144, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
 INSERT INTO `sa_admin_rules` VALUES (146, 0, '高级管理', '#', '#', 0, NULL, '', 145, 'layui-icon-engine', 1, 'normal', 0, 1621989908, 1621989908, NULL);
 INSERT INTO `sa_admin_rules` VALUES (147, 146, '公司管理', '/system.company/index', 'system.company:index', 0, NULL, '', 146, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
 INSERT INTO `sa_admin_rules` VALUES (148, 147, '查看', '/system.company/index', 'system.company:index', 1, NULL, '', 147, '', 1, 'normal', 0, 1621989908, 1621989908, NULL);
@@ -290,12 +214,6 @@ INSERT INTO `sa_admin_rules` VALUES (172, 171, '查看', '/system.attachment/ind
 INSERT INTO `sa_admin_rules` VALUES (173, 171, '编辑', '/system.attachment/edit', 'system.attachment:edit', 1, NULL, '', 172, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
 INSERT INTO `sa_admin_rules` VALUES (174, 171, '删除', '/system.attachment/del', 'system.attachment:del', 1, NULL, '', 173, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
 INSERT INTO `sa_admin_rules` VALUES (175, 171, '附件上传', '/upload/upload', 'upload:upload', 2, NULL, '', 174, '', 0, 'normal', 0, 1621989909, 1621989909, NULL);
-INSERT INTO `sa_admin_rules` VALUES (176, 171, '头像上传', '/upload/avatar', 'upload:avatar', 2, NULL, '', 175, '', 0, 'normal', 0, 1621989909, 1621989909, NULL);
-INSERT INTO `sa_admin_rules` VALUES (177, 146, '模型管理', '/system.channel/index', 'system.channel:index', 0, NULL, '', 176, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
-INSERT INTO `sa_admin_rules` VALUES (178, 177, '查看', '/system.channel/index', 'system.channel:index', 1, NULL, '', 177, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
-INSERT INTO `sa_admin_rules` VALUES (179, 177, '添加', '/system.channel/add', 'system.channel:add', 1, NULL, '', 178, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
-INSERT INTO `sa_admin_rules` VALUES (180, 177, '编辑', '/system.channel/edit', 'system.channel:edit', 1, NULL, '', 179, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
-INSERT INTO `sa_admin_rules` VALUES (181, 177, '删除', '/system.channel/del', 'system.channel:del', 1, NULL, '', 180, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
 INSERT INTO `sa_admin_rules` VALUES (182, 0, '插件应用', '#', '#', 0, NULL, '', 181, 'layui-icon-component', 1, 'normal', 0, 1621989909, 1621989909, NULL);
 INSERT INTO `sa_admin_rules` VALUES (183, 182, '插件管理', '/system.plugin/index', 'system.plugin:index', 0, NULL, '', 182, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
 INSERT INTO `sa_admin_rules` VALUES (184, 183, '查看', '/system.plugin/index', 'system.plugin:index', 1, NULL, '', 183, '', 1, 'normal', 0, 1621989909, 1621989909, NULL);
@@ -336,184 +254,9 @@ INSERT INTO `sa_admin_rules` VALUES (224, 222, '添加', '/system.usergroup/add'
 INSERT INTO `sa_admin_rules` VALUES (225, 222, '编辑', '/system.usergroup/edit', 'system.usergroup:edit', 1, NULL, '', 224, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
 INSERT INTO `sa_admin_rules` VALUES (226, 222, '删除', '/system.usergroup/del', 'system.usergroup:del', 1, NULL, '', 225, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
 INSERT INTO `sa_admin_rules` VALUES (227, 222, '状态', '/system.usergroup/status', 'system.usergroup:status', 2, NULL, '', 226, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
-INSERT INTO `sa_admin_rules` VALUES (228, 0, '其他设置', '#', '#', 0, NULL, '', 227, 'layui-icon-about', 1, 'normal', 0, 1621989911, 1621989911, NULL);
-INSERT INTO `sa_admin_rules` VALUES (229, 228, '回收站', '/system.recyclebin/index', 'system.recyclebin:index', 0, NULL, '', 228, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
-INSERT INTO `sa_admin_rules` VALUES (230, 229, '还原', '/system.recyclebin/restore', 'system.recyclebin:restore', 1, NULL, '', 229, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
-INSERT INTO `sa_admin_rules` VALUES (231, 229, '销毁', '/system.recyclebin/destroy', 'system.recyclebin:destroy', 1, NULL, '', 230, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
-INSERT INTO `sa_admin_rules` VALUES (232, 229, '查看', '/system.recyclebin/index', 'system.recyclebin:index', 1, NULL, '', 231, '', 1, 'normal', 0, 1621989911, 1621989911, NULL);
-INSERT INTO `sa_admin_rules` VALUES (245, 146, '索引管理', '/system.fulltext/index', 'system.fulltext:index', 0, NULL, '', 245, '', 1, 'normal', 0, 1636198445, 1636198445, NULL);
-INSERT INTO `sa_admin_rules` VALUES (252, 0, '代码生成', '/generate.index/index', 'generate.index:index', 0, NULL, '', 33, 'layui-icon-layer', 1, 'normal', 0, 1646735985, 1639725879, NULL);
-
--- ----------------------------
--- Table structure for sa_adwords
--- ----------------------------
-DROP TABLE IF EXISTS `sa_adwords`;
-CREATE TABLE `sa_adwords`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '广告标题',
-  `alias` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '广告标识',
-  `pic` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '封面',
-  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '代码',
-  `remind` tinyint(1) NULL DEFAULT 1 COMMENT '到期提醒',
-  `status` smallint(6) NULL DEFAULT 1 COMMENT '状态',
-  `expirestime` int(11) NULL DEFAULT NULL COMMENT '过期时间',
-  `updatetime` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  `createtime` int(11) NOT NULL COMMENT '添加时间',
-  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '广告管理' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_adwords
--- ----------------------------
-INSERT INTO `sa_adwords` VALUES (1, '阿里联盟1', 'alimama_300x250', '/upload/images/2021-04-21/607f877516a50.jpeg', '<script>当前模块未过滤XSS，如不需要请删除该模块！</script>', 1, 1, 1619793011, 1646972507, 1610942227, NULL);
-
--- ----------------------------
--- Table structure for sa_api
--- ----------------------------
-DROP TABLE IF EXISTS `sa_api`;
-CREATE TABLE `sa_api`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `app_id` int(11) NOT NULL COMMENT 'appid',
-  `pid` int(11) NOT NULL COMMENT '分组ID',
-  `title` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '接口名称',
-  `class` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '接口类/方法名',
-  `hash` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '路由映射',
-  `model` int(11) NULL DEFAULT 1 COMMENT '接口模式',
-  `status` int(11) NULL DEFAULT NULL COMMENT '接口状态',
-  `access` int(11) NULL DEFAULT 1 COMMENT '认证方式',
-  `method` int(11) NULL DEFAULT 0 COMMENT '请求方式',
-  `sort` int(11) NULL DEFAULT NULL COMMENT '排序号',
-  `version` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'v1' COMMENT '接口版本号',
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '接口信息描述',
-  `request` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '请求示例',
-  `restful` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '返回示例',
-  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'API接口信息' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_api
--- ----------------------------
-INSERT INTO `sa_api` VALUES (1, 1, 0, '', 'index/index', 'b5mxzuc2ea', 1, 1, 1, 0, 1, 'v1', '', 'http://www.swiftadmin.net/api/b5mxzuc2ea?id=2&cid=1', '{\"error_code\":\"20000\",\"error_msg\":\"search word not found\"}', 1612082386, NULL);
-INSERT INTO `sa_api` VALUES (2, 1, 0, '', 'index/list', 'hdxtwfcd42', 1, 1, 1, 1, 2, 'v1.1.3', '', NULL, NULL, 1612083114, NULL);
-INSERT INTO `sa_api` VALUES (3, 1, 0, '', 'index/nodes', 'tc4fdkaghq', 1, 1, 1, 2, 3, 'v1', '', NULL, NULL, 1612083147, NULL);
-
--- ----------------------------
--- Table structure for sa_api_access
--- ----------------------------
-DROP TABLE IF EXISTS `sa_api_access`;
-CREATE TABLE `sa_api_access`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `user_id` int(11) NOT NULL COMMENT '用户id',
-  `api_id` int(11) NOT NULL COMMENT '接口id',
-  `day` int(11) NULL DEFAULT NULL COMMENT '每日调用次数',
-  `qps` int(11) NULL DEFAULT NULL COMMENT 'QPS',
-  `seconds` int(11) NULL DEFAULT 0 COMMENT '间隔秒数，适合测试接口',
-  `ceiling` int(11) NULL DEFAULT NULL COMMENT '接口调用总次数',
-  `status` int(10) UNSIGNED NULL DEFAULT 1 COMMENT '规则状态',
-  `sort` int(11) NULL DEFAULT NULL COMMENT '排序字段',
-  `contents` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '规则备注',
-  `createtime` int(11) NULL DEFAULT NULL COMMENT '规则创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api权限规则表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_api_access
--- ----------------------------
-INSERT INTO `sa_api_access` VALUES (1, 1, 1, 5, 0, 0, 10, 1, 1, '这里是规则备注哦', 1612243570);
-INSERT INTO `sa_api_access` VALUES (2, 1, 2, 0, 0, 0, 0, 1, 2, '这里可以随便写！备忘', 1613612287);
-
--- ----------------------------
--- Table structure for sa_api_condition
--- ----------------------------
-DROP TABLE IF EXISTS `sa_api_condition`;
-CREATE TABLE `sa_api_condition`  (
-  `hash` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '主键',
-  `day` int(11) NULL DEFAULT NULL COMMENT '每日访问上限',
-  `qps` int(11) NULL DEFAULT NULL COMMENT 'QPS',
-  `ceiling` int(11) NULL DEFAULT NULL COMMENT '访问总数',
-  `seconds` int(11) NULL DEFAULT NULL COMMENT '秒间隔',
-  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`hash`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api访问控制表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_api_condition
--- ----------------------------
-INSERT INTO `sa_api_condition` VALUES ('72225c90a6430113', 1, NULL, 10, 1617199269, 1617199237);
-
--- ----------------------------
--- Table structure for sa_api_group
--- ----------------------------
-DROP TABLE IF EXISTS `sa_api_group`;
-CREATE TABLE `sa_api_group`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `pid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '上级分类',
-  `app_id` int(11) NOT NULL COMMENT '应用类型',
-  `title` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '分组名称',
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组说明',
-  `sort` int(11) NULL DEFAULT NULL COMMENT '分组排序',
-  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api请求参数表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_api_group
--- ----------------------------
-INSERT INTO `sa_api_group` VALUES (1, 0, 1, '概述', 'API开始', 1, 1621843822, NULL);
-INSERT INTO `sa_api_group` VALUES (2, 0, 1, '获取分类', '分类接口', 2, 1621843876, NULL);
-INSERT INTO `sa_api_group` VALUES (3, 0, 1, '接口验证', '会员分类', 3, 1621843892, NULL);
-INSERT INTO `sa_api_group` VALUES (4, 1, 1, '基础接口', 'base', 4, 1621846765, NULL);
-
--- ----------------------------
--- Table structure for sa_api_params
--- ----------------------------
-DROP TABLE IF EXISTS `sa_api_params`;
-CREATE TABLE `sa_api_params`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `pid` int(11) NOT NULL COMMENT '所属接口',
-  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字段名',
-  `type` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字段类型',
-  `default` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '默认值',
-  `mandatory` int(11) NOT NULL DEFAULT 0 COMMENT '强制必选',
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字段说明',
-  `sort` int(11) NULL DEFAULT NULL COMMENT '字段排序',
-  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api请求参数表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_api_params
--- ----------------------------
-INSERT INTO `sa_api_params` VALUES (1, 1, 'id', 'Integer', '1', 1, '文章id', 1, 1612092258, NULL);
-INSERT INTO `sa_api_params` VALUES (2, 1, 'cid', 'Integer', '2', 0, '分类id', 2, 1612092808, NULL);
-INSERT INTO `sa_api_params` VALUES (3, 1, 'limit', 'Integer', '10', 0, '分页大小', 3, 1612092872, NULL);
-INSERT INTO `sa_api_params` VALUES (4, 1, 'page', 'Integer', '1', 0, '页码', 4, 1612093015, NULL);
-
--- ----------------------------
--- Table structure for sa_api_restful
--- ----------------------------
-DROP TABLE IF EXISTS `sa_api_restful`;
-CREATE TABLE `sa_api_restful`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `pid` int(11) NOT NULL COMMENT '所属接口',
-  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '返回参数名',
-  `type` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '返回参数类型',
-  `sort` int(11) NULL DEFAULT NULL COMMENT '排序字段',
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '返回参数说明',
-  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'api返回参数表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_api_restful
--- ----------------------------
-INSERT INTO `sa_api_restful` VALUES (1, 1, 'num', 'Integer', 1, '返回数据长度', 1612103650);
-INSERT INTO `sa_api_restful` VALUES (2, 1, 'code', 'Integer', 2, '应用返回的响应代码', 1612104178);
+INSERT INTO `sa_admin_rules` VALUES (253, 0, '代码生成', '/generate.index/index', 'generate.index:index', 0, NULL, '', 120, 'fa-codepen', 1, 'normal', 0, 1649388076, 1649298971, NULL);
+INSERT INTO `sa_admin_rules` VALUES (301, 182, '测试二级', '#', '#', 0, NULL, '', 126, '', 1, 'normal', 0, 1649503945, 1649503945, NULL);
+INSERT INTO `sa_admin_rules` VALUES (302, 301, '测试三级', '/generate.inddex/index', 'generate.inddex:index', 0, NULL, '', 127, '', 1, 'normal', 0, 1649504908, 1649503963, NULL);
 
 -- ----------------------------
 -- Table structure for sa_attachment
@@ -538,53 +281,6 @@ CREATE TABLE `sa_attachment`  (
 -- ----------------------------
 -- Records of sa_attachment
 -- ----------------------------
-
--- ----------------------------
--- Table structure for sa_category
--- ----------------------------
-DROP TABLE IF EXISTS `sa_category`;
-CREATE TABLE `sa_category`  (
-  `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `pid` smallint(6) NOT NULL COMMENT '父类di',
-  `cid` tinyint(1) NOT NULL COMMENT '模型id',
-  `name` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '栏目名称',
-  `alias` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目别名',
-  `access` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问权限',
-  `pinyin` varchar(90) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '栏目路径/拼音',
-  `image` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '图片地址',
-  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目SEO标题',
-  `keywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目SEO关键字',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目SEO描述',
-  `contribute` int(11) NULL DEFAULT 0 COMMENT '是否支持投稿',
-  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '栏目单页信息',
-  `sort` smallint(6) NULL DEFAULT NULL COMMENT '排序id',
-  `skin` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目列表页',
-  `pages` tinyint(1) NULL DEFAULT 0 COMMENT '是否单页面',
-  `items` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '文档数量',
-  `status` tinyint(1) NULL DEFAULT 1 COMMENT '栏目状态',
-  `readurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问地址',
-  `jumpurl` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '栏目跳转地址',
-  `updatetime` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `id`(`id`) USING BTREE,
-  INDEX `pid`(`pid`) USING BTREE,
-  INDEX `cid`(`cid`) USING BTREE,
-  INDEX `title`(`title`) USING BTREE,
-  INDEX `alias`(`alias`) USING BTREE,
-  INDEX `access`(`access`) USING BTREE,
-  INDEX `pinyin`(`pinyin`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '栏目管理' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_category
--- ----------------------------
-INSERT INTO `sa_category` VALUES (1, 0, 2, '图集2', NULL, '', 'xwpd', '', '', '', '', 0, '', 1, '', 0, 2, 1, NULL, '', 1647163994, 1639749226, NULL);
-INSERT INTO `sa_category` VALUES (2, 0, 1, '文章', NULL, '', '', '', '', '', '', 0, '', 2, '', 0, 34, 1, NULL, '', 1647158806, 1646296100, NULL);
-INSERT INTO `sa_category` VALUES (3, 0, 3, '视频', NULL, '', '', '', '', '', '', 0, '', 3, '', 0, 1, 1, NULL, '', 1647163033, 1646296108, NULL);
-INSERT INTO `sa_category` VALUES (4, 0, 4, '软件', NULL, '', 'rj', '', '', '', '', 0, '', 4, '', 0, 1, 1, NULL, '', 1647163073, 1646296117, NULL);
-INSERT INTO `sa_category` VALUES (5, 0, 5, '产品', NULL, '', 'cp', '', '', '', '', 0, '', 5, '', 0, 1, 1, NULL, '', 1647163208, 1646296125, NULL);
 
 -- ----------------------------
 -- Table structure for sa_ceshi
@@ -614,37 +310,12 @@ CREATE TABLE `sa_ceshi`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_ceshi
 -- ----------------------------
-
--- ----------------------------
--- Table structure for sa_channel
--- ----------------------------
-DROP TABLE IF EXISTS `sa_channel`;
-CREATE TABLE `sa_channel`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '模型名称',
-  `table` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '数据库表',
-  `template` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板名称',
-  `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
-  `sort` tinyint(4) NULL DEFAULT NULL COMMENT '排序字段',
-  `updatetime` int(11) NOT NULL COMMENT '更新时间',
-  `createtime` int(11) NOT NULL COMMENT '创建时间',
-  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据模型表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_channel
--- ----------------------------
-INSERT INTO `sa_channel` VALUES (1, '文章模型', 'article', 'article', 1, 1, 1636675687, 1595545811, NULL);
-INSERT INTO `sa_channel` VALUES (2, '图片模型', 'images', 'images', 1, 2, 1636675700, 1595545853, NULL);
-INSERT INTO `sa_channel` VALUES (3, '视频模型', 'video', 'video', 1, 3, 1636675708, 1595545827, NULL);
-INSERT INTO `sa_channel` VALUES (4, '软件模型', 'soft', 'soft', 1, 4, 1636676518, 1595545858, NULL);
-INSERT INTO `sa_channel` VALUES (5, '产品模型', 'product', 'product', 1, 6, 1636693188, 1595061806, NULL);
+INSERT INTO `sa_ceshi` VALUES (1, '姓名', 1, '/upload/images/2022-04-09/62518c709de4a.png', 'write,game', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"name\": \"java\"}', NULL, NULL, 1, '天津市/天津市/河东区', '<p>这里是其他的内容</p>', 1649511555, 1649511555, NULL);
 
 -- ----------------------------
 -- Table structure for sa_comment
@@ -676,11 +347,12 @@ CREATE TABLE `sa_comment`  (
   INDEX `rid`(`rid`) USING BTREE,
   INDEX `uid`(`user_id`) USING BTREE,
   INDEX `sid`(`sid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户评论表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户评论表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_comment
 -- ----------------------------
+INSERT INTO `sa_comment` VALUES (1, 1, 0, 0, 0, 0, 1, '我发表了一条评论\n在这里说点啥', 0, 0, 2130706433, 0, 0, 1, 1649501557, 1611143750, NULL);
 
 -- ----------------------------
 -- Table structure for sa_company
@@ -701,7 +373,7 @@ CREATE TABLE `sa_company`  (
   `latitude` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '地图纬度',
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '公司信息表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '公司信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_company
@@ -710,174 +382,112 @@ INSERT INTO `sa_company` VALUES (1, '北京总部技术公司', 'bj', '北京市
 INSERT INTO `sa_company` VALUES (2, '河北分公司', 'hb', '河北省邯郸市丛台区公园路880号', 56000, '权栈', 12345678901, '0310-12345678', 'coolsec@foxmail.com', 'code', NULL, NULL, 1613787702);
 
 -- ----------------------------
--- Table structure for sa_content
+-- Table structure for sa_config
 -- ----------------------------
-DROP TABLE IF EXISTS `sa_content`;
-CREATE TABLE `sa_content`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `pid` int(11) NOT NULL COMMENT '当前栏目',
-  `cid` int(11) NOT NULL COMMENT '当前模型',
-  `title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '标题',
-  `seotitle` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'SEO标题',
-  `keywords` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关键词',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述信息',
-  `access` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '访问权限',
-  `letter` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '首字母',
-  `color` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题颜色',
-  `thumb` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '缩略图',
-  `image` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '文章封面',
-  `attribute` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '当前属性',
-  `hits` mediumint(8) NULL DEFAULT NULL COMMENT '点击量',
-  `hits_day` mediumint(8) NULL DEFAULT NULL COMMENT '日点击',
-  `hits_week` mediumint(8) NULL DEFAULT NULL COMMENT '周点击',
-  `hits_month` mediumint(8) NULL DEFAULT NULL COMMENT '月点击',
-  `hits_lasttime` int(11) NULL DEFAULT NULL COMMENT '点击时间',
-  `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
-  `stars` tinyint(3) UNSIGNED NULL DEFAULT 1 COMMENT '星级',
-  `score` int(11) NULL DEFAULT NULL COMMENT '浏览所需积分',
-  `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
-  `up` mediumint(9) NULL DEFAULT NULL COMMENT '顶一下',
-  `down` mediumint(9) NULL DEFAULT NULL COMMENT '踩一下',
-  `gold` decimal(3, 1) NULL DEFAULT NULL COMMENT '评分',
-  `golder` smallint(6) NULL DEFAULT NULL COMMENT '评分人数',
-  `author` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '作者',
-  `admin_id` int(11) NULL DEFAULT NULL COMMENT '管理员id',
-  `user_id` int(11) NULL DEFAULT NULL COMMENT '会员投稿id',
-  `skin` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板文件',
-  `reurl` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '来源URL',
-  `readurl` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问地址',
-  `jumpurl` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '跳转地址',
-  `updatetime` int(11) NULL DEFAULT 0 COMMENT '更新时间',
-  `createtime` int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
-  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
+DROP TABLE IF EXISTS `sa_config`;
+CREATE TABLE `sa_config`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字段',
+  `system` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '系统',
+  `group` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '配置组',
+  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '字段类型',
+  `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字段值',
+  `tips` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '提示信息',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `id`(`id`) USING BTREE,
-  INDEX `cid`(`cid`) USING BTREE,
-  INDEX `pid`(`pid`) USING BTREE,
-  INDEX `sort`(`sort`) USING BTREE,
-  INDEX `createtime`(`createtime`) USING BTREE,
-  INDEX `updatetime`(`updatetime`) USING BTREE,
-  INDEX `title`(`title`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章模型数据表' ROW_FORMAT = DYNAMIC;
+  INDEX `name`(`name`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 89 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统配置表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of sa_content
+-- Records of sa_config
 -- ----------------------------
-
--- ----------------------------
--- Table structure for sa_content_article
--- ----------------------------
-DROP TABLE IF EXISTS `sa_content_article`;
-CREATE TABLE `sa_content_article`  (
-  `id` int(10) UNSIGNED NOT NULL COMMENT '主键',
-  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容字段',
-  `createtime` int(11) NULL DEFAULT 0 COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章模型数据表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_content_article
--- ----------------------------
-
--- ----------------------------
--- Table structure for sa_content_images
--- ----------------------------
-DROP TABLE IF EXISTS `sa_content_images`;
-CREATE TABLE `sa_content_images`  (
-  `id` int(10) UNSIGNED NOT NULL COMMENT '主键',
-  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容字段',
-  `album` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '相册图集',
-  `createtime` int(11) NULL DEFAULT 0 COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '图片模型数据表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_content_images
--- ----------------------------
-
--- ----------------------------
--- Table structure for sa_content_product
--- ----------------------------
-DROP TABLE IF EXISTS `sa_content_product`;
-CREATE TABLE `sa_content_product`  (
-  `id` int(10) UNSIGNED NOT NULL COMMENT '主键',
-  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容字段',
-  `album` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '产品图册',
-  `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '产品价格',
-  `discount` decimal(10, 2) NULL DEFAULT NULL COMMENT '优惠价格',
-  `inventory` int(11) NULL DEFAULT NULL COMMENT '库存余量',
-  `updatetime` int(11) NULL DEFAULT 0 COMMENT '更新时间',
-  `createtime` int(11) NULL DEFAULT 0 COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `id`(`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '产品模型数据表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_content_product
--- ----------------------------
-
--- ----------------------------
--- Table structure for sa_content_soft
--- ----------------------------
-DROP TABLE IF EXISTS `sa_content_soft`;
-CREATE TABLE `sa_content_soft`  (
-  `id` int(10) UNSIGNED NOT NULL COMMENT '主键',
-  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容字段',
-  `file_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '下载地址',
-  `file_code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '软件提取码',
-  `file_size` int(11) NULL DEFAULT NULL COMMENT '软件大小',
-  `file_ext` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '软件后缀名',
-  `file_type` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '软件类型',
-  `file_language` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '软件语言',
-  `file_env` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '运行软件',
-  `file_auth` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '授权方式',
-  `file_author` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '软件作者',
-  `file_website` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '软件官网',
-  `file_downtotal` int(11) NULL DEFAULT NULL COMMENT '下载次数',
-  `createtime` int(11) NULL DEFAULT 0 COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `id`(`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '下载模型数据表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_content_soft
--- ----------------------------
-
--- ----------------------------
--- Table structure for sa_content_video
--- ----------------------------
-DROP TABLE IF EXISTS `sa_content_video`;
-CREATE TABLE `sa_content_video`  (
-  `id` int(8) UNSIGNED NOT NULL COMMENT '主键',
-  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容字段',
-  `alias` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '别名',
-  `desc` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '简述',
-  `class` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类小标签',
-  `marks` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '影片备注',
-  `actor` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '演员',
-  `banner` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '幻灯片',
-  `director` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '导演',
-  `area` char(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地区',
-  `language` char(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '语言',
-  `year` smallint(4) NULL DEFAULT NULL COMMENT '年份',
-  `continu` int(20) NULL DEFAULT 0 COMMENT '连载',
-  `total` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '总数',
-  `play` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '播放器组',
-  `server` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '服务器组',
-  `note` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '播放器备注',
-  `url` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '播放地址',
-  `isfilm` tinyint(1) NULL DEFAULT 1 COMMENT '已上映、未上映',
-  `filmtime` int(11) NULL DEFAULT NULL COMMENT '上映日期',
-  `minutes` int(11) NULL DEFAULT NULL COMMENT '影片时长',
-  `weekday` varchar(6) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '节目周期，周几播出',
-  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `createtime`(`createtime`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_content_video
--- ----------------------------
+INSERT INTO `sa_config` VALUES (1, 'site_name', 1, 'site', 'string', '基于ThinkPHP和layui的极速后台开发框架', '网站名称');
+INSERT INTO `sa_config` VALUES (2, 'site_url', 1, 'site', 'string', 'www.swiftadmin.net', '网站URL');
+INSERT INTO `sa_config` VALUES (3, 'site_logo', 1, 'site', 'string', '/static/images/logo.png', '网站logo');
+INSERT INTO `sa_config` VALUES (4, 'site_http', 1, 'site', 'string', 'http://www.swiftadmin.net', 'HTTP地址');
+INSERT INTO `sa_config` VALUES (5, 'site_state', 1, 'site', 'string', '0', '是否开启手机版');
+INSERT INTO `sa_config` VALUES (6, 'site_type', 1, 'site', 'string', '1', '手机版类型');
+INSERT INTO `sa_config` VALUES (7, 'site_mobile', 1, 'site', 'string', '', '手机版地址');
+INSERT INTO `sa_config` VALUES (8, 'site_icp', 1, 'site', 'string', '京ICP备13000001号', '备案号');
+INSERT INTO `sa_config` VALUES (9, 'site_email', 1, 'site', 'string', 'admin@swiftadmin.net', '站长邮箱');
+INSERT INTO `sa_config` VALUES (10, 'site_keyword', 1, 'site', 'string', '网站关键字', '网站关键字');
+INSERT INTO `sa_config` VALUES (11, 'site_description', 1, 'site', 'string', '网站描述', '网站描述');
+INSERT INTO `sa_config` VALUES (12, 'site_total', 1, 'site', 'string', '统计代码：', '统计代码');
+INSERT INTO `sa_config` VALUES (13, 'site_copyright', 1, 'site', 'string', '版权信息：', '版权信息');
+INSERT INTO `sa_config` VALUES (14, 'site_clearLink', 1, 'site', 'string', '1', '清理非本站链接');
+INSERT INTO `sa_config` VALUES (15, 'site_status', 1, 'site', 'string', '0', '运营状态');
+INSERT INTO `sa_config` VALUES (16, 'site_notice', 1, 'site', 'string', 'html', '关闭通知');
+INSERT INTO `sa_config` VALUES (17, 'auth_key', 0, NULL, 'string', '38nfCIlkqNMI2', '授权码');
+INSERT INTO `sa_config` VALUES (18, 'auth_code', 0, NULL, 'string', 'wMRkfKO4Lr37HTJQ', '加密KEY');
+INSERT INTO `sa_config` VALUES (19, 'system_alogs', 0, NULL, 'string', '0', '后台日志');
+INSERT INTO `sa_config` VALUES (20, 'system_exception', 0, NULL, 'string', '1', '异常日志');
+INSERT INTO `sa_config` VALUES (21, 'cache_status', 0, 'cache', 'string', '0', '缓存状态');
+INSERT INTO `sa_config` VALUES (22, 'cache_type', 0, 'cache', 'string', 'redis', '缓存类型');
+INSERT INTO `sa_config` VALUES (23, 'cache_time', 0, 'cache', 'string', '6000', '缓存时间');
+INSERT INTO `sa_config` VALUES (24, 'cache_host', 0, 'cache', 'string', '127.0.0.1', '服务器IP');
+INSERT INTO `sa_config` VALUES (25, 'cache_port', 0, 'cache', 'string', '6379', '端口');
+INSERT INTO `sa_config` VALUES (26, 'cache_select', 0, 'cache', 'string', '1', '缓存数据库');
+INSERT INTO `sa_config` VALUES (27, 'cache_user', 0, 'cache', 'string', '', '用户名');
+INSERT INTO `sa_config` VALUES (28, 'cache_pass', 0, 'cache', 'string', '', '密码');
+INSERT INTO `sa_config` VALUES (29, 'upload_path', 0, 'upload', 'string', 'upload', '上传路径');
+INSERT INTO `sa_config` VALUES (30, 'upload_style', 0, 'upload', 'string', 'Y-m-d', '文件夹格式');
+INSERT INTO `sa_config` VALUES (31, 'upload_class', 0, 'upload', 'array', '{\"images\":\".bmp.jpg.jpeg.png.gif.svg\",\"video\":\".flv.swf.mkv.avi.rm.rmvb.mpeg.mpg.ogg.ogv.mov.wmv.mp4.webm.mp3.wav.mid\",\"document\":\".txt.doc.xls.ppt.docx.xlsx.pptx\",\"files\":\".exe.dll.sys.so.dmg.iso.zip.rar.7z.sql.pem.pdf.psd\"}', '文件分类');
+INSERT INTO `sa_config` VALUES (32, 'upload_ftp', 0, 'upload', 'string', '0', 'FTP上传');
+INSERT INTO `sa_config` VALUES (33, 'upload_del', 0, 'upload', 'string', '0', '上传后删除');
+INSERT INTO `sa_config` VALUES (34, 'upload_ftp_host', 0, 'upload', 'string', '127.0.0.1', 'FTP服务器');
+INSERT INTO `sa_config` VALUES (35, 'upload_ftp_port', 0, 'upload', 'string', '21', 'FTP端口');
+INSERT INTO `sa_config` VALUES (36, 'upload_ftp_user', 0, 'upload', 'string', '', 'FTP用户名');
+INSERT INTO `sa_config` VALUES (37, 'upload_ftp_pass', 0, 'upload', 'string', '', 'FTP密码');
+INSERT INTO `sa_config` VALUES (38, 'upload_http_prefix', 0, 'upload', 'string', '', '图片CDN地址');
+INSERT INTO `sa_config` VALUES (39, 'upload_http_auto', 0, 'upload', 'string', '1', '自动上传');
+INSERT INTO `sa_config` VALUES (40, 'upload_thumb', 0, 'upload', 'string', '0', '是否开启缩略图');
+INSERT INTO `sa_config` VALUES (41, 'upload_thumb_w', 0, 'upload', 'string', '120', '宽度');
+INSERT INTO `sa_config` VALUES (42, 'upload_thumb_h', 0, 'upload', 'string', '140', '高度');
+INSERT INTO `sa_config` VALUES (43, 'upload_water', 0, 'upload', 'string', '0', '是否水印');
+INSERT INTO `sa_config` VALUES (44, 'upload_water_type', 0, 'upload', 'string', '1', '水印类型');
+INSERT INTO `sa_config` VALUES (45, 'upload_water_font', 0, 'upload', 'string', 'www.swiftadmin.net', '水印文字');
+INSERT INTO `sa_config` VALUES (46, 'upload_water_size', 0, 'upload', 'string', '20', '字体大小');
+INSERT INTO `sa_config` VALUES (47, 'upload_water_color', 0, 'upload', 'string', '#0fbeea', '字体颜色');
+INSERT INTO `sa_config` VALUES (48, 'upload_water_pct', 0, 'upload', 'string', '47', '透明度');
+INSERT INTO `sa_config` VALUES (49, 'upload_water_img', 0, 'upload', 'string', '/', '图片水印地址');
+INSERT INTO `sa_config` VALUES (50, 'upload_water_pos', 0, 'upload', 'string', '9', '水印位置');
+INSERT INTO `sa_config` VALUES (51, 'play', 0, NULL, 'array', '{\"play_width\":\"960\",\"play_height\":\"450\",\"play_show\":\"0\",\"play_second\":\"10\",\"play_area\":\"大陆,香港,中国台湾,美国,韩国,日本,泰国,印度,英国,法国,俄罗斯,新加坡,其它\",\"play_year\":\"2022,2021,2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010,2009,2008,2007,2006,2005,2004,2003,2002,2001,2000,1999\",\"play_version\":\"高清版,剧场版,抢先版,OVA,TV,影院版\",\"play_language\":\"国语,英语,粤语,韩语,日语,法语,德语,泰语,俄语,其它\",\"play_week\":\"周一,周二,周三,周四,周五,周六,周日\",\"play_playad\":\"http:\\/\\/www.swiftadmin.net\\/api\\/show.html\",\"play_down\":\"http:\\/\\/www.swiftadmin.net\\/api\\/show.html\",\"play_downgorup\":\"http:\\/\\/down.swiftadmin.net\\/\"}', '播放器数据');
+INSERT INTO `sa_config` VALUES (52, 'cloud_status', 0, NULL, 'string', '1', '是否开启OSS上传');
+INSERT INTO `sa_config` VALUES (53, 'cloud_type', 0, NULL, 'string', 'aliyun', 'OSS上传类型');
+INSERT INTO `sa_config` VALUES (54, 'aliyun_oss', 0, NULL, 'array', '{\"accessId\":\"LTAI5333kuER9w3xNnVMe1vC\",\"accessSecret\":\"kFStrmkXjHjw9sankaJdocxsSScjRt9A\",\"bucket\":\"demo\",\"endpoint\":\"oss-cn-beijing.aliyuncs.com\",\"url\":\"http:\\/\\/oss-cn-beijing.aliyuncs.com\"}', '阿里云OSS');
+INSERT INTO `sa_config` VALUES (55, 'qcloud_oss', 0, NULL, 'array', '{\"app_id\":\"1252296528\",\"secret_id\":\"LTAI5333kuER9w3xNnVMe1vC\",\"secret_key\":\"kFStrmkXjHjw9sankaJdocxsSScjRt9A\",\"bucket\":\"testpack\",\"region\":\"ap-beijing\",\"url\":\"\"}', '腾讯云OSS');
+INSERT INTO `sa_config` VALUES (56, 'email', 0, NULL, 'array', '{\"smtp_debug\":\"0\",\"smtp_host\":\"smtp.163.com\",\"smtp_port\":\"587\",\"smtp_name\":\"管理员\",\"smtp_user\":\"\",\"smtp_pass\":\"\",\"smtp_test\":\"\"}', '邮箱配置');
+INSERT INTO `sa_config` VALUES (57, 'qq', 0, NULL, 'array', '{\"app_id\":\"\",\"app_key\":\"\",\"callback\":\"\"}', 'QQ登录');
+INSERT INTO `sa_config` VALUES (58, 'weixin', 0, NULL, 'array', '{\"app_id\":\"\",\"app_key\":\"\",\"callback\":\"\"}', '微信登录');
+INSERT INTO `sa_config` VALUES (59, 'gitee', 0, NULL, 'array', '{\"app_id\":\"\",\"app_key\":\"\",\"callback\":\"\"}', '码云登录');
+INSERT INTO `sa_config` VALUES (60, 'weibo', 0, NULL, 'array', '{\"app_id\":\"\",\"app_key\":\"\",\"callback\":\"\"}', '微博登录');
+INSERT INTO `sa_config` VALUES (61, 'alipay', 0, NULL, 'array', '{\"mode\":\"0\",\"app_id\":\"202100213462****\",\"app_public_cert_path\":\"appCertPublicKey_20210021346*****.crt\",\"app_secret_cert\":\"7eUBvZLxn8XwZPuCA==\",\"return_url\":\"https:\\/\\/www.swiftadmin.net\\/\",\"notify_url\":\"https:\\/\\/www.swiftadmin.net\\/\",\"alipay_public_cert_path\":\"alipayCertPublicKey_RSA2.crt\",\"alipay_root_cert_path\":\"alipayRootCert.crt\"}', '支付宝');
+INSERT INTO `sa_config` VALUES (62, 'wechat', 0, NULL, 'array', '{\"mode\":\"0\",\"mch_id\":\"16138*****\",\"mch_secret_key\":\"GgnohjtLdR******rprA6duxQ8k0AuVA\",\"mp_app_id\":\"wxd2bf0834be*****\",\"mini_app_id\":\"\",\"notify_url\":\"https:\\/\\/www.swiftadmin.net\\/\",\"mch_secret_cert\":\"apiclient_key.pem\",\"mch_public_cert_path\":\"apiclient_cert.pem\"}', '微信支付');
+INSERT INTO `sa_config` VALUES (63, 'smstype', 0, NULL, 'string', 'tensms', '短信类型');
+INSERT INTO `sa_config` VALUES (64, 'alisms', 0, NULL, 'array', '{\"app_id\":\"cn-hangzhou\",\"app_sign\":\"河北邯郸市有限公司\",\"access_id\":\"kFStrmkXjHjw9sankaJdoIXXSScjRt9A\",\"access_secret\":\"kFStrmkXjHjw9sankaJdoIXXSScjRt9A\"}', '阿里云短信');
+INSERT INTO `sa_config` VALUES (65, 'tensms', 0, NULL, 'array', '{\"app_id\":\"1400660771\",\"app_sign\":\"河北邯郸市有限公司\",\"secret_id\":\"kFStrmkXjHjw9sankaJdoIXXSScjRt9A\",\"secret_key\":\"kFStrmkXjHjw9sankaJdoIXXSScjRt9A\"}', '腾讯云短信');
+INSERT INTO `sa_config` VALUES (66, 'mpwechat', 0, NULL, 'array', '{\"secret_id\":\"\",\"secret_key\":\"\",\"secret_token\":\"\",\"EncodingAESKey\":\"\"}', '微信公众号');
+INSERT INTO `sa_config` VALUES (67, 'user_status', 0, 'user', 'string', '1', '注册状态');
+INSERT INTO `sa_config` VALUES (68, 'user_register_style', 0, 'user', 'string', 'normal', '注册方式');
+INSERT INTO `sa_config` VALUES (69, 'user_document', 0, 'user', 'string', '1', '用户投稿');
+INSERT INTO `sa_config` VALUES (70, 'user_sensitive', 0, 'user', 'string', '1', '开启违禁词检测');
+INSERT INTO `sa_config` VALUES (71, 'user_document_integra', 0, 'user', 'string', '1', '投稿获得积分');
+INSERT INTO `sa_config` VALUES (72, 'user_valitime', 0, 'user', 'string', '10', '激活码有效期');
+INSERT INTO `sa_config` VALUES (73, 'user_register_second', 0, 'user', 'string', '10', '每日注册');
+INSERT INTO `sa_config` VALUES (74, 'user_login_integra', 0, 'user', 'string', '1', '登录获得积分');
+INSERT INTO `sa_config` VALUES (75, 'user_spread_integra', 0, 'user', 'string', '1', '推广获得积分');
+INSERT INTO `sa_config` VALUES (76, 'user_search_interval', 0, 'user', 'string', '1', '用户搜索间隔');
+INSERT INTO `sa_config` VALUES (77, 'user_reg_notallow', 0, 'user', 'string', 'www,bbs,ftp,mail,user,users,admin,administrator', '禁止注册');
+INSERT INTO `sa_config` VALUES (78, 'user_form_status', 0, 'user', 'string', '1', '评论开关');
+INSERT INTO `sa_config` VALUES (79, 'user_form_check', 0, 'user', 'string', '1', '评论审核');
+INSERT INTO `sa_config` VALUES (80, 'user_isLogin', 0, 'user', 'string', '1', '游客评论');
+INSERT INTO `sa_config` VALUES (81, 'user_anonymous', 0, 'user', 'string', '0', '匿名评论');
+INSERT INTO `sa_config` VALUES (82, 'user_form_second', 0, 'user', 'string', '10', '最大注册');
+INSERT INTO `sa_config` VALUES (83, 'user_replace', 0, 'user', 'string', '她妈|它妈|他妈|你妈|去死|贱人', '过滤字符');
+INSERT INTO `sa_config` VALUES (84, 'sitemap', 0, NULL, 'array', '', '地图配置');
+INSERT INTO `sa_config` VALUES (85, 'rewrite', 0, NULL, 'string', '', 'URL配置');
+INSERT INTO `sa_config` VALUES (86, 'database', 0, NULL, 'string', '', '数据库维护');
+INSERT INTO `sa_config` VALUES (87, 'variable', 0, NULL, 'array', '{\"test\":\"我是值2\",\"ceshi\":\"我是测试变量的值\"}', '自定义变量');
+INSERT INTO `sa_config` VALUES (88, 'param', 0, NULL, 'string', '', '测试代码');
 
 -- ----------------------------
 -- Table structure for sa_department
@@ -897,7 +507,7 @@ CREATE TABLE `sa_department`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '添加时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '部门管理表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '部门管理表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_department
@@ -928,14 +538,14 @@ CREATE TABLE `sa_dictionary`  (
   INDEX `pid`(`pid`) USING BTREE,
   INDEX `name`(`name`) USING BTREE,
   INDEX `value`(`value`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典数据表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_dictionary
 -- ----------------------------
 INSERT INTO `sa_dictionary` VALUES (1, 0, '内容属性', 'cattr', 1, '', 1, 1637738903, 1637738903, NULL);
 INSERT INTO `sa_dictionary` VALUES (2, 1, '头条', '1', 2, '', 1, 1638093403, 1638093403, NULL);
-INSERT INTO `sa_dictionary` VALUES (3, 1, '推荐', '2', 3, '', 1, 1638093425, 1638093425, NULL);
+INSERT INTO `sa_dictionary` VALUES (3, 1, '推荐', '2', 3, '', 1, 1649300011, 1638093425, NULL);
 INSERT INTO `sa_dictionary` VALUES (4, 1, '幻灯', '3', 4, '', 1, 1638093430, 1638093430, NULL);
 INSERT INTO `sa_dictionary` VALUES (5, 1, '滚动', '4', 5, '', 1, 1638093435, 1638093435, NULL);
 INSERT INTO `sa_dictionary` VALUES (6, 1, '图文', '5', 6, '', 1, 1638093456, 1638093456, NULL);
@@ -945,56 +555,12 @@ INSERT INTO `sa_dictionary` VALUES (9, 8, '资源', '1', 9, '', 1, 1638093430, 1
 INSERT INTO `sa_dictionary` VALUES (10, 8, '社区', '2', 10, '', 1, 1638093435, 1638093435, NULL);
 INSERT INTO `sa_dictionary` VALUES (11, 8, '合作伙伴', '3', 11, '', 1, 1638093456, 1638093456, NULL);
 INSERT INTO `sa_dictionary` VALUES (12, 8, '关于我们', '4', 12, '', 1, 1638093461, 1638093461, NULL);
-INSERT INTO `sa_dictionary` VALUES (13, 0, '视频属性', 'vattr', 13, '', NULL, 1646900854, 1646900854, NULL);
+INSERT INTO `sa_dictionary` VALUES (13, 0, '视频属性', 'vattr', 13, '', NULL, 1649300145, 1646900854, NULL);
 INSERT INTO `sa_dictionary` VALUES (14, 13, '首页推荐', '1', 14, '', NULL, 1646900865, 1646900865, NULL);
 INSERT INTO `sa_dictionary` VALUES (15, 13, '正在热映', '2', 15, '', NULL, 1646900869, 1646900869, NULL);
 INSERT INTO `sa_dictionary` VALUES (16, 13, '卫视同步', '3', 16, '', NULL, 1646900874, 1646900874, NULL);
 INSERT INTO `sa_dictionary` VALUES (17, 13, '即将上映', '4', 17, '', NULL, 1646900880, 1646900880, NULL);
 INSERT INTO `sa_dictionary` VALUES (18, 13, '锁定', '5', 18, '', NULL, 1646900886, 1646900886, NULL);
-
--- ----------------------------
--- Table structure for sa_friendlink
--- ----------------------------
-DROP TABLE IF EXISTS `sa_friendlink`;
-CREATE TABLE `sa_friendlink`  (
-  `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `title` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '友链名称',
-  `desc` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '友链简介',
-  `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '友链logo',
-  `url` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '友链地址',
-  `type` int(11) NULL DEFAULT 0 COMMENT '友链类型',
-  `sort` tinyint(4) NULL DEFAULT NULL COMMENT '排序ID',
-  `status` tinyint(1) NULL DEFAULT 1 COMMENT '友链状态',
-  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '友情链接表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_friendlink
--- ----------------------------
-INSERT INTO `sa_friendlink` VALUES (1, 'SAPHP极速开发', 'ThinkPHP框架里第二好用的框架', '', 'https://www.swiftadmin.net', 9, 1, 1, 1602040473, NULL);
-
--- ----------------------------
--- Table structure for sa_fulltext
--- ----------------------------
-DROP TABLE IF EXISTS `sa_fulltext`;
-CREATE TABLE `sa_fulltext`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `name` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '索引库',
-  `index` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '索引服务器',
-  `search` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '搜索服务器',
-  `username` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名',
-  `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '密码',
-  `type` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '索引服务类型',
-  `field` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '字段内容',
-  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_fulltext
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for sa_generate
@@ -1029,7 +595,7 @@ CREATE TABLE `sa_generate`  (
 -- ----------------------------
 -- Records of sa_generate
 -- ----------------------------
-INSERT INTO `sa_generate` VALUES (1, '测试代码', 0, 'sa_ceshi', '0', '0', '1', '1', 0, 'layui-icon-android', 'name,sex,avatar,hobby,age,tags,stars,city,createtime,album,content,json', '/ceshi/index', 'a:5:{i:0;a:6:{s:5:\"title\";s:6:\"查看\";s:5:\"route\";s:11:\"ceshi:index\";s:6:\"router\";s:12:\"/ceshi/index\";s:8:\"template\";s:6:\"默认\";s:4:\"auth\";s:1:\"1\";s:4:\"type\";s:1:\"1\";}i:1;a:6:{s:5:\"title\";s:6:\"添加\";s:5:\"route\";s:9:\"ceshi:add\";s:6:\"router\";s:10:\"/ceshi/add\";s:8:\"template\";s:6:\"默认\";s:4:\"auth\";s:1:\"1\";s:4:\"type\";s:1:\"1\";}i:2;a:6:{s:5:\"title\";s:6:\"编辑\";s:5:\"route\";s:9:\"ceshi:zdy\";s:6:\"router\";s:10:\"/ceshi/zdy\";s:8:\"template\";s:6:\"默认\";s:4:\"auth\";s:1:\"1\";s:4:\"type\";s:1:\"1\";}i:3;a:6:{s:5:\"title\";s:6:\"删除\";s:5:\"route\";s:14:\"ceshi:xiaoMing\";s:6:\"router\";s:15:\"/ceshi/xiaoMing\";s:8:\"template\";s:6:\"默认\";s:4:\"auth\";s:1:\"1\";s:4:\"type\";s:1:\"2\";}i:4;a:6:{s:5:\"title\";s:6:\"状态\";s:5:\"route\";s:12:\"ceshi:status\";s:6:\"router\";s:13:\"/ceshi/status\";s:8:\"template\";s:6:\"默认\";s:4:\"auth\";s:1:\"1\";s:4:\"type\";s:1:\"2\";}}', 'form', '1', '[{\"index\":0,\"tag\":\"input\",\"label\":\"姓名\",\"name\":\"name\",\"type\":\"text\",\"placeholder\":\"请输入\",\"default\":\"\",\"labelwidth\":\"110\",\"width\":100,\"maxlength\":\"\",\"min\":0,\"max\":0,\"required\":false,\"readonly\":false,\"disabled\":false,\"labelhide\":false,\"lay_verify\":\"\"},{\"index\":2,\"tag\":\"radio\",\"name\":\"sex\",\"label\":\"性别\",\"labelwidth\":110,\"width\":100,\"disabled\":false,\"labelhide\":false,\"options\":[{\"title\":\"男\",\"value\":\"1\",\"checked\":true},{\"title\":\"女\",\"value\":\"0\",\"checked\":false}]},{\"index\":3,\"tag\":\"upload\",\"name\":\"avatar\",\"label\":\"用户头像\",\"uploadtype\":\"images\",\"labelwidth\":110,\"width\":100,\"data_size\":102400,\"data_accept\":\"file\",\"disabled\":false,\"required\":false,\"labelhide\":false},{\"index\":5,\"tag\":\"cascader\",\"name\":\"city\",\"label\":\"城市\",\"data_value\":\"label\",\"labelwidth\":110,\"width\":100,\"data_parents\":true,\"labelhide\":false},{\"index\":4,\"tag\":\"checkbox\",\"name\":\"hobby\",\"label\":\"爱好\",\"lay_skin\":\"primary\",\"labelwidth\":110,\"width\":100,\"disabled\":false,\"labelhide\":false,\"options\":[{\"title\":\"写作\",\"value\":\"write\",\"checked\":true},{\"title\":\"阅读\",\"value\":\"read\",\"checked\":true},{\"title\":\"游戏\",\"value\":\"game\",\"checked\":false}]},{\"index\":6,\"tag\":\"json\",\"name\":\"json\",\"label\":\"数组组件\",\"labelwidth\":110,\"width\":100,\"labelhide\":false},{\"index\":1,\"tag\":\"editor\",\"name\":\"content\",\"label\":\"编辑器\",\"labelwidth\":110,\"width\":100,\"labelhide\":false}]', '1100px', '750px', 'a:1:{i:0;a:5:{s:5:\"table\";s:7:\"sa_user\";s:5:\"style\";s:6:\"hasOne\";s:10:\"foreignKey\";s:8:\"group_id\";s:8:\"localKey\";s:2:\"id\";s:13:\"relationField\";s:12:\"group_id,pwd\";}}', '0', 1647410738, 1646395278);
+INSERT INTO `sa_generate` VALUES (1, '测试代码', 0, 'sa_ceshi', '1', '1', '1', '1', 0, 'layui-icon-android', 'name,sex,avatar,hobby,age,tags,stars,city,createtime,album,json', '/ceshi/index', 'a:5:{i:0;a:6:{s:5:\"title\";s:6:\"查看\";s:5:\"route\";s:11:\"ceshi:index\";s:6:\"router\";s:12:\"/ceshi/index\";s:8:\"template\";s:6:\"默认\";s:4:\"auth\";s:1:\"1\";s:4:\"type\";s:1:\"1\";}i:1;a:6:{s:5:\"title\";s:6:\"添加\";s:5:\"route\";s:9:\"ceshi:add\";s:6:\"router\";s:10:\"/ceshi/add\";s:8:\"template\";s:6:\"默认\";s:4:\"auth\";s:1:\"1\";s:4:\"type\";s:1:\"1\";}i:2;a:6:{s:5:\"title\";s:6:\"编辑\";s:5:\"route\";s:9:\"ceshi:zdy\";s:6:\"router\";s:10:\"/ceshi/zdy\";s:8:\"template\";s:6:\"默认\";s:4:\"auth\";s:1:\"1\";s:4:\"type\";s:1:\"1\";}i:3;a:6:{s:5:\"title\";s:6:\"删除\";s:5:\"route\";s:14:\"ceshi:xiaoMing\";s:6:\"router\";s:15:\"/ceshi/xiaoMing\";s:8:\"template\";s:6:\"默认\";s:4:\"auth\";s:1:\"1\";s:4:\"type\";s:1:\"2\";}i:4;a:6:{s:5:\"title\";s:6:\"状态\";s:5:\"route\";s:12:\"ceshi:status\";s:6:\"router\";s:13:\"/ceshi/status\";s:8:\"template\";s:6:\"默认\";s:4:\"auth\";s:1:\"1\";s:4:\"type\";s:1:\"2\";}}', 'form', '1', '[{\"index\":0,\"tag\":\"input\",\"label\":\"姓名\",\"name\":\"name\",\"type\":\"text\",\"placeholder\":\"请输入\",\"default\":\"\",\"labelwidth\":\"110\",\"width\":100,\"maxlength\":\"\",\"min\":0,\"max\":0,\"required\":false,\"readonly\":false,\"disabled\":false,\"labelhide\":false,\"lay_verify\":\"\"},{\"index\":2,\"tag\":\"radio\",\"name\":\"sex\",\"label\":\"性别\",\"labelwidth\":110,\"width\":100,\"disabled\":false,\"labelhide\":false,\"options\":[{\"title\":\"男\",\"value\":\"1\",\"checked\":true},{\"title\":\"女\",\"value\":\"0\",\"checked\":false}]},{\"index\":3,\"tag\":\"upload\",\"name\":\"avatar\",\"label\":\"用户头像\",\"uploadtype\":\"images\",\"labelwidth\":110,\"width\":100,\"data_size\":102400,\"data_accept\":\"file\",\"disabled\":false,\"required\":false,\"labelhide\":false},{\"index\":5,\"tag\":\"cascader\",\"name\":\"city\",\"label\":\"城市\",\"data_value\":\"label\",\"labelwidth\":110,\"width\":100,\"data_parents\":true,\"labelhide\":false},{\"index\":4,\"tag\":\"checkbox\",\"name\":\"hobby\",\"label\":\"爱好\",\"lay_skin\":\"primary\",\"labelwidth\":110,\"width\":100,\"disabled\":false,\"labelhide\":false,\"options\":[{\"title\":\"写作\",\"value\":\"write\",\"checked\":true},{\"title\":\"阅读\",\"value\":\"read\",\"checked\":true},{\"title\":\"游戏\",\"value\":\"game\",\"checked\":false}]},{\"index\":6,\"tag\":\"json\",\"name\":\"json\",\"label\":\"数组组件\",\"labelwidth\":110,\"width\":100,\"labelhide\":false},{\"index\":1,\"tag\":\"editor\",\"name\":\"content\",\"label\":\"编辑器\",\"labelwidth\":110,\"width\":100,\"labelhide\":false}]', '1100px', '750px', 'a:1:{i:0;a:5:{s:5:\"table\";s:7:\"sa_user\";s:5:\"style\";s:6:\"hasOne\";s:10:\"foreignKey\";s:8:\"group_id\";s:8:\"localKey\";s:2:\"id\";s:13:\"relationField\";s:12:\"group_id,pwd\";}}', '0', 1649513297, 1646395278);
 
 -- ----------------------------
 -- Table structure for sa_guestbook
@@ -1051,12 +617,12 @@ CREATE TABLE `sa_guestbook`  (
   INDEX `id`(`id`) USING BTREE,
   INDEX `uid`(`user_id`) USING BTREE,
   INDEX `cid`(`cid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户留言表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户留言表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_guestbook
 -- ----------------------------
-INSERT INTO `sa_guestbook` VALUES (1, 0, 0, '游客', 'SwiftAdmin后台极速开发框架，安全高效，简单易懂，不错不错！', '感谢老铁支持！！！', 2130706433, 1, 1647328244, 1611143750, NULL);
+INSERT INTO `sa_guestbook` VALUES (1, 0, 1, '游客', 'SwiftAdmin后台极速开发框架，安全高效，简单易懂，不错不错', '感谢老铁支持！！！', 2130706433, 1, 1649501004, 1611143750, NULL);
 
 -- ----------------------------
 -- Table structure for sa_jobs
@@ -1072,7 +638,7 @@ CREATE TABLE `sa_jobs`  (
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '岗位管理' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '岗位管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_jobs
@@ -1083,51 +649,6 @@ INSERT INTO `sa_jobs` VALUES (3, '首席技术岗', 'cto', '主要职责是设�
 INSERT INTO `sa_jobs` VALUES (4, '首席运营官', 'coo', '又常称为运营官或营运总监)是公司团体里负责监督管理每日活动的高阶官员。COO是企业组织中最高层的成员之一，监测每日的公司运作，并直接报告给首席执行官。在某些公司中COO会同时兼任总裁，但通常COO还是以兼任常务或资深副总裁的情况居多。', 4, 1, 1611274981, NULL);
 INSERT INTO `sa_jobs` VALUES (5, '首席财务官', 'cof', '企业治理结构发展到一个新阶段的必然产物。没有首席财务官的治理结构不是现代意义上完善的治理结构。从这一层面上看，中国构造治理结构也应设立CFO之类的职位。当然，从本质上讲，CFO在现代治理结构中的真正含义，不是其名称的改变、官位的授予，而是其职责权限的取得，在管理中作用的真正发挥。', 5, 1, 1611275010, NULL);
 INSERT INTO `sa_jobs` VALUES (6, '普通员工', 'pop', '一线员工', 6, 1, 1611275128, NULL);
-
--- ----------------------------
--- Table structure for sa_navmenu
--- ----------------------------
-DROP TABLE IF EXISTS `sa_navmenu`;
-CREATE TABLE `sa_navmenu`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `pid` int(11) NULL DEFAULT 0 COMMENT '父类ID',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '名称',
-  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '导航地址',
-  `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
-  `status` int(11) NULL DEFAULT 1 COMMENT '状态',
-  `createtime` int(11) NULL DEFAULT NULL COMMENT '添加时间',
-  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '导航表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_navmenu
--- ----------------------------
-INSERT INTO `sa_navmenu` VALUES (1, 0, '导航测试', '/xiazai', 1, 1, 1610788293, NULL);
-INSERT INTO `sa_navmenu` VALUES (2, 1, '二级导航2', '/daohang', 2, 1, 1610788293, NULL);
-INSERT INTO `sa_navmenu` VALUES (3, 1, '网站编辑3', '/xiazaiD', 3, 1, 1610788293, NULL);
-
--- ----------------------------
--- Table structure for sa_project
--- ----------------------------
-DROP TABLE IF EXISTS `sa_project`;
-CREATE TABLE `sa_project`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `pid` int(10) UNSIGNED NULL DEFAULT 0,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `app_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `app_key` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `createtime` int(11) NULL DEFAULT NULL,
-  `delete_time` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'APP项目表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_project
--- ----------------------------
-INSERT INTO `sa_project` VALUES (1, 0, '示例应用', '/upload/images/2021-04-26/6086c217cb526.jpg', '1000001', 'ydFbQVBsRzovUMiISn0m2pLfY9WDTjkq', '这里只是一个示例应用，是为了方便你的API接口分类用的，仅仅只是一个展示功能！', 1612073268, NULL);
 
 -- ----------------------------
 -- Table structure for sa_systemlog
@@ -1150,56 +671,10 @@ CREATE TABLE `sa_systemlog`  (
   `status` int(11) NULL DEFAULT 1 COMMENT '执行状态',
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统日志表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_systemlog
--- ----------------------------
-INSERT INTO `sa_systemlog` VALUES (1, 'admin', 'admin', 'ceshi', 'add', '/admin.php/ceshi/add.html', 'C:\\wwwroot\\demo.swiftadmin.net\\runtime\\admin\\temp\\f416d078dcb3b7f4d6deda53c7a98eb2.php', 59, 'Undefined array key \"avatat\"', 'a:0:{}', 2130706433, 'GET', '1', 1, 1647410443);
-INSERT INTO `sa_systemlog` VALUES (2, 'admin', 'admin', 'ceshi', 'index', '/admin.php/ceshi/index.html', 'C:\\wwwroot\\demo.swiftadmin.net\\vendor\\topthink\\framework\\src\\think\\route\\dispatch\\Controller.php', 76, 'controller not exists:app\\admin\\controller\\Ceshi', 'a:0:{}', 2130706433, 'GET', '1', 1, 1647410688);
-
--- ----------------------------
--- Table structure for sa_tags
--- ----------------------------
-DROP TABLE IF EXISTS `sa_tags`;
-CREATE TABLE `sa_tags`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '词名称',
-  `pinyin` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '拼音',
-  `type` int(11) UNSIGNED NULL DEFAULT 1 COMMENT '1 正常词 2 敏感词',
-  `sort` int(11) NULL DEFAULT NULL COMMENT '字段排序',
-  `total` int(11) NULL DEFAULT NULL COMMENT '标签调用总数',
-  `index` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '搜索指数',
-  `link` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '是否内链',
-  `status` int(1) UNSIGNED NULL DEFAULT 1 COMMENT '词语状态',
-  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `id`(`id`) USING BTREE,
-  INDEX `type`(`type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'SEO关键词库' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_tags
--- ----------------------------
-
--- ----------------------------
--- Table structure for sa_tags_mapping
--- ----------------------------
-DROP TABLE IF EXISTS `sa_tags_mapping`;
-CREATE TABLE `sa_tags_mapping`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `tag_id` int(11) NULL DEFAULT NULL COMMENT '关键词id',
-  `aid` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '文档内容id',
-  `oid` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '预留其他ID',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `id`(`id`) USING BTREE,
-  INDEX `cid`(`aid`) USING BTREE,
-  INDEX `tid`(`tag_id`) USING BTREE,
-  INDEX `oid`(`oid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '关键词映射表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_tags_mapping
 -- ----------------------------
 
 -- ----------------------------
@@ -1211,7 +686,7 @@ CREATE TABLE `sa_user`  (
   `group_id` smallint(5) UNSIGNED NOT NULL DEFAULT 1 COMMENT '组id',
   `nickname` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户昵称',
   `pwd` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '密码',
-  `salt` char(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '密码盐',
+  `salt` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '密码盐',
   `qq` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'QQ',
   `avatar` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '头像',
   `heart` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '这个人很懒，什么都没有留下～ ' COMMENT '用户心情',
@@ -1243,11 +718,12 @@ CREATE TABLE `sa_user`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
   INDEX `group_id`(`group_id`, `status`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '会员管理' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '会员管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_user
 -- ----------------------------
+INSERT INTO `sa_user` VALUES (1, 1, '唐英俊', '4182a09d5544954439d1556f4c3f785a', 'ANWocM', '888888', '/static/images/user1.jpg', '这个人很懒，什么都没有留下～ ', 'one@swiftadmin.net', 15100001111, NULL, '河北省邯郸市中华区人民东路023号', 0, 568, NULL, NULL, NULL, 1, 10001, 'yfoeXZEatiLjJsbRcdwlpr', NULL, NULL, NULL, NULL, NULL, NULL, 1696378740, 1649490188, 35, NULL, NULL, 1621989902, NULL);
 
 -- ----------------------------
 -- Table structure for sa_user_group
@@ -1262,7 +738,7 @@ CREATE TABLE `sa_user_group`  (
   `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '会员组说明',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '会员组管理' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '会员组管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_user_group
@@ -1271,25 +747,6 @@ INSERT INTO `sa_user_group` VALUES (1, '初级会员', 'v1', 10, 1, '新注册�
 INSERT INTO `sa_user_group` VALUES (2, '中级会员', 'v2', 100, 1, '活跃会员', NULL);
 INSERT INTO `sa_user_group` VALUES (3, '高级会员', 'v3', 500, 1, '高级会员', NULL);
 INSERT INTO `sa_user_group` VALUES (4, '超级会员', 'v4', 0, 1, '超神会员', NULL);
-
--- ----------------------------
--- Table structure for sa_user_invitecode
--- ----------------------------
-DROP TABLE IF EXISTS `sa_user_invitecode`;
-CREATE TABLE `sa_user_invitecode`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `uid` int(11) NULL DEFAULT NULL COMMENT '用户uid',
-  `ruid` int(11) NULL DEFAULT NULL COMMENT '使用者uid',
-  `code` char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '邀请码',
-  `status` int(10) UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否使用',
-  `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户邀请码表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sa_user_invitecode
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for sa_user_third
@@ -1312,7 +769,7 @@ CREATE TABLE `sa_user_third`  (
   `expiretime` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '过期时间',
   PRIMARY KEY (`id`, `user_id`) USING BTREE,
   INDEX `user_id`(`user_id`, `type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '第三方登录表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '第三方登录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_user_third
@@ -1328,11 +785,11 @@ CREATE TABLE `sa_user_validate`  (
   `mobile` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手机号',
   `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '验证码',
   `event` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '事务类型',
-  `status` int(11) NULL DEFAULT 0 COMMENT '验证码状态',
+  `status` int(11) UNSIGNED NULL DEFAULT 1 COMMENT '验证码状态',
   `createtime` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `delete_time` int(11) NULL DEFAULT NULL COMMENT '软删除标识',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户验证码表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户验证码表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sa_user_validate

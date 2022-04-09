@@ -3,9 +3,8 @@ declare (strict_types = 1);
 
 namespace app\common\model\system;
 use think\Model;
-use app\common\library\Auth;
-use app\common\library\Content;
 use system\Random;
+use app\common\library\Globals;
 use think\model\concern\SoftDelete;
 
 /**
@@ -62,28 +61,7 @@ class User extends Model
      * @return object 
      */
     public static function onBeforeUpdate($data)
-    {
-        return self::changePassWord($data);
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param object $data
-     * @return void
-     */
-    public static function changePassWord($data)
-    {
-        if (!empty($data->pwd)) {
-            $salt = Random::alpha(8);
-            $data->pwd = member_encrypt($data->pwd,$salt);
-            $data->salt = $salt;
-        } else {
-            unset($data->pwd);
-        }
-
-        return $data;
-    }
+    {}
 
     /**
      * 注册会员后
@@ -136,7 +114,7 @@ class User extends Model
      */
     public function setAvatarAttr($value, $data)
     {
-        return Content::setImageAttr($value,$data);
+        return Globals::setImageAttr($value,$data);
     }
 
     /**
@@ -156,7 +134,7 @@ class User extends Model
      */
     public function setCreateipAttr($ip)
     {
-        return Content::setIPAttr($ip);
+        return Globals::setIPAttr($ip);
     }
 
     /**
@@ -164,7 +142,7 @@ class User extends Model
      */
     public function getCreateipAttr($ip)
     {
-        return Content::getIPAttr($ip);
+        return Globals::getIPAttr($ip);
     }
 
     /**
@@ -172,7 +150,7 @@ class User extends Model
      */
     public function setLoginipAttr($ip)
     {
-        return Content::setIPAttr($ip);
+        return Globals::setIPAttr($ip);
     }
 
     /**
@@ -180,7 +158,7 @@ class User extends Model
      */
     public function getLoginipAttr($ip)
     {
-        return Content::getIPAttr($ip);
+        return Globals::getIPAttr($ip);
     }
 
     /**
@@ -191,7 +169,7 @@ class User extends Model
      */
     public function setIPAttr($ip)
     {
-        return Content::setIPAttr($ip);
+        return Globals::setIPAttr($ip);
     }
 
     /**
@@ -202,7 +180,7 @@ class User extends Model
      */
     public function getIPAttr($ip)
     {
-        return Content::getIPAttr($ip);
+        return Globals::getIPAttr($ip);
     }
 
     /**

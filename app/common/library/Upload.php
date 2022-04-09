@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare (strict_types=1);
 // +----------------------------------------------------------------------
 // | swiftAdmin 极速开发框架 [基于ThinkPHP6开发]
 // +----------------------------------------------------------------------
@@ -31,18 +31,18 @@ class Upload
     /**
      * 文件类型
      */
-	protected $fileclass;
-	
+    protected $fileclass;
+
     /**
      * 文件名称
      */
-	protected $filename;
-	
+    protected $filename;
+
     /**
      * 文件保存路径
      */
     protected $filepath;
-    
+
     /**
      * 文件全路径名称
      */
@@ -57,7 +57,7 @@ class Upload
      * 上传来源
      */
     protected $ckeditor;
-    
+
     /**
      * 错误信息
      */
@@ -75,7 +75,7 @@ class Upload
     public function __construct()
     {
         $this->Images = new ImagesModel();
-        if ($config = saenv('upload')) {
+        if ($config = saenv('upload', true)) {
             $this->config = array_merge($this->config, $config);
         }
     }
@@ -83,7 +83,7 @@ class Upload
     /**
      * 初始化
      * @access public
-     * @param  array $options 参数
+     * @param array $options 参数
      * @return self
      */
 
@@ -95,166 +95,164 @@ class Upload
         // 返回实例
         return self::$instance;
     }
-    
+
     /**
      * logo 上传
      */
-    public function logo() 
+    public function logo()
     {
 
-		// 接收文件信息
+        // 接收文件信息
         $file = request()->file('file');
-		if (!$file || is_empty($file)) {
+        if (!$file || is_empty($file)) {
             $this->setError('上传文件读写失败！');
-			return false;
+            return false;
         }
 
         // 文件信息过滤器
         if (!$this->fileFilter($file)) {
             $this->setError($this->_error ?? '禁止上传的文件类型！');
-			return false;
+            return false;
         }
 
-        $this->filename = 'logo.'.strtolower($file->extension());
-        $this->filepath = 'static/images/';  
+        $this->filename = 'logo.' . strtolower($file->extension());
+        $this->filepath = 'static/images/';
 
         // 移动上传文件
-        if (!$file->move($this->filepath,$this->filename)) {
+        if (!$file->move($this->filepath, $this->filename)) {
             $this->setError('请检查服务器读写权限！');
-			return false;
+            return false;
         }
 
-        return $this->success('上传logo成功！','/'.$this->filepath.$this->filename);
+        return $this->success('上传logo成功！', '/' . $this->filepath . $this->filename);
     }
 
     /**
      * 用户头像上传
      */
-    public function avatar($id = 0) {
-        return $this->realUpload(true,$id);
+    public function avatar($id = 0)
+    {
+        return $this->realUpload(true, $id);
     }
 
     /**
      * 普通文件上传
      */
-    public function upload() {
+    public function upload()
+    {
         return $this->realUpload();
     }
 
     /**
-     * 真实上传函数
+     * 上传函数实例
      */
     public function realUpload(bool $avatar = false, $id = 0)
     {
         // 接收参数
-        $param = input(); 
-		$param['form'] = input('form/s');
-		if ($param['form'] == 'ckeditor') {
+        $param = input();
+        $param['form'] = input('form/s');
+        if ($param['form'] == 'ckeditor') {
             $param['input'] = $this->ckeditor = 'upload';
-		}else {
-			$param['input'] = 'file';
+        } else {
+            $param['input'] = 'file';
         }
 
         try {
             // 接收文件信息
             $file = request()->file($param['input']);
-            if (!$file || empty($file)) {
+
+            if (empty($file)) {
                 $this->setError('上传文件读写失败！');
                 return false;
             }
 
         } catch (\Throwable $th) {
-            return  $this->error($th->getMessage());
+            return $this->error($th->getMessage());
         }
 
-        $fileInfo = $file->getFileInfo();
-        $filesize = $file->getSize();
-    
         // 文件信息过滤器
         if (!$this->fileFilter($file)) {
             $this->setError($this->_error);
-			return false;
+            return false;
         }
 
         // 拼接文件路径
         if ($avatar) {
-            $this->filename = md5((string)$id).'_100x100.'.strtolower($file->extension());
-            $this->filepath = $this->config['upload_path'].'/avatars'; 
-        }else {
-            $this->filename = uniqid().'.'.strtolower($file->extension());
-            $this->filepath = $this->config['upload_path'].'/'.$this->fileclass.'/'.date($this->config['upload_style']); 
+            $this->filename = md5((string)$id) . '_100x100.' . strtolower($file->extension());
+            $this->filepath = $this->config['upload_path'] . '/avatars';
+        } else {
+            $this->filename = uniqid() . '.' . strtolower($file->extension());
+            $this->filepath = $this->config['upload_path'] . '/' . $this->fileclass . '/' . date($this->config['upload_style']);
         }
 
-        
-        $this->resource = $this->filepath .'/'. $this->filename;
+        $this->resource = $this->filepath . '/' . $this->filename;
 
         $attachment = [
             'filename' => $file->getOriginalName(), // 保存原始文件名
             'filesize' => $file->getSize(),
-            'url' => '/'.$this->resource,
+            'url' => '/' . $this->resource,
             'suffix' => $file->extension(),
-            'mimetype' => $file->getMime() ,
+            'mimetype' => $file->getMime(),
             'user_id' => cookie('uid') ?? 0,
             'sha1' => $file->hash(),
         ];
 
-    
+
         // 移动上传文件
         if (!$file->move($this->filepath, $this->filename)) {
             $this->setError('请检查服务器读写权限！');
-			return false;
+            return false;
         }
-        
+
         // 上传阿里云/FTP空间
         if (!$this->uploadOss() || !$this->uploadFtp()) {
             return false;
         }
 
         // 过滤gif文件
-        if ($this->fileclass == "images" 
-            && !strstr($file->extension(),'gif')) {
+        if ($this->fileclass == "images" && !strstr($file->extension(), 'gif')) {
 
             // 设置水印/微缩图
             if ($this->config['upload_water']) {
-                $this->Images->waterMark($this->resource,$this->config);
+                $this->Images->waterMark($this->resource, $this->config);
             }
 
-            if ($this->config['upload_thumb'] || $avatar ){
+            if ($this->config['upload_thumb'] || $avatar) {
                 $this->Images->thumb($this->filepath, $this->filename, $this->config, $avatar);
-            } 
+            }
         }
- 
+
         Attachment::create($attachment);
-        
-		return $this->success('文件上传成功！','/'.$this->resource);   
+
+        return $this->success('文件上传成功！', '/' . $this->resource);
     }
 
     protected function uploadOss()
     {
-        if (saenv('cloud.status')) {
+        if (saenv('cloud_status')) {
 
             if (!Event::hasListener('clouduploads')) {
                 $this->setError('未安装云上传插件');
                 return false;
             }
 
-           try {
+            try {
                 // 开启云上传
-                if (Event::trigger('clouduploads',[
-                    'type'=>saenv('cloud.type'),
-                    'object'=> $this->resource,
-                    'filename'=> $this->resource
-                    ]
-                ) !== false) {
+                if (Event::trigger('clouduploads', [
+                            'type' => saenv('cloud.type'),
+                            'object' => $this->resource,
+                            'filename' => $this->resource
+                        ]
+                    ) !== false) {
                     // 删除本地文件
                     if ($this->config['upload_del']) {
                         unlink($this->resource);
                     }
                 }
-           } catch (\Throwable $th) {
+            } catch (\Throwable $th) {
                 $this->setError($th->getMessage());
                 return false;
-           }
+            }
         }
 
         return true;
@@ -263,29 +261,28 @@ class Upload
     protected function uploadFtp()
     {
         // 上传FTP空间
-		if ($this->config['upload_ftp']) {
-            
-            // 存在微缩图则上传
-            $thumbfile = $this->filepath.'/thumb_'.$this->filename;
-            if ($this->config['upload_ftp'] && is_file($thumbfile)) {
-                $ftpstatus = Ftp::instance()->ftpUpload($thumbfile,$this->filepath,'thumb_'.$this->filename,$this->config);
-            }
-            
-            $ftpstatus = Ftp::instance()->ftpUpload($this->resource,$this->filepath,$this->filename,$this->config);
-			if ($ftpstatus) {
+        if ($this->config['upload_ftp']) {
 
-				// 删除本地文件
-				if ($this->config['upload_del']) {
+            // 存在微缩图则上传
+            $thumbfile = $this->filepath . '/thumb_' . $this->filename;
+            if ($this->config['upload_ftp'] && is_file($thumbfile)) {
+                 Ftp::instance()->ftpUpload($thumbfile, $this->filepath, 'thumb_' . $this->filename, $this->config);
+            }
+
+            $ftpstatus = Ftp::instance()->ftpUpload($this->resource, $this->filepath, $this->filename, $this->config);
+            if ($ftpstatus) {
+
+                // 删除本地文件
+                if ($this->config['upload_del']) {
                     unlink($thumbfile);
                     unlink($this->resource);
-                } 
-			}
-            else {
+                }
+            } else {
 
                 $this->setError('文件上传至FTP服务器异常');
                 return false;
-			}
-		}
+            }
+        }
 
         return true;
     }
@@ -293,11 +290,11 @@ class Upload
     /**
      * 验证文件类型
      */
-    public function fileFilter($file) 
+    public function fileFilter($file)
     {
         // 查找文件类型	
         foreach ($this->config['upload_class'] as $key => $value) {
-            if (stripos($value,strtolower($file->extension()))) {
+            if (stripos($value, strtolower($file->extension()))) {
                 $this->fileclass = $key;
                 break;
             }
@@ -306,10 +303,10 @@ class Upload
         // 验证一句话木马 /*如果是加密的无法判断*/
         $tempFile = $file->getPathname();
         $content = @file_get_contents($tempFile);
-        if (false == $content 
-            || preg_match('#<\?php#i', $content) 
-            || $file->getMime() == 'text/x-php' )  {
-			$this->fileclass = null;
+        if (false == $content
+            || preg_match('#<\?php#i', $content)
+            || $file->getMime() == 'text/x-php') {
+            $this->fileclass = null;
         }
 
         if ($this->fileclass == null) {
@@ -331,13 +328,13 @@ class Upload
     /**
      * JSON格式化信息
      */
-    public function success($msg, $url) 
+    public function success($msg, $url)
     {
         try {
             // 编辑器上传回显已去除
             if (!is_empty($this->ckeditor)
                 && ($this->config['upload_ftp'] || saenv('cloud.status'))) {
-                $url = str_replace('http:','',$this->config['upload_http_prefix']).$url;
+                $url = str_replace('http:', '', $this->config['upload_http_prefix']) . $url;
             }
         } catch (\Throwable $th) {
             echo $th->getMessage();
@@ -346,14 +343,15 @@ class Upload
         // 非空自动增加HTTP前缀
         $prefix = cdn_Prefix();
         if (!empty($prefix)) {
-            $url = $prefix.$url;
+            $url = $prefix . $url;
         }
 
-        return ['code'=>200,'msg'=>$msg,'url'=>$url];
+        return ['code' => 200, 'msg' => $msg, 'url' => $url];
     }
 
-    public function error($msg) {
-        return ['code'=>101,'msg'=>$msg];
+    public function error($msg)
+    {
+        return ['code' => 101, 'msg' => $msg];
     }
 
     /**

@@ -224,7 +224,7 @@ class Third extends HomeController
                 window.opener.refreshLogin();
                 window.close();
             </script>
-        Eof;
+Eof;
         echo $refreshLogin;
 	}
 }

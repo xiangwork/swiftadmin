@@ -27,6 +27,11 @@ a {
 	text-align: center;
 }
 
+
+.layui-nav .layui-this:after, .layui-nav-bar {
+    background: 0!important;
+}
+
 .layui-fluid {
 	padding: 15px;
 }
@@ -174,7 +179,7 @@ a {
 }
 
 .login-link {
-    padding: 20px 0 20px 0;
+    padding: 20px 0 20px 36px;
     margin-bottom: 8px;
     border-bottom: 1px solid #e6e6e6;
 }
@@ -198,12 +203,20 @@ a {
 }
 
 .layui-input, .layui-select, .layui-textarea {
-	height: 30px;
-	line-height: 30px;
+	height: 33px;
+	line-height: 33px;
 }
 
 .layui-form-item .layui-input-inline {
 	width: 230px;
+}
+
+.captcha {
+    display: inline-block;
+}
+
+input.captcha {
+    width: 200px;
 }
 
 .layui-nav-tree .layui-nav-item a:hover {
@@ -211,7 +224,7 @@ a {
 }
 
 #content .layui-nav-tree .layui-nav-bar {
-	background: 0 0;
+	background: 0!important;
 }
 
 #content .layui-user-desc {
@@ -237,77 +250,17 @@ a {
 }
 
 /* 修改原有样式 */
-.layui-btn-normal {
-	background: #2F4056;
-}
 
-.layui-nav .layui-this:after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after {
-	background: 0 0 ;
-}
 
-.layui-nav-tree {
-	width: 100%;
-}
-
-.layui-nav {
-	background-color: #fff;
-	color: #000
-}
-
-.layui-nav .layui-nav-item a {
-	padding-left: 35px;
-}
-
-.layui-nav .layui-nav-item a,.layui-nav .layui-nav-item a:hover, .layui-nav .layui-this a {
-	color: #000
-}
-
-.layui-nav-itemed>a {
-	color: #000!important;
-	background: #f2f2f2
+.layui-btn {
+    height: 33px;
+    line-height: 33px;
 }
 
 @media screen and (max-width: 992px) {
   #content {
   	padding-top: 100px;
   }
-}
-
-.layui-user-avatar {
-    width: 110px;
-    height: 110px;
-    position: relative;
-    display: inline-block;
-    border-radius: 50%;
-    border: 2px solid #eee;
-    margin-left: 120px;
-    cursor: pointer;
-    text-align: center;
-}
-
-.layui-user-avatar img {
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-}
-
-.layui-user-avatar:hover:after {
-    content: '\e65d';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    color: #eee;
-    background: rgba(0, 0, 0, 0.5);
-    font-family: layui-icon;
-    font-size: 24px;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    cursor: pointer;
-    line-height: 110px;
-    border-radius: 50%;
 }
 
 #footer {

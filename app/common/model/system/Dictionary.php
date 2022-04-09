@@ -1,5 +1,6 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
 
 namespace app\common\model\system;
 
@@ -12,19 +13,20 @@ use think\model\concern\SoftDelete;
 class Dictionary extends Model
 {
     use SoftDelete;
-    
+
     // 定义时间戳字段名
     protected $createTime = 'createtime';
-	protected $updateTime = 'updatetime';
+    protected $updateTime = 'updatetime';
 
     // 字段修改器
-    public function setSortAttr($value) 
+    public function setSortAttr($value)
     {
         if (is_empty($value)) {
             return self::count('id') + 1;
         }
+
         return $value;
-	}
+    }
 
     /**
      * 获取字典信息
@@ -36,18 +38,18 @@ class Dictionary extends Model
      */
     public static function queryDiction(array $where = [], string $field = '*', bool $style = true)
     {
-        $dicCacheName = sha1(implode(',',$where).$field);
+        $dicCacheName = sha1(implode(',', $where) . $field);
         $dicCacheData = system_cache($dicCacheName);
 
         if (empty($dicCacheData)) {
+            
             if ($style == false) {
                 $dicCacheData = self::where($where)->field($field)->find();
-            }
-            else {
+            } else {
                 $dicCacheData = self::where($where)->field($field)->select()->toArray();
             }
-            
-            system_cache($dicCacheName,$dicCacheData,saenv('cache_time'));
+
+            system_cache($dicCacheName, $dicCacheData, saenv('cache_time'));
         }
 
         return $dicCacheData;
@@ -58,7 +60,6 @@ class Dictionary extends Model
      */
     public static function minId()
     {
-        return (int)self::where('pid','0')->min('id');
+        return (int)self::where('pid', '0')->min('id');
     }
-	
 }

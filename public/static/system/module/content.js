@@ -13,8 +13,6 @@ layui.define(['jquery','layer'],function (exports) {
                 toolbar: 'code undo redo restoredraft | cut copy paste pastetext table | image axupimgs media print preview bdmap forecolor backcolor formatpainter bold italic underline strikethrough link anchor fullscreen | alignleft aligncenter alignright alignjustify outdent indent  | \
                 styleselect formatselect fontselect fontsizeselect | bullist numlist | blockquote subscript superscript removeformat | \
                 charmap emoticons hr pagebreak insertdatetime|  indent2em lineheight ',
-                // plugins: 'code print preview fullscreen paste searchreplace save autosave link autolink image imagetools media table codesample lists advlist hr charmap emoticons anchor directionality pagebreak quickbars nonbreaking visualblocks visualchars wordcount',
-                // toolbar: 'fullscreen preview code | undo redo | forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | formatselect fontselect fontsizeselect | link image media emoticons charmap anchor pagebreak codesample | ltr rtl',
                 height: 650, //编辑器高度
                 min_height: 400,
                 max_width: 1200,
@@ -28,7 +26,7 @@ layui.define(['jquery','layer'],function (exports) {
                         formData.append('file',file);
                         jquery.ajax({
                             type:'post',
-                            url: '/upload/file',
+                            url:  _fr4mework.app + '/upload/file',
                             data: formData,                   
                             async: false,
                             cache: false,

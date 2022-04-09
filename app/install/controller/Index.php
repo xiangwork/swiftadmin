@@ -7,11 +7,11 @@ use app\BaseController;
 use system\Random;
 
 class Index extends BaseController
-{   
+{
     /**
      * 使用协议
      *
-     * @return void
+     * @return \think\response\View
      */
     public function index()
     {
@@ -22,7 +22,7 @@ class Index extends BaseController
     /**
      * 检测安装环境
      *
-     * @return void
+     * @return mixed
      */
     public function step1() {
 
@@ -30,19 +30,16 @@ class Index extends BaseController
 
             // 检测生产环境
             foreach (checkenv() as $key => $value) {
-                
+
                 if ($key == 'php' && (float)$value < 7.3) {
                     return $this->error('PHP版本过低！');
                 }
 
-                if ($value == false && $value != 'redis') {
-                    return $this->error($key.'扩展未安装！');
-                }
             }
 
             // 检测目录权限
             foreach (check_dirfile() as $value) {
-                if ($value[1] == ERROR 
+                if ($value[1] == ERROR
                     || $value[2] == ERROR) {
                     return $this->error($value[3].' 权限读写错误！');
                 }
@@ -61,14 +58,14 @@ class Index extends BaseController
     /**
      * 检查环境变量
      *
-     * @return void
+     * @return mixed
      */
     public function step2() {
 
         if (!Cache::get('checkenv')) {
             return redirect('/install.php/index/step1');
         }
- 
+
         if (request()->isPost()) {
 
             // 链接数据库
@@ -77,13 +74,13 @@ class Index extends BaseController
             if (!$connect) {
                 return $this->error('数据库链接失败');
             }
-    
+
             // 检测MySQL版本
             $mysqlInfo = mysqli_get_server_info($connect);
             if ((float)$mysqlInfo < 5.5) {
                 return $this->error('MySQL版本过低');
             }
-    
+
             // 查询数据库名
             $database = mysqli_select_db($connect, $params['database']);
             if (!$database) {
@@ -99,10 +96,14 @@ class Index extends BaseController
                     return $this->error('数据表已存在，请勿重复安装');
                 }
             }
-            
-            Cache::set('mysqlInfo',$params);
+
+            Cache::set('mysqlInfo', $params);
+
+
             return json(['code'=>200,'url'=>'/install.php/index/step3']);
         }
+
+
 
         return view();
     }
@@ -110,19 +111,14 @@ class Index extends BaseController
     /**
      * 初始化数据库
      *
-     * @return void
+     * @return \think\response\Redirect|\think\response\View
      */
-    public function step3() 
+    public function step3()
     {
         $mysqlInfo = Cache::get('mysqlInfo');
         if (!$mysqlInfo) {
             return redirect('/install.php/index/step2');
         }
-
-        // 修改加密KEY
-        $config = config('system');
-        $config['auth']['auth_key'] = Random::alpha(16);
-        arr2file('../config/system.php',$config);
 
         return view();
     }
@@ -145,11 +141,11 @@ class Index extends BaseController
             $mysqlPath = app_path().'install.sql';
             $sqlRecords = file_get_contents($mysqlPath);
             $sqlRecords = str_replace("\r", "\n", $sqlRecords);
-    
+
             // 替换数据库表前缀
             $sqlRecords = explode(";\n", $sqlRecords);
             $sqlRecords = str_replace(" `sa_", " `{$mysqlInfo['prefix']}", $sqlRecords);
-            
+
             // 缓存任务总数
             $recordCount = count($sqlRecords);
             if ($recordCount >= 1 && is_numeric($recordCount)) {
@@ -157,7 +153,7 @@ class Index extends BaseController
                 Cache::set('recordCount',$recordCount);
             } else {
                 return $this->error('读取install.sql出错');
-            }            
+            }
 
             return $this->success('success');
         }
@@ -168,7 +164,7 @@ class Index extends BaseController
      *
      * @return void
      */
-    public function progress() 
+    public function progress()
     {
         if (request()->isAjax()) {
 
@@ -180,25 +176,25 @@ class Index extends BaseController
             $sqlConnect = @mysqli_connect($mysqlInfo['hostname'].':'.$mysqlInfo['hostport'], $mysqlInfo['username'], $mysqlInfo['password']);
             mysqli_select_db($sqlConnect, $mysqlInfo['database']);
             mysqli_query($sqlConnect, "set names utf8mb4");
-            
+
             $key = input('key/d') ?? 1;
             if (isset($sqlRecords[$key-1])) {
-                
+
                 $sqlLine = trim($sqlRecords[$key-1]);
                 if (!empty($sqlLine)) {
                     try {
                         // 创建表数据
-                        if (substr($sqlLine, 0, 12) == 'CREATE TABLE') {     
+                        if (substr($sqlLine, 0, 12) == 'CREATE TABLE') {
                             $name = preg_replace("/^CREATE TABLE `(\w+)` .*/s", "\\1", $sqlLine);
                             $msg  = "创建数据表 {$name}...";
 
                             if (mysqli_query($sqlConnect,$sqlLine) !== false) {
-                            $msg .= '成功！';
-                        }
-                            else {
-                            $msg .= '失败！';
+                                $msg .= '成功！';
                             }
-                        } 
+                            else {
+                                $msg .= '失败！';
+                            }
+                        }
                         else {
                             if (mysqli_query($sqlConnect,$sqlLine) === false) {
                                 throw new \Exception(mysqli_error($sqlConnect));
@@ -212,21 +208,21 @@ class Index extends BaseController
                 // 修改初始化密码
                 if ($key == ($recordCount-1)) {
                     $pwd = encryption($mysqlInfo['pwd']);
-                    mysqli_query($sqlConnect,"UPDATE {$mysqlInfo['prefix']}admin SET pwd='{$pwd}' where id = 1");   
+                    mysqli_query($sqlConnect,"UPDATE {$mysqlInfo['prefix']}admin SET pwd='{$pwd}' where id = 1");
                 }
 
                 // 更新进度
                 $progress = round(($key/$recordCount)*100).'%';
                 $result = [
-					'code'=> 200,
-					'total'=> $recordCount,
-					'key'=> $key,
-					'msg'=> $msg ?? '',
-					'progress'=> $progress,  
-				];
+                    'code'=> 200,
+                    'total'=> $recordCount,
+                    'key'=> $key,
+                    'msg'=> $msg ?? '',
+                    'progress'=> $progress,
+                ];
 
                 Cache::set('progress',$progress);
-				return json($result); 
+                return json($result);
             }
         }
     }
@@ -236,12 +232,12 @@ class Index extends BaseController
      *
      * @return void
      */
-    public function clear() 
+    public function clear()
     {
 
         if (request()->isAjax()) {
             try {
-            
+
                 $mysqlInfo = Cache::get('mysqlInfo');
                 $env = app_path().'install.env';
                 $parse = parse_ini_file($env,true);
@@ -252,13 +248,13 @@ class Index extends BaseController
                 $parse['DATABASE']['PASSWORD'] = $mysqlInfo['password'];
                 $parse['DATABASE']['PREFIX'] = $mysqlInfo['prefix'];
 
-                $parseInfo = parse_array_ini($parse);   
+                $parseInfo = parse_array_ini($parse);
                 write_file(root_path().'.env',$parseInfo);
-                write_file(root_path().'extend/conf/install.lock',true); 
+                write_file(root_path().'extend/conf/install.lock',true);
 
                 // 复制入口文件
                 copy('../extend/conf/index.tpl',public_path().'index.php');
-                
+
                 // 随机后台文件
                 $loginName = input('loginfile/s') ?? 'admin.php';
                 copy('../extend/conf/admin.tpl',public_path().$loginName);

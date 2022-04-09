@@ -32,12 +32,12 @@ class AdminRules
     if (saenv('system_alogs')) {
       $array = [
         'module'        => app()->http->getName(),
-        'controller'    => $request->controller(true),
-        'action'        => $request->action(true),
-        'params'        => serialize($request->param),
-        'method'        => $request->method,
-        'url'           => $request->baseUrl,
-        'ip'            => $request->ip,
+        'controller'    => request()->controller(true),
+        'action'        => request()->action(true),
+        'params'        => serialize(request()->param()),
+        'method'        => request()->method(),
+        'url'           => request()->baseUrl(),
+        'ip'            => request()->ip(),
         'name'          => session('AdminLogin.name'),
       ];
 

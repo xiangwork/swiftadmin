@@ -1,5 +1,6 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
 // +----------------------------------------------------------------------
 // | swiftAdmin 极速开发框架 [基于ThinkPHP6开发]
 // +----------------------------------------------------------------------
@@ -19,7 +20,7 @@ use think\exception\ValidateException;
 use think\exception\HttpResponseException;
 
 // 插件控制器基类
-class PluginController 
+class PluginController
 {
     /**
      * 控制器/类名
@@ -38,13 +39,13 @@ class PluginController
      * 错误消息
      * @var string
      */
-	public $error = null;
+    public $error = null;
 
     /**
      * 接口权限
      * @var object
      */
-	public $auth = null;
+    public $auth = null;
 
     /**
      * 用户登录ID
@@ -68,19 +69,19 @@ class PluginController
      * 禁止登录重复
      * @var array
      */
-	public $repeatLogin = [];
+    public $repeatLogin = [];
 
     /**
      * 非鉴权方法
      * @var array
      */
-	public $noNeedLogin = ['index'];
+    public $noNeedLogin = ['index'];
 
     /**
      * 跳转URL地址
      * @var string
      */
-	public $JumpUrl = '/';
+    public $JumpUrl = '/';
 
     /**
      * 构造方法
@@ -92,32 +93,31 @@ class PluginController
         $this->initialize();
     }
 
-    public function initialize() 
+    public function initialize()
     {
         $this->auth = Auth::instance();
         $this->action = request()->action(true);
         $this->controller = request()->controller(true);
-        if($this->auth->isLogin()) {
-            $this->userId = $this->auth->userInfo->id; 
-            $this->userInfo = $this->auth->userInfo; 
-            if(in_array($this->action,$this->repeatLogin)) {
+        if ($this->auth->isLogin()) {
+            $this->userId = $this->auth->userInfo->id;
+            $this->userInfo = $this->auth->userInfo;
+            if (in_array($this->action, $this->repeatLogin)) {
                 $this->redirect($this->JumpUrl);
             }
-        }
-        else { 
-            if ($this->userLogin && !in_array($this->action,$this->noNeedLogin)) {
-                return $this->error('请登录后访问','/');
+        } else {
+            if ($this->userLogin && !in_array($this->action, $this->noNeedLogin)) {
+                return $this->error('请登录后访问', '/');
             }
         }
-        
+
         foreach (config('system.site') as $key => $value) {
-            View::assign($key,$value);
+            View::assign($key, $value);
         }
 
-        View::assign('user',$this->auth->userInfo);
+        View::assign('user', $this->auth->userInfo);
     }
 
-        /**
+    /**
      * 验证数据
      * @access protected
      * @param  array        $data     数据
@@ -161,7 +161,7 @@ class PluginController
      * @param  mixed     $data 返回的数据
      * @param  integer   $wait 跳转等待时间
      * @param  array     $header 发送的Header信息
-     * @return void
+     * @return mixed
      */
     protected function success($msg = '', string $url = null, $data = '', int $count = 0,  int $code = 200, int $wait = 3, array $header = [])
     {
@@ -179,17 +179,17 @@ class PluginController
             'msg'  => $msg,
             'data' => $data,
             'count' => $count,
-            'url'  =>(string)$url,
+            'url'  => (string)$url,
             'wait' => $wait,
         ];
 
         $type = $this->getResponseType();
-        if (strtolower($type) == 'html'){
+        if (strtolower($type) == 'html') {
             $response = view(config('app.dispatch_success'), $result);
         } else if ($type == 'json') {
             $response = json($result);
         }
-        
+
         throw new HttpResponseException($response);
     }
 
@@ -201,7 +201,7 @@ class PluginController
      * @param  mixed     $data 返回的数据
      * @param  integer   $wait 跳转等待时间
      * @param  array     $header 发送的Header信息
-     * @return void
+     * @return mixed
      */
     protected function error($msg = '',  $url = null, $data = '', int $code = 101, int $wait = 3, array $header = [])
     {
@@ -215,12 +215,12 @@ class PluginController
             'code' => $code,
             'msg'  => $msg,
             'data' => $data,
-            'url'  =>(string)$url,
+            'url'  => (string)$url,
             'wait' => $wait,
         ];
 
         $type = $this->getResponseType();
-        if ($type == 'html'){
+        if ($type == 'html') {
             $response = view(config('app.dispatch_error'), $result);
         } else if ($type == 'json') {
             $response = json($result);
@@ -246,7 +246,7 @@ class PluginController
             $code   = $params;
             $params = [];
         }
-     
+
         $response->code($code);
         throw new HttpResponseException($response);
     }
@@ -269,14 +269,14 @@ class PluginController
      * @param  templateFile
      * @return void
      */
-    protected function buildHtml(string $htmlfile = null,string $htmlpath = null, string $templateFile = null,$suffix = 'html') 
+    protected function buildHtml(string $htmlfile = null, string $htmlpath = null, string $templateFile = null, $suffix = 'html')
     {
-        $content = View::fetch($templateFile); 
+        $content = View::fetch($templateFile);
         $htmlpath = !empty($htmlpath) ? $htmlpath : './';
-        $htmlfile = $htmlpath . $htmlfile . '.' . $suffix; 
+        $htmlfile = $htmlpath . $htmlfile . '.' . $suffix;
 
         // 写入静态文件
-        if(write_file($htmlfile, $content) === false) {
+        if (write_file($htmlfile, $content) === false) {
             return false;
         } else {
             return true;
@@ -290,8 +290,8 @@ class PluginController
      * @param  code        错误代码
      * @return void
      */
-	public function throwError(string $msg = 'not found!', int $code = 404)
+    public function throwError(string $msg = 'not found!', int $code = 404)
     {
-		abort($code,$msg);
-	}
+        abort($code, $msg);
+    }
 }

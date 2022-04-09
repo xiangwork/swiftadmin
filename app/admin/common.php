@@ -9,8 +9,8 @@ if (!function_exists('encryption')) {
     /**
      * 管理员密码加密
      */
-	function encryption($pwd, $salt = 'sw/ift', $encrypt = 'md5')
+	function encryption($pwd, $encrypt = 'md5')
 	{
-		return $encrypt($pwd . $salt);
+		return $encrypt($pwd);
 	}
 }

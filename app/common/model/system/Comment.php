@@ -5,7 +5,7 @@ namespace app\common\model\system;
 
 use think\Model;
 use think\model\concern\SoftDelete;
-use app\common\library\Content as ContentLibrary;
+use app\common\library\Globals;
 
 /**
  * @mixin \think\Model
@@ -81,7 +81,7 @@ class Comment extends Model
      */
     public function setIPAttr($ip)
     {
-        return ContentLibrary::setIPAttr($ip);
+        return Globals::setIPAttr($ip);
     }
 
     /**
@@ -92,6 +92,6 @@ class Comment extends Model
      */
     public function getIPAttr($ip)
     {
-        return ContentLibrary::getIPAttr($ip);
+        return Globals::getIPAttr($ip);
     }    
 }

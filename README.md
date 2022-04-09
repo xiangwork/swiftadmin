@@ -27,7 +27,7 @@ PS：本项目的开源包含很多清晰的注释，代码逻辑也不复杂，
 <b>管理账号  admin admin888 </b><br/>
 <b>测试账号  ceshi admin888 </b>如正式运营环境请删除测试账号;<br/>
 
-<b>开发环境：Windows服务器版 PhpStorm Apache MySQL5.7 PHP >= 7.3 支持PHP8  [最低支持PHP7.3]</b><br/>
+<b>开发环境：Linux PhpStorm Apache MySQL5.7 PHP >= 7.3 支持PHP8.1  [最低支持PHP7.3]</b><br/>
 
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/license-Apache-blue.svg" alt="swiftadmin"></a>
 <a href="https://gitee.com/meystack/swiftadmin/"><img src="https://img.shields.io/badge/ThinkPHP-6LTS-brightgreen.svg" alt="thinkphp"></a>
@@ -63,7 +63,14 @@ swiftadmin极速后台开发框架采用PHP+MYSQL的基础架构，秉承着代�
 你可以在这个基础上增加函数的过滤，这样来说，至少安全会更好一些；
 
 ```
+## 重要通知
 
+> 当前版本为`v1.1.1` 核心版, 以下部分模块在当前版本以至后期的升级版本中，都会已插件的方式存在
+```injectablephp
+> 也就是说，类似于API、广告管理、全文检索都已经被删掉了。
+> 如果你热衷于原生实现某些功能，可以使用 v1.1.0版本；
+> 你还需要注意的是，v1.1.0版本已经不再升级和维护！！！
+```
 
 ## 🔥 集成功能
 
