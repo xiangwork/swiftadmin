@@ -17,7 +17,6 @@ use app\common\library\Email;
 use app\common\library\Ftp;
 use app\common\model\system\Config;
 use think\facade\Cache;
-use think\facade\Db;
 use think\cache\driver\Redis;
 use think\cache\driver\memcached;
 use Throwable;
@@ -32,35 +31,8 @@ class Index extends AdminController
     // 控制台首页
     public function console()
     {
-        // 组合系统信息
-        $system['app'] = config('app.app_name');
-        $system['version'] = config('app.app_version');
-        $system['copyright'] = config('app.app_copyright');
-        $system['php_version'] = PHP_VERSION;
-        $system['php_sapi'] = PHP_SAPI;
-        $system['php_uname'] = php_uname();
-        $system['php_server'] = $_SERVER['SERVER_SOFTWARE'];
-        $system['ip'] = $_SERVER['SERVER_ADDR'];
-        $system['host'] = $_SERVER['HTTP_HOST'];
-        $system['gd_info'] = @gd_info();
-        $system['post_size'] = get_cfg_var('file_uploads') ? get_cfg_var("post_max_size") : '<font color="red">post_size error</font>';
-        $system['upload_max_filesize'] = get_cfg_var('file_uploads') ? get_cfg_var("upload_max_filesize") : '<font color="red">file upload error</font>';
-        $system['memory_limit'] = ini_get('memory_limit');
-        $system['openssl'] = extension_loaded('openssl') ? '<font color=green><strong>√</strong></font>' : '<font color="red">未开启</font>';
-        $system['zip'] = extension_loaded('zip') ? '<font color=green><strong>√</strong></font>' : '<font color="red">NO（请开启 php.ini 中的php-zip扩展）</font>';
-        $system['gzclose'] = function_exists('gzclose') ? '<font color=green><strong>√</strong></font>' : '<font color="red">NO（请开启 php.ini 中的php-zlib扩展）</font>';
 
-        $database = config('database.default');
-        if ($database == 'mysql' || $database == 'mysqli') {
-            $mysqlver = Db::query('select version()');
-            if (is_array($mysqlver)) {
-                $system['mysql_version'] = $database . ' ' . $mysqlver[0]['version()'];
-            }
-        } else {
-            $system['mysql_version'] = $database . ' 未知版本';
-        }
-
-        return view('', ['system' => $system]);
+        return view();
     }
 
     /**
