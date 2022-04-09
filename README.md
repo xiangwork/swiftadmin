@@ -129,11 +129,8 @@ http://www.swiftadmin.net/ # 把该域名换成你的域名
 > php7.3 安装问题 ; 
 
 ```
-Warning: require(/vendor/composer/../symfony/polyfill-intl-normalizer/bootstrap.php): failed to open stream: No such file or directory in /vendor/composer/autoload_real.php on line 78
 
-Fatal error: require(): Failed opening required '/vendor/composer/../symfony/polyfill-intl-normalizer/bootstrap.php' (include_path='.:/www/server/php/73/lib/php') in /vendor/composer/autoload_real.php on line 78
-
-Fatal error: Uncaught Error: Failed opening required '/vendor/composer/../symfony/polyfill-intl-normalizer/bootstrap.php' (include_path='.:') in /vendor/composer/autoload_real.php:78 Stack trace: #0 /vendor/composer/autoload_real.php(61): composerRequire437c84fd425ce20384726a1e89d87a70() #1 /vendor/autoload.php(7): ComposerAutoloaderInit437c84fd425ce20384726a1e89d87a70::getLoader() #2 /public/index.php(21): require('...') #3 {main} thrown in /vendor/composer/autoload_real.php on line 78
+安装的时候直接报500错误，请确保你的runtime有写入权限，如果还存在错误的话，请在根目录创建.env文件，并设置app_debug = 1
 
 ```
 
