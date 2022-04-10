@@ -51,9 +51,7 @@ class User extends Model
      * @return object 
      */
     public static function onBeforeInsert($data)
-    {
-        return self::changePassWord($data);
-    }
+    {}
 
     /**
      * 更新会员前

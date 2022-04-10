@@ -402,7 +402,7 @@ layui.define(['i18n'], function (exports) {
     /**
      * 本地安装插件
      */
-    $('*[lay-value=install]').click(function (res) {
+    $('*[data-value=install]').click(function (res) {
         table.reload('lay-tableList', {
             url: plugin.baseUrl + '/system.plugin/index?type=install'
         });
@@ -411,7 +411,7 @@ layui.define(['i18n'], function (exports) {
     /**
      * 更新插件缓存
      */
-    $('*[lay-value=cache]').click(function (res) {
+    $('*[data-value=cache]').click(function (res) {
         var confirm = layer.confirm('确定要更新缓存吗？', {
             title: '更新提示'
         }, function () {
