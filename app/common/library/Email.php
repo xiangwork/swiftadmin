@@ -37,17 +37,13 @@ class Email
 
     //默认配置
     protected $config = [
-        'smtp_server' => 'smtp.163.com',                // 服务器地址
-        'smtp_port' => 578,                            // 服务器端口
-        'smtp_user' => 'yourname@163.com',                // 邮件用户名
-        'smtp_pass' => '123',                            // 邮件密码
-        'smtp_name' => '管理员',                         // 发送邮件显示
     ];
 
     /**
      * 类构造函数
      * class constructor.
      */
+
     public function __construct()
     {
         // 此配置项为数组。
@@ -55,6 +51,8 @@ class Email
             $this->config = array_merge($this->config, $email);
         }
 
+        //测试
+//        var_dump($this->config);
         // 创建PHPMailer对象实例
         $this->mail = new PHPMailer();
         $this->mail->CharSet = 'UTF-8';
@@ -65,7 +63,7 @@ class Email
         $this->mail->SMTPDebug = $this->config['smtp_debug'];
         $this->mail->SMTPAuth = true;
         $this->mail->SMTPSecure = 'ssl';
-        $this->mail->Host = $this->config['smtp_server'];
+        $this->mail->Host = $this->config['smtp_host'];
         $this->mail->Port = $this->config['smtp_port'];
         $this->mail->Username = $this->config['smtp_user'];
         $this->mail->Password = trim($this->config['smtp_pass']);
@@ -284,7 +282,7 @@ class Email
         }
 
         $this->config = array_merge($this->config, $config);
-        $this->mail->Host = $this->config['smtp_server'];
+        $this->mail->Host = $this->config['smtp_host'];
         $this->mail->Port = $this->config['smtp_port'];
         $this->mail->Username = $this->config['smtp_user'];
         $this->mail->Password = trim($this->config['smtp_pass']);
