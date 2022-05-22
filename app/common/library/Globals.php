@@ -33,7 +33,7 @@ class Globals
             return pinyin($data['title'], true);
         }
 
-        return $pinyin;
+        return trim($pinyin);
     }
 
     /**
@@ -79,7 +79,7 @@ class Globals
             $content = str_replace($prefix, '', $content);
         }
 
-        return htmlspecialchars($content);
+        return $content;
     }
 
     /**
@@ -91,8 +91,6 @@ class Globals
     public static function getContentAttr($content, $data)
     {
         if (!empty($content)) {
-
-            $content = htmlspecialchars_decode($content);
 
             // 是否开启前缀
             if ($prefix = cdn_Prefix()) {
@@ -157,7 +155,7 @@ class Globals
      * @param   bool    $bool   链接OR替换
      * @return  string
      */
-    protected static function changeImages($image, $bool = true)
+    protected static function changeImages($image, $bool = true): string
     {
         $prefix = cdn_Prefix();
         if (!empty($prefix) && $image) {
@@ -214,14 +212,4 @@ class Globals
 
         return $skin;
     }
-
-    /**
-     * 获取内容页地址
-     * @access  public
-     * @param   mixed $readUrl
-     * @param   object $data
-     * @return  string
-     */
-    public static function getReadurlAttr($readUrl, $data)
-    {}
 }

@@ -25,8 +25,23 @@ use app\common\model\system\AdminAccess as AdminAccessModel;
 class Admin extends AdminController
 {
 
-    // 分组数组
+    /**
+     * 用户管理组
+     * @var null
+     */
     protected $group = null;
+
+    /**
+     * 用户岗位
+     * @var null
+     */
+    public $jobs = null;
+
+    /**
+     * 用户部门
+     * @var null
+     */
+    public $department = null;
 
     // 初始化函数
     public function initialize()
@@ -36,6 +51,7 @@ class Admin extends AdminController
         $this->jobs = Jobs::select()->toArray();
         $this->group = AdminGroupModel::select()->toArray();
         $this->department = Department::getListTree();
+
         foreach ($this->group as $k => $v) {
             $this->group[$k]['title'] = __($v['title']);
         }
@@ -81,11 +97,11 @@ class Admin extends AdminController
 
             // 循环处理数据
             foreach ($list as $key => $value) {
-
                 $groupIDs = explode(',', $value['group_id']);
                 foreach ($groupIDs as $field => $id) {
                     // 查找组
-                    if ($result = list_search($this->group, ['id' => $id])) {
+                    $result = list_search($this->group, ['id' => $id]);
+                    if (!empty($result)) {
                         $list[$key]['group'][$field] = $result;
                     }
                 }
@@ -94,11 +110,11 @@ class Admin extends AdminController
                     $list[$key]['group'] = list_sort_by($list[$key]['group'], 'id');
                 }
 
-                $authnodes = $this->auth->getRulesNode($value['id']);
-                $list[$key][AUTHRULES] = $authnodes[$this->auth->authPrivate];
+                $authNodes = $this->auth->getRulesNode($value['id']);
+                $list[$key][AUTHRULES] = $authNodes[$this->auth->authPrivate];
 
-                $authnodes = $this->auth->getRulesNode($value['id'], AUTHCATES);
-                $list[$key][AUTHCATES] = $authnodes[$this->auth->authPrivate];
+                $authNodes = $this->auth->getRulesNode($value['id'], AUTHCATES);
+                $list[$key][AUTHCATES] = $authNodes[$this->auth->authPrivate];
             }
 
             return $this->success('查询成功', null, $list, $count);
@@ -132,8 +148,8 @@ class Admin extends AdminController
             }
 
             // 管理员加密
-            $post['pwd'] = encryption($post['pwd']);
-            $post['createip'] = request()->ip();
+            $post['pwd'] = encryptPwd($post['pwd']);
+            $post['create_ip'] = request()->ip();
             $data = $this->model->create($post);
             if (!is_empty($data->id)) {
                 $access['admin_id'] = $data->id;
@@ -171,7 +187,7 @@ class Admin extends AdminController
                 // 修改密码
                 $data = $this->model->find($id);
                 if (!empty($data) && $data['pwd'] != $post['pwd']) {
-                    $post['pwd'] = encryption($post['pwd']);
+                    $post['pwd'] = encryptPwd($post['pwd']);
                 }
 
                 if ($this->model->update($post)) {
@@ -251,26 +267,32 @@ class Admin extends AdminController
     }
 
     /**
+     * 获取用户菜单
+     * @return void
+     */
+    public function authorities()
+    {
+        if (\request()->isAjax()) {
+            return $this->auth->getRulesMenu();
+        }
+    }
+
+    /**
      * 权限函数接口
      * @access      public
      * @return      mixed|array
      */
-    public function authorizeInterface()
+    public function getRuleCateTree()
     {
-        $action = request()->param('action/s');
         if (request()->isAjax()) {
-            $action = $action ?? 'getRulesMenu';
-            if (is_callable(array($this->auth, $action))) {
-
-                try {
-                    return call_user_func(array($this->auth, $action), input());
-                } catch (\Throwable $t) {
-                    return $this->error($t->getMessage());
-                }
+            $type = input('type/s') ?? 'rules';
+            try {
+                $list = $this->auth->getRuleCatesTree($type, $this->auth->authPrivate);
+            } catch (\Exception $e) {
+                return $this->error($e->getMessage());
             }
+            return $list;
         }
-
-        $this->throwError('无权访问！', 401);
     }
 
     /**
@@ -292,31 +314,31 @@ class Admin extends AdminController
                 '0' => [
                     'title' => '你收到了几份周报！',
                     'type' => '周报类型',
-                    'createtime' => '1周前',
+                    'create_time' => '1周前',
                 ],
                 '1' => [
                     'title' => '你收到了来自女下属的周报',
                     'type' => '周报类型',
-                    'createtime' => '2周前',
+                    'create_time' => '2周前',
                 ]
             ],
             'comment' => [
                 '0' => [
                     'title' => '一个领导评论了你',
                     'content' => '小伙子不错，继续努力！',
-                    'createtime' => '1周前',
+                    'create_time' => '1周前',
                 ]
             ],
             'things' => [
                 '0' => [
                     'title' => '客户说尽快修复瞟了么APP闪退的问题...',
                     'type' => '0',
-                    'createtime' => '1周前',
+                    'create_time' => '1周前',
                 ],
                 '1' => [
                     'title' => '秦老板和经销商的下季度合同尽快签订！',
                     'type' => '1',
-                    'createtime' => '2周前',
+                    'create_time' => '2周前',
                 ]
             ],
         ];
@@ -432,11 +454,11 @@ class Admin extends AdminController
 
             // 查找数据
             $where[] = ['id', '=', $this->admin['id']];
-//            $where[] = ['pwd', '=', encryption($pwd)];
+            $where[] = ['pwd', '=', encryptPwd($pwd)];
             $result = $this->model->where($where)->find();
 
             if (!empty($result)) {
-                $this->model->where($where)->update(['pwd' => encryption($post['pass'])]);
+                $this->model->where($where)->update(['pwd' => encryptPwd($post['pass'])]);
                 $this->success('更改密码成功！');
             } else {
                 $this->error('原始密码输入错误');

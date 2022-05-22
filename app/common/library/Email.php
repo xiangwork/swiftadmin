@@ -3,6 +3,7 @@ declare (strict_types=1);
 
 namespace app\common\library;
 
+use app\common\model\system\UserValidate;
 use PHPMailer\PHPMailer\PHPMailer;
 use system\Random;
 
@@ -24,9 +25,9 @@ class Email
     protected $mail = [];
 
     /**
-     * @vaObject 验证码对象实例
+     * @userValiModel 验证码对象实例
      */
-    public $vaObject = null;
+    public $userValiModel = null;
 
 
     /**
@@ -37,13 +38,17 @@ class Email
 
     //默认配置
     protected $config = [
+        'smtp_host' => 'smtp.163.com',                // 服务器地址
+        'smtp_port' => 465,                            // 服务器端口
+        'smtp_user' => 'yourname@163.com',                // 邮件用户名
+        'smtp_pass' => '123',                            // 邮件密码
+        'smtp_name' => '管理员',                         // 发送邮件显示
     ];
 
     /**
      * 类构造函数
      * class constructor.
      */
-
     public function __construct()
     {
         // 此配置项为数组。
@@ -51,8 +56,6 @@ class Email
             $this->config = array_merge($this->config, $email);
         }
 
-        //测试
-//        var_dump($this->config);
         // 创建PHPMailer对象实例
         $this->mail = new PHPMailer();
         $this->mail->CharSet = 'UTF-8';
@@ -68,9 +71,8 @@ class Email
         $this->mail->Username = $this->config['smtp_user'];
         $this->mail->Password = trim($this->config['smtp_pass']);
         $this->mail->SetFrom($this->config['smtp_user'], $this->config['smtp_name']);
-
         // 实例化数据库对象
-        $this->vaObject = new \app\common\model\system\UserValidate();
+        $this->userValiModel = new UserValidate();
     }
 
     /**
@@ -176,6 +178,20 @@ class Email
     }
 
     /**
+     * 获取最后一条
+     * @param string $email
+     * @return UserValidate|array|mixed|\think\Model|null
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function getLast(string $email)
+    {
+        $sms = UserValidate::where('email', $email)->order('id', 'desc')->find();
+        return $sms ?: null;
+    }
+
+    /**
      * 发送验证码
      */
     public function captcha(string $email = '', string $event = "default")
@@ -187,7 +203,7 @@ class Email
             'email' => $email,
         ];
 
-        $this->vaObject->create($array);
+        $this->userValiModel->create($array);
 
         // 设置标题
         $this->to($email)->Subject("验证码")->MsgHTML("验证码为：" . $code);
@@ -206,7 +222,7 @@ class Email
      */
     public function check(string $email, $code = '', string $event = "default")
     {
-        $result = $this->vaObject->where([
+        $result = $this->userValiModel->where([
             ['event', '=', $event],
             ['email', '=', $email],
             ['status', '=', 1],
@@ -214,15 +230,13 @@ class Email
 
         if (!empty($result) && $result->code == $code) {
 
-            // 验证码失效
+            // 设置已使用
             $result->status = 0;
             $result->save();
 
-            // 计算间隔期
-            $time = strtotime($result['createtime']);
-            $difftime = time() - $time;
-
-            if (($difftime / 60) <= saenv('user_valitime')) {
+            // 是否过期
+            $expires = time() - strtotime($result['create_time']);
+            if ($expires <= 60) {
                 return true;
             }
 

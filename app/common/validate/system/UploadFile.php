@@ -13,7 +13,7 @@ class UploadFile extends Validate
      *
      * @var array
      */	
-	protected $rule = [
+	public $rule = [
 		'images'=>[
 			'fileSize' => 419430400,
 			'fileExt' => 'jpg,jpeg,png,bmp,gif,svg',

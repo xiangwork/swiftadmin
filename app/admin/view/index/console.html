@@ -1,94 +1,14 @@
 <include file="/public/header"/>
 <script src="__STATICADMIN__module/echarts/echarts.js?console"></script>
 <style>
-
     .layui-row {
         overflow: hidden;
         margin-bottom: 10px;
     }
 
-
     .layui-table {
         height: 250px;
     }
-
-    .layui-table tr {
-        cursor: pointer;
-    }
-
-    .task .layui-table td {
-        white-space: nowrap;
-        max-width: 120px;
-    }
-
-    .layui-table[lay-skin="nob"] th, .layui-table[lay-skin="nob"] td {
-        white-space: nowrap;
-        max-width: 50px;
-        overflow: hidden;
-    }
-
-    ul.layui-timeline {
-        height: 260px;
-        overflow: hidden;
-    }
-
-    ul.layui-timeline:hover {
-        overflow-y: auto;
-    }
-
-    .layui-carousel {
-        height: 260px;
-    }
-
-    .layui-carousel > [carousel-item] > * {
-        background: 0 0;
-    }
-
-
-    .layui-carousel > [carousel-item]:before {
-        content: '';
-    }
-
-    /** 小组成员 */
-    .console-user-group {
-        position: relative;
-        padding: 10px 0 10px 60px;
-    }
-
-    .console-user-group .console-user-group-head {
-        width: 32px;
-        height: 32px;
-        position: absolute;
-        top: 50%;
-        left: 12px;
-        margin-top: -16px;
-        border-radius: 50%;
-    }
-
-    .console-user-group .layui-badge {
-        position: absolute;
-        top: 50%;
-        right: 8px;
-        margin-top: -10px;
-    }
-
-    .console-user-group .console-user-group-name {
-        line-height: 1.2;
-    }
-
-    .console-user-group .console-user-group-desc {
-        color: #8c8c8c;
-        line-height: 1;
-        font-size: 12px;
-        margin-top: 5px;
-    }
-
-    @media screen and (max-width: 1200px) {
-        .layui-admin-workplace {
-            margin: 0 8px 0px 1px;
-        }
-    }
-
 </style>
 
 <div class="layui-fluid ">
@@ -142,8 +62,7 @@
                             <a href="http://www.rookiew.com" class="workplace-action" target="_blank"
                                title="菜鸟教程 - 免费基础编程教学">菜鸟教程 ❤️</a>
                             <a href="https://www.yingtwo.com" class="workplace-action" target="_blank"
-                               title="高性价比云服务器">云服务器 <span class="layui-badge"
-                                                           style="height: 11px;line-height:11px;font-size:10px;">HOT</span></a>
+                               title="高性价比云服务器">云服务器 <span class="layui-badge" style="height: 11px;line-height:11px;font-size:10px;">HOT</span></a>
                             <a href="javascript:;" class="workplace-action" sa-event="tabs"
                                data-url="{:url('/system.plugin/index')}"
                                title="插件管理">插件管理</a>
@@ -392,23 +311,23 @@
                         <tbody>
                         <tr>
                             <td>当前版本</td>
-                            <td><a href="http://www.swiftadmin.net/" target="_blank">{:config('app.version')}</a>
-                                <a href="http://www.swiftadmin.net/service/update.html" target="_blank"
+                            <td><a href="http://www.swiftadmin.net/" target="_blank">{:release()}</a>
+                                <a href="https://www.swiftadmin.net/download/" target="_blank"
                                    style="padding-left: 10px;">日志</a>
                                 <a href="javascript:;" sa-event="update" style="padding-left: 5px;">检查更新</a>
                             </td>
                         </tr>
                         <tr>
                             <td>前端框架</td>
-                            <td>layui-v2.7 / 多语言 / 多布局 / 前端鉴权</td>
+                            <td>layui-v2.6-Fix / 多语言 / 多布局 / 前端鉴权</td>
                         </tr>
                         <tr>
                             <td>后端框架</td>
-                            <td>ThinkPHP6.*</td>
+                            <td>ThinkPHP6lts</td>
                         </tr>
                         <tr>
                             <td>PHP版本</td>
-                            <td>支持>=7.* 8* QQ群：68221484</td>
+                            <td>支持>=7.3 &8 QQ群：68221484</td>
                         </tr>
                         <tr>
                             <td>主要特色</td>
@@ -421,7 +340,8 @@
                                     <div class="layui-col-md4"><a href="https://www.swiftadmin.net/authorize.html"
                                                                   target="_blank" class="layui-btn layui-btn-danger">获取授权</a>
                                     </div>
-                                    <div class="layui-col-md4"><a href="#" target="_blank" class="layui-btn">立即下载</a>
+                                    <div class="layui-col-md4">
+                                        <a href="https://www.swiftadmin.net/download/" target="_blank" class="layui-btn">立即下载</a>
                                     </div>
                                 </div>
                             </td>

@@ -30,7 +30,6 @@ class Login extends AdminController
 	 */
 	public function index()
 	{
-
 		if (request()->isPost()) {
 
 			// 用户信息
@@ -73,8 +72,8 @@ class Login extends AdminController
 					return $this->error('帐号未审核或已被禁用，原因：' . $result['banned'] . '！');
 				}
 
-				$result->loginip = request()->ip();
-				$result->logintime = time();
+				$result->login_ip = request()->ip();
+				$result->login_time = time();
 				$result->count = $result->count + 1;
 
 				try {

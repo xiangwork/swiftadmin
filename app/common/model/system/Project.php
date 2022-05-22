@@ -14,7 +14,7 @@ class Project extends Model
     use SoftDelete;
 
     // 定义时间戳字段名
-    protected $createTime = 'createtime';
-    protected $updateTime = 'updatetime';
+    protected $createTime = 'create_time';
+    protected $updateTime = 'update_time';
 }
 

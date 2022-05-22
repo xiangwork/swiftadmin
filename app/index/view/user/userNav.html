@@ -1,17 +1,23 @@
-<!--// hook前台菜单-->
-{:hook('user_sidenav_before')}
+<!--// 初始化菜单-->
 <ul class="layui-nav layui-nav-tree" lay-filter="master">
-	<li class="layui-nav-item {:usenav_highlighted('/user/index')}"><a href="/user/index">控制台</a></li>
-	<li class="layui-nav-item {:usenav_highlighted('/user/order')}"><a href="/user/order">订单管理</a></li>
-
-	<li class="layui-nav-item {:usenav_highlighted('/user/notice')}"><a href="/user/notice">消息中心</a></li>
-	<li class="layui-nav-item layui-nav-itemed">
+	<li class="layui-nav-item layui-this">
+		<a lay-href="/user/profile">控制台</a>
+	</li>
+	<!--// hook前台菜单-->
+	{:hook('user_sidenav_before')}
+	<li class="layui-nav-item">
+		<a class="#" href="javascript:;">反馈管理</a>
+		<dl class="layui-nav-child">
+			<dd><a lay-href="/user/comment">我的评论</a></dd>
+			<dd><a lay-href="/user/gbook">我的留言</a></dd>
+		</dl>
+	</li>
+	{:hook('user_sidenav_after')}
+	<li class="layui-nav-item">
 		<a class="#" href="javascript:;">账号设置</a>
 		<dl class="layui-nav-child">
-			<dd class="{:usenav_highlighted('/user/appid')}"><a href="/user/personal">实名认证</a></dd>
-			<dd class="{:usenav_highlighted('/user/appid')}"><a href="/user/comment">我的评论</a></dd>
-			<dd class="{:usenav_highlighted('/user/appid')}"><a href="/user/gbook">我的留言</a></dd>
+			<dd><a lay-href="/user/security">安全设置</a></dd>
 		</dl>
 	</li>
 </ul>
-{:hook('user_sidenav_after')}
+

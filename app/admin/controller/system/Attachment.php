@@ -58,6 +58,6 @@ class Attachment extends AdminController
             return $this->success('查询成功', "", $list, $count);
         }
 
-		return view();
+		return view(input('type') ?? 'index');
     }
 }

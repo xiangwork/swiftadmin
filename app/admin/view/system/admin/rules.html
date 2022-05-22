@@ -52,7 +52,7 @@
         </div>
         <label class="layui-form-label"><font color="red">* </font>{:__('权限标识')}</label>
         <div class="layui-input-inline">
-            <input name="alias" placeholder="{:__('请输入权限标识')}" type="text" class="layui-input alias"  lay-verify="required"  />
+            <input name="alias" placeholder="{:__('system.target:index')}" type="text" disabled class="layui-input alias layui-disabled"  lay-verify="required"  />
         </div>
     </div>
 
@@ -83,7 +83,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">{:__('路由地址')}</label>
         <div class="layui-input-inline">
-            <input name="router" placeholder="{:__('请输入路由地址')}" type="text" class="layui-input router"  lay-verify="required" />
+            <input name="router" placeholder="{:__('/system.target/index')}" type="text" class="layui-input router"  lay-verify="required" />
         </div>
         <label class="layui-form-label"><font color="red">* </font>{:__('是否鉴权')}</label>
         <div class="layui-input-inline">
@@ -163,7 +163,7 @@
                         }, align: 'center'
                     },
                     {field: 'sort',  width: 80, align: 'center',title: '{:__("排序")}'},
-                    {field: 'createtime', align: 'center',title: '{:__("创建时间")}'},
+                    {field: 'create_time', align: 'center',title: '{:__("创建时间")}'},
                     {align: 'center', toolbar: '#tableBar', width: 220,title: '{:__("操作")}'},
                 ]]
             });
@@ -226,15 +226,12 @@
         // 渲染权限select元素
         var draSelect = function(tableThis, subadd) {
 
-            // 判断是编辑还是添加，还是自定义添加
-            // 这里只判断event // 一定要先判断tableThis
-            // 对于操作不太多的情况下，完全可以写在一起！
             var checkedId = [];
             if (typeof(tableThis) !== "undefined") {
 
-                if (tableThis.event == 'add') { // 注意这里是列表里的添加按钮
+                if (tableThis.event === 'add') {
                     checkedId.push(tableThis.data.id);
-                }else {
+                } else {
                     // 这里需要自己判断pid是否等于0，否则会报错！
                     if (tableThis.data.pid !== 0) {
                         checkedId.push(tableThis.data.pid);
@@ -295,7 +292,13 @@
         // 监听input表单
         var inputchange = function() {
             jquery('.router').bind('input propertychange change',function(data){
-                var router = jquery('.router').val().substring(1);
+                let router = jquery('.router').val();
+                let first = router.substr(0, 1);
+                if (first !== '/') {
+                    jquery('.router').val('/');
+                    return layui.layer.error('路由必须以/符号开始');
+                }
+                router = router.substring(1);
                 jquery('.alias').val(router.replace('/',':'));
             })
         }
@@ -314,7 +317,6 @@
                 }else {
                      _pageUrl = pageThat.attr('lay-add');
                 }
-                
                 
                 if (typeof(_pageUrl) === 'undefined') {
                     layer.msg('按钮缺少 url 属性','info'); 
@@ -337,6 +339,7 @@
                             }
 
                             // 调用接口更新菜单
+                            top.layui.admin.reloadLayout();
 
                             // 关闭当前窗口
                             layer.close(colletction.index);

@@ -125,25 +125,6 @@ class Sms
                 $this->params = array(Random::number(4));
             }
 
-            // 判断类型并设置时间限制
-            if ($this->autoPrarms) {
-                if (is_array($this->phone)) {
-                    $phone = implode(',', $this->phone);
-                } else {
-                    $phone = $this->phone;
-                }
-
-                $phone = str_replace("+86", "", $phone);
-                $result = UserValidate::where("mobile", $phone)->order('id desc')->find();
-                if (!empty($result)) {
-                    $difftime = time() - strtotime($result['createtime']);
-                    if (($difftime / 60) <= saenv('user_valitime')) {
-                        $this->setError("请求的频率过快，请稍后再试！");
-                        return false;
-                    }
-                }
-            }
-
             if (!$this->valiParam($this->phone, $this->params)) {
                 $this->setError("暂时只支持大陆手机号！");
                 return false;
@@ -174,7 +155,7 @@ class Sms
                     "PhoneNumberSet" => $this->phone,            # 手机号
                     "TemplateParamSet" => $this->params,        # 变量
                     "TemplateID" => $template,                   # 模板ID
-                    "SmsSdkAppid" => $config['app_id'],          # APPID    
+                    "SmsSdkAppid" => $config['app_id'],          # APPID
                     "Sign" => $config['app_sign']               # 公司签名
                 ])->request();
 
@@ -300,13 +281,31 @@ class Sms
     }
 
     /**
+     * 获取最后一条
+     * @param string $mobile
+     * @return UserValidate|array|mixed|\think\Model|null
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function getLast(string $mobile)
+    {
+        $sms = UserValidate::where('mobile', $mobile)->order('id', 'desc')->find();
+        return $sms ?: null;
+    }
+
+    /**
      * 检查验证码
      *
      * @param string $mobile
+     * @param string $code
      * @param string $event
      * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
-    public function check(string $mobile, $code = '', string $event = "default")
+    public function check(string $mobile, string $code, string $event = "default")
     {
         $result = UserValidate::where([
             ['event','=',$event],
@@ -314,16 +313,14 @@ class Sms
             ['status', '=', 1],
         ])->order("id", "desc")->find();
 
-        if (!empty($result) && $result->code == $code) {
+        if (!empty($result) && $result->code === $code) {
 
             $result->status = 0;
             $result->save();
 
-            // 计算间隔期
-            $time = strtotime($result['createtime']);
-            $difftime = time() - $time;
-
-            if (($difftime / 60) <= saenv('user_valitime')) {
+            // 是否过期
+            $expires = time() - strtotime($result['create_time']);
+            if ($expires <= 60) {
                 return true;
             }
 

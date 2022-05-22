@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare (strict_types=1);
 // +----------------------------------------------------------------------
 // | swiftAdmin 极速开发框架 [基于ThinkPHP6开发]
 // +----------------------------------------------------------------------
@@ -10,6 +10,7 @@ declare (strict_types = 1);
 // | Author: 权栈 <coolsec@foxmail.com>  Apache 2.0 License Code
 // +----------------------------------------------------------------------
 namespace app\api\controller;
+
 use app\ApiController;
 
 /**
@@ -18,9 +19,9 @@ use app\ApiController;
 class Index extends ApiController
 {
     // 首页展示
-    public function index()
+    public function index(): \think\response\Json
     {
-        return ajax_return('Hallo SwiftAdmin APIs');
+        return json(['msg' => 'success', 'data' => 'Hello']);
     }
 
 }

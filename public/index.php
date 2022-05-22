@@ -26,8 +26,6 @@ if (!is_file('../extend/conf/install.lock')){
     header('Location: /install.php');
 }else {
     $response = $http->run();
+    $response->send();
+    $http->end($response);
 }
-
-$response->send();
-
-$http->end($response);

@@ -1,6 +1,5 @@
 <?php
-
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace think\plugin;
 
@@ -9,14 +8,13 @@ use think\facade\Config;
 use think\facade\Db;
 use think\facade\Cache;
 use think\facade\Event;
-use GuzzleHttp\Client;
+use GuzzleHttp\Client; 
 use GuzzleHttp\Exception\TransferException;
-
 /**
  * 插件服务
  * @package think\plugin
  */
-class Service extends \think\Service
+class Service extends \think\Service 
 {
     // 插件路径
     public $pluginPath = null;
@@ -30,8 +28,8 @@ class Service extends \think\Service
     public function register()
     {
         // 定义目录
-        $this->pluginPath = root_path() . 'plugin' . DIRECTORY_SEPARATOR;
-        define('PLUGIN_PATH', $this->pluginPath);
+        $this->pluginPath = root_path().'plugin'.DIRECTORY_SEPARATOR;
+        define('PLUGIN_PATH',$this->pluginPath);
 
         // 自动创建目录
         if (!is_dir($this->pluginPath)) {
@@ -88,11 +86,10 @@ class Service extends \think\Service
     /**
      * 服务注册启动
      */
-    public function boot()
-    {
+    public function boot() {
 
         // 注册路由
-        $this->registerRoutes(function (Route $route) {
+        $this->registerRoutes(function(Route $route) {
 
             // 插件路由
             $execute = '\\think\\plugin\\Router@execute';
@@ -127,6 +124,7 @@ class Service extends \think\Service
                                 ->append($rule);
                         }
                     });
+
                 } else {
 
                     list($plugin, $controller, $action) = explode('/', $value);
@@ -139,7 +137,7 @@ class Service extends \think\Service
                             'action' => $action
                         ]);
                 }
-            }
+            }            
         });
     }
 
@@ -152,17 +150,15 @@ class Service extends \think\Service
      * @param  array  $extend 扩展参数
      * @return  string
      */
-    public static function download(string $type = 'plugin', $name = '', $extend = [])
+    public static function download(string $type = 'plugin', $name = '', $extend = []) 
     {
         $files = self::Typepath($type);
         $client = self::getClient();
 
         try {
-
             $response = $client->get($files['url'], ['query' => array_merge(['name' => $name], $extend)]);
             $body = $response->getBody();
             $content = $body->getContents();
-
             if (substr($content, 0, 1) === '{') {
                 $json = (array)json_decode($content, true);
                 // 如果传回的是一个下载链接,则再次下载
@@ -171,23 +167,23 @@ class Service extends \think\Service
                     $body = $response->getBody();
                     $content = $body->getContents();
                 } else {
-                    throw new PluginException($json['msg'], $json['code'], $json['data']);
+                    throw new PluginException($json['msg'],$json['code'],$json['data']);
                 }
             }
-
-        } catch (TransferException $e) {
-            throw new \Exception(__("安装包下载失败"), -111);
+        }
+        catch(TransferException $e) {
+            throw new \Exception(__("安装包下载失败"),-111);
         }
 
         // 写入文件
-        $filepath = $files['file'] . $name . '.zip';
+        $filepath = $files['file'].$name.'.zip';
         if ($write = fopen($filepath, 'w')) {
             fwrite($write, $content);
             fclose($write);
             return $filepath;
         }
 
-        throw new \Exception(__("没有写入权限"), -112);
+        throw new \Exception(__("没有写入权限"),-112);
     }
 
     /**
@@ -199,32 +195,32 @@ class Service extends \think\Service
     public static function unzip(string $type = 'plugin', $name = '')
     {
         if (!$type || !$name) {
-            throw new \Exception(__('文件类型无效'), -113);
+            throw new \Exception(__('文件类型无效'),-113);
         }
 
         // 获取文件地址
         $files = self::Typepath($type);
         $filename = $files['file'] . $name . '.zip';
-
+        
         $unzip = new \ZipArchive();
-
+        
         if ($unzip->open($filename) !== TRUE) {
-            throw new \Exception(__("访问安装包失败"), -114);
+            throw new \Exception(__("访问安装包失败"),-114);
         }
 
         $dir = $files['file'] . $name . DIRECTORY_SEPARATOR;
         if (!is_dir($dir)) {
             @mkdir($dir, 0755);
         }
-
+        
         try {
             $unzip->extractTo($files['file']);
         } catch (\Throwable $th) {
-            throw new \Exception(__("解压 %s 安装包失败", $name), -115);
-        } finally {
+            throw new \Exception(__("解压 %s 安装包失败",$name),-115);
+        }finally {
             $unzip->close();
         }
-
+        
         return $filename;
     }
 
@@ -233,14 +229,14 @@ class Service extends \think\Service
      * @param  string  $type  下载类型
      * @return array
      */
-    public static function Typepath(string $type = 'plugin')
+    public static function Typepath(string $type = 'plugin') 
     {
 
         $address = [
-            'plugin' => [
-                'url' => '/plugin/query',
-                'check' => '/plugin/update',
-                'file' => PLUGIN_PATH,
+            'plugin'=>[
+                'url'=>'/plugin/query',
+                'check'=>'/plugin/update',
+                'file'=> PLUGIN_PATH,
             ]
         ];
 
@@ -255,7 +251,7 @@ class Service extends \think\Service
     {
         return Config::get('app.api_url');
     }
-
+ 
     /**
      * 获取请求对象
      * @return Client
@@ -274,7 +270,6 @@ class Service extends \think\Service
                 'User-Agent'       => 'SwiftAdmin',
             ]
         ];
-
         // 返回对象
         static $client;
         if (empty($client)) {
@@ -293,16 +288,16 @@ class Service extends \think\Service
      * @return  boolean
      * @throws  Exception
      */
-    public static function install($name, $force = false, $extend = [])
+    public static function install($name, $force = false, $extend = []) 
     {
         // 是否覆盖安装
         $filepath = Service::Typepath('plugin')['file'];
-        if (!$name || (is_dir($filepath . $name) && !$force)) {
-            throw new \Exception(__("请勿重复安装 %s 插件", $name), -116);
+        if (!$name || (is_dir($filepath. $name) && !$force)) {
+            throw new \Exception(__("请勿重复安装 %s 插件",$name),-116);
         }
 
         // 下载该插件
-        $tempfiles = Service::download('plugin', $name, $extend);
+        $tempfiles = Service::download('plugin',$name,$extend);
 
         // 获取解压目录
         $pluginDir = Service::getPluginDir($name);
@@ -310,28 +305,28 @@ class Service extends \think\Service
         try {
 
             // 解压压缩包
-            Service::unzip('plugin', $name);
-
+            Service::unzip('plugin',$name);
+ 
             // 校验插件是否完整
             Service::check($name);
-
+            
             // 判断文件冲突
             if (!$force) {
                 Service::noconflict($name);
             }
-
+            
         } catch (PluginException $p) {
-            throw new PluginException($p->getMessage(), $p->getCode(), $p->getData());
+            throw new PluginException($p->getMessage(),$p->getCode(),$p->getData());
         } catch (\Throwable $th) {
             @rmdirs($pluginDir);
-            throw new \Exception($th->getMessage(), $th->getCode());
-        } finally {
+            throw new \Exception($th->getMessage(),$th->getCode());
+        }  finally {
             @unlink($tempfiles);
         }
 
         // 安装插件
         try {
-
+            
             $pluginClass = get_plugin_class($name);
             if (class_exists($pluginClass)) {
                 $pluginObject = new $pluginClass();
@@ -344,7 +339,7 @@ class Service extends \think\Service
         } catch (\Throwable $th) {
             // 异常删除解压目录
             @rmdirs($pluginDir);
-            throw new \Exception($th->getMessage(), $th->getCode());
+            throw new \Exception($th->getMessage(),$th->getCode());
         }
 
         // 启用插件
@@ -361,13 +356,13 @@ class Service extends \think\Service
      */
     public static function upgrade($name, $extend)
     {
-        $config = get_plugin_infos($name, true);
+        $config = get_plugin_infos($name,true);
         if ($config['status']) {
             throw new \Exception(__('请先禁用插件再升级'));
         }
 
         // 下载插件
-        $tempfiles = Service::download('plugin', $name, $extend);
+        $tempfiles = Service::download('plugin',$name,$extend);
 
         // 备份插件
         Service::backup($name);
@@ -379,21 +374,20 @@ class Service extends \think\Service
 
             // 删除源文件
             @rmdirs($pluginDir);
-
             // 解压插件
-            Service::unzip('plugin', $name);
+            Service::unzip('plugin',$name);
 
         } catch (\Throwable $th) {
-            throw new \Exception($th->getMessage(), $th->getCode());
-        } finally {
+            throw new \Exception($th->getMessage(),$th->getCode());
+        }finally {
             // 移除临时文件
             @unlink($tempfiles);
         }
 
         // 更新配置
-        $newConfig = get_plugin_infos($name, true);
-        $config = array_merge($config, $newConfig);
-        set_plugin_infos($name, $config);
+        $newConfig = get_plugin_infos($name,true);
+        $config = array_merge($config,$newConfig);
+        set_plugin_infos($name,$config);
 
         // 安装插件
         try {
@@ -410,7 +404,7 @@ class Service extends \think\Service
             Service::importsql($name);
 
         } catch (\Throwable $th) {
-            throw new \Exception($th->getMessage(), $th->getCode());
+            throw new \Exception($th->getMessage(),$th->getCode());
         }
 
         // 启用插件
@@ -436,7 +430,7 @@ class Service extends \think\Service
             $pluginDir = Service::getPluginDir($name);
 
             $files = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($pluginDir, \RecursiveDirectoryIterator::SKIP_DOTS),
+                new \RecursiveDirectoryIterator($pluginDir, \RecursiveDirectoryIterator::SKIP_DOTS), 
                 \RecursiveIteratorIterator::CHILD_FIRST
             );
 
@@ -444,15 +438,17 @@ class Service extends \think\Service
                 // 如果是文件
                 if ($fileinfo->isFile()) {
                     $filePath = $fileinfo->getPathName();
-                    $zip->addFile($filePath, str_replace(PLUGIN_PATH, '', $filePath));
-                } else {
-                    $localDir = str_replace(PLUGIN_PATH, "", $fileinfo->getPathName());
+                    $zip->addFile($filePath,str_replace(PLUGIN_PATH, '', $filePath));
+                }
+                else {
+                    $localDir = str_replace(PLUGIN_PATH,"",$fileinfo->getPathName());
                     $zip->addEmptyDir($localDir);
                 }
             }
+
         } catch (\Throwable $th) {
             throw new \Exception($th->getMessage());
-        } finally {
+        }finally {
             $zip->close();
         }
 
@@ -470,7 +466,7 @@ class Service extends \think\Service
     public static function uninstall($name, $force = true)
     {
         if (!$name || !is_dir(PLUGIN_PATH . $name)) {
-            throw new \Exception(__("插件数据不存在"), -117);
+            throw new \Exception(__("插件数据不存在"),-117);
         }
 
         // 返回冲突文件
@@ -480,7 +476,7 @@ class Service extends \think\Service
 
         // 获取插件目录
         $pluginDir = Service::getPluginDir($name);
-
+        
         // 移除插件资源文件
         if ($force) {
             $list = Service::getGlobalFiles($name);
@@ -497,6 +493,7 @@ class Service extends \think\Service
                 $plugin = new $class();
                 $plugin->uninstall();
             }
+
         } catch (\Throwable $th) {
             throw new \Exception($th->getMessage());
         }
@@ -551,7 +548,7 @@ class Service extends \think\Service
     public static function enable($name, $force = false)
     {
         if (!$name || !is_dir(PLUGIN_PATH . $name)) {
-            throw new \Exception(__('插件数据不存在'), -117);
+            throw new \Exception(__('插件数据不存在'),-117);
         }
 
         if (!$force) {
@@ -559,8 +556,7 @@ class Service extends \think\Service
         }
 
         // 是否备份冲突文件
-        if (config('app.plugin_mutex')) {
-
+        if (config('system.plugin.mutex_file')) {
             // 仅备份冲突文件
             $conflictFiles = self::getGlobalFiles($name, true);
             if (!empty($conflictFiles)) {
@@ -571,9 +567,10 @@ class Service extends \think\Service
                     foreach ($conflictFiles as $k => $v) {
                         $zip->addFile(root_path() . $v, $v);
                     }
+
                 } catch (\Throwable $th) {
                     throw new \Exception($th->getMessage());
-                } finally {
+                }finally {
                     $zip->close();
                 }
             }
@@ -602,9 +599,9 @@ class Service extends \think\Service
         }
 
         // 修改插件状态
-        $pluginInfo = get_plugin_infos($name, true);
+        $pluginInfo = get_plugin_infos($name,true);
         $pluginInfo['status'] = 1;
-        set_plugin_infos($name, $pluginInfo);
+        set_plugin_infos($name,$pluginInfo);
         plugin_refresh_hooks();
 
         return true;
@@ -622,7 +619,7 @@ class Service extends \think\Service
     {
         // 检查当前目录是否存在
         if (!$name || !is_dir(PLUGIN_PATH . $name)) {
-            throw new \Exception(__('插件数据不存在'), -117);
+            throw new \Exception(__('插件数据不存在'),-117);
         }
 
         // 获取冲突文件
@@ -631,7 +628,7 @@ class Service extends \think\Service
         }
 
         // 备份文件
-        if (config('app.plugin_mutex')) {
+        if (config('system.plugin.mutex_file')) {
             // 仅备份冲突文件
             $conflictFiles = self::getGlobalFiles($name, true);
             if (!empty($conflictFiles)) {
@@ -642,9 +639,10 @@ class Service extends \think\Service
                     foreach ($conflictFiles as $k => $v) {
                         $zip->addFile(root_path() . $v, $v);
                     }
+
                 } catch (\Throwable $th) {
-                    throw new \Exception($th->getMessage(), -999);
-                } finally {
+                    throw new \Exception($th->getMessage(),-999);
+                }finally {
                     $zip->close();
                 }
             }
@@ -654,22 +652,20 @@ class Service extends \think\Service
         $pluginDir = self::getPluginDir($name);
         foreach (self::getCheckDirs() as $checkdir) {
 
-            if (is_dir($pluginDir . $checkdir)) {
+            if (is_dir($pluginDir .$checkdir)) {
 
                 // 匹配出所有的文件
                 $files = new \RecursiveIteratorIterator(
-                    new \RecursiveDirectoryIterator(
-                        $pluginDir . $checkdir,
-                        \RecursiveDirectoryIterator::SKIP_DOTS
-                    ),
+                    new \RecursiveDirectoryIterator($pluginDir.$checkdir, 
+                    \RecursiveDirectoryIterator::SKIP_DOTS), 
                     \RecursiveIteratorIterator::CHILD_FIRST
                 );
 
                 foreach ($files as $fileinfo) {
-                    $dirfile = str_replace($pluginDir, root_path(), $fileinfo->getPathname());
+                    $dirfile = str_replace($pluginDir,root_path(),$fileinfo->getPathname());
                     if ($fileinfo->isFile()) { // 删除文件
                         @unlink($dirfile);
-                    } else if ($fileinfo->isDir()) { // 删除空文件夹
+                    }else if ($fileinfo->isDir()) { // 删除空文件夹
                         remove_empty_folder($dirfile);
                     }
                 }
@@ -686,13 +682,13 @@ class Service extends \think\Service
                 }
             }
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage(), -999);
+            throw new \Exception($e->getMessage(),-999);
         }
 
         // 修改配置信息
-        $pluginInfo = get_plugin_infos($name, true);
+        $pluginInfo = get_plugin_infos($name,true);
         $pluginInfo['status'] = 0;
-        set_plugin_infos($name, $pluginInfo);
+        set_plugin_infos($name,$pluginInfo);
         plugin_refresh_hooks();
 
         return true;
@@ -709,13 +705,10 @@ class Service extends \think\Service
     {
         // 检测冲突文件
         $list = self::getGlobalFiles($name, true);
-
         if ($list) {
-
-            // 发现冲突文件，抛出异常列表
-            throw new \Exception(__("插件 %s 存在文件冲突<br/> %s", $name, implode('<br/>',$list)), -118);
+            // 发现冲突文件，抛出异常
+            throw new \Exception(__("插件 %s 存在文件冲突 %s",$name, implode(PHP_EOL, $list)), -118);
         }
-
         return true;
     }
 
@@ -742,7 +735,7 @@ class Service extends \think\Service
 
             //匹配出所有的文件
             $files = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($pluginDir . $dirName, \RecursiveDirectoryIterator::SKIP_DOTS),
+                new \RecursiveDirectoryIterator($pluginDir . $dirName, \RecursiveDirectoryIterator::SKIP_DOTS), 
                 \RecursiveIteratorIterator::CHILD_FIRST
             );
 
@@ -752,7 +745,7 @@ class Service extends \think\Service
                     $filePath = $fileinfo->getPathName();
                     $path = str_replace($pluginDir, '', $filePath);
 
-                    // 判断冲突文件
+					// 判断冲突文件
                     if ($onlyconflict) {
                         $destPath = root_path() . $path;
                         if (is_file($destPath)) {
@@ -816,19 +809,19 @@ class Service extends \think\Service
     public static function check($name)
     {
         if (!$name || !is_dir(PLUGIN_PATH . $name)) {
-            throw new \Exception(__('插件目录不存在'), -117);
+            throw new \Exception(__('插件目录不存在'),-117);
         }
 
         $pluginClass = get_plugin_class($name);
         if (!$pluginClass) {
-            throw new \Exception(__("插件安装出现异常"), -119);
+            throw new \Exception(__("插件安装出现异常"),-119);
         }
 
         $plugin = new $pluginClass();
         if (!$plugin->checkInfo()) {
-            throw new \Exception(__("插件信息配置不正确"), -120);
+            throw new \Exception(__("插件信息配置不正确"),-120);
         }
-
+        
         return true;
     }
 
@@ -836,10 +829,9 @@ class Service extends \think\Service
      * 获取缓存标识
      * @return string
      */
-    public static function tags()
-    {
+    public static function tags() {
         $domain = request()->domain();
-        return md5($domain . 'SWIFTADMIN');
+        return md5($domain.'SWIFTADMIN');
     }
 
     /**
@@ -857,6 +849,8 @@ class Service extends \think\Service
      */
     protected static function setError($error)
     {
-        Cache::set(self::tags(), $error);
+        Cache::set(self::tags(),$error);
     }
+
+
 }

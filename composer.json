@@ -28,14 +28,22 @@
         "topthink/think-image": "^1.0",
         "topthink/think-view": "^1.0",
         "topthink/think-captcha": "^3.0",
+        "topthink/think-queue": "^3.0",
+        "topthink/think-worker": "^3.0",
         "phpmailer/phpmailer": "^6.6",
+        "phpoffice/phpspreadsheet": "^1.23",
+        "guzzlehttp/guzzle": "7.3",
         "meystack/plugin": "^1.0",
         "overtrue/pinyin": "^4.0",
         "firebase/php-jwt": "^6.0",
+        "overtrue/wechat": "~4.0",
+        "yansongda/pay": "~3.0.26",
+        "php-di/php-di": "^6.3",
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-iconv": "*",
-        "ext-gd": "*"
+        "ext-gd": "*",
+        "ext-zip": "*"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2"
@@ -49,7 +57,10 @@
         }
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "easywechat-composer/easywechat-composer": true
+        }
     },
     "scripts": {
         "post-autoload-dump": [

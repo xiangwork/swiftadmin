@@ -49,15 +49,6 @@ class AdminRules
       Systemlog::write($array);
     }
 
-    // 全局过滤系统属性
-    if ($request->isPost()) {
-      $where[] = ['id', '=', input('id/d')];
-      $where[] = ['isSystem', '=', 1];
-      if (!empty(AdminRulesModel::where($where)->find())) {
-        return json(ResultCode::SYSTEM_DISABLE);
-      }
-    }
-
     return $next($request);
   }
 }

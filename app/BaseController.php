@@ -132,7 +132,7 @@ abstract class BaseController
      * @param string $valiscene
      * @return bool
      */
-    protected function autoPostValidate(array $post, $valiclass = '', $valiscene = '')
+    protected function autoPostValidate(array $post, $valiclass = '', $valiscene = ''): bool
     {
         if (empty($post) || !is_array($post)) {
             $this->errorMsg = __('参数不符合预期');
@@ -300,7 +300,7 @@ abstract class BaseController
         if (!empty($tableFields) && is_array($tableFields)) {
             foreach ($tableFields as $key => $value) {
 
-                $filter = ['updatetime','createtime','delete_time'];
+                $filter = ['update_time','create_time','delete_time'];
                 if (!in_array($value,$filter)) {
                     $tableFields[$value] = '';
                 }

@@ -138,7 +138,7 @@
             <div class="layui-card">
                 <div class="layui-card-body" style="padding: 25px;">
                     <div class="text-center layui-text">
-                        <div class="user-info-head" id="imgHead" lay-upload="imgHead" data-url="{:url('/upload/avatar/')}auth_key={:saenv('auth_key')}" callback="imgHead">
+                        <div class="user-info-head" id="imgHead" lay-upload="imgHead" data-url="{:url('/ajax/upload/')}?action=avatar" callback="imgHead">
                             <img src="{$data.face}" class="imgHead" />
                         </div>
                         <h2 style="padding-top: 20px;">{$data.nickname|default='没有昵称'}</h2>
@@ -159,7 +159,7 @@
                         </div>
                     </div>
                     <div class="dash"></div>
-                    <h3>{:__('标签')} <i class="layui-tags layui-icon layui-icon-add-1" style="color: #666"></i> </h3>
+                    <h3>{:__('标签')} <i class="layui-inputags layui-icon layui-icon-add-1" style="color: #666"></i> </h3>
                     <div class="layui-badge-list" style="padding-top: 6px;"> <volist name="$data.tags" id="vo">
                         <span class="layui-badge layui-bg-gray"><i class="layui-icon layui-icon-close"></i>{$vo}</span>
                         </volist>
@@ -284,19 +284,18 @@
         var admin = layui.admin;
         var jquery = layui.jquery;
         
-        admin.callback.imgHead = function(clickthis,colletction,config) {
+        admin.callback.imgHead = function(clickthis, colletction) {
 
-            var res = colletction.res,
-                images = config.images;
+            var res = colletction.res;
             if (res.code == 200) { // 查找元素
-                jquery('.'+images).attr('src',res.url);
-                // 执行后端投递工作
-                jquery.post('{:url("/system.admin/modify")}',{
-                    field: 'face'
-                    ,face: res.url
-                },function(res) {
-                    layer.msg("{:__('上传成功')}");
-                })
+                jquery('.imgHead').attr('src',res.url);
+                // // 执行后端投递工作
+                // jquery.post('{:url("/system.admin/modify")}',{
+                //     field: 'face'
+                //     ,face: res.url
+                // },function(res) {
+                //     layer.msg("{:__('上传成功')}");
+                // })
             }
             else {
                 layer.error(res.msg);
@@ -322,7 +321,7 @@
                 })
         })
 
-        jquery('.layui-tags').click(function(){
+        jquery('.layui-inputags').click(function(){
             if (jquery('.editTags').length <= 0) {
                 jquery(this).parent().append('<input class="editTags layui-input" type="text" maxlength="10">');
             }

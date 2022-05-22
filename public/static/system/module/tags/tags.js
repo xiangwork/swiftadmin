@@ -66,6 +66,7 @@ layui.define(function(exports){
     Class.prototype.config = {
         url: undefined,     // ajax的URL地址
         limit: 3,           // 限定数量
+        length: 10,         // 汉字最大长度
         data: [],           // 初始化数据，默认渲染INPUT表单
     };
     
@@ -124,8 +125,13 @@ layui.define(function(exports){
     // 增加标签
     Class.prototype.drawring = function(element, that) {
 
-      
       element = element.replace(/(^\s*)|(\s*$)/g, "");
+      if(!(/[a-zA-Z0-9]+$/.test(element))) {
+          if (element.length >= this.config.length) {
+            return layui.layer.msg('超出最大长度','error');
+          }
+      }
+
       var othis = this;
       var html = '<span class="tag-elem"><span>'+element; 
       html += '</span><i class="layui-icon layui-icon-close" title="移除标签"></i></span>';
@@ -141,13 +147,18 @@ layui.define(function(exports){
 
       // 点击删除标签
       $('.tag-elem .layui-icon-close').click(function(e) {
+
           e.stopPropagation();
           e.preventDefault();
+
           $(this).parent('.tag-elem').remove();
           $('#'+othis.config.id+' input').show();
+
+          // 重载数据
+          othis.getData();
       });
 
-      typeof this.config.done === 'function' && this.config.done(element,this.getData());
+      typeof this.config.done === 'function' && this.config.done(element, othis.getData());
     };
 
     // 获取标签总数
@@ -160,7 +171,8 @@ layui.define(function(exports){
       })
       
       // 修改标签属性
-      $(this.config.elem).prop('value',keyword.join(','));
+      $(this.config.elem).attr('value',keyword.join(','));
+
 
       return keyword;
     };
@@ -224,7 +236,7 @@ layui.define(function(exports){
         }
 
         // 按下回车 或者空格
-        if (keyCode == 13) {
+        if (keyCode === 13) {
 
           e.preventDefault();
           e.stopPropagation();
@@ -275,7 +287,7 @@ layui.define(function(exports){
       // 清空元素
       elem.html(tagsHtml);
       var status = tagsHtml !== '' ? 'block' : 'none';
-      var left = wordElem.offset().left + document.body.scrollLeft - 20;
+      var left = wordElem.offset().left + document.body.scrollLeft - 10;
       var top = wordElem.offset().top + document.body.scrollTop + 30;  
       elem.css({left: left,top: top,display:status});
       $('#'+LAY_TAGS_RESULT+' .tag-item:first').addClass(LAY_TAG_THIS);
@@ -305,7 +317,7 @@ layui.define(function(exports){
       return thisTags.call(inst);
     };
 	
-	  layui.link(layui.cache.base + 'tags/tags.css?v1.0b');
+    layui.link(layui.cache.base + 'tags/tags.css?v1.0b');
     exports(MOD_NAME, MODULE_TAGS_NAME);
   })
   

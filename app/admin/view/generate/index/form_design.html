@@ -1,5 +1,5 @@
 <include file="/public/header" />
-<link href="__STATICADMIN__/module/formDesign/formdesign.css" rel="stylesheet" type="text/css" />
+<link href="__STATICADMIN__/module/formDesign/formdesign.css?v={:release()}" rel="stylesheet" type="text/css" />
 <div class="layui-fluid">
     <form class="layui-form layui-card">
         <input type="text" name="curd_id" value="{$data.id}" hidden="">
@@ -211,8 +211,10 @@
 </div>
 
 <include file="/public/footer" />
-<script src="__STATICJS__tinymce/tinymce.min.js?v={:config('app.version')}"></script>
-<script src="__STATICJS__Sortable/Sortable.js?v={:config('app.version')}"></script>
+<script src="__STATICJS__tinymce/tinymce.min.js?v={:release()}"></script>
+<script src="__STATICJS__Sortable/Sortable.js?v={:release()}"></script>
+<script src="__STATICJS__markdown/cherry-markdown.min.js?v={:release()}"></script>
+<link href="__STATICJS__markdown/cherry-markdown.css?v={:release()}" rel="stylesheet" type="text/css"/>
 <script>
     layui.use(['jquery', 'flow', 'formDesign'], function () {
         var $ = layui.jquery;

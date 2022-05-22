@@ -15,7 +15,9 @@ namespace app\admin\controller\system;
 use app\AdminController;
 use app\common\model\system\User  as UserModel;
 use app\common\model\system\UserGroup  as UserGroupModel;
-class User extends AdminController 
+use system\Random;
+
+class User extends AdminController
 {
    
     // 初始化函数
@@ -60,7 +62,7 @@ class User extends AdminController
             foreach ($list as $key => $value) {
 
                 $value->hidden(['pwd', 'salt']);
-                $region = \app\common\library\Ip2Region::instance()->memorySearch($list[$key]['loginip']);
+                $region = \app\common\library\Ip2Region::instance()->memorySearch($list[$key]['login_ip']);
                 $region = explode('|',$region['region']);
 
                 $list[$key]['region'] = $region;
@@ -113,11 +115,9 @@ class User extends AdminController
     {
 
         if (request()->isPost()) {
-			$post = input();
-            $post = safe_field_model($post,get_class($this->model));
-			if (empty($post) || !is_array($post)) {
-				return $this->error($post);
-            }
+	
+		$post = input();
+
             // 查询数据
             $data = $this->model->find($post['id']);
             if ($data['nickname'] != $post['nickname']) {
@@ -132,6 +132,12 @@ class User extends AdminController
                 if($this->model->where($whereEmail)->find()) {
                     return $this->error('该用户邮箱已经存在！');
                 }
+            }
+
+            if (!empty($post['pwd'])) {
+                $salt = Random::alpha();
+                $post['salt'] = $salt;
+                $post['pwd'] = encryptPwd($post['pwd'],$post['salt']);
             }
 
             if ($this->model->update($post)) {

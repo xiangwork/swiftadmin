@@ -238,8 +238,8 @@
                 {field: 'name', align: 'center', title: '{:__("用户名")}'},
                 {field: 'status', align: 'center',templet: '#userStatus', width: 135, title: '{:__("状态")}'},
                 {field: 'group', align: 'center', templet:'#userGroup', title: '{:__("用户组")}'},
-                {field: 'loginip', align: 'center',width: 160, title: '{:__("登录 IP")}'},
-                {field: 'createtime', align: 'center', width: 160,title: '{:__("创建时间")}'},
+                {field: 'login_ip', align: 'center',width: 160, title: '{:__("登录 IP")}'},
+                {field: 'create_time', align: 'center', width: 160,title: '{:__("创建时间")}'},
                 {align: 'center', toolbar: '#tableBar',width: 250, title: '{:__("操作")}'},
             ]]
         })
@@ -265,7 +265,7 @@
 
             // 渲染用户组
             xmSelect.render({
-                el: '.group', 
+                el: '.group',
                 name: 'group_id',
                 size: 'small',
                 prop: {
@@ -273,7 +273,7 @@
                     name:'title'
                 }
                 ,theme: {
-                    color: '#0081ff', 
+                    color: '#0081ff',
                 }
                 ,data: {:json_encode($group)}
                 ,initValue: !status ? tableThis.data.group_id.split(',') : []
@@ -281,7 +281,7 @@
 
             // 渲染岗位
             xmSelect.render({
-                el: '.jobs', 
+                el: '.jobs',
                 name: 'jobs_id',
                 size: 'small',
                 prop: {
@@ -289,7 +289,7 @@
                     name:'title'
                 }
                 ,theme: {
-                    color: '#0081ff', 
+                    color: '#0081ff',
                 }
                 ,data: {:json_encode($jobs)}
                 ,initValue: !status ? tableThis.data.jobs_id.split(',') : []
@@ -314,11 +314,11 @@
                     showLine: false,
                     clickExpand: false,
                 },
-                model: { 
+                model: {
                     icon: 'hidden',
-                    label: { 
-                        type: 'text' 
-                    } 
+                    label: {
+                        type: 'text'
+                    }
                 },
                 theme: {
                     color: '#1890FF'
@@ -354,10 +354,9 @@
         // 编辑用户权限/栏目权限回调函数
         admin.callback.rulecates = function(clickthis,colletction,config) {
 
-            var tableThis = colletction.tableThis,
-                event = tableThis.event;
+            var tableThis = colletction.tableThis, event = tableThis.event;
 
-            var rules = _ajax('getrulecatestree',event,'private');
+            var rules = _ajax(event);
             if (typeof rules.code != "undefined") {
                 return layer.msg(rules.msg,'info');
             }
@@ -372,18 +371,17 @@
             })
 
             // 监听权限提交
-            form.on("submit(submitPage)",function(post){
+            form.on("submit(submitPage)", function (post) {
 
                 // 获取用户id
                 post.field.admin_id = tableThis.data.id;
                 // 增加节点数据
-                post.field[event] = tree.getChecked('authTree',true);
+                post.field[event] = tree.getChecked('authTree', true);
                 // 开始POST提交数据
-                clickthis.attr("disabled",true);
-                layui.$.post("{:url('/system.admin/edit"+event+"')}", 
-                    post.field, function(res){
-                        if (res.code == 200) {
-                            
+                clickthis.attr("disabled", true);
+                layui.$.post("{:url('/system.admin/edit" + event + "')}",
+                    post.field, function (res) {
+                        if (res.code === 200) {
                             // 更新本地规则
                             tableThis.update({
                                 [event]: post.field[event]
@@ -392,22 +390,20 @@
                             // 关闭当前窗口
                             layer.msg(res.msg);
                             layer.close(colletction.index);
-                        }else {
-                            layer.error(res.msg);                         
+                        } else {
+                            layer.error(res.msg);
                         }
-                }, 'json');
+                    }, 'json');
 
                 return false;
-            })  
+            })
         }
         
         // 同步加载函数
-        var _ajax = function (action,type,classd) {
-            var func = '{:url("/system.admin/authorizeInterface")}';
-            return admin.event.ajax(func,{ 
-                action : action,
+        var _ajax = function (type) {
+            var func = '{:url("/system.admin/getrulecatetree")}';
+            return admin.event.ajax(func,{
                 type   : type,
-                class  : classd
             },false)
         }
     });

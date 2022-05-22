@@ -15,14 +15,14 @@ class Dictionary extends Model
     use SoftDelete;
 
     // 定义时间戳字段名
-    protected $createTime = 'createtime';
-    protected $updateTime = 'updatetime';
+    protected $createTime = 'create_time';
+    protected $updateTime = 'update_time';
 
     // 字段修改器
     public function setSortAttr($value)
     {
         if (is_empty($value)) {
-            return self::count('id') + 1;
+            return self::max('id') + 1;
         }
 
         return $value;
@@ -30,35 +30,30 @@ class Dictionary extends Model
 
     /**
      * 获取字典信息
-     *
-     * @param array $where
-     * @param string $field
-     * @param boolean $style
-     * @return void
+     * @param string $value
+     * @return array
      */
-    public static function queryDiction(array $where = [], string $field = '*', bool $style = true)
+    public static function getValueList(string $value = '')
     {
-        $dicCacheName = sha1(implode(',', $where) . $field);
-        $dicCacheData = system_cache($dicCacheName);
+        $list = [];
 
-        if (empty($dicCacheData)) {
-            
-            if ($style == false) {
-                $dicCacheData = self::where($where)->field($field)->find();
-            } else {
-                $dicCacheData = self::where($where)->field($field)->select()->toArray();
-            }
+        // 默认只查询顶级
+        $data = self::where([
+            'pid' => 0,
+            'value' => $value
+        ])->find();
 
-            system_cache($dicCacheName, $dicCacheData, saenv('cache_time'));
+        if (!empty($data)) {
+            $list = self::where('pid', $data['id'])->select();
         }
 
-        return $dicCacheData;
+        return $list;
     }
 
     /**
      * 返回最小id
      */
-    public static function minId()
+    public static function minId(): int
     {
         return (int)self::where('pid', '0')->min('id');
     }

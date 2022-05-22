@@ -137,24 +137,4 @@ class AdminRules extends AdminController
 		return $this->error('删除失败，请检查您的参数！');
 	}
 
-	/**
-	 * 查询父节点
-	 */
-	public function parentNode($pid, &$array=[]) 
-	{
-		$where[] = ['id','=',$pid];
-		$result = $this->model->where($where)->find()->toArray();
-
-		// 递归查询父节点
-		if (!empty($result)) {
-			$result['title'] = __($result['title']);
-			$array[] = $result;
-			if ($result['pid'] !== 0) {
-				$this->parentNode($result['pid'], $array);
-			}
-		}
-
-		return $array;
-	}
-
 }

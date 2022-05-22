@@ -73,13 +73,13 @@ class Curd extends AdminController
      * 添加时间字段
      * @var string
      */
-    protected $createTimeField = 'createtime';
+    protected $createTimeField = 'create_time';
 
     /**
      * 更新时间字段
      * @var string
      */
-    protected $updateTimeField = 'updatetime';
+    protected $updateTimeField = 'update_time';
 
     /**
      * 软删除时间字段
@@ -139,38 +139,15 @@ class Curd extends AdminController
         "admin_access",
         "admin_group",
         "admin_rules",
-        "adwords",
-        "api",
-        "api_access",
-        "api_condition",
-        "api_group",
-        "api_params",
-        "api_restful",
-        "category",
-        "channel",
         "comment",
         "company",
-        "content",
-        "content_articl",
-        "content_images",
-        "content_produc",
-        "content_soft",
-        "content_video",
         "department",
         "dictionary",
-        "friendlink",
-        "fulltext",
         "generate",
         "guestbook",
         "jobs",
-        "navmenu",
-        "project",
-        "systemlog",
-        "tags",
-        "tags_mapping",
         "user",
         "user_group",
-        "user_invitecod",
         "user_third",
         "user_validate"
     ];
@@ -254,6 +231,9 @@ class Curd extends AdminController
         $this->model = new Generate();
         $this->templatePath = app_path('view');
         $this->prefix = env('DATABASE.PREFIX');
+        if (empty($this->prefix)) {
+            $this->prefix = config('database.connections.mysql.prefix');
+        }
     }
 
     /**
@@ -261,6 +241,7 @@ class Curd extends AdminController
      *
      * @param integer $id
      * @return void
+     * @throws \Exception
      */
     public function index(int $id = 0)
     {
@@ -269,7 +250,7 @@ class Curd extends AdminController
 
             $data = $this->model->find($id);
 
-            if ($data['status'] && !$data['force'] && !$data['delete']) {
+            if ($data['status'] && !$data['force']) {
                 return $this->error('已经生成非覆盖选项');
             }
 
@@ -298,45 +279,16 @@ class Curd extends AdminController
             $formItems   = [];
             $formType    = $data['formType'];
             $controller  = $data['controller'];
-            $globalspace = $data['global'] ? 'common' : 'admin';
+            $globalSpace = $data['global'] ? 'common' : 'admin';
 
             // 获取控制器
             list($controllerName, $controllerNamespace, $controllerFile) = $this->getControllerData($controller, null);
             // 获取数据模型
-            list($modelName, $modelNamespace, $modelFile) = $this->getModelData($globalspace, $controller, $table);
+            list($modelName, $modelNamespace, $modelFile) = $this->getModelData($globalSpace, $controller, $table);
             // 获取验证器规则
-            list($validateName, $validateNamespace, $validateFile) = $this->getvalidateData($globalspace, $controller, $table);
+            list($validateName, $validateNamespace, $validateFile) = $this->getvalidateData($globalSpace, $controller, $table);
             // 获取菜单函数模板
             list($this->menus, $this->methods, $this->templateFiles) = $this->getMenuMethods($data->toArray());
-
-            // 是否为删除模式
-            if ($data['delete']) {
- 
-                try {
-                    $readyFiles = [$controllerFile, $modelFile, $validateFile];
-                    foreach ($readyFiles as $key => $value) {
-                        if (is_file($value)) {
-                            unlink($value);
-                        }
-    
-                        $this->removeEmptyFolder(dirname($value));
-                    }
-    
-                    recursive_delete($this->templatePath);
-
-                    Menus::delete($table);
-
-                    // 更新状态
-                    $data->status = 0;
-                    $data->save();
-
-                } catch (\Throwable $th) {
-                    
-                    return $this->error($th->getMessage());
-                }
-
-                return $this->success('删除成功');
-            }
 
             // 获取字段
             $adviceField = [];
@@ -351,10 +303,8 @@ class Curd extends AdminController
 
             foreach ($this->tableFields as $key => $value) {
 
-                if (
-                    strtolower($key) != 'id'
-                    && current($this->tableFields) == $value
-                ) {
+                if (strtolower($key) != 'id'
+                    && current($this->tableFields) == $value) {
                     $this->error('The first field must be an id');
                 }
 
@@ -386,10 +336,9 @@ class Curd extends AdminController
                     $fieldAttrArr[] = $this->getFieldAttrArr($field, $type);
                 }
 
-                if (
-                    empty($adviceField)
-                    || ($adviceField['type'] != 'varchar' && $type == 'varchar')
-                ) {
+                if (empty($adviceField)
+                    || ($adviceField['type'] != 'varchar' && $type == 'varchar'))
+                {
                     $adviceField = [
                         'field' => $field,
                         'type' => $type,
@@ -409,7 +358,7 @@ class Curd extends AdminController
 
             // 推荐搜索片段
             $adviceSearch[] = $adviceField['field'];
-            $advceSearchHtml = $this->getadviceSearch($adviceSearch, $formDesign);
+            $adviceSearchHtml = $this->getadviceSearch($adviceSearch, $formDesign);
 
             // 获取全部搜索字段
             $everySearch = array_diff($everySearch, $adviceSearch);
@@ -436,7 +385,7 @@ class Curd extends AdminController
                 'fieldAttrArr'          => $fieldAttrArr,
                 'validateName'          => $validateName,
                 'validateNamespace'     => $validateNamespace,
-                'advceSearchHtml'       => $advceSearchHtml,
+                'adviceSearchHtml'      => $adviceSearchHtml,
                 'everySearchHtml'       => $everySearchHtml,
                 'colsListArr'           => $colsListArr,
                 'FormArea'              => $data['width'] . ',' . $data['height'],
@@ -505,7 +454,57 @@ class Curd extends AdminController
         }
     }
 
+    /**
+     * 清理内容
+     * @param int $id
+     * @return mixed|void
+     */
+    public function clear(int $id = 0)
+    {
+        if (request()->isAjax()) {
 
+            $data = $this->model->find($id);
+            $table = str_replace($this->prefix, '', $data['table']);
+            $controller  = $data['controller'];
+            $globalSpace = $data['global'] ? 'common' : 'admin';
+
+            // 获取控制器
+            list($controllerName, $controllerNamespace, $controllerFile) = $this->getControllerData($controller, null);
+            // 获取数据模型
+            list($modelName, $modelNamespace, $modelFile) = $this->getModelData($globalSpace, $controller, $table);
+            // 获取验证器规则
+            list($validateName, $validateNamespace, $validateFile) = $this->getvalidateData($globalSpace, $controller, $table);
+            // 获取菜单函数模板
+            try {
+                list($this->menus, $this->methods, $this->templateFiles) = $this->getMenuMethods($data->toArray());
+            } catch (\Exception $e) {
+            }
+
+            try {
+                $readyFiles = [$controllerFile, $modelFile, $validateFile];
+
+                foreach ($readyFiles as $value) {
+                    if (is_file($value)) {
+                        unlink($value);
+                    }
+                    $this->removeEmptyFolder(dirname($value));
+                }
+
+                recursive_delete($this->templatePath);
+
+                Menus::delete($table);
+
+                // 更新状态
+                $data->status = 0;
+                $data->save();
+
+            } catch (\Throwable $th) {
+                return $this->error($th->getMessage());
+            }
+
+            return $this->success('删除成功');
+        }
+    }
     /**
      * 获取列表字段
      *

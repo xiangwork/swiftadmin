@@ -12,8 +12,8 @@ use app\common\library\Globals;
 class Systemlog extends Model
 {
     // 定义时间戳字段名
-    protected $createTime = 'createtime';
-    protected $updateTime = 'updatetime';
+    protected $createTime = 'create_time';
+    protected $updateTime = 'update_time';
 
     // 写入日志
     public static function write($logs = null) 

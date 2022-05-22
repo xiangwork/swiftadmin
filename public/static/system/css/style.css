@@ -46,6 +46,11 @@ a {
     background: transparent;
 }
 
+.layui-badge {
+    height: 21px;
+    line-height: 20px;
+}
+
 .layui-side .layui-logo h1 {
 	display: inline-block;
     height: 32px;
@@ -76,6 +81,10 @@ a {
     border-bottom-style: solid;
     border-color: #e6e6e6;
     white-space: nowrap;
+}
+
+.layui-table .layui-table-cell a:hover {
+    color: #1890ff;
 }
 
 .layui-table-tool .layui-inline[lay-event], .layui-table-tool .layui-inline[lay-event]:hover {
@@ -458,7 +467,19 @@ a {
     line-height: 40px;
     padding-left: 45px;
     padding-right: 30px;
-    
+}
+
+.layui-side-menu .layui-nav .layadmin-nav-hover dd a>cite {
+    display: inline-block;
+    width: 80px;
+    height: 26px;
+    line-height: 26px;
+    margin-left: 20px;
+}
+
+.layui-side-menu .layui-nav dl dd.layadmin-nav-hover>a>i:last-child {
+    display: inline-block;
+    transform: rotate(-90deg)!important;
 }
 
 .layui-side-menu .layui-nav .layui-nav-item>a {
@@ -474,15 +495,8 @@ a {
     background: 0 0;
 }
 
-.layui-side-menu .layui-nav .layui-nav-itemed>.layui-nav-child {
-    padding: 5px 0;
-    padding-left: 3px;
-} 
-
-
 .layui-side-menu .layui-nav .layui-nav-item .layui-icon {
     position: absolute;
-    /* top: 50%; */
     left: 20px;
 
 }
@@ -544,10 +558,27 @@ a {
     padding-right: 0
 }
 
-.layadmin-side-shrink .layui-side-menu .layui-nav-item cite,.layadmin-side-shrink .layui-side-menu .layui-nav>.layui-nav-item>.layui-nav-child,.layadmin-side-shrink .layui-side-menu .layui-nav>.layui-nav-item>a .layui-nav-more {
+.layadmin-side-shrink .layui-side-menu .layui-nav-item cite,
+.layadmin-side-shrink .layui-side-menu .layui-nav>.layui-nav-item>.layui-nav-child,
+.layadmin-side-shrink .layui-side-menu .layui-nav>.layui-nav-item>a .layui-nav-more,
+.layadmin-side-shrink .layui-side-menu .layui-nav li>a>.layui-nav-more:last-child {
     display: none;
     padding: 8px 0;
     width: 200px
+}
+
+.layui-nav-top dl dl.layui-nav-third-child {
+    display: none;
+    position: absolute;
+    min-width: 100%;
+    line-height: 36px;
+    padding: 5px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,.12);
+    border: 1px solid #eee;
+    background-color: #fff;
+    z-index: 100;
+    border-radius: 2px;
+    white-space: nowrap;
 }
 
 .layadmin-side-shrink .layui-side-menu .layui-nav>.layui-nav-itemed>a {
@@ -566,7 +597,7 @@ a {
 }
 
 .layadmin-side-shrink .layui-side .layui-nav .layadmin-nav-hover>.layui-nav-child i.layui-icon {
-    position: static;
+    /*position: static;*/
     margin-right: 5px;
 }
 
@@ -1222,7 +1253,7 @@ a {
 .layui-layout-admin .layui-body>.layui-tab>.layui-tab-title li .layui-tab-close {
     width: 13px;
     height: 13px;
-    line-height: 13px;
+    line-height: 14px;
     border-radius: 50%;
     font-size: 10px;
     position: absolute;
@@ -2055,8 +2086,7 @@ a {
 }
 
 .layui-side-menu .layui-nav .layui-nav-itemed .layui-nav-child i.layui-icon {
-    /*position: static;*/
-    margin-right: 10px;
+    /*margin-right: 10px;*/
 }
 
 .layui-side-menu .layui-nav .layui-nav-item>.layui-nav-child {
@@ -2072,12 +2102,28 @@ a {
     cursor: pointer;
 }
 
+.layui-side-menu .layui-nav .layui-nav-item .layui-nav-child .layui-nav-child a>i.layui-icon {
+    left: 40px;
+}
+
 .layui-side-menu .layui-nav .layui-nav-item .layui-nav-child .layui-nav-child .layui-nav-child a {
     padding-left: 85px;
 }
 
+.layui-side-menu .layui-nav .layui-nav-item .layui-nav-child .layui-nav-child .layui-nav-child a>i.layui-icon {
+    left: 60px;
+}
+
 .layui-side-menu .layui-nav .layui-nav-item .layui-nav-child .layui-nav-child .layui-nav-child .layui-nav-child a {
     padding-left: 105px;
+}
+
+.layui-side-menu .layui-nav .layui-nav-item .layui-nav-child .layui-nav-child .layui-nav-child .layui-nav-child a>i.layui-icon {
+    left: 80px;
+}
+
+.layui-side-menu .layui-nav .layui-nav-item .layadmin-nav-hover .layui-nav-child a i:first-child {
+    left: 15px!important;
 }
 
 /* 修改原有样式 */
@@ -2250,7 +2296,7 @@ a {
 }
 
 .layui-imagesbox img {
-    width: 190px;
+    width: 100%;
     height: 116px;
     cursor: pointer;
 }
@@ -2454,7 +2500,6 @@ xm-select > .xm-body .xm-tree-icon:hover {
     color: #1890ff;
 }
 
-
 .layui-table-body img.filesuffix {
     height: 30px!important;
     width: 30px!important;
@@ -2469,6 +2514,139 @@ xm-select > .xm-body .xm-tree-icon:hover {
 
 .layui-laydate-footer span[lay-type=date] {
     color: #1890ff;
+}
+
+.chunkProgress {
+    background-color: transparent!important;
+    box-shadow: 0 0 0 rgba(0,0,0,0)!important;
+}
+
+/*控制台CSS*/
+.layui-table tr {
+    cursor: pointer;
+}
+
+.task .layui-table td {
+    white-space: nowrap;
+    max-width: 120px;
+}
+
+.layui-table[lay-skin="nob"] th, .layui-table[lay-skin="nob"] td {
+    white-space: nowrap;
+    max-width: 50px;
+    overflow: hidden;
+}
+
+ul.layui-timeline {
+    height: 260px;
+    overflow: hidden;
+}
+
+ul.layui-timeline:hover {
+    overflow-y: auto;
+}
+
+.layui-carousel {
+    height: 260px;
+}
+
+.layui-carousel > [carousel-item] > * {
+    background: 0 0;
+}
+
+
+.layui-carousel > [carousel-item]:before {
+    content: '';
+}
+
+/** 小组成员 */
+.console-user-group {
+    position: relative;
+    padding: 10px 0 10px 60px;
+}
+
+.console-user-group .console-user-group-head {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    margin-top: -16px;
+    border-radius: 50%;
+}
+
+.console-user-group .layui-badge {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    margin-top: -10px;
+}
+
+.console-user-group .console-user-group-name {
+    line-height: 1.2;
+}
+
+.console-user-group .console-user-group-desc {
+    color: #8c8c8c;
+    line-height: 1;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+@media screen and (max-width: 1200px) {
+    .layui-admin-workplace {
+        margin: 0 8px 0px 1px;
+    }
+}
+
+.layui-card-header span {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.layui-sales {
+    margin-bottom: 0;
+    overflow: hidden;
+    color: rgba(0,0,0,.85);
+    font-size: 30px;
+}
+
+.layui-sales-info {
+    padding-top: 16px;
+    color: rgba(0,0,0,.65);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+fieldset.layui-field-title {
+    margin-bottom: 10px;
+}
+
+.numberInfoSubTitle {
+    color: rgba(0, 0, 0, .45);
+    font-size: 14px;
+    height: 22px;
+    line-height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-all;
+}
+
+.numberInfoValue {
+    color: rgba(0, 0, 0, .85);
+    font-size: 24px;
+    margin-top: 10px;
+    height: 32px;
+    line-height: 32px;
+}
+
+.numberInfoSuffix {
+    color: rgba(0, 0, 0, .65);
+    font-size: 16px;
+    font-style: normal;
+    margin-left: 4px;
+    line-height: 32px;
 }
 
 /* 皮肤设置 */

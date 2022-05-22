@@ -421,7 +421,7 @@ class FormBuilder
         // 非INPUT表单 值
         $value = $this->formtype ? '{$data.' . $data['name'] . '}' : '';
         $html = <<<Eof
-            <textarea lay-editor="" id="{$data['name']}" class="layui-hide" {$this->attributes($data)} type="layui-textarea" >{$value}</textarea>
+            <textarea id="{$data['name']}" {$data['editorType']} class="layui-hide" {$this->attributes($data)} type="layui-textarea" >{$value}</textarea>
         Eof;
         return $html;
     }

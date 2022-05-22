@@ -20,32 +20,106 @@ use think\template\TagLib;
 /**
  * 注意：定界符结尾必须靠墙立正
  */
-
-class Salibs extends TagLib
+class SaLibs extends TagLib
 {
 
-	/**
-	 * 定义标签列表
-	 */
-	protected $tags   =  [
-		// 标签定义： attr 属性列表 close 是否闭合（0 或者1 默认1） alias 标签别名 level 嵌套层次
-		'variable'  	=> ['attr' => 'name', 'close' => 0], 						// 自定义变量	
-		'company'   	=> ['attr' => 'name,alias', 'close' => 0], 				// 公司信息	
-		'plugin'    	=> ['attr' => 'name,field', 'close' => 0], 				// 插件配置信息	
-		'category'		=> ['attr' => 'id,cid,pid,typeid,field,limit,order,type,pages'], // 获取栏目
-		'navlist'		=> ['attr' => 'id'],										// 导航标签
-		'channel'		=> ['attr' => 'id'],										// 模型标签
-		'customtpl'		=> ['attr' => 'id'],										// 自定义模板
-		'usergroup'		=> ['attr' => 'id'],										// 用户组			
-		'playlist'		=> ['attr' => 'id'],										// 播放器列表
-		'serverlist'	=> ['attr' => 'id'],										// 服务器列表
-		'arealist'		=> ['attr' => 'id'],										// 地区列表
-		'yearlist'		=> ['attr' => 'id'],										// 年代列表
-		'weeklist'		=> ['attr' => 'id'],										// 星期列表
-		'language'		=> ['attr' => 'id'],										// 语言列表
-		'friendlink'	=> ['attr' => 'id,type'],									// 获取友链
-		'dictionary'	=> ['attr' => 'id,value'],							    	// 获取字典列表
-	];
+    /**
+     * 定义标签列表
+     */
+    protected $tags = [
+        // 标签定义： attr 属性列表 close 是否闭合（0 或者1 默认1） alias 标签别名 level 嵌套层次
+        'variable'   => ['attr' => 'name', 'close' => 0],                    // 自定义变量
+        'company'    => ['attr' => 'name,alias', 'close' => 0],              // 公司信息
+        'archivetpl' => ['attr' => 'id'],                                    // 自定义模板
+        'dictionary' => ['attr' => 'id,value'],                              // 获取字典列表
+    ];
 
+    /**
+     * 获取自定义模板
+     * @param array $tags
+     * @param string $content
+     * @return string
+     */
+    public function tagArchivetpl(array $tags, string $content): string
+    {
+        $tags['id'] = $tags['id'] ?? 'vo';
+        $id = $this->autoBuildVar($tags['id']);
 
+        $_var = Random::alpha();
+        $parse = '<?php ';
+        $parse .= '$path = root_path()."app/index/view/custom";';
+        $parse .= '$_TPL_LIST = glob($path.\'*.html\');';
+        $parse .= '$_' . $_var . ' = str_replace(array($path,\'.html\'),\'\',$_TPL_LIST);';
+        $parse .= ' ?>';
+        $parse .= '<?php foreach($_' . $_var . ' as $key=>' . $id . '):?>';
+        $parse .= $content;
+        $parse .= '<?php endforeach; ?>';
+        return $parse;
+    }
+
+    /**
+     * 自定义变量标签
+     * @access public
+     * @param string $tags 值或变量
+     * @return string
+     */
+    public function tagVariable($tags)
+    {
+        if (!isset($tags['name'])
+            || !$tags['name']) {
+            return false;
+        }
+
+        // 获取变量
+        $variable = saenv('variable');
+        if (isset($variable[$tags['name']])) {
+            return $variable[$tags['name']];
+        }
+    }
+
+    /**
+     * 获取公司变量
+     * @access public
+     * @param string $tags 值或变量
+     * @return string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function tagCompany($tags)
+    {
+        $where = [];
+        if (isset($tags['alias']) && $tags['alias']) {
+            $where[] = ['alias', '=', $tags['alias']];
+        } else { // 默认查询
+            $where[] = ['id', '=', '1'];
+        }
+
+        $data = Db::name('company')->where($where)->find();
+        if (!empty($data) && isset($data[$tags['name']])) {
+            return $data[$tags['name']];
+        }
+    }
+
+    /**
+     * 获取字典标签
+     * @access public
+     * @param array $tags
+     * @param string $content 自定义元素
+     * @return string
+     */
+    public function tagDictionary(array $tags, string $content): string
+    {
+        $tags['id'] = $tags['id'] ?? 'vo';
+        $id = $this->autoBuildVar($tags['id']);
+        $value = $tags['value'] ?? '';
+        $_var = Random::alpha();
+        $parse = '<?php ';
+        $parse .= '$_' . $_var . ' = \app\common\model\system\Dictionary::getValueList("' . $value . '");';
+        $parse .= ' ?>';
+        $parse .= '<?php foreach($_' . $_var . ' as $key=>' . $id . '):?>';
+        $parse .= $content;
+        $parse .= '<?php endforeach; ?>';
+        return $parse;
+    }
 }

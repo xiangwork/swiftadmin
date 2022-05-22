@@ -9,6 +9,7 @@ tinymce.PluginManager.add('axupimgs', function(editor, url) {
     axupimgs.axupimgs_filetype = editor.getParam('axupimgs_filetype', '.png,.gif,.jpg,.jpeg', 'string');
 	axupimgs.res=[];
 	var openDialog = function() {
+		
 		return editor.windowManager.openUrl({
 			title: pluginName,
 			size: 'large',

@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare (strict_types=1);
 // +----------------------------------------------------------------------
 // | swiftAdmin 极速开发框架 [基于ThinkPHP6开发]
 // +----------------------------------------------------------------------
@@ -17,6 +17,7 @@ use app\common\library\Auth;
 use app\common\model\system\User;
 use app\common\model\system\UserThird;
 use system\Random;
+use think\facade\Cookie;
 
 /**
  * 社会化登录
@@ -39,13 +40,14 @@ class Third extends HomeController
     /**
      * 构造函数
      */
-    public function __construct($type = null) {
+    public function __construct($type = null)
+    {
         $this->auth = Auth::instance();
         $this->type = input('type/s') ?? null;
-        
+
         try {
-            $class = "\\system\\third\\".$this->type;
-            return $this->oauth = new $class;
+            $class = "\\system\\third\\" . $this->type;
+            $this->oauth = new $class;
         } catch (\Throwable $th) {
             exit("暂时还不支持该方式扩展！");
         }
@@ -56,58 +58,68 @@ class Third extends HomeController
      */
     public function login()
     {
+        $referer = input('ref/s', request()->server('HTTP_REFERER', '/'));
+        Cookie::set('redirectUrl', $referer, 3600);
         return $this->oauth->login();
     }
 
     /**
      * 用户回调函数
+     * @return mixed|void
      */
-    public function callback() 
+    public function callback()
     {
         $userInfos = $this->oauth->getUserInfo();
         // 注册新用户
         if (!empty($userInfos) && !$this->auth->isLogin()) {
-           return $this->register($userInfos,$this->type);
-        }
-        else if ($this->auth->isLogin()) { // 绑定用户
-            return $this->doBind($userInfos,$this->type); 
+            return $this->register($userInfos, $this->type);
+        } else if ($this->auth->isLogin()) { // 绑定用户
+            return $this->doBind($userInfos, $this->type);
         }
     }
 
     /**
      * 用户注册操作
+     * @param array $userInfos
+     * @param string|null $type
+     * @return void
      */
-    public function register(array $userInfos = [], string $type = null) 
+    public function register(array $userInfos = [], string $type = null)
     {
-        
+
         // 查询是否已经注册
         $openid = $userInfos['openid'] ?? $userInfos['id'];
         $nickname = $userInfos['userinfo']['name'] ?? $userInfos['userinfo']['nickname'];
 
-        $result = UserThird::alias('th')->view('user','*','user.id=th.user_id')
-                                        ->where(['openid'=>$openid,'type'=>$type])->find();
+        $result = UserThird::alias('th')
+                           ->view('user', '*', 'user.id=th.user_id')
+                           ->where(['openid' => $openid, 'type' => $type])
+                           ->find();
+
         if (!empty($result)) {
             $array['id'] = $result['id'];
-            $array['logintime'] = time();
-            $array['loginip'] = request()->ip();
-            $array['logincount'] = $result['logincount'] + 1;
+            $array['login_time'] = time();
+            $array['login_ip'] = request()->ip();
+            $array['login_count'] = $result['login_count'] + 1;
+
             if (User::update($array)) {
                 $this->auth->returnToken($result);
-                $this->refreshStatus();
+                $this->redirectUrl();
             }
-        }
-        else {
+
+        } else {
 
             // 注册本地用户
-			$local['nickname'] = $nickname;
-			$local['avatar'] = $userInfos['userinfo']['avatar'];	
+            $post['nickname'] = $nickname;
+            $post['avatar'] = $userInfos['userinfo']['avatar'];
+
             if (User::getByNickname($nickname)) {
-                $local['nickname'] .= Random::alpha(3);
+                $post['nickname'] .= Random::alpha(3);
             }
-            
-            $local['group_id'] = 1;
-            $local['createip'] = request()->ip();
-            $result = User::create($local);
+
+            $post['group_id'] = 1;
+            $post['create_ip'] = request()->ip();
+            $result = $this->auth->register($post);
 
             // 封装第三方数据
             if (!empty($result)) {
@@ -119,19 +131,17 @@ class Third extends HomeController
                     'access_token'  => $userInfos['access_token'],
                     'refresh_token' => $userInfos['refresh_token'],
                     'expires_in'    => $userInfos['expires_in'],
-                    'logintime'     => time(),
+                    'login_time'    => time(),
                     'expiretime'    => time() + $userInfos['expires_in'],
                 ];
             }
 
             // 注册第三方数据
             if (isset($third) && is_array($third)) {
-
                 if (UserThird::create($third)) {
                     $this->auth->returnToken($result);
-                    $this->refreshStatus();
+                    $this->redirectUrl();
                 }
-                
             }
         }
     }
@@ -139,34 +149,38 @@ class Third extends HomeController
     /**
      * 用户绑定操作
      */
-    public function bind() 
+    public function bind()
     {
         if ($this->auth->isLogin()) {
-            // 跳转到登录的地址
-            $this->redirect("/third/login?bind=true&type=".$this->type);
+            $buildQuery = [
+                'bind' => true,
+                'type' => $this->type,
+                'ref' => input('ref/s', request()->server('HTTP_REFERER', '/')),
+            ];
+            $this->redirect("/third/login?" . http_build_query($buildQuery));
         }
     }
 
     /**
      * 用户解除绑定
      */
-    public function unbind() 
+    public function unbind()
     {
         if ($this->auth->isLogin()) {
 
-          $result = $this->auth->userInfo;
-          if (!empty($result)) {
-            
-            if (empty($result['email']) || empty($result['pwd'])) {
-                return $this->error('解除绑定需要设置邮箱和密码！');
-            }
+            $result = $this->auth->userInfo;
+            if (!empty($result)) {
 
-            $where['type'] = $this->type;
-            $where['user_id'] = cookie('uid');
-            if (UserThird::where($where)->delete()) {
-                return $this->success('解除绑定成功！');
+                if (empty($result['email']) || empty($result['pwd'])) {
+                    return $this->error('解除绑定需要设置邮箱和密码！');
+                }
+
+                $where['type'] = $this->type;
+                $where['user_id'] = cookie('uid');
+                if (UserThird::where($where)->delete()) {
+                    return $this->success('解除绑定成功！');
+                }
             }
-          }
         }
 
         return $this->error();
@@ -175,9 +189,9 @@ class Third extends HomeController
     /**
      * 用户绑定操作实例
      */
-    protected function doBind(array $userInfos = [], string $type = null) 
+    protected function doBind(array $userInfos = [], string $type = null)
     {
-        
+
         $openid = $userInfos['openid'] ?? $userInfos['id'];
         $nickname = $userInfos['userinfo']['name'] ?? $userInfos['userinfo']['nickname'];
 
@@ -195,36 +209,31 @@ class Third extends HomeController
                 'access_token'  => $userInfos['access_token'],
                 'refresh_token' => $userInfos['refresh_token'],
                 'expires_in'    => $userInfos['expires_in'],
-                'logintime'     => time(),
+                'login_time'    => time(),
                 'expiretime'    => time() + $userInfos['expires_in'],
             ];
 
-            try {
-                if (UserThird::create($third)) {
-                    return $this->refreshStatus();
-                }
-            } catch (\Throwable $th) {
-                return $this->error($th->getMessage());
+            if (UserThird::create($third)) {
+                return $this->redirectUrl();
+            } else {
+                return $this->error('绑定异常');
             }
         }
 
         return $this->error('当前用户已被其他账户绑定！');
     }
 
-	/**
-     * 页面登录JS刷新
-     * window.refreshLogin = function(e) 
-     * { top.location.reload();}
-     * // 单独登录也可使用HEADER
+    /**
+     * 跳转URL
+     * @return mixed
      */
-	protected function refreshStatus () 
+    protected function redirectUrl(): mixed
     {
-        $refreshLogin = <<<Eof
-            <script>
-                window.opener.refreshLogin();
-                window.close();
-            </script>
-Eof;
-        echo $refreshLogin;
-	}
+        $referer = Cookie::get('redirectUrl', '/');
+        if (preg_match("/(user\/login|user\/register|user\/logout)/i", $referer)) {
+            $referer = '/';
+        }
+        Cookie::delete('redirectUrl');
+        return $this->redirect($referer);
+    }
 }

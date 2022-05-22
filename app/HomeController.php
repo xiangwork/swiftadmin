@@ -121,6 +121,7 @@ class HomeController extends BaseController
 
         // 是否验证登录器
         if ($this->auth->isLogin()) {
+
             $this->userId = $this->auth->userInfo['id'];
             $this->userInfo = $this->auth->userInfo;
 
@@ -140,9 +141,11 @@ class HomeController extends BaseController
     /**
      * 视图过滤
      *
-     * @return string
+     * @param $template
+     * @param array $argc
+     * @return \think\response\View
      */
-    public function view($template = '', array $argc = [])
+    public function view($template = '', array $argc = []): \think\response\View
     {
         return view($template, $argc)->filter(function ($content) {
 
@@ -154,6 +157,7 @@ class HomeController extends BaseController
         });
     }
 
+
     /**
      * 退出登录
      * @access public
@@ -161,6 +165,8 @@ class HomeController extends BaseController
      */
     public function logOut()
     {
-        return $this->auth->logOut();
+        $this->auth->logOut();
+        return $this->success('退出成功','/');
     }
+
 }

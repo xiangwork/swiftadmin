@@ -21,28 +21,31 @@ use app\common\library\Globals;
 class Admin extends Model
 {
     // 定义时间戳字段名
-    protected $createTime = 'createtime';
-    protected $updateTime = 'updatetime';
+    protected $createTime = 'create_time';
+    protected $updateTime = 'update_time';
 
     /**
      * 关联管理组
      *
-     * @return void
+     * @return \think\model\relation\HasOne
      */
-    public function group()
+    public function group(): \think\model\relation\HasOne
     {
         return $this->hasOne(AdminGroup::class, 'id', 'group_id');
     }
 
     /**
      * 根据用户名/密码 进行登录判断
-     * @param string $User
-     * @param string $Pwd
+     * @param $user
+     * @param $pwd
+     * @return Admin|array|mixed|Model|null
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public static function checkLogin($user, $pwd)
     {
-        // 密码加盐
-        $where[] = ['pwd', '=', encryption(trim($pwd))];
+        $where[] = ['pwd', '=', encryptPwd(trim($pwd))];
         if (filter_var($user, FILTER_VALIDATE_EMAIL)) {
             $where[] = ['email', '=', htmlspecialchars(trim($user))];
         } else {
@@ -56,6 +59,10 @@ class Admin extends Model
      * 根据用户名/验证码 进行数据查找
      * @param string $user
      * @param string $code
+     * @return Admin|array|mixed|Model|null
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public static function checkForget($user, $code)
     {
@@ -73,7 +80,7 @@ class Admin extends Model
     /**
      * 设置创建IP
      */
-    public function setCreateipAttr($ip)
+    public function setCreateIpAttr($ip)
     {
         return Globals::setIPAttr($ip);
     }
@@ -81,7 +88,7 @@ class Admin extends Model
     /**
      * 获取创建IP
      */
-    public function getCreateipAttr($ip)
+    public function getCreateIpAttr($ip) 
     {
         return Globals::getIPAttr($ip);
     }
@@ -89,7 +96,7 @@ class Admin extends Model
     /**
      * 设置登录IP
      */
-    public function setLoginipAttr($ip)
+    public function setLoginIpAttr($ip)
     {
         return Globals::setIPAttr($ip);
     }
@@ -97,7 +104,7 @@ class Admin extends Model
     /**
      * 获取登录IP
      */
-    public function getLoginipAttr($ip)
+    public function getLoginIpAttr($ip) 
     {
         return Globals::getIPAttr($ip);
     }

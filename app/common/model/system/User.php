@@ -15,8 +15,8 @@ class User extends Model
     use SoftDelete;
     
     // 定义时间戳字段名
-    protected $createTime = 'createtime';
-    protected $updateTime = 'updatetime';
+    protected $createTime = 'create_time';
+    protected $updateTime = 'update_time';
 
     // 定义第三方关联
     public function third()
@@ -96,7 +96,7 @@ class User extends Model
 
         $prefix = cdn_Prefix();
         if (!empty($prefix) && $value) {
-            if (!strstr($value,'data:image')) { 
+            if (!str_contains($value,'data:image')) { 
                 return $prefix.$value;
             }
         }
@@ -118,7 +118,7 @@ class User extends Model
     /**
      * 登录时间
      */
-    public function getLogintimeAttr($value)
+    public function getLoginTimeAttr($value)
     {
         if (!empty($value)) {
             $value = date('Y-m-d H:i:s',$value);
@@ -130,7 +130,7 @@ class User extends Model
     /**
      * 设置创建IP
      */
-    public function setCreateipAttr($ip)
+    public function setCreateIpAttr($ip)
     {
         return Globals::setIPAttr($ip);
     }
@@ -138,7 +138,7 @@ class User extends Model
     /**
      * 获取创建IP
      */
-    public function getCreateipAttr($ip)
+    public function getCreateIpAttr($ip)
     {
         return Globals::getIPAttr($ip);
     }
@@ -146,7 +146,7 @@ class User extends Model
     /**
      * 设置登录IP
      */
-    public function setLoginipAttr($ip)
+    public function setLoginIpAttr($ip)
     {
         return Globals::setIPAttr($ip);
     }
@@ -154,7 +154,7 @@ class User extends Model
     /**
      * 获取登录IP
      */
-    public function getLoginipAttr($ip)
+    public function getLoginIpAttr($ip)
     {
         return Globals::getIPAttr($ip);
     }
@@ -191,8 +191,12 @@ class User extends Model
     public static function reduceScore(int $id = 0, int $score = 0)
     {
         try {
-            self::where('id',$id)->dec('score',$score)->update();
-        } catch (\Throwable $th) {}
+            if ($score) {
+                self::where('id', $id)->dec('score', $score)->update();
+            }
+        } catch (\Throwable $th) {
+        }
     }
+
 }
 

@@ -156,6 +156,7 @@ layui.define(['form', 'jquery', 'layer', 'admin', 'cascader'], function (exports
     textarea: '多行文本',
     border: '分割线',
     column: '栅格列数',
+    editorType: '编辑器类型',
   }
 
   // 组件属性
@@ -359,6 +360,7 @@ layui.define(['form', 'jquery', 'layer', 'admin', 'cascader'], function (exports
       tag: "editor",
       name: '-1',
       label: "编辑器",
+      editorType: 'lay-editor', // 编辑器类型
       labelwidth: 110,
       width: 100,
       labelhide: false
@@ -904,8 +906,8 @@ layui.define(['form', 'jquery', 'layer', 'admin', 'cascader'], function (exports
     $('body').on('click', '.layui-btn-component', function (e) {
 
       var othis = this, subHtml = STR_EMPTY,
-        formname = $('#formname').val(),
-        html = '<div class="layui-fluid"><form id="' + formname + '" class="layui-form">';
+          formName = $('#formName').val(),
+        html = '<div class="layui-fluid"><form id="' + formName + '" class="layui-form">';
       html += $('#formBuilder').html();
       html += '</form></div>';
       html = html.replace(/<ol[^>]+>/g, '').replace(/<\/ol>/g, '');
@@ -920,22 +922,18 @@ layui.define(['form', 'jquery', 'layer', 'admin', 'cascader'], function (exports
       html = subHtml;
 
       var formWidth = $('#formWidth').val();
-      if (formWidth) {
-        formWidth += 'px';
-      } else {
+      if (!formWidth) {
         formWidth = '65%';
       }
 
       var formHeight = $('#formHeight').val();
-      if (formHeight) {
-        formHeight += 'px';
-      } else {
+      if (!formHeight) {
         formHeight = '65%';
       }
 
       layer.open({
         type: 1,
-        title: '预览表单 - ' + formname,
+        title: '预览表单 - ' + formName,
         maxmin: true,
         area: [formWidth, formHeight],
         content: html,
@@ -1490,6 +1488,21 @@ layui.define(['form', 'jquery', 'layer', 'admin', 'cascader'], function (exports
           }
           optionsHtml += '</select>';
           break;
+        case 'editorType':
+          var attrs = {
+            'lay-editor': 'tinymce',
+            'lay-markdown': 'markdown',
+          };
+          optionsHtml += '<select lay-filter="componentSelected" data-field="editorType">';
+          for (const key in attrs) {
+            optionsHtml += '<option value="' + key + '" ';
+            if (key == data.editorType) {
+              optionsHtml += 'selected';
+            }
+            optionsHtml += '>' + attrs[key] + '</option>';
+          }
+          optionsHtml += '</select>';
+          break;
         case 'options':
           optionsHtml += this.formOptionHeader();
           for (const key in data.options) {
@@ -1677,10 +1690,29 @@ layui.define(['form', 'jquery', 'layer', 'admin', 'cascader'], function (exports
           admin.components.cascader('input#' + element.name);
           break;
         case 'editor':
-          tinymce.init({
-            selector: '#' + element.name + '_tiny',
-            language: 'zh_CN',
-          })
+          if (element.editorType === 'lay-editor') {
+            tinymce.init({
+              selector: '#' + element.name + '_tiny',
+              language: 'zh_CN',
+            })
+          } else {
+            let elem = '#' + element.name + '_tiny';
+            let height = $(elem).data('height') || '400px';
+            let _id = 'markdown_' + Math.round(Math.random() * 36);
+            $(elem).after('<div id="' + _id + '" ></div>');
+            new Cherry({
+              id: _id,
+              toolbars: {
+                theme: 'light',
+                float: false,
+                bubble : false // array or false
+              },
+              editor: {
+                height: height,
+                defaultModel: 'editOnly',
+              }
+            });
+          }
           break;
         case 'tab':
         case 'grid':
@@ -2078,7 +2110,7 @@ layui.define(['form', 'jquery', 'layer', 'admin', 'cascader'], function (exports
       render: function (data) {
         var html = getBeforeItem(data);
         html += getBeforeLabel(data.labelhide, data);
-        html += '<textarea id="' + data.name + '_tiny" name="' + data.name + '" class="layui-hide editorsrv" ';
+        html += '<textarea id="' + data.name + '_tiny" '+ data.editorType +' name="' + data.name + '" class="layui-hide editorsrv" ';
         html += '></textarea>';
         html += '</div></div>';
         return html;

@@ -11,17 +11,12 @@ declare (strict_types = 1);
 // +----------------------------------------------------------------------
 namespace app\index\controller;
 
-use app\common\library\Sms;
 use app\HomeController;
 
 class Index extends HomeController
 {
     public function index()
     {
-//        $sms = Sms::instance();
-//         $sms->register('15100038819', 'register');
-//         echo $sms->getError();
-//    die();
         return $this->view();
     }
 }

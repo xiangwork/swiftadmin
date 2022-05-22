@@ -14,6 +14,11 @@ layui.config({
     treetable: 'treetable/treetable',
     tableSelect: 'tableSelect/tableSelect',
     formDesign: 'formDesign/formDesign',
+    soulTable: 'soulTable/soulTable',
+    tableChild: 'soulTable/tableChild',
+    tableMerge: 'soulTable/tableMerge',
+    tableFilter: 'soulTable/tableFilter',
+    excel: 'soulTable/excel',
 }).use(['admin','jquery'], function () {
     var $ = layui.jquery;       // jquery的
     var admin = layui.admin;    // amdin模块的

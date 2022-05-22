@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
-<link href="__STATICADMIN__layui/css/layui.css?v{:config('app.version')}" rel="stylesheet" type="text/css" />
-<link href="__STATICADMIN__css/login.css?v{:config('app.version')}" rel="stylesheet" type="text/css" />
+<link href="__STATICADMIN__layui/css/layui.css?v={:release()}" rel="stylesheet" type="text/css" />
+<link href="__STATICADMIN__css/login.css?v={:release()}" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <div class="swiftadmin-login">
@@ -188,8 +188,8 @@
         </div>
     </div>
 </body>
-<script src="__STATICADMIN__layui/layui.js?{:config('app.version')}"></script>
-<script src="__STATICADMIN__js/common.js?{:config('app.version')}"></script>
+<script src="__STATICADMIN__layui/layui.js?v={:release()}"></script>
+<script src="__STATICADMIN__js/common.js?v={:release()}"></script>
 <script>
     window.sessionStorage.clear();
     layui.use(['layer','form'],function() {

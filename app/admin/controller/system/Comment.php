@@ -53,7 +53,7 @@ class Comment extends AdminController
             $list = $this->model->where($where)
                                 ->where('status',$status)
                                 ->order('id','desc')
-                                ->field('id,cid,user_id,content,count,sid,status,ip,createtime')
+                                ->field('id,cid,user_id,content,count,sid,status,ip,create_time')
                                 ->limit($limit)
                                 ->page($page)
                                 ->select()

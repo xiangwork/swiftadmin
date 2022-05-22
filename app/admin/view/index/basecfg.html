@@ -110,7 +110,7 @@
                                             placeholder="请上传站点LOGO图" class="layui-input logo">
                                     </div>
                                     <button type="button" class="layui-btn layui-btn-normal" lay-upload="logo"
-                                        data-url="{:url('/upload/logo')}" callback="test">
+                                        data-url="{:url('/ajax/upload')}?action=logo" >
                                         <i class="layui-icon layui-icon-upload"></i>{:__('上传图片')}
                                     </button>
                                 </div>
@@ -241,6 +241,28 @@
                                         <i class="layui-icon layui-icon-vercode"
                                             lay-tips="* {:__('系统全局加密的KEY，初始化安装自动生成！')}"></i>
                                     </div>
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{:__('全文检索功能')}</label>
+                                    <div class="layui-input-inline">
+                                        <input type="radio" name="full_status"
+                                               value="1" title="{:__('开启')}"  <if condition="$config['full_status'] eq 1 "> checked </if> >
+                                        <input type="radio" name="full_status"
+                                               value="0" title="{:__('关闭')}"  <if condition="$config['full_status'] eq 0 "> checked </if>>
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux"> <font color="red">* {:__('开启后请安装XS/ES服务器，如不需要请关闭！！')}</font> </div>
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{:__('编辑器')}</label>
+                                    <div class="layui-input-inline">
+                                        <input type="radio" name="editor"
+                                               value="lay-editor" title="{:__('常规')}"  <if condition="$config['editor'] eq 'lay-editor' "> checked </if> >
+                                        <input type="radio" name="editor"
+                                               value="lay-markdown" title="{:__('MarkDown')}"  <if condition="$config['editor'] eq 'lay-markdown' "> checked </if>>
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux"> <font color="red">* {:__('请在切换选项后清空系统缓存')}</font> </div>
                                 </div>
 
                                 <div class="layui-form-item">
@@ -450,7 +472,7 @@
                                                 </eq> >{:__('关闭')}</option>
                                         </select>
                                     </div>
-                                    <div class="layui-form-mid layui-word-aux">* {:__('文件是否上传至FTP后删除本地文件。不建议开启！')}</div>
+                                    <div class="layui-form-mid layui-word-aux">* {:__('是否上传至云空间后删除本地文件。不建议开启！')}</div>
                                 </div>
 
                                 <!-- FTP下载设置隐藏域  -->
@@ -491,17 +513,17 @@
                                             placeholder="{:__('非空则会自动增加远程图片地址')}" value="{$config.upload_http_prefix}"
                                             class="layui-input">
                                     </div>
-                                    <label class="layui-form-label">{:__('自动下载图片')}</label>
+                                    <label class="layui-form-label">{:__('文件分片大小')}</label>
                                     <div class="layui-input-inline">
-                                        <select name="upload_http_auto">
-                                            <option value="1" <eq name="$config['upload_http_auto']" value="1">
-                                                selected="" </eq> >{:__('开启')}</option>
-                                            <option value="0" <eq name="$config['upload_http_auto']" value="0">
-                                                selected="" </eq> >{:__('关闭')}</option>
-                                        </select>
+                                        <input type="number" name="upload_chunk_size"
+                                               placeholder="{:__('请输入文件分片大小')}"
+                                               value="{$config.upload_chunk_size}"
+                                               lay-verify="required"
+                                               disabled
+                                               class="layui-input layui-disabled">
                                     </div>
                                     <div class="layui-form-mid layui-word-aux">
-                                        <font color="red">* {:__('开启后，发表内容会自动将图片下载或上传云空间')}</font>
+                                        <font color="red">* {:__('默认分片大小为2MB：单位(字节)')}</font>
                                     </div>
                                 </div>
 
@@ -529,9 +551,9 @@
                                         <div class="layui-input-inline">
                                             <select name="cloud_type" data-selector="aliyun,qcloud"
                                                 lay-filter="selectStatus">
-                                                <option value="aliyun" <eq name="$config['cloud_type']" value="aliyun">
+                                                <option value="aliyun_oss" <eq name="$config['cloud_type']" value="aliyun">
                                                     selected="" </eq> >{:__('阿里云OSS')}</option>
-                                                <option value="qcloud" <eq name="$config['cloud_type']" value="qcloud">
+                                                <option value="qcloud_oss" <eq name="$config['cloud_type']" value="qcloud">
                                                     selected="" </eq> >{:__('腾讯云COS')}</option>
                                             </select>
                                         </div>
@@ -766,7 +788,7 @@
                                                 class="layui-input upload_water_img">
                                         </div>
                                         <button type="button" class="layui-btn layui-btn-normal"
-                                            lay-upload="upload_water_img" data-url="/upload/file">{:__('上传图片')}</button>
+                                            lay-upload="upload_water_img" data-url="/ajax/upload">{:__('上传图片')}</button>
                                     </div>
 
                                     <div class="layui-form-item">

@@ -15,11 +15,11 @@ class Comment extends Model
     use SoftDelete;
     
     // 定义时间戳字段名
-    protected $createTime = 'createtime';
-    protected $updateTime = 'updatetime';
+    protected $createTime = 'create_time';
+    protected $updateTime = 'update_time';
 
     // 自定义关联字段
-    protected $userField  = 'id,nickname,heart,loginip,avatar,readurl,score';
+    protected $userField  = 'id,nickname,heart,login_ip,avatar,readurl,score';
 
     /**
      * 关联用户

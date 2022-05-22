@@ -18,6 +18,12 @@ class User extends ApiController
      */
 	public $needLogin = true;
 
+    /**
+     * 非鉴权方法
+     * @var array
+     */
+    public array $noNeedLogin = ['register', 'login'];
+
 	// 初始化函数
     public function initialize()
     {
@@ -66,9 +72,11 @@ class User extends ApiController
 			// 获取参数
 			$nickname = input('nickname/s');
             $password = input('pwd/s');
+
             if (!$this->auth->login($nickname,$password)) {
                 return $this->error($this->auth->getError());
             }
+
             return $this->success('登录成功',null,['token' => $this->auth->token]);
 		}
 

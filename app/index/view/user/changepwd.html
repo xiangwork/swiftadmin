@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>修改密码 | {$site_name}</title>
-<include file="user:include"/>
+    <meta charset="UTF-8">
+    <title>修改密码 | {$site_name}</title>
+    <include file="user:include"/>
 </head>
 <body>
 
 <div class="layui-card-body">
     <form action="/user/changepwd" class="layui-form layui-form-fixed">
-        <input type="text" name="nickname" value="{$data.nickname}" hidden="">
+        <input type="text" name="nickname" value="{$user.nickname}" hidden="">
         <div class="layui-form-item">
             <label class="layui-form-label">原密码</label>
             <div class="layui-input-block">

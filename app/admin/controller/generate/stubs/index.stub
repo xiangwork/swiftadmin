@@ -9,7 +9,7 @@
                     {%everySearchHtml%}
                 </div>
                 <div class="layui-form-item">
-                    {%advceSearchHtml%}
+                    {%adviceSearchHtml%}
                     <div class="layui-inline" >
                         <!-- // 默认搜索 -->
                         <button class="layui-btn icon-btn" lay-filter="formSearch" lay-submit><i class="layui-icon layui-icon-search"></i>{:__('搜索')}</button>

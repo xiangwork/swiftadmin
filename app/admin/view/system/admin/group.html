@@ -143,7 +143,7 @@
                 {field: 'title', align: 'center', title: "{:__('名称')}"},
                 {field: 'alias', align: 'center', title: "{:__('角色标识')}"},
                 {field: 'content', align: 'center',title: "{:__('角色备注')}"},
-                {field: 'createtime', align: 'center',title: "{:__('创建时间')}"},
+                {field: 'create_time', align: 'center',title: "{:__('创建时间')}"},
                 {align: 'center', toolbar: '#tableBar',width: 260, title: "{:__('操作')}"},
             ]]
         })
@@ -168,7 +168,7 @@
             tree.render({
                 id: 'authTree'
                 ,elem: '#authTree'
-                ,data: _ajax('getrulecatestree')
+                ,data: _ajax('rules')
                 ,showCheckbox: true
                 ,checkids: checkKeys
                 ,oncheck: function(obj){}
@@ -225,7 +225,7 @@
                 }
             }
 
-            var rules = _ajax('getrulecatestree','cates','private');
+            var rules = _ajax('cates');
             if (typeof rules.code != "undefined") {
                 return layer.msg(rules.msg,'info');
             }
@@ -277,12 +277,10 @@
         }
 
         // 同步加载函数
-        var _ajax = function (action,type,classd) {
-            var func = '{:url("/system.admin/authorizeInterface")}';
-            return admin.event.ajax(func,{ 
-                action : action,
+        var _ajax = function (type) {
+            var func = '{:url("/system.admin/getrulecatetree")}';
+            return admin.event.ajax(func,{
                 type   : type,
-                class  : classd
             },false)
         }
 

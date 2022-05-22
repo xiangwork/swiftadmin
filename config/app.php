@@ -49,7 +49,7 @@ return [
     'error_message'    => '页面错误！请稍后再试～',
 
     // 框架版本
-    'version'          => 'v1.1.1',
+    'version'          => 'v1.1.2',
 
     // 插件冲突缓存
     'plugin_mutex'     => true,

@@ -12,6 +12,6 @@ class UserThird extends Model
 {
 
     // 定义时间戳字段名
-    protected $createTime = 'createtime';
-    protected $updatetime = 'updatetime';
+    protected $createTime = 'create_time';
+    protected $updatetime = 'update_time';
 }

@@ -8,6 +8,7 @@ use app\ApiController;
 use app\common\library\Email;
 use app\common\library\Sms;
 use app\common\model\system\User;
+use app\common\model\system\UserValidate;
 
 /**
  * 异步调用
@@ -36,14 +37,18 @@ class Ajax extends ApiController
                 return $this->error('手机号码不正确');
             }
 
+            $sms = Sms::instance();
+            $last = $sms->getLast($mobile);
+            if ($last && time() - $last['create_time'] < 60) {
+                return $this->error(__('发送频繁'));
+            }
+
             // 查询是否存在
-            $resultUser = User::getByMobile($mobile);
-            if ($event == 'register' && !empty($resultUser)) {
+            if (User::getByMobile($mobile)) {
                 return $this->error('当前手机号已被占用');
             }
 
-            $sms = Sms::instance();
-            if ($sms->register($mobile, $event)) {
+            if ($sms->$event($mobile, $event)) {
                 return $this->success("验证码发送成功！");
             } else {
                 return $this->error($sms->getError());
@@ -66,16 +71,20 @@ class Ajax extends ApiController
                 return $this->error('邮件格式不正确');
             }
 
-            // 注册事件查询邮箱
-            if ($event == 'register' && User::getByEmail($email)) {
+            $Ems = Email::instance();
+            $last = $Ems->getLast($email);
+            if ($last && time() - $last['create_time'] < 60) {
+                return $this->error(__('发送频繁'));
+            }
+
+            if (User::getByEmail($email)) {
                 return $this->error('当前邮箱已被占用');
             }
 
-            $sms = Email::instance();
-            if ($sms->captcha($email,$event)->send()) {
+            if ($Ems->captcha($email, $event)->send()) {
                 return $this->success("验证码发送成功！");
             } else {
-                return $this->error($sms->getError());
+                return $this->error($Ems->getError());
             }
         }
     }

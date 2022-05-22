@@ -67,7 +67,7 @@
                         lay-filter="lay-tree" >
                   <thead>
                     <tr>
-                      <th lay-data="{type:'checkbox'}"></th>
+                      <th lay-data="{type:'radio'}"></th>
                       <th lay-data="{field:'name'}">{:__('字典名称')}</th>
                     </tr>
                   </thead>
@@ -194,12 +194,12 @@
                 {field: 'name', align: 'center', title: '{:__("字典项名称")}'},
                 {field: 'value', align: 'center', title: '{:__("字典值")}'},
                 {field: 'sort', align: 'center',  width: 135, title: '{:__("排序号")}'},
-                {field: 'createtime', align: 'center', width: 160,title: '{:__("创建时间")}'},
+                {field: 'create_time', align: 'center', width: 160,title: '{:__("创建时间")}'},
                 {align: 'center', toolbar: '#tableBar',width: 250, title: '{:__("操作")}'},
             ]]
         })
 
-        table.on('checkbox(lay-tree)', function(obj){
+        table.on('radio(lay-tree)', function(obj){
             var data = table.checkStatus('lay-tree').data;
             var ids = [];
             if (data.length) {

@@ -11,6 +11,6 @@ use think\Model;
 class Company extends Model
 {
     // 定义时间戳字段名
-    protected $createTime = 'createtime';
+    protected $createTime = 'create_time';
     
 }

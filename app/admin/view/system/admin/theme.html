@@ -122,20 +122,20 @@
 <script>
     layui.use(['admin','form','layer'], function () {
 
-        var $ = layui.jquery;
-        var form = layui.form;
-        var layer = layui.layer;
-        var admin = layui.admin;
-        var html = '<i class="layui-icon layui-icon-ok"></i>';
+        let $ = layui.jquery;
+        let form = layui.form;
+        let layer = layui.layer;
+        let admin = layui.admin;
+        let html = '<i class="layui-icon layui-icon-ok"></i>';
 
         // 风格选择
-        var style = admin.getStorage('style') || admin.options.style;
+        let style = admin.getStorage('style') || admin.options.style;
         $('*[data-style='+ style +']').append(html);
         $('.drawer-item').click(function(obj) {
             $('.drawer-item>.layui-icon-ok').remove();
             $(this).append(html);
 
-            var stylesheet = $(this).data('style');
+            let stylesheet = $(this).data('style');
             if (stylesheet == 'light') {
                 top.layui.$('head').append(admin.globalStyleCss());
             }
@@ -147,7 +147,7 @@
         })
 
         // 主题选择
-        var theme = admin.getStorage('theme') || admin.options.theme;
+        let theme = admin.getStorage('theme') || admin.options.theme;
         $('*[data-theme='+ theme +']').append(html);
         $('body').attr('id',theme);
         $('.theme-item').click(function(obj) {
@@ -161,21 +161,18 @@
         })
         
         // 导航选择
-        var layout = admin.getStorage('layout') || admin.options.layout;
+        let layout = admin.getStorage('layout') || admin.options.layout;
         $('*[lay-layout='+ layout +']').append(html);
         $('.drawer-menu').click(function(obj) {
             $('.drawer-menu>.layui-icon-ok').remove();
             $(this).append(html);
             layout = $(this).attr('lay-layout');
-            // 顶部混合菜单关闭单页面
-            if (layout == 'top' || layout == 'hybrid') {
+            if (layout === 'top' || layout === 'hybrid') {
                 admin.setStorage('moreLabel',true);
             }
-
             admin.setStorage('layout', layout);
-            top.layui.admin.BasicLayout();
+            top.layui.admin.BasicLayout(null, undefined, false);
         })
-
 
         // 其他配置项
         form.on('switch(double)',function(obj) {
@@ -184,10 +181,9 @@
             form.render('checkbox');
         })        
 
-
         // 内容铺满
-        var fluid = admin.getStorage('fluid')
-        if (fluid == 'undefined') {
+        let fluid = admin.getStorage('fluid')
+        if (fluid === 'undefined') {
             fluid= admin.options.fluid;
         }
         $('.fluid').prop('checked', fluid);
@@ -197,7 +193,7 @@
         })
 
         // 菜单下拉样式
-        var dropstyle = admin.getStorage('dropstyle');
+        let dropstyle = admin.getStorage('dropstyle');
         if (typeof dropstyle !== "undefined") {
             layui.each($('.dropstyle').children('option'),function(index,elem) {
                 if ($(elem).val() == dropstyle) {
@@ -212,7 +208,7 @@
         })  
 
         // 多标签选项卡
-        var moreLabel = admin.getStorage('moreLabel');
+        let moreLabel = admin.getStorage('moreLabel');
         if (moreLabel == 'undefined') {
             moreLabel = admin.options.moreLabel;
         }
@@ -221,8 +217,8 @@
         $('.moreLabel').prop('checked', moreLabel);
         form.on('switch(moreLabel)',function(obj) {
 
-            var layout = admin.getStorage('layout')
-            if (layout === 'top' || layout == 'hybrid') {
+            let layout = admin.getStorage('layout')
+            if (layout == 'top' || layout == 'hybrid') {
                 $(".moreLabel").prop("checked", true);
                 layer.msg('当前菜单布局不支持该操作！','error');
                 form.render();
@@ -231,13 +227,13 @@
 
             admin.setStorage('layout','left');
             admin.setStorage('moreLabel',obj.elem.checked);
-            var element = "div[lay-filter='swiftadmin-tabs']>.layui-tab-title,#tabs-control";
+            let element = "div[lay-filter='swiftadmin-tabs']>.layui-tab-title,#tabs-control";
             obj.elem.checked ? top.layui.$(element).show() : top.layui.$(element).hide();
-            top.layui.admin.BasicLayout();
+            top.layui.admin.BasicLayout(null, undefined);
         })
 
         // 开启页头
-        var openHeader = admin.getStorage('openHeader');
+        let openHeader = admin.getStorage('openHeader');
         if (typeof openHeader == 'undefined') {
             openHeader = admin.options.openHeader;
         }
@@ -249,7 +245,7 @@
         })
 
         // 开启页脚
-        var openFooter = admin.getStorage('openFooter');
+        let openFooter = admin.getStorage('openFooter');
         if (typeof openFooter == 'undefined') {
             openFooter = admin.options.openFooter;
         }

@@ -1,173 +1,117 @@
-"use strict";
+/**
+ * SAPHP 前端CommonJS
+ * 默认提供一些基础的页面交互操作
+ * 注：插件开发请勿直接将JS代码写入此文件
+ */
+layui.use(['jquery','form','upload'], function(){
 
-/*
-    *SwiftAdmin 前端模块
-    由于前端样式有些地方可能并不符合你已有的模板样式，
-    所以此style和js文件仅供参考调用使用。
-    在你实际的项目中，请参考一下示例重写模板文件。
-*/
-layui.use(['jquery', 'layer', 'element', 'form'], function () {
-
-    var $ = layui.jquery;
-    var layer = layui.layer;
-    var form = layui.form;
-    var element = layui.element;
-
-    // 点击发送验证码
-    $('#captcha').click(function() {
-
-        let mobile = $('#mobile').val();
-        if (!mobile) {
-            return layer.msg('请输入手机号','error');
-        }
-
-        $.get('/api.php/ajax/smssend',{
-            mobile: mobile,
-            event : 'register'
-        }, function(res) {
-            if (res.code == 200) {
-               layer.msg(res.msg);
+    let $ = layui.$;
+    let form = layui.form;
+    let layer = layui.layer;
+    let upload = layui.upload;
+    // 注册为全局对象
+    window.Home = {
+        screen: function(){
+            let width =$(window).width()
+            if(width > 1200){
+                return 3; //大屏幕
+            } else if(width > 992){
+                return 2; //中屏幕
+            } else if(width > 768){
+                return 1; //小屏幕
             } else {
-                layer.msg(res.msg,'error');
-            }
-        })
-    })
-
-    // cookie
-    const Cookie = { // 获取cookies
-        'Set': function (name, value, days) {
-            var exp = new Date();
-            exp.setTime(exp.getTime() + days * 24 * 60 * 60 * 1000);
-            var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
-            document.cookie = name + "=" + escape(value) + ";path=/;expires=" + exp.toUTCString();
-        },
-        'Get': function (name) {
-            var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
-            if (arr != null) {
-                return unescape(arr[2]);
-                return null;
+                return 0; //超小屏幕
             }
         },
-        'Del': function (name) {
-            var exp = new Date();
-            exp.setTime(exp.getTime() - 1);
-            var cval = this.Get(name);
-            if (cval != null) {
-                document.cookie = name + "=" + escape(cval) + ";path=/;expires=" + exp.toUTCString();
+        event: {
+            closeDialog:function(that) {
+                that = that || this;
+                let _type = $(that).parents(".layui-layer").attr("type");
+                if (typeof _type === "undefined") {
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                }else {
+                    let layerId = $(that).parents(".layui-layer").attr("id").substring(11);
+                    layer.close(layerId);
+                }
+            }
+        },
+        // cookie
+        Cookie : { // 获取cookies
+            'Set': function (name, value, days) {
+                let exp = new Date();
+                exp.setTime(exp.getTime() + days * 24 * 60 * 60 * 1000);
+                let arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+                document.cookie = name + "=" + escape(value) + ";path=/;expires=" + exp.toUTCString();
+            },
+            'Get': function (name) {
+                let arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+                if (arr != null) {
+                    return unescape(arr[2]);
+                    return null;
+                }
+            },
+            'Del': function (name) {
+                let exp = new Date();
+                exp.setTime(exp.getTime() - 1);
+                let cval = this.Get(name);
+                if (cval != null) {
+                    document.cookie = name + "=" + escape(cval) + ";path=/;expires=" + exp.toUTCString();
+                }
             }
         }
     }
 
-    // 全局事件调用
-    const event = {
-        closeDialog: function (that) {
+    // 监听全局form表单
+    form.on('submit(submitIframe)', function(data){
+        let that = $(this), _form = that.parents('form'),
+            _url = _form.attr("action") || false,
+            _close = that.data("close") || undefined,
+            _reload = that.data('reload');
 
-            that = that || this;
-            var _type = $(that).parents(".layui-layer").attr("type");
-            if (typeof _type === "undefined") {
-                parent.layer.close(parent.layer.getFrameIndex(window.name));
-            } else {
-
-                var layerId = $(that).parents(".layui-layer").attr("id").substring(11);
-                layer.close(layerId);
-                top.layer.close(layerId);
-            }
-        }
-    }
-
-    // 默认监听的操作开始
-    $(window).scroll(function () {
-        var a = $(window).scrollTop();
-        if (a >= 50) {
-            $("#header").addClass("layui-nav-scroll")
-        } else {
-            $("#header").removeClass("layui-nav-scroll")
-        }
-    });
-
-    // 监听form表单
-    form.on('submit(submitIframe)', function (data) {
-        var that = $(this), _form = that.parents('form'),
-            _url = _form.attr("action") || false;
         $.post(_url,
-            data.field, function (res) {
-                if (res.code == 200) { // 存在URL属性则跳转
-                    top.layer.msg(res.msg, function () {
-                        if (res.url != "" || res.url != null) {
-                            top.location.href = res.url;
-                        }
+            data.field,function(res){
+                if(res.code === 200){
 
-                        event.closeDialog(that);
-                    });
+                    top.layer.msg(res.msg);
+                    switch (_reload) {
+                        case 'top':
+                            top.location.reload();
+                            break;
+                        case 'parent':
+                            parent.location.reload();
+                            break;
+                        case 'self':
+                            location.reload();
+                            break;
+                        default:
+                    }
+
+                    if (typeof res.url !== 'undefined' && res.url) {
+                        location.href = res.url;
+                    }
+
+                    // 默认关闭
+                    if (_close === undefined) {
+                        Home.event.closeDialog(that);
+                    }
                 }
-                else {
-                    top.layer.msg(res.msg,'error');
+                else{
+                    layer.msg(res.msg,'error');
                 }
+
+                try {
+                    /**
+                     * token重载下
+                     * 框架也需要更新
+                     */
+                    if (typeof res.data.__token__ !== 'undefined') {
+                        $('input#__token__').val(res.data.__token__);
+                    }
+                } catch (e) {}
+
             }, 'json');
+
         return false;
-    });
-
-
-    // 监听打开窗口
-    $(document).on('click', "*[lay-open]", function () {
-        var clickthis = $(this),
-            config = {
-                url: clickthis.attr('lay-url') || undefined,
-                type: clickthis.attr('lay-type') || 2,
-                area: clickthis.attr('lay-area') || "auto",
-                offset: clickthis.attr('lay-offset') || "25%",
-                title: clickthis.attr('lay-title') || false,
-                maxmin: clickthis.attr('lay-maxmin') || false,
-                auto: clickthis.attr('lay-auto') || "undefined",
-            }
-
-        if (config.url.indexOf('#') !== -1 || config.url.indexOf('.') !== -1) {
-            if (config.url.indexOf('http://') === -1 && config.url.indexOf('.php') === -1) {
-                config.type = 1;
-                config.url = $(config.url).html();
-            }
-        }
-
-        // 配置窗口大小
-        if (config.area !== "auto") {
-            config.area = config.area.split(',');
-        }
-
-        // 打开窗口
-        layer.open({
-            type: config.type,
-            area: config.area,
-            title: config.title,
-            offset: config.offset,
-            maxmin: config.maxmin,
-            shadeClose: true,
-            scrollbar: false,
-            content: config.url,
-            success: function (layero, index) {
-
-                if (config.type === 1) {
-                    form.render();
-                    form.on("submit(submitPage)", function (post) {
-                        var that = $(this), _pageUrl = that.parents('form').attr('action');
-                        // 开始POST提交数据
-                        $.post(_pageUrl,
-                            post.field, function (res) {
-
-                                if (res.code == 200) {
-                                    event.closeDialog(that);
-                                    top.layer.msg(res.msg);
-                                }
-                                else {
-                                    top.layer.msg(res.msg,'error');
-                                }
-
-                            }, 'json');
-
-                        return false;
-                    })
-                }
-            }
-        })
     })
 
     /**
@@ -183,98 +127,268 @@ layui.use(['jquery', 'layer', 'element', 'form'], function () {
         }
 
         layui.table.reload('lay-tableList', {
-            page: { curr: 1 },
+            page: {curr: 1},
             where: field
         });
     })
 
-    // 监听ajax操作
-    $(document).on("click", "*[lay-ajax]", function (obj) {
+    // 监听全局事件
+    $(document).on("click", "*[sa-event]", function () {
+        let name = $(this).attr("sa-event");
+        let obj = Home.event[name];
+        obj && obj.call(this, $(this));
+    });
 
-        var clickthis = $(this), config = {
-            url: clickthis.attr('lay-url') || "undefined",
-            type: clickthis.attr('lay-type') || 'post',
-            dataType: clickthis.attr('lay-dataType') || 'json',
-            timeout: clickthis.attr('lay-timeout') || '6000',
-            tableId: clickthis.attr('lay-table') || clickthis.attr('lay-batch'),
-            reload: clickthis.attr('lay-reload') || false,
+    var uploadURL = '/user/upload';
+    layui.each($('*[lay-upload]'), function (index, elem) {
+
+        var that = $(this),
+            name = $(elem).attr('lay-upload') || undefined,
+            type = $(elem).data('type') || 'normal',
+            size = $(elem).data('size') || 51200, // 限制最大5M
+            accept = $(elem).data('accept') || 'images',
+            multiple = $(elem).data('multiple') || false,
+            callback = $(elem).attr('callback') || undefined;
+
+        // 文件上传函数
+        var uploadFiles = {
+            normal: function (res, name) {
+                $('input.' + name).prop('value', res.url);
+                $('img.' + name).prop('src', res.url);
+            },
+            images: function (res, name) {
+                var o = $('img.' + name);
+                o.prop('src', res.url);
+                o.parent('div').removeClass('layui-hide');
+                $('input.' + name).val(res.url);
+                $(elem).find('p,i,hr').addClass('layui-hide');
+            },
+            multiple: function (res, name) {
+                var index = $('.layui-imagesbox .layui-input-inline');
+                index = index.length ? index.length - 1 : 0;
+                var html = '<div class="layui-input-inline">';
+                html += '<img src="' + res.url + '" >';
+                html += '<input type="text" name="' + name + '[' + index + '][src]" class="layui-hide" value="' + res.url + '">';
+                html += '<input type="text" name="' + name + '[' + index + '][title]" class="layui-input" placeholder="图片简介">';
+                html += '<span class="layui-badge layui-badge-red" onclick="layui.$(this).parent().remove();">删除</span></div>';
+                $(elem).parent().before(html);
+            }
+        }
+
+        // 执行上传操作
+        upload.render({
+            elem: elem
+            , url: uploadURL
+            , method: 'post'
+            , size: size
+            , accept: 'file'
+            , before: function (res) {
+                // 关闭按钮点击
+                that.prop("disabled", true);
+            }, done: function (res, index, file) {
+
+                that.prop("disabled", false);
+
+                if (res.code === 200 && res.url !== '') {
+
+                    if (typeof res.chunkId != 'undefined' ) {
+                        layer.close(window[res.chunkId]);
+                    }
+
+                    layer.msg(res.msg);
+                    uploadFiles[type](res, name);
+                } else {
+                    // 错误消息
+                    layer.error(res.msg);
+                    that.prop("disabled", false);
+                }
+            }
+        })
+
+    })
+
+    // 全局监听打开窗口
+    $(document).on('click',"*[lay-open]",function(){
+        let clickthis = $(this),
+            config = {
+                url: clickthis.data('url') || undefined,
+                object: clickthis.data('object') || 'self',
+                type: clickthis.data('type') || 2,
+                area: clickthis.data('area') || "auto",
+                offset: clickthis.data('offset') || "25%",
+                title: clickthis.data('title') || false,
+                maxmin: clickthis.data('maxmin') || false,
+                auto: clickthis.data('auto') || "undefined",
+            }
+
+        let firstURL = config.url.substring(0, 1);
+        if (firstURL && firstURL === '#') {
+            config.type = 1;
+            config.url = $(config.url).html();
+        }
+
+        // 配置窗口大小
+        if (config.area !== "auto") {
+            config.area = config.area.split(',');
+        }
+
+        var layObject = self;
+        if (config.object === 'top') {
+            layObject = top;
+        } else if (config.object === 'parent') {
+            layObject = parent;
+        }
+
+        // 打开窗口
+        layObject.layer.open({
+            type: config.type,
+            area: config.area,
+            title: config.title,
+            offset: config.offset,
+            maxmin: config.maxmin,
+            shadeClose: true,
+            scrollbar: true,
+            content:  config.url,
+            success:function(layero,index){
+                // 页面层才渲染
+                if (config.type === 1) {
+                    layui.form.render();
+                    layui.form.on("submit(submitPage)",function(post){
+                        let that = $(this), _pageUrl = that.parents('form').attr('action');
+                        // 开始POST提交数据
+                        $.post(_pageUrl,
+                            post.field, function(res){
+                                if (res.code === 200) {
+                                    Home.event.closeDialog(that);
+
+                                    /**
+                                     * 当前这个页面，也需要写成是否重载
+                                     * 支持哪种重载方式，父页面 自身，还是其他。
+                                     */
+                                    if ($(that).data('reload')) {
+                                        location.reload();
+                                    }
+
+                                    layer.msg(res.msg);
+                                } else {
+                                    layer.msg(res.msg,'error');
+                                }
+
+                            }, 'json');
+
+                        return false;
+                    })
+                }
+            }
+        })
+    })
+
+    // 监听ajax操作
+    $(document).on("click","*[lay-ajax]",function(obj) {
+
+        let clickthis = $(this),config = {
+            url : clickthis.data('url')|| "undefined",
+            type :  clickthis.data('type') || 'post',
+            dataType :  clickthis.data('dataType') || 'json',
+            timeout :  clickthis.data('timeout') || '6000',
+            tableId :  clickthis.data('table') || clickthis.data('batch'),
+            reload :  clickthis.data('reload'),
+            jump :  clickthis.data('jump') || false,
+            confirm :  clickthis.data('confirm'),
         }, defer = $.Deferred();
 
         // 定义初始化对象
-        var data = {}
-
+        let data = {}
             // 获取拼接参数
             , packet = clickthis.attr("lay-data") || null
             , object = clickthis.attr("lay-object") || undefined;
 
+        if (config.confirm !== undefined) {
+            config.confirm = config.confirm || '确定执行此操作吗?';
+            layer.confirm(config.confirm, function(index){
+                runAjax(config);
+                layer.close(index);
+            },function(index){
+                layer.close(index);
+                return false;
+            })
+        }
+
         // 传递类数据
         if (typeof object !== "undefined") {
             object = object.split(',');
-            for (var i = 0; i < object.length; i++) {
+            for (let i = 0; i < object.length; i++) {
                 let ele = object[i].split(":");
-                var val = $('.' + ele[1]).val();
+                let val = $('.'+ele[1]).val();
                 data[ele[0]] = val;
             }
         }
 
         // 传递对象数据
         if (packet !== 'null') {
-            packet = new Function("return " + packet)();
-            data = $.extend({}, data, packet);
+            packet = new Function("return "+packet)();
+            data = $.extend({},data,packet);
         }
 
         // 传递input表单数据
-        var input = clickthis.attr('lay-input') || undefined;
+        let input = clickthis.data('input') || undefined;
         if (typeof input !== undefined) {
-            var attribute = top.layui.jquery('.' + input).val();
+            let attribute = layui.$('.'+input).val();
         }
 
-        // 执行AJAX操作
-        $.ajax({
-            url: config.url,
-            type: config.type,
-            dataType: config.dataType,
-            timeout: config.timeout,
-            data: data,
-            success: function (res) {
+        // 回调函数
+        let runAjax = function(config) {
+            // 执行AJAX操作
+            $.ajax({
+                url: config.url,
+                type: config.type,
+                dataType: config.dataType,
+                timeout: config.timeout,
+                data: data,
+                // 需要支持跨域访问
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function(res) {
+                    if (res.code === 200) {
+                        layer.msg(res.msg);
 
-                if (res.code == 200) {
-                    if (config.reload) {
-                        location.reload();
+                        if (typeof res.data.text !== 'undefined') {
+                            $(clickthis).text(res.data.text);
+                        }
+
+                        switch (config.reload) {
+                            case 'top':
+                                top.location.reload();
+                                break;
+                            case 'parent':
+                                parent.location.reload();
+                                break;
+                            case 'self':
+                                location.reload();
+                                break;
+                            default:
+                        }
+
+                        if (typeof (config.tableId) !== "undefined") {
+                            layui.table.reload(config.tableId);
+                        }
+
+                    } else {
+                        layer.msg(res.msg,'error');
                     }
-                    top.layer.msg(res.msg);
+                },
+                error: function(res) {
+                    layer.msg('Access methods failure','error');
                 }
-                else {
-                    top.layer.msg(res.msg,'error');
-                }
+            })
+        }
 
-            },
-            error: function (res) {
-                top.layer.msg('Access methods failure');
-            }
-        })
+        if (!config.confirm) {
+            runAjax(config);
+        }
     })
 
-    // 点击QQ登录 关闭自身
-    $('.login-link a,.layui-bind-third').click(function () {
-        var type = $(this).attr('data-url');
-        parent.layer.open({
-            type: 2,
-            area: ['600px', '600px'],
-            title: false,
-            scrollbar: true,
-            shadeClose: true,
-            closeBtn: 0,
-            content: [type, 'no'],
-            success: function (layero, index) {
-                // TODO...
-                var index = layer.getFrameIndex(window.name);
-                parent.layer.close(index);
-            }
-        });
-    })
+
 })
-
-function openWindow(obj) {
-    window.open(layui.$(obj).attr("data-url"), "_blank", "width=600,height=600,top=100px,resizable=no")
-}

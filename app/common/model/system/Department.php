@@ -15,8 +15,8 @@ class Department extends Model
     use SoftDelete;
     
     // 定义时间戳字段名
-    protected $createTime = 'createtime';
-	protected $updateTime = 'updatetime';
+    protected $createTime = 'create_time';
+	protected $updateTime = 'update_time';
 	
 	/**
 	 * 树形分类
@@ -33,7 +33,7 @@ class Department extends Model
     public function setSortAttr($value) 
     {
         if (is_empty($value)) {
-            return self::count('id') + 1;
+            return self::max('id') + 1;
         }
         return $value;
 	}

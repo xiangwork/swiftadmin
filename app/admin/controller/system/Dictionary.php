@@ -28,6 +28,7 @@ class Dictionary extends AdminController
         $post = input();
         $pid = input('pid'); 
         $limit = input('limit/d') ?? 10;
+        $page = input('page/d') ?? 1;
         if ($pid == null) {
             $pid = (string)$this->model->minId();
         } 
@@ -41,8 +42,8 @@ class Dictionary extends AdminController
                 $where[] = ['name','like','%'.$post['name'].'%'];
             }
 
-
-            $list = $this->model->where($where)->limit($limit)->select()
+            $count = $this->model->where($where)->count();
+            $list = $this->model->where($where)->limit($limit)->page($page)->select()
                 ->each(function($item,$key) use ($pid){
                 if ($key == 0 && $pid == '0') {
                     $item['LAY_CHECKED'] = true;
@@ -51,7 +52,7 @@ class Dictionary extends AdminController
                 return $item;
             });
 
-            return $this->success('查询成功', null, $list, count($list));
+            return $this->success('查询成功', null, $list, $count);
         }
 
         return view('',[ 'pid' => $pid]);

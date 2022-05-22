@@ -52,8 +52,9 @@
     <div class="layui-divider layui-divider-vertical"></div>
     <a class="layui-table-text lay-form-design" data-url="{:url('/generate.index/formDesign')}?curdId={{d.id}}" >{:__('表单')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
-    <!-- // 当前需要重载表格 -->
-    <a class="layui-table-text" lay-ajax data-table="lay-tableList" data-url="{:url('/generate.curd/index')}?id={{d.id}}" >{:__('执行')}</a>
+    <a class="layui-table-text" lay-ajax data-table="lay-tableList" data-url="{:url('/generate.curd/index')}?id={{d.id}}" data-callback="reloadRouter"  >{:__('部署')}</a>
+    <div class="layui-divider layui-divider-vertical"></div>
+    <a class="layui-table-text" lay-ajax data-table="lay-tableList" data-url="{:url('/generate.curd/clear')}?id={{d.id}}" data-callback="reloadRouter"  >{:__('清理')}</a>
     <div class="layui-divider layui-divider-vertical"></div>
     <a class="layui-table-text"  data-url="{:url('/generate.index/del')}?id={{d.id}}" lay-event="del" >{:__('删除')}</a>
 </script>
@@ -65,11 +66,12 @@
 
 <include file="/public/footer" />
 <script>
-    layui.use(['jquery','layer','util','table'],function () {
+    layui.use(['jquery','layer','admin','table'],function () {
 
         var table = layui.table;
         var $ = layui.jquery;
         var layer = layui.layer;
+        var admin = layui.admin;
         /*
          * 初始化表格
         */
@@ -90,12 +92,29 @@
                     var status = ['<span class="layui-badge layui-bg-gray">未生成</span>','<span class="layui-badge layui-bg-red">已生成</span>'];
                     return status[d.status];
                 }, title: '{:__("状态")}'},
-                {field: 'updatetime', align: 'center',title: '{:__("更新时间")}'},
-                {field: 'createtime', align: 'center',title: '{:__("创建时间")}'},
-                {align: 'center', toolbar: '#tableBar', width:260, title: '{:__("操作")}'},
+                {field: 'update_time', align: 'center',title: '{:__("更新时间")}'},
+                {field: 'create_time', align: 'center',title: '{:__("创建时间")}'},
+                {align: 'center', toolbar: '#tableBar', width:330, title: '{:__("操作")}'},
             ]]
         })
 
+        /**
+         * Ajax重载函数
+         * @type {{success: layui.admin.callback.reloadRouter.success, error: layui.admin.callback.reloadRouter.error}}
+         */
+        admin.callback.reloadRouter = {
+            success: function (res) {
+
+                layer.msg(res.msg);
+                table.reload('lay-tableList');
+                top.layui.admin.reloadLayout();
+            }
+            ,error: function (res) {}
+        }
+
+        /**
+         * 设计FORM表单
+         */
         $('body').on('click','.lay-form-design',function(params) {
             top.layer.open({
                 type:2,

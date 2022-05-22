@@ -12,12 +12,11 @@ declare (strict_types = 1);
 namespace app\admin\library;
 
 use think\facade\Db;
+use think\facade\Event;
 use app\common\model\system\AdminAccess;
 use app\common\model\system\Admin as AdminModel;
 use app\common\model\system\AdminRules as AdminRulesModel;
 use app\common\model\system\AdminGroup as AdminGroupModel;
-use app\common\model\system\Category as CategoryModel;
-use think\facade\Event;
 
 /**
  * 后台模块验证类
@@ -35,26 +34,26 @@ class Auth
      * 管理员数据
      * @var array
      */
-    private $admin = null;
+    private $admin;
 
     /**
      * 分组标记
      * @var array
      */
-    public $authGroup = '_admin_group_auth';
+    public $authGroup = 'authGroup';
 
     /**
      * 用户私有标记
      * @var array
      */
-    public $authPrivate = '_admin_private_auth';
+    public $authPrivate = 'authPrivate';
 
     /**
      * 默认权限字段
      *
      * @var string
      */
-    public $authFields = 'id,cid,pid,title,access';
+    public $authFields = 'id,cid,pid,title,auth';
 
     /**
      * 错误信息
@@ -74,7 +73,6 @@ class Auth
     public function __construct($config = [])
     {
         $this->admin = session('AdminLogin');
-        $this->request = \think\facade\Request::instance();
     }
 
     /**
@@ -103,7 +101,7 @@ class Auth
      * @param string        $relation 		如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
      * @return bool               	        通过验证返回true;失败返回false
      */
-    public function check($name, $admin_id = 0, $type = 1, $mode = 'url', $relation = 'or') 
+    public function check($name, $admin_id = 0, $type = 1, $mode = 'url', $relation = 'or'): bool
     {
         // 转换格式
         if (is_string($name)) {
@@ -117,7 +115,7 @@ class Auth
         
         $authList = [];
         if ('url' == $mode) { // 解析URL参数
-            $REQUEST = unserialize(strtolower(serialize($this->request->param())));
+            $REQUEST = unserialize(strtolower(serialize(request()->param())));
         }
 
         foreach ($this->getAuthList($admin_id) as $auth) {
@@ -205,30 +203,27 @@ class Auth
     /**
      * 获取权限菜单
      * @access  public
-     * @return  JSON|Array
+     * @return false|string
      */
     public function getRulesMenu()
     {
-        // 查找节点
-        $where[] = ['status','=','normal'];
-        $auth_nodes = $this->getRulesNode();
-        $list = $this->getAuthList($this->admin['id'] ,$auth_nodes);
+        $authNodes = $this->getRulesNode();
+        $list = $this->getAuthList($this->admin['id'], $authNodes);
 
-        // 循环处理数据
         foreach ($list as $key => $value) {
             $list[$key]['title'] = __($value['title']);
-           
             if ($value['router'] != '#') {
                 $list[$key]['router'] = (string)url($value['router']);
             }
         }
 
         if ($this->superAdmin()) {
-            $auth_nodes['supersadmin'] = true;
+            $authNodes['supersAdmin'] = true;
         }
 
-        $auth_nodes['_admin_auth_menus_'] = list_to_tree($list);
-        return json_encode($auth_nodes,JSON_UNESCAPED_UNICODE);
+        $authNodes['authorities'] = list_to_tree($list);
+        return json_encode($authNodes, JSON_UNESCAPED_UNICODE);
+	
     }
 
     /**
@@ -262,11 +257,10 @@ class Auth
      * @access public
      * @param mixed|null $type
      * @param mixed|null $class
-     * @return \think\response\Json
+     * @return false|string|\think\response\Json
      */
     public function getRuleCatesTree($type = null, $class = null, $tree = true)
     {
-        
         $list = [];
         if (is_array($type) && $type) {
             $class = $type['class'] ?? $this->authGroup;
@@ -294,26 +288,24 @@ class Auth
             }
         } else {
 
-            if (!Event::hasListener('cms_category_auth')) {
+            if (!Event::hasListener('cmsCategoryAuth')) {
                 throw new \Exception('请安装CMS');
             } else {
 
                 if (!$this->superAdmin()) {
                     if (!empty($auth_nodes[$class])) {
-                        $list = Event::trigger('cms_category_auth',[
+                        $list = Event::trigger('cmsCategoryAuth',[
                             'field' => $this->authFields,
                             'nodes' => $auth_nodes[$class]
-                        ]);
+                        ],true);
                     }
                 }
 
-                if (!isset($list[0]['list']) || empty($list[0]['list'])) {
-                    $list = Event::trigger('cms_category_auth',[
+                if (empty($list)) {
+                    $list = Event::trigger('cmsCategoryAuth',[
                         'field' => $this->authFields
-                    ]);
+                    ], true);
                 }
-
-                $list = $list[0]['list'] ?: [];
             }
         }
   

@@ -14,6 +14,7 @@ namespace app\common\library;
 
 use system\Random;
 use app\common\model\system\User as UserModel;
+use think\facade\Event;
 
 class Auth
 {
@@ -75,62 +76,74 @@ class Auth
 
     /**
      * 用户注册
-     *
      * @param array $post
-     * @return void
+     * @return UserModel|array|false|object|\think\Model|void|null
      */
     public function register(array $post)
     {
-
         if (!saenv('user_status')) {
             $this->setError('暂未开放注册！');
-            return false;
+            return;
         }
 
-        // 禁止批量注册
-        $where[] = ['createip', '=', ip2long(request()->ip())];
-        $where[] = ['createtime', '>', linux_extime(1)];
+        /**
+         * 禁止批量注册
+         */
+        $where[] = ['create_ip', '=', ip2long(request()->ip())];
+        $where[] = ['create_time', '>', linux_extime(1)];
         $totalMax = UserModel::where($where)->count();
 
         if ($totalMax >= saenv('user_register_second')) {
             $this->setError('当日注册量已达到上限');
-            return false;
+            return;
         }
 
         // 过滤用户信息
         if (isset($post['nickname']) && UserModel::getByNickname($post['nickname'])) {
             $this->setError('当前用户名已被占用！');
-            return false;
+            return;
         }
 
         if (isset($post['email']) && UserModel::getByEmail($post['email'])) {
             $this->setError('当前邮箱已被占用！');
-            return false;
+            return;
         }
 
         if (isset($post['mobile']) && UserModel::getByMobile($post['mobile'])) {
             $this->setError('当前手机号已被占用！');
-            return false;
+            return;
         }
 
         try {
 
-           $this->userInfo = UserModel::create($post);
-           $this->returnToken($this->userInfo);
+            /**
+             * 是否存在邀请注册
+             */
+            $post['invite_id'] = cookie('inviter');
+            if (isset($post['pwd']) && $post['pwd']) {
+                $post['salt'] = Random::alpha();
+                $post['pwd'] = encryptPwd($post['pwd'], $post['salt']);
+            }
+
+            $this->userInfo = UserModel::create($post);
+            $this->returnToken($this->userInfo);
 
         } catch (\Throwable $th) {
             $this->setError($th->getMessage());
             return false;
         }
 
-        return true;
+        return $this->userInfo;
     }
 
     /**
      * 用户检测登录
-     * @param string $name
+     * @param string $nickname
      * @param string $pwd
      * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function login(string $nickname = '', string $pwd = '')
     {
@@ -146,7 +159,7 @@ class Auth
         if (!empty($this->userInfo)) {
 
             $uPwd = encryptPwd($pwd, $this->userInfo->salt);
-            if ($this->userInfo->pwd != $uPwd) {
+            if ($this->userInfo->pwd !== $uPwd) {
                 $this->setError('用户名或密码错误');
                 return false;
             }
@@ -157,11 +170,14 @@ class Auth
             }
 
             // 更新登录数据
-            $this->userInfo->logintime = time();
-            $this->userInfo->loginip = request()->ip();
-            $this->userInfo->logincount++;
+            $userUpdate = [
+                'id'          => $this->userInfo->id,
+                'login_time'  => time(),
+                'login_ip'    => request()->ip(),
+                'login_count' => $this->userInfo->login_count++,
+            ];
 
-            if ($this->userInfo->save()) {
+            if (UserModel::update($userUpdate)) {
                 $this->returnToken($this->userInfo);
                 return true;
             }
@@ -184,14 +200,11 @@ class Auth
         if (!$token) {
             return false;
         }
-
         $uid = $this->checkToken($token);
 
         if (!empty($uid)) {
-
             $this->token = $token;
             $this->userInfo = UserModel::find($uid);
-
             return true;
         }
 
@@ -211,26 +224,29 @@ class Auth
     }
 
     /**
-     * 
+     *
      * 返回前端令牌
-     * @param object  $array
-     * @return bool
+     * @param object|null $user
+     * @param bool $token
+     * @return void
      */
-    public function returnToken(object $user = null, $token = false)
+    public function returnToken(object $user = null, bool $token = false)
     {
         $this->token = $token ? $this->getToken() : $this->buildToken($user->id);
         cookie('uid', $user->id, $this->keepTime);
         cookie('token', $this->token, $this->keepTime);
         cookie('nickname',$user->nickname, $this->keepTime);
         \think\facade\Cache::set($this->token, $user->id, $this->keepTime);
+        // 执行登录成功钩子
+        Event::trigger("user_login_successed", $user);
     }
 
     /**
      * 生成token
      * @access protected
-     * @return mixed   
+     * @return string
      */
-    protected function buildToken($id = 0)
+    protected function buildToken($id = 0): string
     {
         return md5(Random::alpha(16) . $id);
     }
@@ -248,8 +264,8 @@ class Auth
     /**
      * 校验token
      * @access protected
-     * @param  string       $token       用户token
-     * @return bool
+     * @param string|null $token 用户token
+     * @return mixed
      */
     public function checkToken(string $token = null)
     {

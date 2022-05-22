@@ -1,6 +1,5 @@
 <?php
-
-declare(strict_types=1);
+declare(strict_types = 1);
 // +----------------------------------------------------------------------
 // | swiftAdmin 极速开发框架 [基于ThinkPHP6开发]
 // +----------------------------------------------------------------------
@@ -20,7 +19,6 @@ spl_autoload_register(function ($class) {
 
     $class = ltrim($class, '\\');
     $dir = app()->getRootPath();
-
     // 去除常量
     $namespace = 'plugin';
     if (strpos($class, $namespace) === 0) {
@@ -36,7 +34,7 @@ spl_autoload_register(function ($class) {
             include $dir;
             return true;
         }
-
+        
         return false;
     }
 
@@ -62,13 +60,12 @@ if (!function_exists('get_plugin_infos')) {
     /**
      * 获取插件信息
      */
-    function get_plugin_infos(string $name = null, bool $force = false)
-    {
+    function get_plugin_infos(string $name = null,bool $force = false) {
         $plugin = get_plugin_instance($name);
         if (!$plugin) {
             return [];
         }
-        return $plugin->getInfo($name, $force);
+        return $plugin->getInfo($name,$force);
     }
 }
 
@@ -76,15 +73,14 @@ if (!function_exists('set_plugin_infos')) {
     /**
      * 设置插件信息
      */
-    function set_plugin_infos(string $name = null, array $array = [])
-    {
+    function set_plugin_infos(string $name = null, array $array = []) {
 
         $plugin = get_plugin_instance($name);
         if (!$plugin) {
             return [];
         }
 
-        $result = $plugin->setConfig($name, $array);
+        $result = $plugin->setConfig($name,$array);
 
         if (!empty($result)) {
             return true;
@@ -93,7 +89,6 @@ if (!function_exists('set_plugin_infos')) {
         return false;
     }
 }
-
 if (!function_exists('get_plugin_instance')) {
     /**
      * 获取插件的单例
@@ -129,7 +124,7 @@ if (!function_exists('get_plugin_class')) {
     function get_plugin_class($name, $type = 'hook', $class = null)
     {
         $name = trim($name);
-
+        
         // 处理多级控制器情况
         if (!is_null($class) && strpos($class, '.')) {
             $class = explode('.', $class);
@@ -139,7 +134,7 @@ if (!function_exists('get_plugin_class')) {
         } else {
             $class = Str::studly(is_null($class) ? $name : $class);
         }
-
+        
         switch ($type) {
             case 'controller':
                 $namespace = "\\plugin\\" . $name . "\\controller\\" . $class;
@@ -157,7 +152,7 @@ if (!function_exists('plugin_refresh_hooks')) {
      * 刷新插件配置
      * @return boolean
      */
-    function plugin_refresh_hooks(bool $truncate = true)
+    function plugin_refresh_hooks(bool $truncate = true) 
     {
         $plugin = (array)Config::get('plugin');
         if ($truncate) {
@@ -167,7 +162,7 @@ if (!function_exists('plugin_refresh_hooks')) {
 
         // 读取插件基础函数
         $base_methods = get_class_methods("\\think\\plugin");
-        $base_methods = array_merge($base_methods, ['enable', 'disable', 'upgrade']);
+        $base_methods = array_merge($base_methods, ['enable', 'disable','upgrade']);
 
         // 获取插件列表
         $DIRlist = get_plugin_list();
@@ -175,7 +170,7 @@ if (!function_exists('plugin_refresh_hooks')) {
         // 读取优先级
         $priority = $plugin['priority'];
         if (!is_array($priority)) {
-            $priority = explode(',', $priority);
+            $priority = explode(',',$priority);
         }
 
         // 处理函数优先级
@@ -205,12 +200,12 @@ if (!function_exists('plugin_refresh_hooks')) {
                 if (!isset($plugin['hooks'][$hook])) {
                     $plugin['hooks'][$hook] = [];
                 }
-
+                
                 // 兼容手动配置项
                 if (is_string($plugin['hooks'][$hook])) {
                     $plugin['hooks'][$hook] = explode(',', $plugin['hooks'][$hook]);
                 }
-
+                
                 if (!in_array($name, $plugin['hooks'][$hook])) {
                     $plugin['hooks'][$hook][] = $name;
                 }
@@ -220,55 +215,52 @@ if (!function_exists('plugin_refresh_hooks')) {
             $rules = array_map(function ($data) use ($value) {
                 return "{$value['name']}/{$data}";
             }, $value['rewrite']);
-
-            $plugin['router'] = array_merge($plugin['router'], $rules);
+            
+            $plugin['router'] = array_merge($plugin['router'],$rules);
         }
 
         try {
             // 写入插件配置
-            arr2file(config_path() . 'plugin.php', $plugin);
+            arr2file(config_path().'plugin.php',$plugin);
         } catch (\Throwable $th) {
-            throw new \Exception("写入配置文件出错 " . $th->getMessage());
+            throw new Exception("写入配置文件出错 ".$th->getMessage());
         }
 
         return true;
+        
     }
 }
-
 if (!function_exists('get_plugin_list')) {
     /**
      * 获取插件列表
      * @param array     $list  目录
      * @return array
      */
-    function get_plugin_list(&$list = [], array $function = [])
-    {
+    function get_plugin_list(&$list = [],array $function = []) {
 
         foreach (scandir(PLUGIN_PATH) as $name) {
 
-            if (
-                $name === '.'
-                || $name === '..'
-                || is_file(PLUGIN_PATH . $name)
-            ) {
+            if ($name === '.' 
+                || $name === '..' 
+                || is_file(PLUGIN_PATH . $name)) {
                 continue;
             }
 
             // 校验插件目录
-            $pluginDir = PLUGIN_PATH . $name . DIRECTORY_SEPARATOR;
+            $pluginDir = PLUGIN_PATH.$name.DIRECTORY_SEPARATOR;
             if (!is_dir($pluginDir) || !is_file($pluginDir . ucfirst($name) . '.php')) {
                 continue;
             }
-
-            $config = $pluginDir . 'config.php';
-            $preg = function ($config) {
+            
+            $config = $pluginDir.'config.php';
+            $preg = function($config) {
 
                 try {
                     // 正则处理配置文件
-                    $regx = ['<?php', 'return', ';', '\n', '\r'];
+                    $regx = ['<?php','return',';','\n','\r'];
                     $file = file_get_contents($config);
-                    $file = str_replace($regx, '', $file);
-                    @eval("\$config = " . $file . '; ');
+                    $file = str_replace($regx,'',$file);
+                    @eval("\$config = ".$file.'; ');
                 } catch (\Throwable $th) {
                     if (!$config || !is_array($config)) {
                         $config = include $config;
@@ -283,7 +275,6 @@ if (!function_exists('get_plugin_list')) {
         return $list ?? [];
     }
 }
-
 if (!function_exists('rmdirs')) {
 
     /**
@@ -307,10 +298,10 @@ if (!function_exists('rmdirs')) {
             $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
             $todo($fileinfo->getRealPath());
         }
-
+        
         try {
             if ($withself) {
-                rmdir($dirname);
+               rmdir($dirname);
             }
         } catch (\Throwable $th) {
             throw new \Exception($th->getMessage());
@@ -332,10 +323,12 @@ if (!function_exists('copydirs')) {
         if (!is_dir($dest)) {
             mkdir($dest, 0755, true);
         }
-        foreach ($iterator = new \RecursiveIteratorIterator(
+        foreach (
+            $iterator = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
                 \RecursiveIteratorIterator::SELF_FIRST
-            ) as $item) {
+            ) as $item
+        ) {
             if ($item->isDir()) {
                 $sontDir = $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName();
                 if (!is_dir($sontDir)) {
@@ -361,7 +354,9 @@ function remove_empty_folder($dir)
             remove_empty_folder(dirname($dir));
         }
     } catch (\UnexpectedValueException $e) {
+
     } catch (\Exception $e) {
+
     }
 }
 
@@ -373,7 +368,7 @@ function remove_empty_folder($dir)
 function get_plugin_tables($name)
 {
     $pluginInfo = get_plugin_infos($name);
-
+    
     if (!$pluginInfo) {
         return [];
     }
@@ -419,15 +414,15 @@ if (!function_exists('get_plugin_url')) {
         }
 
         $val = "@plugin/{$url}";
-        $config = get_plugin_infos($plugin, true);
+        $config = get_plugin_infos($plugin,true);
         $indomain = isset($config['indomain']) && $config['indomain'] ? true : false;
         $domainprefix = $config && isset($config['domain']) && $config['domain'] ? $config['domain'] : '';
         $domain = $domainprefix && Config::get('url_domain_deploy') ? $domainprefix : $domain;
         $rewrite = $config && isset($config['rewrite']) && $config['rewrite'] ? $config['rewrite'] : [];
         if ($rewrite) {
-
+            
             $path = substr($url, stripos($url, '/') + 1);
-            $keys = array_search($path, $rewrite);
+            $keys = array_search($path,$rewrite);
             if (isset($rewrite[$keys]) && $rewrite[$keys]) {
                 $val = $keys;
                 array_walk($params, function ($value, $key) use (&$val) {
@@ -446,7 +441,6 @@ if (!function_exists('get_plugin_url')) {
                 }
             }
         } else {
-            
             // 如果采用了域名部署,则需要去掉前两段
             if ($indomain && $domainprefix) {
                 $arr = explode("/", $val);
@@ -456,10 +450,8 @@ if (!function_exists('get_plugin_url')) {
                 $vars[substr($k, 1)] = $v;
             }
         }
-
         $url = url($val, [], $suffix, $domain) . ($vars ? '?' . http_build_query($vars) : '');
         $url = preg_replace("/\/((?!index)[\w]+)\.php\//i", "/", $url);
-
         return $url;
     }
 }

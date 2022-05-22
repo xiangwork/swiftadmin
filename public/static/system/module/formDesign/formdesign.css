@@ -239,9 +239,8 @@ form .layui-rate li i.layui-icon {
 }
 
 #layui-form-attribute .layui-form-label {
-    padding: 6px;
-    padding-right: 10px;
-    width: 60px!important;
+    padding: 5px 6px 5px 5px;
+    width: 70px!important;
 }
 
 .layui-minmax {

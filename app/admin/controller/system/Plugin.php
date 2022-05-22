@@ -92,12 +92,10 @@ class Plugin extends AdminController
                 ];
 
                 $data = Service::install($name,$force,$extends) ?? [];
-            }
-            catch (\think\plugin\PluginException $p) {
-                return ajax_return($p->getMessage(),$p->getData(),$p->getCode());
-            }
-            catch (Throwable $th) {
-                return ajax_return($th->getMessage(),null,$th->getCode());
+            } catch (\think\plugin\PluginException $p) {
+                return $this->error($p->getMessage(),null,$p->getData(),$p->getCode());
+            } catch (Throwable $th) {
+                return $this->error($th->getMessage(),null,null,$th->getCode());
             }
 
             return $this->success('插件安装成功',null, $data);
@@ -129,12 +127,10 @@ class Plugin extends AdminController
                 ];
 
                 $data = Service::upgrade($name,$extends) ?? [];
-            }
-            catch (\think\plugin\PluginException $p) {
-                return ajax_return($p->getMessage(),$p->getData(),$p->getCode());
-            }
-            catch (Throwable $th) {
-                return ajax_return($th->getMessage(),null,$th->getCode());
+            } catch (\think\plugin\PluginException $p) {
+                return $this->error($p->getMessage(),null,$p->getData(),$p->getCode());
+            } catch (Throwable $th) {
+                return $this->error($th->getMessage(),null,null,$th->getCode());
             }
 
             return $this->success('插件更新成功',null, $data);
@@ -213,6 +209,8 @@ class Plugin extends AdminController
 
             try {
                 $plugin->setConfig($name,$config);
+                // 刷新插件配置
+                plugin_refresh_hooks();
             } catch (Throwable $th) {
                 return $this->error($th->getMessage());
             }

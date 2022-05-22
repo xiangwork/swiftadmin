@@ -136,16 +136,3 @@ if (!function_exists('write_file')) {
 		return @file_put_contents($file, $content);
 	}
 }
-
-// +----------------------------------------------------------------------
-// | 数据加密函数开始
-// +----------------------------------------------------------------------
-if (!function_exists('encryption')) {
-    /**
-     * 管理员密码加密
-     */
-	function encryption($pwd, $encrypt = 'md5')
-	{
-		return $encrypt($pwd);
-	}
-}

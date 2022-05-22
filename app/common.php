@@ -104,7 +104,7 @@ if (!function_exists('var_exports')) {
      * @param bool $return 返回类型
      * @return array
      */
-    function var_exports($expression, $return = true)
+    function var_exports(array $expression, bool $return = true)
     {
         $export = var_export($expression, true);
         $patterns = [
@@ -113,10 +113,12 @@ if (!function_exists('var_exports')) {
             "/=>[ ]?\n[ ]+\[/" => '=> [',
             "/([ ]*)(\'[^\']+\') => ([\[\'])/" => '$1$2 => $3',
         ];
+
         $export = preg_replace(array_keys($patterns), array_values($patterns), $export);
         if ($return) return $export; else echo $export;
     }
 }
+
 
 if (!function_exists('recursive_delete')) {
     /**
@@ -140,7 +142,7 @@ if (!function_exists('recursive_delete')) {
             }
 
             @closedir($handle);
-            rmdir($dir);
+            @rmdir($dir);
         }
     }
 }
@@ -148,7 +150,20 @@ if (!function_exists('recursive_delete')) {
 // +----------------------------------------------------------------------
 // | 字符串函数开始
 // +----------------------------------------------------------------------
-// 
+//
+
+if (!function_exists('release')) {
+
+    /**
+     * 获取静态版本
+     * @return int|mixed
+     */
+    function release()
+    {
+        return env('app_debug') ? rand(1000,999999) : config('app.version');
+    }
+}
+
 if (!function_exists('delNr')) {
     /**
      * 去掉换行
@@ -233,14 +248,18 @@ if (!function_exists('pinyin')) {
      * 获取拼音
      * @param string $str 需要转换的汉子
      * @param bool $abbr 是否只要首字母
+     * @param bool $first
      * @param bool $trim 是否清除空格
-     * @return array|string|string[]
+     * @return array|string|string[]|null
      */
-    function pinyin($str, $abbr = false, $first = false, $trim = true)
+    function pinyin(string $str, bool $abbr = false, bool $first = false, bool $trim = true)
     {
         $obj = new \Overtrue\Pinyin\Pinyin();
         if (!$abbr) {
-            $string = $obj->sentence($str);
+            $string = $obj->name($str);
+            if (is_array($string)) {
+                $string = implode('',$string);
+            }
         } else {
             $string = $obj->abbr($str);
         }
@@ -249,10 +268,10 @@ if (!function_exists('pinyin')) {
             return strtoupper(substr($string, 0, 1));
         }
 
-        return $trim ? str_replace(' ', '', $string) : $string;
-
+        return $trim ? preg_replace('/\s+/', '', $string) : $string;
     }
 }
+
 
 if (!function_exists('format_bytes')) {
 
@@ -269,6 +288,81 @@ if (!function_exists('format_bytes')) {
             $size /= 1024;
         }
         return round($size, 2) . $delimiter . $units[$i];
+    }
+}
+
+if (!function_exists('hide_str')) {
+    /**
+     * 将一个字符串部分字符用*替代隐藏
+     * @param string $string   待转换的字符串
+     * @param int $bengin   起始位置，从0开始计数，当$type=4时，表示左侧保留长度
+     * @param int $len      需要转换成*的字符个数，当$type=4时，表示右侧保留长度
+     * @param int $type     转换类型：0，从左向右隐藏；1，从右向左隐藏；2，从指定字符位置分割前由右向左隐藏；3，从指定字符位置分割后由左向右隐藏；4，保留首末指定字符串中间用***代替
+     * @param string $glue     分割符
+     * @return string   处理后的字符串
+     */
+    function hide_str(string $string, int $bengin=3, int $len = 4, int $type = 0, string $glue = "@")
+    {
+        if (empty($string)) {
+            return false;
+        }
+
+        $array = array();
+        if ($type == 0 || $type == 1 || $type == 4) {
+            $strlen = $length = mb_strlen($string);
+            while ($strlen) {
+                $array[] = mb_substr($string, 0, 1, "utf8");
+                $string = mb_substr($string, 1, $strlen, "utf8");
+                $strlen = mb_strlen($string);
+            }
+        }
+        if ($type == 0) {
+            for ($i = $bengin; $i < ($bengin + $len); $i++) {
+                if (isset($array[$i])) {
+                    $array[$i] = "*";
+                }
+            }
+            $string = implode("", $array);
+        } elseif ($type == 1) {
+            $array = array_reverse($array);
+            for ($i = $bengin; $i < ($bengin + $len); $i++) {
+                if (isset($array[$i])) {
+                    $array[$i] = "*";
+                }
+            }
+            $string = implode("", array_reverse($array));
+        } elseif ($type == 2) {
+            $array = explode($glue, $string);
+            if (isset($array[0])) {
+                $array[0] = hide_str($array[0], $bengin, $len, 1);
+            }
+            $string = implode($glue, $array);
+        } elseif ($type == 3) {
+            $array = explode($glue, $string);
+            if (isset($array[1])) {
+                $array[1] = hide_str($array[1], $bengin, $len, 0);
+            }
+            $string = implode($glue, $array);
+        } elseif ($type == 4) {
+            $left = $bengin;
+            $right = $len;
+            $tem = array();
+            for ($i = 0; $i < ($length - $right); $i++) {
+                if (isset($array[$i])) {
+                    $tem[] = $i >= $left ? "" : $array[$i];
+                }
+            }
+            $tem[] = '*****';
+            $array = array_chunk(array_reverse($array), $right);
+            $array = array_reverse($array[0]);
+            for ($i = 0; $i < $right; $i++) {
+                if (isset($array[$i])) {
+                    $tem[] = $array[$i];
+                }
+            }
+            $string = implode("", $tem);
+        }
+        return $string;
     }
 }
 
@@ -407,34 +501,34 @@ if (!function_exists('parse_array_ini')) {
 if (!function_exists('list_search')) {
     /**
      * 从数组查找数据返回
-     * @param array $list 原始数据
-     * @param array $condition 规则['id'=>'??']
+     * @param  array  $list      原始数据
+     * @param  array  $condition 规则['id'=>'??']
      * @return array
      */
-    function list_search($list, $condition)
+    function list_search($list,$condition)
     {
-        if (is_string($condition))
-            parse_str($condition, $condition);
+        if(is_string($condition))
+            parse_str($condition,$condition);
         // 返回的结果集合
         $resultSet = array();
-        foreach ($list as $key => $data) {
+        foreach ($list as $key=>$data){
             $find = false;
-            foreach ($condition as $field => $value) {
-                if (isset($data[$field])) {
-                    if (0 === strpos($value, '/')) {
-                        $find = preg_match($value, $data[$field]);
-                    } else if ($data[$field] == $value) {
+            foreach ($condition as $field=>$value){
+                if(isset($data[$field])) {
+                    if(0 === strpos($value,'/')) {
+                        $find = preg_match($value,$data[$field]);
+                    }else if($data[$field]==$value){
                         $find = true;
                     }
                 }
             }
-            if ($find)
+            if($find)
                 $resultSet[] = &$list[$key];
         }
 
         if (!empty($resultSet[0])) {
             return $resultSet[0];
-        } else {
+        }else {
             return false;
         }
     }
@@ -666,47 +760,6 @@ if (!function_exists('check_referer_origin')) {
     }
 }
 
-if (!function_exists('ajax_return')) {
-    /**
-     * Ajax方式返回数据到客户端
-     * @access protected
-     * @param string $msg 提示消息
-     * @param array|string $data 返回数据
-     * @param integer $code 消息代码
-     * @return mixed
-     */
-    /**
-     * 使用格式
-     * ['list'=>$list,'count'=>$count] = 'data'=>['list','count'...]
-     * ['data'=>$list,'count'=>$count] = ['data'=>$list], ['count'=$count]
-     */
-    function ajax_return($msg = null, $data = [], int $code = 200)
-    {
-        if (is_array($msg)) {
-            $result = $msg;
-        } else if (!is_array($data)) {
-            $result = [
-                'msg' => $msg,
-                'data' => $data,
-                'code' => $code,
-            ];
-        } else {
-            $result['msg'] = $msg;
-            $result['code'] = $code;
-            if (!isset($data['data'])) {
-                $result['data'] = $data;
-            } else if ($data['data']) {
-                $result['data'] = $data['data'];
-                unset($data['data']);
-                $result = array_merge($result, $data);
-            }
-        }
-
-        header('Content-Type:text/json; charset=utf-8');
-        exit(json_encode($result, JSON_UNESCAPED_UNICODE));
-    }
-}
-
 // +----------------------------------------------------------------------
 // | 数据加密函数开始
 // +----------------------------------------------------------------------
@@ -861,6 +914,21 @@ if (!function_exists('safe_validate_model')) {
     }
 }
 
+if (!function_exists('safe_input')) {
+
+    /**
+     * 过滤函数
+     * @param string $key
+     * @param $default
+     * @param string $filter
+     * @return mixed
+     */
+    function safe_input(string $key = '', $default = null, string $filter = 'trim,strip_tags,htmlspecialchars')
+    {
+        return input($key,$default, $filter);
+    }
+}
+
 if (!function_exists('remove_xss')) {
     /**
      * 清理XSS
@@ -870,3 +938,4 @@ if (!function_exists('remove_xss')) {
         return \app\common\library\Security::instance()->xss_clean($content, $is_image);
     }
 }
+

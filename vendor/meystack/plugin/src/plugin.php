@@ -1,16 +1,16 @@
 <?php
-
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace think;
 
 use think\facade\View;
 use think\facade\Cache;
+use think\facade\Config;
 
 /**
  * 插件核心类
  */
-abstract class Plugin
+abstract class Plugin 
 {
     // 视图实例对象
     protected $view = null;
@@ -34,7 +34,7 @@ abstract class Plugin
      * 架构函数
      * @access public
      */
-    public function __construct($name = null)
+    public function __construct($name = null) 
     {
         $name = is_null($name) ? $this->getName() : $name;
 
@@ -47,15 +47,15 @@ abstract class Plugin
         // 设置插件视图
         $this->view = clone View::engine('Think');
         $this->view->config([
-            'view_path' => $this->PluginPath . 'view' . DIRECTORY_SEPARATOR
-        ]);
-
+			'view_path' => $this->PluginPath . 'view' . DIRECTORY_SEPARATOR
+		]);
+    
         // 控制器初始化
         if (method_exists($this, 'initialize')) {
             $this->initialize();
         }
     }
-
+    
     // 初始化
     protected function initialize()
     {}
@@ -83,15 +83,15 @@ abstract class Plugin
         try {
 
             // 读取配置信息
-            $filePath = $this->PluginPath . 'config.php';
+            $filePath = $this->PluginPath.'config.php';
             if (is_file($filePath)) {
 
                 try {
                     // 正则匹配处理数据
-                    $regx = ['<?php', 'return', ';', '\n', '\r'];
+                    $regx = ['<?php','return',';','\n','\r'];
                     $file = file_get_contents($filePath);
-                    $file = str_replace($regx, '', $file);
-                    @eval("\$array = " . $file . '; ');
+                    $file = str_replace($regx,'',$file);
+                    @eval("\$array = ".$file.'; ');
                 } catch (\Throwable $th) {
                     if (!$array || !is_array($array)) {
                         $array = include $filePath;
@@ -99,17 +99,18 @@ abstract class Plugin
                 }
 
                 if (is_array($array)) {
-                    $array['url'] = '/plugin/' . $name;
+                    $array['url'] = '/plugin/'.$name;
                     $array['path'] = $this->PluginPath;
-                    $array['config'] = is_file($this->PluginPath . 'config.html') ? 1 : 0;
+                    $array['config'] = is_file($this->PluginPath.'config.html') ? 1 : 0;
                     $array['filePath'] = $filePath;
                 }
             }
+
         } catch (\Throwable $th) {
-            throw new \Exception($th->getMessage(), -999);
+            throw new \Exception($th->getMessage(),-999);
         }
 
-        Cache::set($tags, $array, 86400);
+        Cache::set($tags,$array,Config::get('system.cache.cache_time'));
         return $array ?? [];
     }
 
@@ -133,7 +134,7 @@ abstract class Plugin
      */
     final public function getConfig($name = '', $force = false)
     {
-        return $this->getInfo($name, $force);
+        return $this->getInfo($name,$force);
     }
 
     /**
@@ -149,13 +150,13 @@ abstract class Plugin
         }
 
         // 重载配置
-        $config = $this->getConfig($name, true);
+        $config = $this->getConfig($name,true);
         $config = array_merge($config, $value);
-        $filePath = $this->PluginPath . 'config.php';
-        arr2file($filePath, $config);
-        Cache::set(sha1($name), null);
+        $filePath = $this->PluginPath.'config.php';
+        arr2file($filePath,$config);
+        Cache::set(sha1($name),null);
         return $config;
-    }
+    }    
 
     /**
      * 检查基础配置信息是否完整
@@ -174,55 +175,55 @@ abstract class Plugin
     }
 
     /**
-     * 加载模板输出
-     * @param string $template
-     * @param array $vars           模板文件名
-     * @return false|mixed|string   模板输出变量
-     * @throws \think\Exception
-     */
-    protected function fetch($template = '', $vars = [])
-    {
-        return $this->view->fetch('/' . $template, $vars);
-    }
+	 * 加载模板输出
+	 * @param string $template
+	 * @param array $vars           模板文件名
+	 * @return false|mixed|string   模板输出变量
+	 * @throws \think\Exception
+	 */
+	protected function fetch($template = '', $vars = [])
+	{
+		return $this->view->fetch('/' . $template, $vars);
+	}
 
-    /**
-     * 渲染内容输出
-     * @access protected
-     * @param  string $content 模板内容
-     * @param  array  $vars    模板输出变量
-     * @return mixed
-     */
-    protected function display($content = '', $vars = [])
-    {
-        return $this->view->display($content, $vars);
-    }
+	/**
+	 * 渲染内容输出
+	 * @access protected
+	 * @param  string $content 模板内容
+	 * @param  array  $vars    模板输出变量
+	 * @return mixed
+	 */
+	protected function display($content = '', $vars = [])
+	{
+		return $this->view->display($content, $vars);
+	}
 
-    /**
-     * 模板变量赋值
-     * @access protected
-     * @param  mixed $name  要显示的模板变量
-     * @param  mixed $value 变量的值
-     * @return $this
-     */
-    protected function assign($name, $value = '')
-    {
-        $this->view->assign([$name => $value]);
+	/**
+	 * 模板变量赋值
+	 * @access protected
+	 * @param  mixed $name  要显示的模板变量
+	 * @param  mixed $value 变量的值
+	 * @return $this
+	 */
+	protected function assign($name, $value = '')
+	{
+		$this->view->assign([$name => $value]);
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * 初始化模板引擎
-     * @access protected
-     * @param  array|string $engine 引擎参数
-     * @return $this
-     */
-    protected function engine($engine)
-    {
-        $this->view->engine($engine);
+	/**
+	 * 初始化模板引擎
+	 * @access protected
+	 * @param  array|string $engine 引擎参数
+	 * @return $this
+	 */
+	protected function engine($engine)
+	{
+		$this->view->engine($engine);
 
-        return $this;
-    }
+		return $this;
+	}
 
 
     //必须实现安装
