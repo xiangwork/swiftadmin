@@ -1954,7 +1954,6 @@ a {
 
 .layui-card .layui-card-header .layui-badge.pull-right {
     top: 50%;
-    margin-top: -10px
 }
 
 /*// 加载样式*/
@@ -2522,50 +2521,50 @@ xm-select > .xm-body .xm-tree-icon:hover {
 }
 
 /*控制台CSS*/
-.layui-table tr {
+#console .layui-table tr {
     cursor: pointer;
 }
 
-.task .layui-table td {
+#console .task .layui-table td {
     white-space: nowrap;
     max-width: 120px;
 }
 
-.layui-table[lay-skin="nob"] th, .layui-table[lay-skin="nob"] td {
+#console .layui-table[lay-skin="nob"] th, .layui-table[lay-skin="nob"] td {
     white-space: nowrap;
     max-width: 50px;
     overflow: hidden;
 }
 
-ul.layui-timeline {
+#console ul.layui-timeline {
     height: 260px;
     overflow: hidden;
 }
 
-ul.layui-timeline:hover {
+#console ul.layui-timeline:hover {
     overflow-y: auto;
 }
 
-.layui-carousel {
+#console .layui-carousel {
     height: 260px;
 }
 
-.layui-carousel > [carousel-item] > * {
+#console .layui-carousel > [carousel-item] > * {
     background: 0 0;
 }
 
 
-.layui-carousel > [carousel-item]:before {
+#console .layui-carousel > [carousel-item]:before {
     content: '';
 }
 
 /** 小组成员 */
-.console-user-group {
+#console .console-user-group {
     position: relative;
     padding: 10px 0 10px 60px;
 }
 
-.console-user-group .console-user-group-head {
+#console .console-user-group .console-user-group-head {
     width: 32px;
     height: 32px;
     position: absolute;
@@ -2575,18 +2574,18 @@ ul.layui-timeline:hover {
     border-radius: 50%;
 }
 
-.console-user-group .layui-badge {
+#console .console-user-group .layui-badge {
     position: absolute;
     top: 50%;
     right: 8px;
     margin-top: -10px;
 }
 
-.console-user-group .console-user-group-name {
+#console .console-user-group .console-user-group-name {
     line-height: 1.2;
 }
 
-.console-user-group .console-user-group-desc {
+#console .console-user-group .console-user-group-desc {
     color: #8c8c8c;
     line-height: 1;
     font-size: 12px;
@@ -2594,7 +2593,7 @@ ul.layui-timeline:hover {
 }
 
 @media screen and (max-width: 1200px) {
-    .layui-admin-workplace {
+    #console .layui-admin-workplace {
         margin: 0 8px 0px 1px;
     }
 }
@@ -2604,25 +2603,25 @@ ul.layui-timeline:hover {
     right: 10px;
     top: 10px;
 }
-.layui-sales {
+#dashboard .layui-sales {
     margin-bottom: 0;
     overflow: hidden;
     color: rgba(0,0,0,.85);
     font-size: 30px;
 }
 
-.layui-sales-info {
+#dashboard .layui-sales-info {
     padding-top: 16px;
     color: rgba(0,0,0,.65);
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-fieldset.layui-field-title {
+#dashboard fieldset.layui-field-title {
     margin-bottom: 10px;
 }
 
-.numberInfoSubTitle {
+#dashboard .numberInfoSubTitle {
     color: rgba(0, 0, 0, .45);
     font-size: 14px;
     height: 22px;
@@ -2633,7 +2632,7 @@ fieldset.layui-field-title {
     word-break: break-all;
 }
 
-.numberInfoValue {
+#dashboard .numberInfoValue {
     color: rgba(0, 0, 0, .85);
     font-size: 24px;
     margin-top: 10px;
@@ -2641,7 +2640,7 @@ fieldset.layui-field-title {
     line-height: 32px;
 }
 
-.numberInfoSuffix {
+#dashboard .numberInfoSuffix {
     color: rgba(0, 0, 0, .65);
     font-size: 16px;
     font-style: normal;
