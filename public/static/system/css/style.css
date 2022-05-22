@@ -2599,7 +2599,7 @@ ul.layui-timeline:hover {
     }
 }
 
-.layui-card-header span {
+#dashboard .layui-card-header span {
     position: absolute;
     right: 10px;
     top: 10px;
