@@ -109,7 +109,7 @@ layui.define(['jquery','form', 'layer'], function (exports) {
                     let formData = new FormData();
                     formData.append('file', file, file.name);
                     $.ajax({
-                        url: uploadURL
+                        url: _global_.app + '/ajax/upload'
                         , type: 'post'
                         , data: formData
                         , contentType: false

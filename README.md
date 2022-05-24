@@ -8,7 +8,7 @@
 <p align="center">
 	<a href="https://www.swiftadmin.net" target="_blank">官方平台</a> 
     <a href="https://demo.swiftadmin.net/admin.php" rel="nofollow" >在线演示</a>
-	<a href="https://www.swiftadmin.net/help/"  target="_blank">在线使用手册</a>
+	<a href="https://doc.swiftadmin.net/help/"  target="_blank">在线使用手册</a>
 </p>
 <p align="center">
 <font>开源不易，右上角请点击stars，感谢</font>

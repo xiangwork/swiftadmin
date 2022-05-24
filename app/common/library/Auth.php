@@ -178,6 +178,8 @@ class Auth
             ];
 
             if (UserModel::update($userUpdate)) {
+                // 执行登录成功钩子
+                Event::trigger("user_login_successed", $this->userInfo);
                 $this->returnToken($this->userInfo);
                 return true;
             }
@@ -237,8 +239,6 @@ class Auth
         cookie('token', $this->token, $this->keepTime);
         cookie('nickname',$user->nickname, $this->keepTime);
         \think\facade\Cache::set($this->token, $user->id, $this->keepTime);
-        // 执行登录成功钩子
-        Event::trigger("user_login_successed", $user);
     }
 
     /**
